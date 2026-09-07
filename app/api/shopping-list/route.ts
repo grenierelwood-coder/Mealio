@@ -184,9 +184,68 @@ export async function GET() {
       )
     }
 
-    const itemsRows =
+    let itemsRows =
       (rawItems ??
         []) as ShoppingItemRow[]
+
+    /*
+     * ----------------------------------------------------------------------
+     * 2 bis. ARTICLES DÉJÀ ACHETÉS ET RANGÉS
+     *
+     * Un article totalement acheté puis rangé dans Frosti/Cellio ne doit
+     * plus revenir dans la liste active. En revanche, un achat partiel reste
+     * visible jusqu'à ce que le besoin soit couvert.
+     *
+     * Le journal de transfert est utilisé comme preuve de rangement ; on ne
+     * supprime donc jamais un article simplement parce qu'il est coché.
+     * ----------------------------------------------------------------------
+     */
+
+    if (itemsRows.length > 0) {
+      const itemIds = itemsRows.map(item => item.id)
+
+      const { data: transfers, error: transfersError } = await mealioServerDb
+        .from('shopping_item_stock_transfers')
+        .select('shopping_item_id')
+        .in('shopping_item_id', itemIds)
+
+      if (transfersError) {
+        console.error(
+          '❌ Erreur récupération des transferts de stock :',
+          transfersError
+        )
+
+        return NextResponse.json(
+          {
+            error:
+              `Impossible de vérifier les articles déjà rangés : ${transfersError.message}`,
+          },
+          {
+            status: 500,
+          }
+        )
+      }
+
+      const transferredIds = new Set(
+        (transfers ?? []).map((row: any) => row.shopping_item_id)
+      )
+
+      const isFullyBought = (item: ShoppingItemRow): boolean => {
+        if (item.is_checked) return true
+
+        const required = Math.max(
+          0,
+          Number(item.qte_achat ?? 0) || Number(item.qte ?? 0)
+        )
+        const bought = Math.max(0, Number(item.qte_achetee ?? 0))
+
+        return required > 0 && bought >= required
+      }
+
+      itemsRows = itemsRows.filter(item => {
+        return !(transferredIds.has(item.id) && isFullyBought(item))
+      })
+    }
 
     /*
      * ----------------------------------------------------------------------

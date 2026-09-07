@@ -78,6 +78,31 @@ function getBoughtQuantity(item: ShoppingItemRow): number {
   return 0
 }
 
+function isQuantityFullyPurchased(item: ShoppingItemRow): boolean {
+  const required = Number(item.qte ?? 0)
+  const bought = getBoughtQuantity(item)
+
+  return Number.isFinite(required) && required > 0 && bought >= required
+}
+
+async function markStoredItemAsCompleted(item: ShoppingItemRow): Promise<void> {
+  // A product that has actually been bought in sufficient quantity is
+  // considered completed at the shopping-list level too. This is persisted
+  // in Mealio so that a page reload does not bring the already-ranged item
+  // back into the active shopping list.
+  if (!isQuantityFullyPurchased(item)) return
+  if (item.is_checked === true) return
+
+  const { error } = await mealioServerDb
+    .from('shopping_items')
+    .update({ is_checked: true })
+    .eq('id', item.id)
+
+  if (error) {
+    throw new Error(`Article rangé mais impossible de clôturer son statut courses : ${error.message}`)
+  }
+}
+
 export async function POST() {
   try {
     const cookieStore = await cookies()
@@ -208,6 +233,7 @@ export async function POST() {
     for (const item of alreadyStored) {
       const transfer = transferMap.get(item.id)!
       if (transfer.stock_item_id && transfer.storage && transfer.location_id) {
+        await markStoredItemAsCompleted(item)
         storedItems.push({
           shopping_item_id: item.id,
           produit: item.produit,
@@ -313,6 +339,8 @@ export async function POST() {
         if (transferInsertError) {
           throw new Error(`Article rangé mais journal de transfert impossible à enregistrer : ${transferInsertError.message}`)
         }
+
+        await markStoredItemAsCompleted(item)
 
         storedItems.push({
           shopping_item_id: item.id,

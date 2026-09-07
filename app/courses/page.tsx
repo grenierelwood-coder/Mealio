@@ -238,6 +238,13 @@ function getActiveEnd(date: Date): Date {
 function getStatusLabel(
   item: ShoppingItem
 ): string {
+  // Le statut d'achat est prioritaire sur l'ancien statut Matcher.
+  // Exemple : 3 carottes achetées pour un besoin de 2 = Acheté,
+  // même si ai_status vaut encore "orange" (À compléter).
+  if (isItemBought(item)) {
+    return 'Acheté'
+  }
+
   if (item.is_manual) {
     return 'Manuel'
   }
@@ -268,7 +275,7 @@ function getStatusLabel(
 function getStatusClasses(
   item: ShoppingItem
 ): string {
-  if (item.is_checked) {
+  if (isItemBought(item)) {
     return 'border-slate-200 bg-slate-50'
   }
 
@@ -300,7 +307,7 @@ function getStatusClasses(
 function getStatusDot(
   item: ShoppingItem
 ): string {
-  if (item.is_checked) {
+  if (isItemBought(item)) {
     return 'bg-slate-400'
   }
 
@@ -386,6 +393,47 @@ function getBoughtQuantity(
   return safeQuantity(
     item.qte_achetee
   )
+}
+
+/**
+ * Un article est considéré comme acheté si :
+ * - il est explicitement coché ; ou
+ * - la quantité réellement achetée atteint la quantité attendue.
+ *
+ * La coche reste donc un raccourci pratique, mais elle n'est plus la seule
+ * façon de terminer un article.
+ */
+function isItemBought(item: ShoppingItem): boolean {
+  if (item.is_checked) {
+    return true
+  }
+
+  const required = Math.max(
+    0,
+    safeQuantity(item.qte_achat) || safeQuantity(item.qte)
+  )
+
+  const bought = getBoughtQuantity(item)
+
+  return required > 0 && bought >= required
+}
+
+function getItemPurchaseProgress(item: ShoppingItem): string {
+  const required = Math.max(
+    0,
+    safeQuantity(item.qte_achat) || safeQuantity(item.qte)
+  )
+  const bought = getBoughtQuantity(item)
+
+  if (isItemBought(item)) {
+    return 'Acheté'
+  }
+
+  if (bought > 0 && required > bought) {
+    return `Partiel · ${formatQuantity(bought)} / ${formatQuantity(required)}`
+  }
+
+  return 'À acheter'
 }
 
 function getRemainingQuantity(
@@ -954,8 +1002,7 @@ export default function CoursesPage() {
 
           const checked =
             nextItems.filter(
-              currentItem =>
-                currentItem.is_checked
+              currentItem => isItemBought(currentItem)
             ).length
 
           return {
@@ -1169,8 +1216,7 @@ export default function CoursesPage() {
 
           const checked =
             nextItems.filter(
-              currentItem =>
-                currentItem.is_checked
+              currentItem => isItemBought(currentItem)
             ).length
 
           return {
@@ -1390,10 +1436,12 @@ export default function CoursesPage() {
           recipes: getUniqueRecipes(item.recipes),
         }))
 
-    if (data.unchecked > 0) {
+    const incompleteCount = remainingBeforeFinish.length
+
+    if (incompleteCount > 0) {
       const confirmed =
         window.confirm(
-          `Il reste ${data.unchecked} article${data.unchecked > 1 ? 's' : ''} non coché${data.unchecked > 1 ? 's' : ''}.\n\nVeux-tu quand même terminer les courses ?`
+          `Il reste ${incompleteCount} article${incompleteCount > 1 ? 's' : ''} dont la quantité attendue n'est pas entièrement achetée.\n\nVeux-tu quand même terminer les courses ?`
         )
 
       if (!confirmed) {
@@ -1456,15 +1504,52 @@ export default function CoursesPage() {
         )
       }
 
-      setCompletedStored(storeResult.stored ?? [])
-      setCompletedSkipped(storeResult.skipped ?? [])
+      const storedResults = storeResult.stored ?? []
+      const skippedResults = storeResult.skipped ?? []
+
+      setCompletedStored(storedResults)
+      setCompletedSkipped(skippedResults)
       setRemainingItems(remainingBeforeFinish)
 
-      if ((storeResult.skipped ?? []).length > 0) {
+      // Un article totalement acheté ET correctement rangé ne doit plus
+      // apparaître dans la liste active, même si un autre article bloque
+      // encore la clôture (ex. article inconnu à résoudre).
+      if (storedResults.length > 0) {
+        const storedIds = new Set(
+          storedResults.map(result => result.shopping_item_id)
+        )
+
+        setData(previous => {
+          if (!previous) return previous
+
+          const remainingItems = previous.items.filter(item => {
+            if (!storedIds.has(item.id)) return true
+
+            // Un achat partiel reste visible : il faut seulement retirer les
+            // articles dont la quantité achetée couvre réellement le besoin.
+            return !isItemBought(item)
+          })
+
+          const checkedCount = remainingItems.filter(item => isItemBought(item)).length
+
+          return {
+            ...previous,
+            items: remainingItems,
+            total: remainingItems.length,
+            checked: checkedCount,
+            unchecked: remainingItems.length - checkedCount,
+          }
+        })
+      }
+
+      if (skippedResults.length > 0) {
         await loadIngredientOptions()
         setGenerationMessage(
-          `${(storeResult.stored ?? []).length} article(s) rangé(s). ${(storeResult.skipped ?? []).length} article(s) nécessitent une résolution avant de clôturer les courses.`
+          `${storedResults.length} article(s) rangé(s). ${skippedResults.length} article(s) nécessitent une résolution avant de clôturer les courses.`
         )
+        // La liste reste active pour les articles non résolus ou incomplets,
+        // mais les articles déjà totalement achetés et rangés ont disparu de
+        // l'affichage.
         return
       }
 
@@ -1723,10 +1808,10 @@ export default function CoursesPage() {
     data?.total ?? 0
 
   const checked =
-    data?.checked ?? 0
+    data?.items.filter(item => isItemBought(item)).length ?? 0
 
   const unchecked =
-    data?.unchecked ?? 0
+    Math.max(total - checked, 0)
 
   const progress =
     total > 0
@@ -2131,7 +2216,7 @@ export default function CoursesPage() {
                     <div className="rounded-full bg-emerald-100 px-3 py-1.5 text-xs font-black text-emerald-700">
                       {unchecked > 0
                         ? `${unchecked} à acheter`
-                        : 'Tout est coché'}
+                        : 'Tout est acheté'}
                     </div>
                   </div>
                 </section>
@@ -2148,7 +2233,7 @@ export default function CoursesPage() {
                       </div>
 
                       <div className="mt-1 text-lg font-black">
-                        {checked} / {total}
+                        {checked} / {total} acheté(s)
                       </div>
                     </div>
 
@@ -2412,7 +2497,7 @@ export default function CoursesPage() {
                                             <div>
                                               <div
                                                 className={`font-black ${
-                                                  item.is_checked
+                                                  isItemBought(item)
                                                     ? 'text-slate-400 line-through'
                                                     : 'text-slate-900'
                                                 }`}
@@ -2420,6 +2505,16 @@ export default function CoursesPage() {
                                                 {
                                                   item.produit
                                                 }
+                                              </div>
+
+                                              <div className={`mt-1 text-xs font-black ${
+                                                isItemBought(item)
+                                                  ? 'text-emerald-700'
+                                                  : getBoughtQuantity(item) > 0
+                                                    ? 'text-orange-600'
+                                                    : 'text-slate-400'
+                                              }`}>
+                                                {getItemPurchaseProgress(item)}
                                               </div>
 
                                               <div className="mt-1 flex flex-wrap items-center gap-2">
@@ -2663,10 +2758,20 @@ export default function CoursesPage() {
                                           {item.produit}
                                         </div>
 
+                                        <div className={`mt-1 text-xs font-black ${
+                                          isItemBought(item)
+                                            ? 'text-emerald-700'
+                                            : getBoughtQuantity(item) > 0
+                                              ? 'text-orange-600'
+                                              : 'text-slate-400'
+                                        }`}>
+                                          {getItemPurchaseProgress(item)}
+                                        </div>
+
                                         <div className="mt-1 flex flex-wrap items-center gap-2">
                                           <span
                                             className={`inline-flex items-center gap-1 text-xs font-bold ${
-                                              item.is_checked
+                                              isItemBought(item)
                                                 ? 'text-slate-400'
                                                 : 'text-slate-600'
                                             }`}
