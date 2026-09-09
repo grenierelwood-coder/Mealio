@@ -113,6 +113,10 @@ function normalizeItem(item: any) {
       item.qte_achat === null || item.qte_achat === undefined
         ? 0
         : Number(item.qte_achat),
+    stock_stored_quantity:
+      item.stock_stored_quantity === null || item.stock_stored_quantity === undefined
+        ? 0
+        : Number(item.stock_stored_quantity),
     qte_achetee:
       item.qte_achetee === null || item.qte_achetee === undefined
         ? 0
@@ -374,10 +378,12 @@ export async function POST(request: NextRequest) {
         qte,
         qte_achat,
         qte_achetee,
+        stock_stored_quantity,
         unite,
         is_checked,
         is_manual,
-        ai_status
+        ai_status,
+        updated_at
       `)
       .single()
 
@@ -449,6 +455,7 @@ export async function PATCH(request: NextRequest) {
     is_checked?: boolean
     qte_achat?: number | string | null
     qte_achetee?: number | string | null
+    expected_updated_at?: string | null
   }
 
   try {
@@ -600,6 +607,7 @@ export async function PATCH(request: NextRequest) {
         qte,
         qte_achat,
         qte_achetee,
+        updated_at,
         shopping_lists!inner (
           id,
           user_id
@@ -635,12 +643,43 @@ export async function PATCH(request: NextRequest) {
     }
 
     /*
+     * Concurrence multi-utilisateur : le navigateur transmet la version
+     * qu'il affichait. Si elle a changé, on refuse l'écrasement silencieux.
+     */
+    if (body.expected_updated_at !== undefined && body.expected_updated_at !== null) {
+      const expectedUpdatedAt = String(body.expected_updated_at)
+      const currentUpdatedAt = item.updated_at ? String(item.updated_at) : null
+      if (currentUpdatedAt && expectedUpdatedAt !== currentUpdatedAt) {
+        return NextResponse.json(
+          {
+            error: 'Cet article vient d’être modifié par une autre personne. La liste a été rechargée.',
+            code: 'SHOPPING_ITEM_CONFLICT',
+          },
+          { status: 409 }
+        )
+      }
+    }
+
+    /*
      * Construction de la mise à jour.
+     *
+     * La quantité réellement achetée reste la source de vérité.
+     * Cocher une ligne est un raccourci : si on la coche, on considère
+     * l'intégralité de la quantité attendue comme achetée. Décocher ne
+     * détruit jamais une quantité réellement saisie.
      */
     const updateData: Record<string, unknown> = {}
 
     if (hasIsChecked) {
       updateData.is_checked = body.is_checked
+
+      if (body.is_checked === true) {
+        const currentBought = Number(item.qte_achetee ?? 0)
+        const expected = Number(item.qte_achat ?? item.qte ?? 0)
+        if (Number.isFinite(expected) && expected > currentBought) {
+          updateData.qte_achetee = expected
+        }
+      }
     }
 
     if (hasQteAchat) {
@@ -654,13 +693,19 @@ export async function PATCH(request: NextRequest) {
     /*
      * Mise à jour.
      */
-    const {
-      data: updatedItem,
-      error: updateError,
-    } = await mealioServerDb
+    let updateQuery = mealioServerDb
       .from('shopping_items')
       .update(updateData)
       .eq('id', id)
+
+    if (body.expected_updated_at !== undefined && body.expected_updated_at !== null) {
+      updateQuery = updateQuery.eq('updated_at', String(body.expected_updated_at))
+    }
+
+    const {
+      data: updatedItem,
+      error: updateError,
+    } = await updateQuery
       .select(`
         id,
         list_id,
@@ -669,14 +714,26 @@ export async function PATCH(request: NextRequest) {
         qte,
         qte_achat,
         qte_achetee,
+        stock_stored_quantity,
         unite,
         is_checked,
         is_manual,
-        ai_status
+        ai_status,
+        updated_at
       `)
       .single()
 
     if (updateError || !updatedItem) {
+      if (!updateError && body.expected_updated_at !== undefined && body.expected_updated_at !== null) {
+        return NextResponse.json(
+          {
+            error: 'Cet article vient d’être modifié par une autre personne. La liste a été rechargée.',
+            code: 'SHOPPING_ITEM_CONFLICT',
+          },
+          { status: 409 }
+        )
+      }
+
       console.error(
         '❌ Erreur mise à jour shopping_item :',
         updateError
@@ -711,5 +768,69 @@ export async function PATCH(request: NextRequest) {
       },
       { status: 500 }
     )
+  }
+}
+
+/**
+ * DELETE
+ * Supprime un article de la liste active du foyer.
+ * Une ligne déjà achetée/rangée ne peut pas être supprimée afin de préserver
+ * l'historique et l'intégrité du stock.
+ */
+export async function DELETE(request: NextRequest) {
+  const username = await getUsername()
+  if (!username) {
+    return NextResponse.json({ error: 'Non authentifié.' }, { status: 401 })
+  }
+
+  let body: { id?: string }
+  try {
+    body = await request.json()
+  } catch {
+    return NextResponse.json({ error: 'Corps de requête invalide (JSON attendu).' }, { status: 400 })
+  }
+
+  const id = body.id?.trim()
+  if (!id) {
+    return NextResponse.json({ error: 'L’identifiant de l’article est requis.' }, { status: 400 })
+  }
+
+  try {
+    const { data: item, error: itemError } = await mealioServerDb
+      .from('shopping_items')
+      .select(`id, produit, qte_achetee, stock_stored_quantity, shopping_lists!inner(id,user_id,status)`)
+      .eq('id', id)
+      .eq('shopping_lists.user_id', username)
+      .eq('shopping_lists.status', 'en_cours')
+      .maybeSingle()
+
+    if (itemError) {
+      return NextResponse.json({ error: `Impossible de vérifier l’article : ${itemError.message}` }, { status: 500 })
+    }
+    if (!item) {
+      return NextResponse.json({ error: 'Article introuvable ou non présent dans la liste active.' }, { status: 404 })
+    }
+
+    const bought = Number(item.qte_achetee ?? 0)
+    const stored = Number(item.stock_stored_quantity ?? 0)
+    if ((Number.isFinite(bought) && bought > 0) || (Number.isFinite(stored) && stored > 0)) {
+      return NextResponse.json({
+        error: `Impossible de supprimer « ${item.produit} » : une quantité a déjà été achetée ou rangée.`,
+      }, { status: 409 })
+    }
+
+    const { error: deleteError } = await mealioServerDb
+      .from('shopping_items')
+      .delete()
+      .eq('id', id)
+
+    if (deleteError) {
+      return NextResponse.json({ error: `Impossible de supprimer « ${item.produit} » : ${deleteError.message}` }, { status: 500 })
+    }
+
+    return NextResponse.json({ success: true, deletedId: id, message: `« ${item.produit} » a été supprimé de la liste.` })
+  } catch (error) {
+    console.error('❌ Erreur DELETE /api/shopping-list/items', error)
+    return NextResponse.json({ error: error instanceof Error ? error.message : 'Erreur interne.' }, { status: 500 })
   }
 }

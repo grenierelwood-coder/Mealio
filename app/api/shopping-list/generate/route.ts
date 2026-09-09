@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { cookies } from 'next/headers'
 import { generateShoppingListForPeriod } from '../../../utils/shopping-list-generator'
+import { addReplenishmentToActiveList, getReplenishmentSuggestions } from '../../../utils/replenishment-server'
 
 function getParisToday(): Date {
   const parts = new Intl.DateTimeFormat('en-CA', {
@@ -66,8 +67,31 @@ export async function POST(request: NextRequest) {
       listName,
     )
 
+    // Les récurrents en mode « systématique » sont injectés par le même
+    // moteur de courses, mais uniquement lorsqu'ils sont arrivés à échéance.
+    const replenishmentSuggestions = await getReplenishmentSuggestions(username)
+    const systematic = replenishmentSuggestions.filter(s => s.source === 'recurring' && s.mode === 'systematic')
+    for (const suggestion of systematic) {
+      try {
+        await addReplenishmentToActiveList(username, {
+          produit: suggestion.produit,
+          ingredient_id: suggestion.ingredient_id,
+          quantity: suggestion.quantity,
+          unite: suggestion.unite,
+          source: 'recurring',
+          rule_id: suggestion.rule_id,
+        })
+      } catch (error) {
+        console.error(`⚠️ Récurrent systématique « ${suggestion.produit} » non ajouté :`, error)
+      }
+    }
+
     return NextResponse.json({
       ...result,
+      replenishment: {
+        systematicAdded: systematic.map(s => s.produit),
+        suggestions: replenishmentSuggestions.filter(s => !(s.source === 'recurring' && s.mode === 'systematic')),
+      },
       period: {
         start: dateStart,
         end: dateEnd,

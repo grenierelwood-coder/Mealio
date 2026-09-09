@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import { useEffect, useMemo, useState } from 'react'
+import AdminHelp from '../../components/AdminHelp'
 
 type Source = 'frosti' | 'cellio'
 type Scope = 'default' | 'category' | 'ingredient'
@@ -92,8 +93,23 @@ export default function StorageAdminPage() {
 
   return <main className="min-h-screen bg-stone-50 text-slate-900">
     <div className="mx-auto max-w-7xl px-5 py-8">
-      <div className="flex flex-wrap items-start justify-between gap-4"><div><p className="text-xs font-bold uppercase tracking-[.2em] text-emerald-700">Administration</p><h1 className="mt-1 text-3xl font-black">📦 Règles de rangement</h1><p className="mt-2 max-w-3xl text-slate-500">Exception ingrédient → catégorie → défaut. Mealio choisit Frosti ou Cellio ; chaque application choisit l’emplacement physique.</p></div><button onClick={load} className="rounded-xl border bg-white px-4 py-2 text-sm font-semibold">↻ Actualiser</button></div>
+      <div className="flex flex-wrap items-start justify-between gap-4"><div><p className="text-xs font-bold uppercase tracking-[.2em] text-emerald-700">Administration</p><h1 className="mt-1 text-3xl font-black">📦 Règles de rangement</h1><p className="mt-2 max-w-3xl text-slate-500">Exception ingrédient → catégorie → défaut. Mealio choisit Frosti ou Cellio ; chaque application choisit l’emplacement physique.</p></div><div className="flex gap-2"><Link href="/admin/storage/pending" className="rounded-xl border bg-white px-4 py-2 text-sm font-semibold">🧺 À ranger</Link><button onClick={load} className="rounded-xl border bg-white px-4 py-2 text-sm font-semibold">↻ Actualiser</button></div></div>
       {error && <div className="mt-5 rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-700">{error}</div>}
+
+      <div className="mt-5">
+        <AdminHelp
+          title="Comprendre les règles de rangement"
+          intro="Ce menu décide où Mealio range un achat. Mealio détermine d’abord l’application de stockage (Frosti ou Cellio), puis cette application choisit l’emplacement physique selon les règles disponibles."
+          sections={[
+            { title: '🥇 Priorité des règles', children: <p>La logique est <b>exception ingrédient → règle de catégorie → règle par défaut</b>. Une règle plus spécifique prend donc le dessus sur une règle générale.</p> },
+            { title: '❄️ Frosti', children: <p>Frosti gère les produits froids. Les règles par défaut distinguent notamment le <b>frigo</b> et le <b>congélateur</b>. Les exceptions permettent de déroger au comportement général.</p> },
+            { title: '🍷 Cellio', children: <p>Cellio gère les produits qui vont dans les espaces secs, réserves ou assimilés. Une règle de catégorie peut orienter un ensemble d’ingrédients vers un emplacement précis.</p> },
+            { title: '🎯 Priorité numérique', children: <p>La priorité permet d’ordonner les règles lorsqu’elles sont comparées. Dans la pratique, il faut surtout conserver une hiérarchie lisible : les exceptions doivent rester plus spécifiques que les catégories et les défauts.</p> },
+          ]}
+          warning="Une règle de rangement agit sur les futurs rangements. Avant de modifier ou supprimer une règle, vérifie les ingrédients et catégories concernés ainsi que l’emplacement cible."
+        />
+      </div>
+
       <form onSubmit={save} className="mt-6 rounded-2xl border bg-white p-6 shadow-sm">
         <div className="flex items-center justify-between"><h2 className="text-lg font-black">{editingId ? 'Modifier la règle' : 'Ajouter une règle'}</h2>{editingId && <button type="button" onClick={() => reset()} className="text-sm font-semibold text-slate-500">Annuler</button>}</div>
         <div className="mt-5 grid gap-4 md:grid-cols-4">

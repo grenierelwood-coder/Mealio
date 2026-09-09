@@ -16,7 +16,24 @@ export interface GenerateShoppingListResult {
   listId: string
   itemCount: number
   wasCreated: boolean
+  issueCount: number
+  issues: GenerationIssue[]
   message: string
+}
+
+export interface GenerationIssue {
+  id?: string
+  list_id: string
+  recipe_id: string | null
+  recipe_nom: string | null
+  shopping_item_id?: string | null
+  produit: string
+  unit: string | null
+  issue_type: string
+  phase: 'generation' | 'storage' | 'finish'
+  message: string
+  resolution_hint: string
+  status: 'open' | 'resolved'
 }
 
 type UnitMapping = {
@@ -352,6 +369,13 @@ function getDatabaseUnit(
 
     paquet: 'Paquet',
     paquets: 'Paquet',
+
+    // ---------------------------------------------------------
+    // BOUTEILLE
+    // ---------------------------------------------------------
+
+    bouteille: 'Bouteille',
+    bouteilles: 'Bouteille',
   }
 
   /*
@@ -413,11 +437,53 @@ function getDatabaseUnit(
    */
   if (!mapping?.unite) {
     throw new Error(
-      `Unité "${wanted}" absente de unit_mappings : impossible de créer l'article de courses.`
+      `Unité "${wanted}" absente de unit_mappings : cet article ne peut pas être créé tant que l’unité n’est pas référencée.`
     )
   }
 
   return mapping.unite
+}
+
+async function logGenerationIssue(issue: Omit<GenerationIssue, 'status'>): Promise<GenerationIssue> {
+  const row = {
+    list_id: issue.list_id,
+    recipe_id: issue.recipe_id,
+    recipe_nom: issue.recipe_nom,
+    shopping_item_id: issue.shopping_item_id ?? null,
+    produit: issue.produit,
+    unit: issue.unit,
+    issue_type: issue.issue_type,
+    phase: issue.phase,
+    message: issue.message,
+    resolution_hint: issue.resolution_hint,
+    status: 'open',
+  }
+
+  const { data, error } = await mealioDb
+    .from('shopping_issues')
+    .insert(row)
+    .select('id,list_id,shopping_item_id,recipe_id,recipe_nom,produit,unit,issue_type,message,resolution_hint,status')
+    .single()
+
+  if (error || !data) {
+    console.error('⚠️ Impossible d’enregistrer le problème de génération :', error?.message)
+    return { ...row, status: 'open' }
+  }
+
+  return data as GenerationIssue
+}
+
+async function closePreviousGenerationIssues(listId: string): Promise<void> {
+  const { error } = await mealioDb
+    .from('shopping_issues')
+    .update({ status: 'resolved', resolved_at: new Date().toISOString() })
+    .eq('list_id', listId)
+    .eq('phase', 'generation')
+    .eq('status', 'open')
+
+  if (error) {
+    console.warn('⚠️ Impossible de clôturer les anciens avertissements de génération :', error.message)
+  }
 }
 
 async function findOrCreateWeeklyList(
@@ -427,64 +493,96 @@ async function findOrCreateWeeklyList(
   listName: string
 ): Promise<{ id: string; wasCreated: boolean }> {
   /*
-   * Les tables Mealio utilisent le username comme identifiant
-   * de foyer :
+   * RÈGLE MÉTIER : un foyer ne possède qu'une seule liste active.
    *
-   *   meal_plans.user_id = "KH"
-   *   shopping_lists.user_id = "KH"
-   *
-   * Le congelo_user_id est un UUID propre à Frosti et ne doit
-   * pas être utilisé pour les tables Mealio.
+   * On réutilise d'abord une liste active correspondant à la période.
+   * S'il existe déjà une autre liste active, on la réutilise également et
+   * met à jour sa période. La migration Phase 15 nettoie les anciennes
+   * doublons et pose ensuite un index unique qui empêche leur réapparition.
    */
+  const { data: activeLists, error: activeError } = await mealioDb
+    .from('shopping_lists')
+    .select('id,created_at,period_start,period_end,name')
+    .eq('user_id', username)
+    .eq('status', 'en_cours')
+    .order('created_at', { ascending: false })
+    .limit(20)
 
-  const { data: existing, error: existingError } =
-    await mealioDb
-      .from('shopping_lists')
-      .select('id')
-      .eq('user_id', username)
-      .eq('period_start', dateStart)
-      .eq('period_end', dateEnd)
-      .eq('status', 'en_cours')
-      .maybeSingle()
-
-  if (existingError) {
-    throw new Error(
-      `Erreur recherche shopping_lists : ${existingError.message}`
-    )
+  if (activeError) {
+    throw new Error(`Erreur recherche shopping_lists : ${activeError.message}`)
   }
 
-  if (existing) {
-    return {
-      id: existing.id,
-      wasCreated: false,
-    }
+  const exact = (activeLists ?? []).find(
+    list => list.period_start === dateStart && list.period_end === dateEnd
+  )
+
+  if (exact) {
+    return { id: exact.id, wasCreated: false }
   }
 
-  const { data: created, error: createError } =
-    await mealioDb
+  const latest = activeLists?.[0]
+
+  if (latest) {
+    const { data: updated, error: updateError } = await mealioDb
       .from('shopping_lists')
-      .insert({
-        user_id: username,
+      .update({
         name: listName,
-        status: 'en_cours',
         period_start: dateStart,
         period_end: dateEnd,
       })
-      .select()
+      .eq('id', latest.id)
+      .eq('user_id', username)
+      .eq('status', 'en_cours')
+      .select('id')
       .single()
 
+    if (updateError || !updated) {
+      throw new Error(
+        `Erreur mise à jour de la liste active : ${updateError?.message ?? 'liste introuvable.'}`
+      )
+    }
+
+    return { id: updated.id, wasCreated: false }
+  }
+
+  const { data: created, error: createError } = await mealioDb
+    .from('shopping_lists')
+    .insert({
+      user_id: username,
+      name: listName,
+      status: 'en_cours',
+      period_start: dateStart,
+      period_end: dateEnd,
+    })
+    .select('id')
+    .single()
+
   if (createError || !created) {
+    if (createError?.code === '23505') {
+      const { data: concurrentList, error: concurrentError } = await mealioDb
+        .from('shopping_lists')
+        .select('id')
+        .eq('user_id', username)
+        .eq('status', 'en_cours')
+        .order('created_at', { ascending: false })
+        .limit(1)
+        .maybeSingle()
+
+      if (concurrentError || !concurrentList) {
+        throw new Error(
+          `Collision création shopping_lists, récupération impossible : ${concurrentError?.message ?? 'liste introuvable.'}`
+        )
+      }
+
+      return { id: concurrentList.id, wasCreated: false }
+    }
+
     throw new Error(
-      `Erreur création shopping_lists : ${
-        createError?.message ?? 'Liste non créée.'
-      }`
+      `Erreur création shopping_lists : ${createError?.message ?? 'Liste non créée.'}`
     )
   }
 
-  return {
-    id: created.id,
-    wasCreated: true,
-  }
+  return { id: created.id, wasCreated: true }
 }
 
 export async function generateShoppingListForPeriod(
@@ -554,6 +652,9 @@ export async function generateShoppingListForPeriod(
     listName
   )
 
+  await closePreviousGenerationIssues(listId)
+  const generationIssues: GenerationIssue[] = []
+
   /*
    * -----------------------------------------------------------
    * 3. AUCUN REPAS PLANIFIÉ
@@ -565,6 +666,8 @@ export async function generateShoppingListForPeriod(
       listId,
       itemCount: 0,
       wasCreated,
+      issueCount: generationIssues.length,
+      issues: generationIssues,
       message:
         'Aucune recette planifiée sur cette période — liste inchangée.',
     }
@@ -619,23 +722,14 @@ export async function generateShoppingListForPeriod(
     ResolvedIngredient[][] = []
 
   for (const plan of mealPlans) {
-    const recipe =
-      await getCachedRecipe(
-        plan.recipe_id
-      )
+    try {
+      const recipe = await getCachedRecipe(plan.recipe_id)
 
-    const baseServings =
-      recipe.baseServings || 4
+      const baseServings = recipe.baseServings || 4
+      const requestedServings = plan.servings || baseServings
+      const servingsRatio = requestedServings / baseServings
 
-    const requestedServings =
-      plan.servings || baseServings
-
-    const servingsRatio =
-      requestedServings /
-      baseServings
-
-    const resolved =
-      await resolveRecipeIngredients(
+      const resolved = await resolveRecipeIngredients(
         recipe.ingredients,
         refData,
         plan.recipe_id,
@@ -643,9 +737,22 @@ export async function generateShoppingListForPeriod(
         servingsRatio
       )
 
-    resolvedLists.push(
-      resolved
-    )
+      resolvedLists.push(resolved)
+    } catch (error) {
+      const issue = await logGenerationIssue({
+        list_id: listId,
+        recipe_id: plan.recipe_id,
+        recipe_nom: null,
+        produit: 'Recette',
+        unit: null,
+        issue_type: 'RECIPE_PROCESSING_ERROR',
+        phase: 'generation',
+        message: error instanceof Error ? error.message : 'Erreur inconnue lors de l’analyse de la recette.',
+        resolution_hint: 'Vérifier uniquement la recette ou la donnée de référence indiquée, puis relancer la génération. Les autres recettes et articles valides sont conservés.',
+      })
+      generationIssues.push(issue)
+      console.error(`⚠️ Recette ${plan.recipe_id} ignorée :`, error)
+    }
   }
 
   /*
@@ -699,174 +806,294 @@ export async function generateShoppingListForPeriod(
    * vider la liste existante.
    */
 
-  const comparedForInsert = compared
-    .filter(
-      item => item.ai_status !== 'green'
-    )
-    .map(item => ({
-      ...item,
-      unite_db: getDatabaseUnit(
-        item.unite,
-        refData.unitMappings as UnitMapping[]
-      ),
-    }))
+  const comparedForInsert: Array<any> = []
 
-  /*
-   * -----------------------------------------------------------
-   * 11. SUPPRESSION DES ANCIENS ARTICLES AUTOMATIQUES
-   * -----------------------------------------------------------
-   *
-   * On conserve :
-   *   - les articles manuels
-   *   - les articles déjà cochés
-   *
-   * On supprime uniquement les articles automatiques
-   * encore non cochés.
-   */
-
-  const {
-    data: staleItems,
-    error: staleError,
-  } = await mealioDb
-    .from('shopping_items')
-    .select('id')
-    .eq('list_id', listId)
-    .eq('is_manual', false)
-    .eq('is_checked', false)
-
-  if (staleError) {
-    throw new Error(
-      `Erreur lecture des anciens articles : ${staleError.message}`
-    )
-  }
-
-  if (
-    staleItems &&
-    staleItems.length > 0
-  ) {
-    const staleIds =
-      staleItems.map(
-        item => item.id
-      )
-
-    const {
-      error: deleteError,
-    } = await mealioDb
-      .from('shopping_items')
-      .delete()
-      .in(
-        'id',
-        staleIds
-      )
-
-    if (deleteError) {
-      throw new Error(
-        `Erreur suppression des anciens articles : ${deleteError.message}`
-      )
+  for (const item of compared.filter(item => item.ai_status !== 'green')) {
+    try {
+      const unite_db = getDatabaseUnit(item.unite, refData.unitMappings as UnitMapping[])
+      comparedForInsert.push({ ...item, unite_db })
+    } catch (error) {
+      const message = error instanceof Error ? error.message : `Unité \"${item.unite}\" inconnue.`
+      const issue = await logGenerationIssue({
+        list_id: listId,
+        recipe_id: item.contributions?.[0]?.recipe_id ?? null,
+        recipe_nom: item.contributions?.[0]?.recipe_nom ?? null,
+        produit: item.produit,
+        unit: item.unite,
+        issue_type: 'UNIT_MAPPING_MISSING',
+        phase: 'generation',
+        message,
+        resolution_hint: `Dans Supabase Mealio → table unit_mappings, créer l’unité canonique \"${item.unite}\". Pour une unité de comptage comme Bouteille, utiliser généralement type_unite = \"unité\" et multiplicateur = 1, puis relancer la génération. Vérifier les colonnes de ta table avant insertion.`,
+      })
+      generationIssues.push(issue)
+      console.warn(`⚠️ Article ignoré mais génération poursuivie : ${item.produit} — ${message}`)
     }
   }
 
   /*
    * -----------------------------------------------------------
-   * 12. CRÉATION DES NOUVEAUX ARTICLES
+   * 11. RÉCONCILIATION DES ARTICLES EXISTANTS
    * -----------------------------------------------------------
    *
-   * Les ingrédients suffisamment présents en stock
-   * (green) ont déjà été exclus.
+   * Une génération ne doit jamais créer une deuxième ligne pour le même
+   * ingrédient. Les anciennes versions conservaient les lignes cochées puis
+   * inséraient une nouvelle ligne, ce qui a produit les doublons observés
+   * (deux Carottes, deux Cocos, deux Oignons, etc.).
    *
-   * Une erreur d'insertion provoque volontairement une
-   * exception afin que l'API retourne HTTP 500.
-   *
-   * On ne veut surtout pas afficher "liste générée"
-   * alors qu'un ou plusieurs articles n'ont pas été créés.
+   * On réutilise donc une ligne existante avant d'en créer une nouvelle.
+   * La quantité réellement achetée n'est jamais remise à zéro.
    */
 
+  const { data: existingItems, error: existingItemsError } = await mealioDb
+    .from('shopping_items')
+    .select('id,produit,ingredient_id,qte,qte_achat,qte_achetee,stock_stored_quantity,unite,is_checked,is_manual,ai_status,updated_at')
+    .eq('list_id', listId)
+
+  if (existingItemsError) {
+    throw new Error(`Erreur lecture des articles existants : ${existingItemsError.message}`)
+  }
+
+  const normalizeProduct = (value: string | null | undefined): string =>
+    String(value ?? '')
+      .trim()
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/\s+/g, ' ')
+
+  const itemKey = (item: { ingredient_id?: string | null; produit?: string | null; unite?: string | null }) => {
+    const ingredientKey = item.ingredient_id?.trim()
+    const productKey = ingredientKey || normalizeProduct(item.produit)
+    return `${productKey}::${normalizeUnit(item.unite)}`
+  }
+
+  const existing = (existingItems ?? []) as Array<{
+    id: string
+    produit: string
+    ingredient_id: string | null
+    qte: number | null
+    qte_achat: number | null
+    qte_achetee: number | null
+    stock_stored_quantity: number | null
+    unite: string | null
+    is_checked: boolean | null
+    is_manual: boolean | null
+    ai_status: string | null
+  }>
+
+  const byKey = new Map<string, typeof existing[number][]>()
+  for (const row of existing) {
+    const key = itemKey(row)
+    const bucket = byKey.get(key) ?? []
+    bucket.push(row)
+    byKey.set(key, bucket)
+  }
+
+  const usedExistingIds = new Set<string>()
   let itemCount = 0
 
   for (const item of comparedForInsert) {
-    const {
-      data: shoppingItem,
-      error: itemError,
-    } = await mealioDb
-      .from('shopping_items')
-.insert({
-  list_id: listId,
-  produit: item.produit,
-  ingredient_id:
-    item.ingredient_id,
-  qte: item.qte_a_acheter,
-  qte_achat: item.qte_a_acheter,
-  qte_achetee: 0,
-  unite: item.unite_db,
-  ai_status: item.ai_status,
-  is_checked: false,
-  is_manual: false,
-})
-      .select()
-      .single()
+    try {
+    const key = itemKey({
+      ingredient_id: item.ingredient_id,
+      produit: item.produit,
+      unite: item.unite_db,
+    })
 
-    if (
-      itemError ||
-      !shoppingItem
-    ) {
-      console.error(
-        `❌ Erreur insertion shopping_items pour "${item.produit}" :`,
-        itemError
-      )
+    const candidates = byKey.get(key) ?? []
+    const candidate = candidates.find(row => !usedExistingIds.has(row.id))
 
-      throw new Error(
-        `Impossible d'ajouter "${item.produit}" à la liste de courses : ${
-          itemError?.message ??
-          'article non créé.'
-        }`
-      )
-    }
+    let shoppingItemId: string
 
-    itemCount++
+    if (candidate) {
+      shoppingItemId = candidate.id
+      usedExistingIds.add(candidate.id)
 
-    /*
-     * ---------------------------------------------------------
-     * 13. ASSOCIATION AUX RECETTES
-     * ---------------------------------------------------------
-     */
+      if (!candidate.is_manual) {
+        const { error: updateError } = await mealioDb
+          .from('shopping_items')
+          .update({
+            produit: item.produit,
+            ingredient_id: item.ingredient_id,
+            qte: item.qte_a_acheter,
+            qte_achat: Math.max(Number(candidate.qte_achat ?? 0), item.qte_a_acheter),
+            ai_status: item.ai_status,
+            is_checked: candidate.is_checked ?? false,
+          })
+          .eq('id', candidate.id)
 
-    const recipeRows =
-      item.contributions.map(
-        contribution => ({
-          shopping_item_id:
-            shoppingItem.id,
-          recipe_id:
-            contribution.recipe_id,
-          recipe_nom:
-            contribution.recipe_nom,
-          qte_contribuee:
-            contribution.qte_contribuee,
+        if (updateError) {
+          throw new Error(`Impossible de mettre à jour "${item.produit}" : ${updateError.message}`)
+        }
+      } else if (!candidate.ingredient_id && item.ingredient_id) {
+        // Un article manuel déjà présent peut être relié à l'ingrédient
+        // officiel trouvé par le moteur sans perdre son statut manuel.
+        const { error: manualLinkError } = await mealioDb
+          .from('shopping_items')
+          .update({ ingredient_id: item.ingredient_id })
+          .eq('id', candidate.id)
+
+        if (manualLinkError) {
+          throw new Error(`Impossible d'associer l'article manuel "${item.produit}" : ${manualLinkError.message}`)
+        }
+      }
+    } else {
+      const { data: shoppingItem, error: itemError } = await mealioDb
+        .from('shopping_items')
+        .insert({
+          list_id: listId,
+          produit: item.produit,
+          ingredient_id: item.ingredient_id,
+          qte: item.qte_a_acheter,
+          qte_achat: item.qte_a_acheter,
+          qte_achetee: 0,
+          stock_stored_quantity: 0,
+          unite: item.unite_db,
+          ai_status: item.ai_status,
+          is_checked: false,
+          is_manual: false,
         })
-      )
+        .select('id')
+        .single()
 
-    if (
-      recipeRows.length > 0
-    ) {
-      const {
-        error: linkError,
-      } = await mealioDb
-        .from(
-          'shopping_item_recipes'
-        )
-        .insert(
-          recipeRows
-        )
-
-      if (linkError) {
-        console.error(
-          `❌ Erreur insertion shopping_item_recipes pour "${item.produit}" :`,
-          linkError
-        )
-
+      if (itemError || !shoppingItem) {
         throw new Error(
-          `Article "${item.produit}" créé, mais impossible d'enregistrer son association avec les recettes : ${linkError.message}`
+          `Impossible d'ajouter "${item.produit}" à la liste de courses : ${itemError?.message ?? 'article non créé.'}`
         )
       }
+
+      shoppingItemId = shoppingItem.id
+      usedExistingIds.add(shoppingItemId)
+    }
+
+    /*
+     * Restitution utilisateur : si le Matcher a trouvé du stock mais qu'une
+     * ou plusieurs lignes ne peuvent pas être converties dans l'unité du
+     * besoin, on conserve une explication directement rattachée à l'article.
+     *
+     * On ne signale ce point que lorsqu'il peut réellement modifier la
+     * quantité à acheter. Un stock non convertible mais déjà suffisant ne
+     * doit pas polluer la liste de courses.
+     */
+    const unconvertibleStock = (item.stock_details ?? []).filter(
+      detail => detail.qte_convertie === null
+    )
+
+    // Une impossibilité de conversion possède déjà un message dédié plus
+    // précis ci-dessous. On n'enregistre donc pas le message générique
+    // stock_match_review dans ce cas, afin d'éviter deux alertes identiques.
+    if (item.stock_match_review && unconvertibleStock.length === 0) {
+      const issue = await logGenerationIssue({
+        list_id: listId,
+        recipe_id: item.contributions?.[0]?.recipe_id ?? null,
+        recipe_nom: item.contributions?.[0]?.recipe_nom ?? null,
+        shopping_item_id: shoppingItemId,
+        produit: item.produit,
+        unit: item.unite,
+        issue_type: 'STOCK_MATCH_REVIEW',
+        phase: 'generation',
+        message: item.stock_match_review,
+        resolution_hint: 'Si cette correspondance est correcte, aucune action n’est nécessaire. Sinon, corriger le rapprochement dans le Matcher afin que Mealio l’apprenne pour les prochaines courses.',
+      })
+      generationIssues.push(issue)
+    }
+
+    if (
+      item.qte_a_acheter > 0 &&
+      unconvertibleStock.length > 0
+    ) {
+      const details = unconvertibleStock
+        .slice(0, 3)
+        .map(detail => `${detail.produit} · ${detail.qte_stock} ${detail.unite_stock}`)
+        .join(', ')
+
+      const extraCount = Math.max(0, unconvertibleStock.length - 3)
+      const detailText = extraCount > 0
+        ? `${details} et ${extraCount} autre(s)`
+        : details
+
+      const issue = await logGenerationIssue({
+        list_id: listId,
+        recipe_id: item.contributions?.[0]?.recipe_id ?? null,
+        recipe_nom: item.contributions?.[0]?.recipe_nom ?? null,
+        shopping_item_id: shoppingItemId,
+        produit: item.produit,
+        unit: item.unite,
+        issue_type: 'STOCK_CONVERSION_MISSING',
+        phase: 'generation',
+        message: `Mealio a trouvé du stock (${detailText}), mais ne peut pas convertir cette quantité en ${item.unite}. Seule la partie convertible est prise en compte dans le calcul des courses.`,
+        resolution_hint: `Vérifier l'équivalence de cette unité pour "${item.produit}" dans les données de référence Mealio. Tant qu'elle n'est pas connue, la quantité non convertible n'est pas déduite des courses.`,
+      })
+      generationIssues.push(issue)
+    }
+
+    // Les associations automatiques de recettes sont recalculées pour cette
+    // ligne afin d'éviter qu'une régénération laisse des liens obsolètes.
+    if (!candidate?.is_manual) {
+      const { error: deleteLinksError } = await mealioDb
+        .from('shopping_item_recipes')
+        .delete()
+        .eq('shopping_item_id', shoppingItemId)
+
+      if (deleteLinksError) {
+        throw new Error(`Impossible de réinitialiser les recettes de "${item.produit}" : ${deleteLinksError.message}`)
+      }
+    }
+
+    const recipeRows = item.contributions.map(contribution => ({
+      shopping_item_id: shoppingItemId,
+      recipe_id: contribution.recipe_id,
+      recipe_nom: contribution.recipe_nom,
+      qte_contribuee: contribution.qte_contribuee,
+    }))
+
+    if (recipeRows.length > 0) {
+      const { error: linkError } = await mealioDb
+        .from('shopping_item_recipes')
+        .insert(recipeRows)
+
+      if (linkError) {
+        throw new Error(`Impossible d'enregistrer les recettes de "${item.produit}" : ${linkError.message}`)
+      }
+    }
+
+      itemCount++
+    } catch (error) {
+      const issue = await logGenerationIssue({
+        list_id: listId,
+        recipe_id: item.contributions?.[0]?.recipe_id ?? null,
+        recipe_nom: item.contributions?.[0]?.recipe_nom ?? null,
+        produit: item.produit,
+        unit: item.unite,
+        issue_type: 'GENERATION_ITEM_ERROR',
+        phase: 'generation',
+        message: error instanceof Error ? error.message : 'Erreur inconnue lors de la création de l’article.',
+        resolution_hint: 'Corriger le problème indiqué puis relancer la génération. Les autres articles ont été conservés.',
+      })
+      generationIssues.push(issue)
+      console.error(`⚠️ Article ignoré mais génération poursuivie : ${item.produit}`, error)
+    }
+  }
+
+  // Les anciens articles automatiques qui ne font plus partie du besoin et
+  // qui n'ont encore rien été acheté/rangé peuvent être supprimés.
+  const obsoleteIds = generationIssues.length === 0
+    ? existing
+    .filter(row => !usedExistingIds.has(row.id))
+    .filter(row => !row.is_manual)
+    .filter(row => Number(row.qte_achetee ?? 0) <= 0)
+    .filter(row => Number(row.stock_stored_quantity ?? 0) <= 0)
+    .map(row => row.id)
+    : []
+
+  if (obsoleteIds.length > 0) {
+    const { error: deleteError } = await mealioDb
+      .from('shopping_items')
+      .delete()
+      .in('id', obsoleteIds)
+
+    if (deleteError) {
+      throw new Error(`Erreur suppression des anciens articles : ${deleteError.message}`)
     }
   }
 
@@ -880,8 +1107,8 @@ export async function generateShoppingListForPeriod(
     listId,
     itemCount,
     wasCreated,
-    message: wasCreated
-      ? `Nouvelle liste créée avec ${itemCount} article(s) à acheter.`
-      : `Liste mise à jour : ${itemCount} article(s) à acheter (articles cochés/manuels préservés).`,
+    issueCount: generationIssues.length,
+    issues: generationIssues,
+    message: `${wasCreated ? `Nouvelle liste créée avec ${itemCount} article(s) à acheter.` : `Liste mise à jour : ${itemCount} article(s) à acheter.`}${generationIssues.length > 0 ? ` ${generationIssues.length} problème(s) non bloquant(s) ont été enregistré(s) et sont affichés dans Courses.` : ''}`,
   }
 }

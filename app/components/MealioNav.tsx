@@ -5,12 +5,11 @@ import { usePathname, useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 
 const links = [
-  { href: '/', label: '🏠 Accueil' },
   { href: '/planning', label: '📅 Planning' },
   { href: '/courses', label: '🛒 Courses' },
+  { href: '/purchases', label: '🧾 Achats' },
   { href: '/stock', label: '❄️ Stock' },
-  { href: '/admin/storage', label: '⚙️ Rangement' },
-  { href: '/matcher', label: '🧠 Matcher' },
+  { href: '/admin', label: '⚙️ Admin' },
 ]
 
 export default function MealioNav() {

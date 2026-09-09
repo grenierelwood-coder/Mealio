@@ -2,200 +2,158 @@ import { NextResponse } from 'next/server'
 import { cookies } from 'next/headers'
 import { mealioServerDb } from '../../../lib/supabase-server'
 
-async function getUsername(): Promise<string | null> {
-  const cookieStore = await cookies()
-
-  return (
-    cookieStore
-      .get('congelo_username')
-      ?.value
-      ?.trim() || null
-  )
+function numberOrZero(value: unknown): number {
+  const n = Number(value ?? 0)
+  return Number.isFinite(n) ? Math.max(0, n) : 0
 }
 
-/**
- * POST
- *
- * Termine la liste de courses active du foyer.
- *
- * Important :
- * - le username vient exclusivement du cookie ;
- * - le client ne fournit jamais le list_id ;
- * - seule la liste "en_cours" du foyer peut être terminée.
- */
-export async function POST() {
-  const username = await getUsername()
+function effectiveBought(item: any): number {
+  // La quantité réellement achetée est la seule vérité métier.
+  return numberOrZero(item.qte_achetee)
+}
+
+export async function POST(request: Request) {
+  let allowIncomplete = false
+  try {
+    const body = await request.json()
+    allowIncomplete = body?.allowIncomplete === true
+  } catch {
+    // Corps vide autorisé. Le comportement par défaut est strict.
+  }
+  const cookieStore = await cookies()
+  const username = cookieStore.get('congelo_username')?.value?.trim() || null
 
   if (!username) {
-    return NextResponse.json(
-      {
-        error: 'Non authentifié.',
-      },
-      { status: 401 }
-    )
+    return NextResponse.json({ error: 'Non authentifié.' }, { status: 401 })
   }
 
   try {
-    /*
-     * Recherche de la liste active du foyer.
-     */
-    const {
-      data: activeList,
-      error: listError,
-    } = await mealioServerDb
+    const { data: activeLists, error: listError } = await mealioServerDb
       .from('shopping_lists')
-      .select(`
-        id,
-        created_at,
-        user_id,
-        name,
-        status,
-        period_start,
-        period_end
-      `)
+      .select('id,created_at,user_id,name,status,period_start,period_end')
       .eq('user_id', username)
       .eq('status', 'en_cours')
-      .order('created_at', {
-        ascending: false,
-      })
-      .limit(1)
-      .maybeSingle()
+      .order('created_at', { ascending: false })
+      .limit(2)
 
     if (listError) {
-      console.error(
-        '❌ Erreur recherche liste active :',
-        listError
-      )
+      throw new Error(`Impossible de récupérer la liste active : ${listError.message}`)
+    }
 
+    if (!activeLists || activeLists.length === 0) {
+      return NextResponse.json({ error: 'Aucune liste de courses active à terminer.' }, { status: 404 })
+    }
+
+    if (activeLists.length > 1) {
       return NextResponse.json(
         {
-          error:
-            `Impossible de récupérer la liste active : ${listError.message}`,
+          error: 'Plusieurs listes de courses actives existent pour ce foyer. Exécute la migration Phase 15 avant de poursuivre.',
+          code: 'MULTIPLE_ACTIVE_LISTS',
         },
-        { status: 500 }
+        { status: 409 },
       )
     }
 
-    if (!activeList) {
-      return NextResponse.json(
-        {
-          error:
-            'Aucune liste de courses active à terminer.',
-        },
-        { status: 404 }
-      )
-    }
+    const activeList = activeLists[0]
 
-    /*
-     * Une liste ne peut pas être clôturée si un article acheté n'a pas de
-     * transfert de stock enregistré. Le contrôle serveur protège le workflow
-     * même si le navigateur contourne le front.
-     */
-    const { data: boughtItems, error: boughtError } = await mealioServerDb
+    const { data: items, error: itemsError } = await mealioServerDb
       .from('shopping_items')
-      .select('id,is_checked,qte_achetee')
+      .select('id,produit,ingredient_id,qte,qte_achat,qte_achetee,stock_stored_quantity,unite,is_checked')
       .eq('list_id', activeList.id)
 
-    if (boughtError) {
-      throw new Error(`Impossible de vérifier les articles achetés : ${boughtError.message}`)
+    if (itemsError) {
+      throw new Error(`Impossible de vérifier les articles : ${itemsError.message}`)
     }
 
-    const boughtIds = (boughtItems ?? [])
-      .filter((item: any) => item.is_checked === true || Number(item.qte_achetee ?? 0) > 0)
-      .map((item: any) => item.id)
+    // Un ingrédient officiel n'est nécessaire pour le rangement que si une
+    // quantité a effectivement été achetée. Un article encore à acheter,
+    // même inconnu, ne doit donc jamais bloquer la clôture à lui seul.
+    const unresolvedBought = (items ?? []).filter((item: any) =>
+      !item.ingredient_id && effectiveBought(item) > 0
+    )
 
-    if (boughtIds.length > 0) {
-      const { data: transfers, error: transferError } = await mealioServerDb
-        .from('shopping_item_stock_transfers')
-        .select('shopping_item_id')
-        .in('shopping_item_id', boughtIds)
-
-      if (transferError) {
-        throw new Error(`Impossible de vérifier les rangements de stock : ${transferError.message}`)
+    const incompleteItems = (items ?? []).map((item: any) => {
+      const required = numberOrZero(item.qte)
+      const bought = effectiveBought(item)
+      const stored = numberOrZero(item.stock_stored_quantity)
+      return {
+        id: item.id,
+        produit: item.produit,
+        ingredient_id: item.ingredient_id,
+        unite: item.unite,
+        required,
+        achete: bought,
+        range: stored,
+        remaining: Math.max(required - bought, 0),
+        storageMissing: Math.max(bought - stored, 0),
       }
+    }).filter((item: any) => item.remaining > 1e-9 || item.storageMissing > 1e-9)
 
-      const transferred = new Set((transfers ?? []).map((row: any) => row.shopping_item_id))
-      const missingCount = boughtIds.filter((id: string) => !transferred.has(id)).length
+    const missingPurchase = incompleteItems.filter((item: any) => item.remaining > 1e-9)
+    const missingStorage = incompleteItems.filter((item: any) => item.storageMissing > 1e-9)
 
-      if (missingCount > 0) {
-        return NextResponse.json(
-          {
-            error: `${missingCount} article(s) acheté(s) ne sont pas encore rangé(s). Résous les articles non rangés puis relance la finalisation.`,
-            code: 'STOCK_TRANSFER_MISSING',
-            missingCount,
-          },
-          { status: 409 }
-        )
-      }
+    if (missingStorage.length > 0 && !allowIncomplete) {
+      return NextResponse.json(
+        {
+          error: `${missingStorage.length} article(s) acheté(s) ne sont pas encore entièrement rangé(s) dans le stock.`,
+          code: 'STOCK_TRANSFER_MISSING',
+          missingCount: missingStorage.length,
+          items: missingStorage,
+          unresolvedBought: unresolvedBought.map((item: any) => ({ id: item.id, produit: item.produit })),
+        },
+        { status: 409 },
+      )
     }
 
-    /*
-     * Termine la liste.
-     *
-     * La condition user_id + id + status protège
-     * contre toute modification hors du foyer.
-     */
-    const {
-      data: finishedList,
-      error: updateError,
-    } = await mealioServerDb
+    if (missingPurchase.length > 0 && !allowIncomplete) {
+      return NextResponse.json(
+        {
+          error: `${missingPurchase.length} article(s) ne sont pas entièrement achetés.`,
+          code: 'INCOMPLETE_PURCHASE',
+          missingCount: missingPurchase.length,
+          items: missingPurchase,
+        },
+        { status: 409 },
+      )
+    }
+
+    // Avec allowIncomplete=true, on clôture volontairement la liste. Les
+    // quantités restantes seront proposées par l'interface pour poursuivre
+    // les achats dans une nouvelle liste.
+
+    const { data: finishedList, error: updateError } = await mealioServerDb
       .from('shopping_lists')
-      .update({
-        status: 'terminee',
-      })
+      .update({ status: 'terminee' })
       .eq('id', activeList.id)
       .eq('user_id', username)
       .eq('status', 'en_cours')
-      .select(`
-        id,
-        created_at,
-        user_id,
-        name,
-        status,
-        period_start,
-        period_end
-      `)
+      .select('id,created_at,user_id,name,status,period_start,period_end')
       .single()
 
     if (updateError || !finishedList) {
-      console.error(
-        '❌ Erreur terminaison liste :',
-        updateError
-      )
-
-      return NextResponse.json(
-        {
-          error:
-            updateError?.message ||
-            'Impossible de terminer la liste de courses.',
-        },
-        { status: 500 }
-      )
+      throw new Error(updateError?.message || 'Impossible de terminer la liste de courses.')
     }
 
-    console.log(
-      `✅ Liste de courses terminée pour ${username} : ${finishedList.id}`
-    )
+    const warningParts: string[] = []
+    if (missingPurchase.length > 0) {
+      warningParts.push(`${missingPurchase.length} besoin(s) non entièrement acheté(s)`)
+    }
+    if (missingStorage.length > 0) {
+      warningParts.push(`${missingStorage.length} article(s) acheté(s) non rangé(s)`)
+    }
 
     return NextResponse.json({
       list: finishedList,
-      message:
-        'Courses terminées avec succès.',
+      warnings: warningParts,
+      message: warningParts.length > 0
+        ? `Courses terminées avec avertissement : ${warningParts.join(' ; ')}.`
+        : 'Courses terminées avec succès.',
     })
   } catch (error) {
-    console.error(
-      '❌ Erreur inattendue POST /api/shopping-list/finish :',
-      error
-    )
-
+    console.error('❌ Erreur POST /api/shopping-list/finish', error)
     return NextResponse.json(
-      {
-        error:
-          error instanceof Error
-            ? error.message
-            : 'Erreur interne.',
-      },
-      { status: 500 }
+      { error: error instanceof Error ? error.message : 'Erreur interne.' },
+      { status: 500 },
     )
   }
 }

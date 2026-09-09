@@ -15,13 +15,7 @@ function numberOrZero(value: unknown): number {
 }
 
 function effectiveBought(item: any): number {
-  const explicit = numberOrZero(item.qte_achetee)
-  if (explicit > 0) return explicit
-  if (item.is_checked) {
-    const purchase = numberOrZero(item.qte_achat)
-    return purchase > 0 ? purchase : numberOrZero(item.qte)
-  }
-  return 0
+  return numberOrZero(item.qte_achetee)
 }
 
 export async function POST(request: NextRequest) {

@@ -5,11 +5,13 @@ import { mealioServerDb } from '../../lib/supabase-server'
 type ShoppingItemRow = {
   id: string
   list_id: string
+  updated_at: string | null
   produit: string
   ingredient_id: string | null
   qte: number | null
   qte_achat: number | null
   qte_achetee: number | null
+  stock_stored_quantity: number | null
   unite: string | null
   is_checked: boolean
   is_manual: boolean
@@ -118,7 +120,19 @@ export async function GET() {
         total: 0,
         checked: 0,
         unchecked: 0,
+        issues: [],
       })
+    }
+
+    const { data: issueRows, error: issuesError } = await mealioServerDb
+      .from('shopping_issues')
+      .select('id,list_id,shopping_item_id,phase,issue_type,produit,unit,message,resolution_hint,status,created_at,resolved_at')
+      .eq('list_id', list.id)
+      .eq('status', 'open')
+      .order('created_at', { ascending: false })
+
+    if (issuesError) {
+      console.warn('⚠️ Impossible de charger les avertissements Courses :', issuesError.message)
     }
 
     /*
@@ -145,11 +159,13 @@ export async function GET() {
         `
           id,
           list_id,
+          updated_at,
           produit,
           ingredient_id,
           qte,
           qte_achat,
           qte_achetee,
+          stock_stored_quantity,
           unite,
           is_checked,
           is_manual,
@@ -192,59 +208,25 @@ export async function GET() {
      * ----------------------------------------------------------------------
      * 2 bis. ARTICLES DÉJÀ ACHETÉS ET RANGÉS
      *
-     * Un article totalement acheté puis rangé dans Frosti/Cellio ne doit
-     * plus revenir dans la liste active. En revanche, un achat partiel reste
-     * visible jusqu'à ce que le besoin soit couvert.
+     * Un article sort de la liste active uniquement lorsque la quantité
+     * réellement achetée est entièrement couverte par la quantité réellement
+     * rangée dans Frosti/Cellio.
      *
-     * Le journal de transfert est utilisé comme preuve de rangement ; on ne
-     * supprime donc jamais un article simplement parce qu'il est coché.
+     * is_checked n'est volontairement plus utilisé pour décider de la sortie
+     * de liste : il reste un état d'interface / compatibilité historique.
      * ----------------------------------------------------------------------
      */
 
     if (itemsRows.length > 0) {
-      const itemIds = itemsRows.map(item => item.id)
-
-      const { data: transfers, error: transfersError } = await mealioServerDb
-        .from('shopping_item_stock_transfers')
-        .select('shopping_item_id')
-        .in('shopping_item_id', itemIds)
-
-      if (transfersError) {
-        console.error(
-          '❌ Erreur récupération des transferts de stock :',
-          transfersError
-        )
-
-        return NextResponse.json(
-          {
-            error:
-              `Impossible de vérifier les articles déjà rangés : ${transfersError.message}`,
-          },
-          {
-            status: 500,
-          }
-        )
-      }
-
-      const transferredIds = new Set(
-        (transfers ?? []).map((row: any) => row.shopping_item_id)
-      )
-
-      const isFullyBought = (item: ShoppingItemRow): boolean => {
-        if (item.is_checked) return true
-
-        const required = Math.max(
-          0,
-          Number(item.qte_achat ?? 0) || Number(item.qte ?? 0)
-        )
+      const isCompleted = (item: ShoppingItemRow): boolean => {
+        const required = Math.max(0, Number(item.qte ?? 0))
         const bought = Math.max(0, Number(item.qte_achetee ?? 0))
+        const stored = Math.max(0, Number(item.stock_stored_quantity ?? 0))
 
-        return required > 0 && bought >= required
+        return required > 0 && bought >= required && stored >= bought
       }
 
-      itemsRows = itemsRows.filter(item => {
-        return !(transferredIds.has(item.id) && isFullyBought(item))
-      })
+      itemsRows = itemsRows.filter(item => !isCompleted(item))
     }
 
     /*
@@ -405,6 +387,16 @@ const rayon =
           /*
            * Quantité réellement achetée.
            */
+          stock_stored_quantity:
+            item.stock_stored_quantity ===
+              null ||
+            item.stock_stored_quantity ===
+              undefined
+              ? 0
+              : Number(
+                  item.stock_stored_quantity
+                ),
+
           qte_achetee:
             item.qte_achetee ===
               null ||
@@ -451,10 +443,11 @@ const rayon =
       items.length
 
     const checked =
-      items.filter(
-        item =>
-          item.is_checked
-      ).length
+      items.filter(item => {
+        const required = Math.max(0, Number(item.qte ?? 0))
+        const bought = Math.max(0, Number(item.qte_achetee ?? 0))
+        return required > 0 && bought >= required
+      }).length
 
     const unchecked =
       total - checked
@@ -471,6 +464,7 @@ const rayon =
       total,
       checked,
       unchecked,
+      issues: issueRows ?? [],
     })
   } catch (error) {
     console.error(

@@ -12,6 +12,7 @@ type RecipeLink = {
 type ShoppingItem = {
   id: string
   list_id: string
+  updated_at: string | null
   produit: string
   ingredient_id: string | null
 
@@ -23,6 +24,7 @@ type ShoppingItem = {
 
   // Quantité réellement achetée
   qte_achetee: number | null
+  stock_stored_quantity: number | null
 
   unite: string | null
   rayon: string | null
@@ -50,12 +52,28 @@ type ShoppingList = {
   period_end: string | null
 }
 
+type ShoppingIssue = {
+  id?: string
+  list_id: string
+  shopping_item_id?: string | null
+  phase: 'generation' | 'storage' | 'finish'
+  issue_type: string
+  produit: string
+  unit?: string | null
+  message: string
+  resolution_hint: string
+  status: string
+  created_at?: string
+}
+
 type ShoppingResponse = {
   list: ShoppingList | null
   items: ShoppingItem[]
   total: number
   checked: number
   unchecked: number
+  issues?: ShoppingIssue[]
+  error?: string
 }
 
 type MealPlan = {
@@ -74,10 +92,22 @@ type StatusFilter =
   | 'urgent'
   | 'recurrent'
 
+type FavoriteIngredient = {
+  ingredient_id: string
+  nom: string
+  categorie: string | null
+  default_storage: string | null
+  purchase_count: number
+  last_purchased_at: string | null
+  unite: string
+}
+
 type GenerationResult = {
   listId?: string
   itemCount?: number
   wasCreated?: boolean
+  issueCount?: number
+  issues?: ShoppingIssue[]
   message?: string
   error?: string
 }
@@ -254,7 +284,7 @@ function getStatusLabel(
   }
 
   if (item.ai_status === 'orange') {
-    return 'À compléter'
+    return 'À vérifier'
   }
 
   if (
@@ -396,33 +426,24 @@ function getBoughtQuantity(
 }
 
 /**
- * Un article est considéré comme acheté si :
- * - il est explicitement coché ; ou
- * - la quantité réellement achetée atteint la quantité attendue.
+ * Un article est considéré comme acheté uniquement lorsque la quantité
+ * réellement achetée atteint la quantité attendue.
  *
- * La coche reste donc un raccourci pratique, mais elle n'est plus la seule
- * façon de terminer un article.
+ * La coche est un état d'interface ; elle ne constitue jamais une quantité
+ * achetée à elle seule.
  */
 function isItemBought(item: ShoppingItem): boolean {
-  if (item.is_checked) {
-    return true
-  }
-
-  const required = Math.max(
-    0,
-    safeQuantity(item.qte_achat) || safeQuantity(item.qte)
-  )
-
+  const required = safeQuantity(item.qte)
   const bought = getBoughtQuantity(item)
 
+  // La quantité réellement saisie est la seule source de vérité.
+  // is_checked reste une information d'interface et ne peut plus faire
+  // disparaître un article ou déclencher artificiellement un achat.
   return required > 0 && bought >= required
 }
 
 function getItemPurchaseProgress(item: ShoppingItem): string {
-  const required = Math.max(
-    0,
-    safeQuantity(item.qte_achat) || safeQuantity(item.qte)
-  )
+  const required = safeQuantity(item.qte)
   const bought = getBoughtQuantity(item)
 
   if (isItemBought(item)) {
@@ -430,7 +451,7 @@ function getItemPurchaseProgress(item: ShoppingItem): string {
   }
 
   if (bought > 0 && required > bought) {
-    return `Partiel · ${formatQuantity(bought)} / ${formatQuantity(required)}`
+    return `Partiel · ${formatNumber(bought)} / ${formatNumber(required)}`
   }
 
   return 'À acheter'
@@ -454,18 +475,9 @@ function getRemainingQuantity(
 function getEffectiveBoughtQuantity(
   item: ShoppingItem
 ): number {
-  const explicitBought =
-    getBoughtQuantity(item)
-
-  if (explicitBought > 0) {
-    return explicitBought
-  }
-
-  if (item.is_checked) {
-    return getInitialPurchaseQuantity(item)
-  }
-
-  return 0
+  // Source de vérité unique : la quantité réellement achetée.
+  // is_checked est uniquement un état d'interface.
+  return getBoughtQuantity(item)
 }
 
 function getEffectiveRemainingQuantity(
@@ -675,6 +687,18 @@ export default function CoursesPage() {
   const [showAddForm, setShowAddForm] =
     useState(false)
 
+  const [showFavorites, setShowFavorites] =
+    useState(false)
+
+  const [favorites, setFavorites] =
+    useState<FavoriteIngredient[]>([])
+
+  const [loadingFavorites, setLoadingFavorites] =
+    useState(false)
+
+  const [addingFavorite, setAddingFavorite] =
+    useState<string | null>(null)
+
   const [manualProduct, setManualProduct] =
     useState('')
 
@@ -717,9 +741,56 @@ export default function CoursesPage() {
    * --------------------------------------------------------------------------
    */
 
-  async function loadShoppingList() {
+  async function loadFavorites() {
     try {
-      setLoading(true)
+      setLoadingFavorites(true)
+      const response = await fetch('/api/replenishment', { cache: 'no-store' })
+      const result = await response.json()
+      if (!response.ok) {
+        throw new Error(result?.error ?? 'Impossible de charger les favoris.')
+      }
+      setFavorites((result?.favorites ?? []) as FavoriteIngredient[])
+    } catch (err) {
+      console.error('❌ Erreur chargement favoris :', err)
+      setError(err instanceof Error ? err.message : 'Impossible de charger les favoris.')
+    } finally {
+      setLoadingFavorites(false)
+    }
+  }
+
+  async function addFavoriteToCourses(favorite: FavoriteIngredient) {
+    if (addingFavorite) return
+    try {
+      setAddingFavorite(favorite.ingredient_id)
+      setError(null)
+      const response = await fetch('/api/replenishment/add', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          produit: favorite.nom,
+          ingredient_id: favorite.ingredient_id,
+          quantity: 1,
+          unite: favorite.unite || 'Pièce',
+          source: 'favorite',
+        }),
+      })
+      const result = await response.json()
+      if (!response.ok) {
+        throw new Error(result?.error ?? 'Impossible d’ajouter le favori aux courses.')
+      }
+      await loadShoppingList(false)
+      setGenerationMessage(`${favorite.nom} ajouté aux courses.`)
+    } catch (err) {
+      console.error('❌ Erreur ajout favori :', err)
+      setError(err instanceof Error ? err.message : 'Impossible d’ajouter le favori aux courses.')
+    } finally {
+      setAddingFavorite(null)
+    }
+  }
+
+  async function loadShoppingList(showLoading = true) {
+    try {
+      if (showLoading) setLoading(true)
       setError(null)
 
       const response =
@@ -753,7 +824,7 @@ export default function CoursesPage() {
           : 'Impossible de charger la liste de courses.'
       )
     } finally {
-      setLoading(false)
+      if (showLoading) setLoading(false)
     }
   }
 
@@ -820,6 +891,27 @@ export default function CoursesPage() {
     void loadShoppingList()
     void loadPlanningPeriod()
   }, [])
+
+  // Synchronisation légère pour les foyers où plusieurs personnes font
+  // les courses simultanément. Une modification locale en vol est prioritaire
+  // afin d'éviter qu'un rafraîchissement distant ne l'écrase à l'écran.
+  useEffect(() => {
+    const interval = window.setInterval(() => {
+      if (generating || finishing || updatingItems.size > 0) return
+      void loadShoppingList(false)
+    }, 4000)
+
+    const onFocus = () => {
+      if (generating || finishing || updatingItems.size > 0) return
+      void loadShoppingList(false)
+    }
+
+    window.addEventListener('focus', onFocus)
+    return () => {
+      window.clearInterval(interval)
+      window.removeEventListener('focus', onFocus)
+    }
+  }, [generating, finishing, updatingItems])
 
   /*
    * --------------------------------------------------------------------------
@@ -965,6 +1057,7 @@ export default function CoursesPage() {
             },
             body: JSON.stringify({
               id: item.id,
+              expected_updated_at: item.updated_at,
               is_checked:
                 !item.is_checked,
             }),
@@ -975,6 +1068,9 @@ export default function CoursesPage() {
         await response.json()
 
       if (!response.ok) {
+        if (response.status === 409) {
+          await loadShoppingList(false)
+        }
         throw new Error(
           result?.error ??
             'Impossible de mettre à jour l’article.'
@@ -1175,6 +1271,7 @@ export default function CoursesPage() {
             },
             body: JSON.stringify({
               id: item.id,
+              expected_updated_at: item.updated_at,
               ...patch,
             }),
           }
@@ -1184,6 +1281,9 @@ export default function CoursesPage() {
         await response.json()
 
       if (!response.ok) {
+        if (response.status === 409) {
+          await loadShoppingList(false)
+        }
         throw new Error(
           result?.error ??
             'Impossible de mettre à jour l’article.'
@@ -1253,6 +1353,60 @@ export default function CoursesPage() {
           return next
         }
       )
+    }
+  }
+
+  /*
+   * --------------------------------------------------------------------------
+   * SUPPRESSION D'UN ARTICLE
+   * --------------------------------------------------------------------------
+   */
+
+  async function deleteShoppingItem(item: ShoppingItem) {
+    if (updatingItems.has(item.id)) return
+
+    const bought = getBoughtQuantity(item)
+    if (bought > 0 || safeQuantity(item.stock_stored_quantity) > 0) {
+      setError(`Impossible de supprimer « ${item.produit} » : une quantité a déjà été achetée ou rangée.`)
+      return
+    }
+
+    const confirmed = window.confirm(`Supprimer « ${item.produit} » de cette liste de courses ?\n\nL'article ne sera pas acheté et sera retiré de la liste actuelle.`)
+    if (!confirmed) return
+
+    setUpdatingItems(current => {
+      const next = new Set(current)
+      next.add(item.id)
+      return next
+    })
+    setError(null)
+
+    try {
+      const response = await fetch('/api/shopping-list/items', {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: item.id }),
+      })
+      const result = await response.json()
+      if (!response.ok) {
+        throw new Error(result?.error ?? 'Impossible de supprimer l’article.')
+      }
+
+      setData(current => {
+        if (!current) return current
+        const nextItems = current.items.filter(currentItem => currentItem.id !== item.id)
+        const checked = nextItems.filter(currentItem => isItemBought(currentItem)).length
+        return { ...current, items: nextItems, total: nextItems.length, checked, unchecked: nextItems.length - checked }
+      })
+    } catch (err) {
+      console.error('❌ Erreur suppression article :', err)
+      setError(err instanceof Error ? err.message : 'Impossible de supprimer l’article.')
+    } finally {
+      setUpdatingItems(current => {
+        const next = new Set(current)
+        next.delete(item.id)
+        return next
+      })
     }
   }
 
@@ -1408,46 +1562,7 @@ export default function CoursesPage() {
   }
 
   async function finishShoppingList() {
-    if (finishing) {
-      return
-    }
-
-    if (!data?.list) {
-      setError(
-        'Aucune liste de courses active.'
-      )
-      return
-    }
-
-    const listBeforeFinish = data.list
-    const remainingBeforeFinish =
-      data.items
-        .map(item => ({
-          item,
-          remaining: getEffectiveRemainingQuantity(item),
-        }))
-        .filter(({ remaining }) => remaining > 0)
-        .map(({ item, remaining }) => ({
-          produit: item.produit,
-          ingredient_id: item.ingredient_id,
-          qte: remaining,
-          unite: item.unite,
-          rayon: item.rayon,
-          recipes: getUniqueRecipes(item.recipes),
-        }))
-
-    const incompleteCount = remainingBeforeFinish.length
-
-    if (incompleteCount > 0) {
-      const confirmed =
-        window.confirm(
-          `Il reste ${incompleteCount} article${incompleteCount > 1 ? 's' : ''} dont la quantité attendue n'est pas entièrement achetée.\n\nVeux-tu quand même terminer les courses ?`
-        )
-
-      if (!confirmed) {
-        return
-      }
-    }
+    if (finishing || !data?.list) return
 
     setFinishing(true)
     setError(null)
@@ -1455,40 +1570,13 @@ export default function CoursesPage() {
     setGenerationError(null)
 
     try {
-      // Si l'utilisateur a planifié un repas après la dernière génération et
-      // que la liste active est encore vide, on la synchronise automatiquement
-      // avant de tenter le rangement.
-      if (data.total === 0) {
-        setGenerationMessage('Synchronisation avec le planning…')
-        const syncResponse = await fetch('/api/shopping-list/generate', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          cache: 'no-store',
-          body: JSON.stringify({ includeFuture: false }),
-        })
-        const syncResult = await syncResponse.json()
-        if (!syncResponse.ok) {
-          throw new Error(syncResult?.error ?? 'Impossible de synchroniser le planning.')
-        }
-        await loadShoppingList()
-        await loadPlanningPeriod()
-      }
+      setGenerationMessage('Vérification des achats et rangement du stock…')
 
-      setGenerationMessage(
-        'Rangement des produits achetés…'
-      )
-
-      const storeResponse =
-        await fetch(
-          '/api/shopping-list/store',
-          {
-            method: 'POST',
-            cache: 'no-store',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-          }
-        )
+      const storeResponse = await fetch('/api/shopping-list/store', {
+        method: 'POST',
+        cache: 'no-store',
+        headers: { 'Content-Type': 'application/json' },
+      })
 
       const storeResult = await storeResponse.json() as {
         message?: string
@@ -1498,126 +1586,92 @@ export default function CoursesPage() {
       }
 
       if (!storeResponse.ok) {
-        throw new Error(
-          storeResult?.error ??
-            'Impossible de ranger les produits achetés dans le stock.'
-        )
+        throw new Error(storeResult?.error ?? 'Impossible de traiter les achats.')
       }
 
       const storedResults = storeResult.stored ?? []
       const skippedResults = storeResult.skipped ?? []
-
       setCompletedStored(storedResults)
       setCompletedSkipped(skippedResults)
-      setRemainingItems(remainingBeforeFinish)
 
-      // Un article totalement acheté ET correctement rangé ne doit plus
-      // apparaître dans la liste active, même si un autre article bloque
-      // encore la clôture (ex. article inconnu à résoudre).
-      if (storedResults.length > 0) {
-        const storedIds = new Set(
-          storedResults.map(result => result.shopping_item_id)
-        )
+      // On recharge depuis le serveur : aucune décision de fin ne doit être
+      // prise à partir d'un état React potentiellement périmé.
+      const freshResponse = await fetch('/api/shopping-list', { cache: 'no-store' })
+      const freshData = await freshResponse.json() as ShoppingResponse
+      if (!freshResponse.ok) throw new Error(freshData?.error ?? 'Impossible de relire la liste après rangement.')
+      setData(freshData)
 
-        setData(previous => {
-          if (!previous) return previous
+      const finishResponse = await fetch('/api/shopping-list/finish', {
+        method: 'POST',
+        cache: 'no-store',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ allowIncomplete: false }),
+      })
 
-          const remainingItems = previous.items.filter(item => {
-            if (!storedIds.has(item.id)) return true
-
-            // Un achat partiel reste visible : il faut seulement retirer les
-            // articles dont la quantité achetée couvre réellement le besoin.
-            return !isItemBought(item)
-          })
-
-          const checkedCount = remainingItems.filter(item => isItemBought(item)).length
-
-          return {
-            ...previous,
-            items: remainingItems,
-            total: remainingItems.length,
-            checked: checkedCount,
-            unchecked: remainingItems.length - checkedCount,
-          }
-        })
+      const finishResult = await finishResponse.json() as FinishResult & {
+        code?: string
+        missingCount?: number
+        items?: Array<{ id: string; produit: string; ingredient_id?: string | null; unite?: string | null; remaining?: number; achete?: number; range?: number }>
       }
 
-      if (skippedResults.length > 0) {
-        await loadIngredientOptions()
-        setGenerationMessage(
-          `${storedResults.length} article(s) rangé(s). ${skippedResults.length} article(s) nécessitent une résolution avant de clôturer les courses.`
+      if (!finishResponse.ok && (finishResult.code === 'INCOMPLETE_PURCHASE' || finishResult.code === 'STOCK_TRANSFER_MISSING')) {
+        const missing = finishResult.items ?? []
+        const isStorageProblem = finishResult.code === 'STOCK_TRANSFER_MISSING'
+        const detail = missing.map(item => {
+          const suffix = item.remaining != null
+            ? ` — reste ${formatNumber(Number(item.remaining))}`
+            : item.range != null
+              ? ` — rangé ${formatNumber(Number(item.range))} / acheté ${formatNumber(Number(item.achete ?? 0))}`
+              : ''
+          return `• ${item.produit}${suffix}`
+        }).join('\n')
+        const confirmed = window.confirm(
+          (isStorageProblem
+            ? `Certains achats n'ont pas pu être rangés automatiquement.\n\n${detail || `${finishResult.missingCount ?? 0} article(s)`}`
+            : `Certains besoins ne sont pas entièrement achetés.\n\n${detail || `${finishResult.missingCount ?? 0} article(s)`}`) +
+          `\n\nOK = terminer quand même et conserver ces éléments dans l'historique / les problèmes à corriger.\nAnnuler = continuer les achats.`
         )
-        // La liste reste active pour les articles non résolus ou incomplets,
-        // mais les articles déjà totalement achetés et rangés ont disparu de
-        // l'affichage.
+        if (!confirmed) {
+          setGenerationMessage('Courses non clôturées : tu peux continuer les achats.')
+          return
+        }
+
+        const forcedResponse = await fetch('/api/shopping-list/finish', {
+          method: 'POST',
+          cache: 'no-store',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ allowIncomplete: true }),
+        })
+        const forcedResult = await forcedResponse.json() as FinishResult & { code?: string }
+        if (!forcedResponse.ok) throw new Error(forcedResult.error ?? 'Impossible de terminer les courses.')
+
+        setCompletedList({ ...data.list, status: 'terminee' })
+        setRemainingItems(missing.map(item => ({
+          produit: item.produit,
+          ingredient_id: item.ingredient_id ?? null,
+          qte: Number(item.remaining ?? 0),
+          unite: item.unite ?? null,
+          rayon: null,
+          recipes: [],
+        })))
+        setData({ list: null, items: [], total: 0, checked: 0, unchecked: 0, issues: [] })
+        setGenerationMessage(forcedResult.message ?? 'Courses terminées. Les achats incomplets pourront être poursuivis.')
         return
       }
 
-      setGenerationMessage(
-        'Produits rangés. Finalisation de la liste…'
-      )
-
-      const finishResponse =
-        await fetch(
-          '/api/shopping-list/finish',
-          {
-            method: 'POST',
-            cache: 'no-store',
-          }
-        )
-
-      const finishResult: FinishResult =
-        await finishResponse.json()
-
       if (!finishResponse.ok) {
-        throw new Error(
-          finishResult.error ??
-            'Les produits ont été rangés, mais impossible de clôturer la liste.'
-        )
+        throw new Error(finishResult.error ?? 'Impossible de terminer les courses.')
       }
 
-      setCompletedList({
-        ...listBeforeFinish,
-        status: 'terminee',
-      })
-
-      setData({
-        list: null,
-        items: [],
-        total: 0,
-        checked: 0,
-        unchecked: 0,
-      })
-
-      const storedCount = (storeResult.stored ?? []).length
-      const skippedCount = (storeResult.skipped ?? []).length
-      const remainingCount = remainingBeforeFinish.length
-
-      if (remainingCount > 0) {
-        setGenerationMessage(
-          `${storedCount} article${storedCount > 1 ? 's' : ''} rangé${storedCount > 1 ? 's' : ''}. ${remainingCount} article${remainingCount > 1 ? 's restent' : ' reste'} à acheter.`
-        )
-      } else if (skippedCount > 0) {
-        setGenerationMessage(
-          `${storedCount} article${storedCount > 1 ? 's' : ''} rangé${storedCount > 1 ? 's' : ''}. ${skippedCount} article${skippedCount > 1 ? 's' : ''} n'ont pas pu être rangé${skippedCount > 1 ? 's' : ''} automatiquement.`
-        )
-      } else {
-        setGenerationMessage(
-          finishResult.message ??
-            'Courses terminées et produits rangés dans le stock.'
-        )
-      }
+      setCompletedList({ ...data.list, status: 'terminee' })
+      setRemainingItems([])
+      setData({ list: null, items: [], total: 0, checked: 0, unchecked: 0, issues: [] })
+      setGenerationMessage(
+        `${storedResults.length} article(s) rangé(s). ${finishResult.message ?? 'Courses terminées avec succès.'}`
+      )
     } catch (err) {
-      console.error(
-        '❌ Erreur fin des courses :',
-        err
-      )
-
-      setError(
-        err instanceof Error
-          ? err.message
-          : 'Impossible de terminer les courses.'
-      )
+      console.error('❌ Erreur fin des courses :', err)
+      setError(err instanceof Error ? err.message : 'Impossible de terminer les courses.')
     } finally {
       setFinishing(false)
     }
@@ -1704,53 +1758,30 @@ export default function CoursesPage() {
         return []
       }
 
-      return data.items.filter(
-        item => {
-          if (
-            !showChecked &&
-            item.is_checked
-          ) {
-            return false
-          }
+      return data.items.filter(item => {
+        const bought = isItemBought(item)
 
-          if (
-            filter === 'a_acheter'
-          ) {
-            return (
-              !item.is_checked &&
-              item.ai_status !==
-                'recurrent'
-            )
-          }
-
-          if (
-            filter === 'urgent'
-          ) {
-            return (
-              !item.is_checked &&
-              item.ai_status ===
-                'red'
-            )
-          }
-
-          if (
-            filter === 'recurrent'
-          ) {
-            return (
-              !item.is_checked &&
-              item.ai_status ===
-                'recurrent'
-            )
-          }
-
-          return true
+        // En mode magasin, un article acheté reste volontairement visible :
+        // on doit pouvoir continuer à augmenter la quantité (sur-achat).
+        if (!storeMode && !showChecked && bought) {
+          return false
         }
-      )
-    }, [
-      data,
-      filter,
-      showChecked,
-    ])
+
+        if (filter === 'a_acheter') {
+          return !bought && item.ai_status !== 'recurrent'
+        }
+
+        if (filter === 'urgent') {
+          return !bought && item.ai_status === 'red'
+        }
+
+        if (filter === 'recurrent') {
+          return !bought && item.ai_status === 'recurrent'
+        }
+
+        return true
+      })
+    }, [data, filter, showChecked, storeMode])
 
   /*
    * --------------------------------------------------------------------------
@@ -1890,6 +1921,22 @@ export default function CoursesPage() {
           <div className="mb-4 rounded-2xl border border-emerald-200 bg-emerald-50 p-4 text-sm font-semibold text-emerald-800">
             ✓ {generationMessage}
           </div>
+        )}
+
+        {data?.issues && data.issues.length > 0 && (
+          <section className="mb-5 rounded-2xl border border-amber-200 bg-amber-50 p-4 shadow-sm sm:p-5">
+            <div className="font-black text-amber-950">⚠️ Points à vérifier — sans bloquer les courses</div>
+            <p className="mt-1 text-sm text-amber-900">Mealio a généré la liste. Certains articles ont toutefois une correspondance ou une conversion qui mérite une vérification.</p>
+            <div className="mt-3 space-y-3">
+              {data.issues.map(issue => (
+                <div key={issue.id ?? `${issue.issue_type}-${issue.produit}-${issue.message}`} className="rounded-xl border border-amber-200 bg-white p-3">
+                  <div className="font-bold text-slate-900">{issue.produit}{issue.unit ? ` · unité : ${issue.unit}` : ''}</div>
+                  <div className="mt-1 text-xs text-amber-900">{issue.message}</div>
+                  <div className="mt-2 rounded-lg bg-amber-50 px-3 py-2 text-xs font-semibold text-amber-950">💡 {issue.resolution_hint}</div>
+                </div>
+              ))}
+            </div>
+          </section>
         )}
 
         {/* ===================================================================
@@ -2055,6 +2102,59 @@ export default function CoursesPage() {
             {generationError && (
               <div className="mt-3 rounded-xl border border-red-200 bg-red-50 px-3 py-2 text-xs font-semibold text-red-700">
                 {generationError}
+              </div>
+            )}
+          </section>
+        )}
+
+        {/* ===================================================================
+            FAVORIS
+            =================================================================== */}
+
+        {!completedList && (
+          <section className="mb-5 rounded-2xl border border-amber-200 bg-white shadow-sm">
+            <button
+              type="button"
+              onClick={() => {
+                const next = !showFavorites
+                setShowFavorites(next)
+                if (next && favorites.length === 0) void loadFavorites()
+              }}
+              className="flex w-full items-center justify-between gap-3 px-4 py-4 text-left"
+            >
+              <div>
+                <div className="font-black">⭐ Mes favoris</div>
+                <div className="mt-0.5 text-xs text-slate-500">Ajouter rapidement aux courses les produits que le foyer achète le plus souvent.</div>
+              </div>
+              <span className="text-xl text-slate-400">{showFavorites ? '−' : '+'}</span>
+            </button>
+
+            {showFavorites && (
+              <div className="border-t border-amber-100 bg-amber-50/40 p-4">
+                {loadingFavorites ? (
+                  <div className="py-4 text-center text-sm text-slate-500">Chargement des favoris…</div>
+                ) : favorites.length === 0 ? (
+                  <div className="rounded-xl bg-white p-4 text-sm text-slate-500">Aucun favori disponible pour le moment.</div>
+                ) : (
+                  <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+                    {favorites.map(favorite => (
+                      <div key={favorite.ingredient_id} className="flex items-center justify-between gap-3 rounded-xl bg-white p-3 shadow-sm">
+                        <div className="min-w-0">
+                          <div className="truncate font-bold">{favorite.nom}</div>
+                          <div className="text-xs text-slate-500">{favorite.purchase_count} achat{favorite.purchase_count > 1 ? 's' : ''} · +1 {favorite.unite}</div>
+                        </div>
+                        <button
+                          type="button"
+                          disabled={addingFavorite !== null}
+                          onClick={() => void addFavoriteToCourses(favorite)}
+                          className="shrink-0 rounded-lg bg-amber-500 px-3 py-2 text-sm font-black text-white hover:bg-amber-600 disabled:opacity-50"
+                        >
+                          {addingFavorite === favorite.ingredient_id ? '…' : '+1'}
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
             )}
           </section>
@@ -2538,11 +2638,20 @@ export default function CoursesPage() {
                                               </div>
                                             </div>
 
-                                            {updating && (
-                                              <span className="text-xs font-bold text-slate-400">
-                                                …
-                                              </span>
-                                            )}
+                                            <div className="flex items-center gap-2">
+                                              {updating && (
+                                                <span className="text-xs font-bold text-slate-400">…</span>
+                                              )}
+                                              <button
+                                                type="button"
+                                                onClick={() => void deleteShoppingItem(item)}
+                                                disabled={updating || getBoughtQuantity(item) > 0}
+                                                className="rounded-lg border border-red-200 bg-white px-2 py-1 text-[11px] font-black text-red-600 disabled:cursor-not-allowed disabled:opacity-30"
+                                                title="Supprimer de cette liste"
+                                              >
+                                                🗑
+                                              </button>
+                                            </div>
                                           </div>
 
                                           <div className="mt-4 grid gap-2 sm:grid-cols-3">
@@ -2750,7 +2859,7 @@ export default function CoursesPage() {
                                       <div className="min-w-0 flex-1">
                                         <div
                                           className={`font-black ${
-                                            item.is_checked
+                                            isItemBought(item)
                                               ? 'text-slate-400 line-through'
                                               : 'text-slate-900'
                                           }`}
@@ -2793,6 +2902,26 @@ export default function CoursesPage() {
                                               item
                                             )}
                                           </span>
+                                        </div>
+
+                                        {data?.issues?.filter(issue => issue.shopping_item_id === item.id).map(issue => (
+                                          <div key={issue.id ?? `${issue.issue_type}-${item.id}`} className="mt-3 rounded-xl border border-amber-200 bg-amber-50 px-3 py-2">
+                                            <div className="text-xs font-black text-amber-950">⚠️ Pourquoi ?</div>
+                                            <div className="mt-1 text-xs leading-5 text-amber-900">{issue.message}</div>
+                                            <div className="mt-2 text-[11px] font-semibold leading-5 text-amber-800">💡 {issue.resolution_hint}</div>
+                                          </div>
+                                        ))}
+
+                                        <div className="mt-2 flex justify-end">
+                                          <button
+                                            type="button"
+                                            onClick={() => void deleteShoppingItem(item)}
+                                            disabled={updating || getBoughtQuantity(item) > 0}
+                                            className="rounded-lg border border-red-200 bg-white px-2 py-1 text-[11px] font-black text-red-600 disabled:cursor-not-allowed disabled:opacity-30"
+                                            title="Supprimer de cette liste"
+                                          >
+                                            🗑 Supprimer
+                                          </button>
                                         </div>
 
                                         {item.recipes.length >

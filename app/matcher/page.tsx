@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import AdminHelp from '../components/AdminHelp'
 import { useEffect, useMemo, useState } from 'react'
 
 /* ============================================================================
@@ -48,6 +49,10 @@ type TraceStage = {
 }
 
 type MatcherTrace = {
+  ingredientDecision?: { source?: string; confidence?: number | null; reason?: string; kind?: string }
+  stockDecision?: { source?: string; confidence?: number | null; reason?: string; kind?: string }
+  ingredientCandidates?: Array<{ id: string; name: string; score: number }>
+  stockCandidates?: Array<{ id: string; name: string; score: number; source?: string }>
   ingredient?: TraceStage
   stock?: TraceStage
   claudeCalls?: number
@@ -346,7 +351,9 @@ export default function MatcherPage() {
             =================================================================== */}
 
         <header>
-          <div className="text-sm font-bold uppercase tracking-widest text-amber-600">
+          <div className="flex flex-wrap items-start justify-between gap-4">
+            <div>
+              <div className="text-sm font-bold uppercase tracking-widest text-amber-600">
             Back-office de test
           </div>
 
@@ -354,14 +361,29 @@ export default function MatcherPage() {
             🧠 Laboratoire du Matcher V3.5
           </h1>
 
-          <p className="mt-2 max-w-5xl text-slate-600">
-            Le laboratoire teste le moteur côté serveur sur le stock réel
-            Frosti + Cellio. Il permet de contrôler la résolution de
-            l’ingrédient, les synonymes, le référentiel officiel, la mémoire,
-            le fallback Claude, les conversions, l’agrégation des lignes
-            de stock et la quantité réellement disponible avant achat.
-          </p>
+              <p className="mt-2 max-w-5xl text-slate-600">
+                Le laboratoire teste le moteur côté serveur sur le stock réel
+                Frosti + Cellio. Il permet de contrôler la résolution de
+                l’ingrédient, les synonymes, le référentiel officiel, la mémoire,
+                le fallback Claude, les conversions, l’agrégation des lignes
+                de stock et la quantité réellement disponible avant achat.
+              </p>
+            </div>
+            <Link href="/admin" className="rounded-xl border bg-white px-4 py-2 text-sm font-semibold shadow-sm hover:bg-stone-50">⚙️ Retour Admin</Link>
+          </div>
         </header>
+
+        <AdminHelp
+          title="Comprendre le Matcher"
+          intro="Le Matcher transforme une ligne de recette en information exploitable par Mealio : il cherche l’ingrédient officiel correspondant, rapproche les lignes de stock pertinentes et vérifie si les unités peuvent être comparées sans approximation injustifiée."
+          sections={[
+            { title: '1️⃣ Résolution de l’ingrédient', children: <p>Le moteur normalise le texte puis privilégie les correspondances connues et déterministes, notamment le référentiel et les synonymes. La mémoire des résolutions précédentes permet d’éviter des traitements IA inutiles.</p> },
+            { title: '2️⃣ Rapprochement du stock', children: <p>Une fois l’ingrédient identifié, le Matcher recherche les produits de stock compatibles dans Frosti et Cellio. Des équivalences sémantiques connues peuvent élargir les candidats lorsque cela est justifié.</p> },
+            { title: '3️⃣ Conversion des quantités', children: <p>Les unités identiques sont comparées directement. Les autres conversions utilisent les règles d’unités et, lorsque nécessaire, les densités du référentiel. Une conversion impossible doit rester visible comme problème à vérifier.</p> },
+            { title: '4️⃣ Diagnostic', children: <p>Le laboratoire affiche le chemin suivi, les lignes de stock réellement utilisées et la source de la résolution. Il sert à comprendre <b>pourquoi</b> le moteur a retenu ou écarté un rapprochement.</p> },
+          ]}
+          warning="Le laboratoire est un outil d’administration et de diagnostic : il ne modifie pas le planning. Une correction durable se fait généralement dans le référentiel ou la mémoire adaptée, pas en contournant le moteur."
+        />
 
 
         {/* ===================================================================
@@ -908,6 +930,18 @@ export default function MatcherPage() {
 
             <div className="mt-5 grid gap-3 md:grid-cols-2">
 
+              <div className="rounded-xl border border-stone-200 bg-stone-50 p-4">
+                <div className="text-xs font-bold uppercase tracking-wider text-stone-500">Décision ingrédient</div>
+                <div className="mt-2 font-bold">{sourceLabel(trace?.ingredientDecision?.source)} · {trace?.ingredientDecision?.confidence == null ? '—' : pretty(trace.ingredientDecision.confidence)}</div>
+                <div className="mt-1 text-sm text-slate-500">{trace?.ingredientDecision?.reason || '—'}</div>
+              </div>
+
+              <div className="rounded-xl border border-stone-200 bg-stone-50 p-4">
+                <div className="text-xs font-bold uppercase tracking-wider text-stone-500">Décision stock</div>
+                <div className="mt-2 font-bold">{sourceLabel(trace?.stockDecision?.source)} · {trace?.stockDecision?.confidence == null ? '—' : pretty(trace.stockDecision.confidence)}</div>
+                <div className="mt-1 text-sm text-slate-500">{trace?.stockDecision?.reason || '—'}</div>
+              </div>
+
               <TraceCard
                 title="Résolution ingrédient"
                 source={ingredientSource}
@@ -931,6 +965,27 @@ export default function MatcherPage() {
 
             </div>
 
+
+            {(trace?.ingredientCandidates?.length || trace?.stockCandidates?.length) ? (
+              <div className="mt-5 grid gap-4 md:grid-cols-2">
+                <div className="rounded-xl border border-stone-200 p-4">
+                  <div className="text-sm font-bold">Candidats ingrédient</div>
+                  <div className="mt-2 space-y-1 text-xs">
+                    {(trace.ingredientCandidates ?? []).map(c => (
+                      <div key={c.id} className="flex justify-between gap-3"><span>{c.name}</span><span className="font-mono">{pretty(c.score)}</span></div>
+                    ))}
+                  </div>
+                </div>
+                <div className="rounded-xl border border-stone-200 p-4">
+                  <div className="text-sm font-bold">Candidats stock</div>
+                  <div className="mt-2 space-y-1 text-xs">
+                    {(trace.stockCandidates ?? []).map(c => (
+                      <div key={c.id} className="flex justify-between gap-3"><span>{c.name}</span><span className="font-mono">{pretty(c.score)}</span></div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            ) : null}
 
             {/* JOURNAL */}
 

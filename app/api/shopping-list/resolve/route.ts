@@ -31,5 +31,13 @@ export async function POST(request: NextRequest) {
     .from('shopping_items').update({ ingredient_id: ingredient.id }).eq('id', item.id).eq('list_id', list.id).select('id,produit,ingredient_id').single()
   if (updateError) return NextResponse.json({ error: updateError.message }, { status: 500 })
 
+  // L'ancien blocage de rangement n'est plus valable après résolution.
+  await mealioServerDb
+    .from('shopping_issues')
+    .update({ status: 'resolved', resolved_at: new Date().toISOString() })
+    .eq('shopping_item_id', item.id)
+    .eq('phase', 'storage')
+    .eq('status', 'open')
+
   return NextResponse.json({ success: true, item: updated, ingredient })
 }

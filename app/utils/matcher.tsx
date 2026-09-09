@@ -16,6 +16,8 @@ export interface StockItem {
   qte: number
   unite: string
   source?: string
+  /** Ingredient officiel associé à la ligne de stock lorsqu'il est connu. */
+  ingredient_id?: string | null
 }
 
 type OfficialIngredient = {
@@ -59,6 +61,13 @@ export interface ReferenceData {
   aiCache: Map<string, string | null>
 }
 
+export interface MatcherDecision {
+  kind: 'ingredient' | 'stock'
+  source: 'ignored' | 'synonym' | 'exact' | 'lexical' | 'memory' | 'ai' | 'unresolved' | 'none'
+  confidence: number | null
+  reason: string
+}
+
 export interface MatcherTrace {
   ingredient: {
     raw: string
@@ -92,6 +101,10 @@ export interface MatcherTrace {
 
   claudeCalls: number
   events: string[]
+  ingredientCandidates?: Array<{ id: string; name: string; score: number }>
+  stockCandidates?: Array<{ id: string; name: string; score: number; source?: string }>
+  ingredientDecision?: MatcherDecision
+  stockDecision?: MatcherDecision
 }
 
 export function createMatcherTrace(raw: string): MatcherTrace {
@@ -115,6 +128,14 @@ export function createMatcherTrace(raw: string): MatcherTrace {
 
     claudeCalls: 0,
     events: [],
+    ingredientCandidates: [],
+    stockCandidates: [],
+    ingredientDecision: {
+      kind: 'ingredient',
+      source: 'unresolved',
+      confidence: null,
+      reason: 'Aucune décision prise',
+    },
   }
 }
 
@@ -222,7 +243,7 @@ export function cleanText(
     .toLowerCase()
     .normalize('NFD')
     .replace(/[\u0300-\u036f]/g, '')
-    .replace(/[()[\],.;:/\\'"!?]/g, ' ')
+    .replace(/[()[\],.;:/\\'"!?-]/g, ' ')
     .replace(/\s+/g, ' ')
     .trim()
     .split(' ')
@@ -369,6 +390,188 @@ function textScore(
     0.97,
     Math.max(0, score)
   )
+}
+
+function tokenCoverage(
+  source: string,
+  candidate: string,
+  stopWords: Set<string>
+): { sourceCoverage: number; candidateCoverage: number; common: string[] } {
+  const sourceTokens = tokens(source, stopWords)
+  const candidateTokens = tokens(candidate, stopWords)
+
+  if (!sourceTokens.length || !candidateTokens.length) {
+    return { sourceCoverage: 0, candidateCoverage: 0, common: [] }
+  }
+
+  const candidateSet = new Set(candidateTokens)
+  const common = sourceTokens.filter(t => candidateSet.has(t))
+  const sourceSet = new Set(sourceTokens)
+  const commonUnique = candidateTokens.filter(t => sourceSet.has(t))
+
+  return {
+    sourceCoverage: new Set(common).size / new Set(sourceTokens).size,
+    candidateCoverage: new Set(commonUnique).size / new Set(candidateTokens).size,
+    common: Array.from(new Set(common)),
+  }
+}
+
+/**
+ * Equivalences sémantiques métier utilisées uniquement pour le
+ * filtrage des candidats stock.
+ *
+ * Elles ne remplacent pas ingredient_synonyms : elles évitent simplement
+ * qu'une relation alimentaire évidente soit rejetée avant Claude lorsque
+ * le libellé du stock emploie un terme différent.
+ *
+ * À terme, ces relations pourront être migrées dans une table de référence.
+ */
+const STOCK_SEMANTIC_EQUIVALENCES: Record<string, string[]> = {
+  gambas: ['crevette'],
+  gamba: ['crevette'],
+  crevette: ['gambas'],
+}
+
+const STOCK_NON_DISCRIMINANT_TOKENS = new Set([
+  'hache',
+  'hachee',
+  'haches',
+  'hachees',
+  'frais',
+  'fraiche',
+  'frais',
+  'fraiches',
+  'surgelé',
+  'surgele',
+  'surgeles',
+  'surgelées',
+  'surgelees',
+  'decoupe',
+  'decoupee',
+  'decoupes',
+  'decoupees',
+  'tranche',
+  'tranchee',
+  'tranches',
+  'tranchees',
+  'emince',
+  'emincee',
+  'eminces',
+  'emincees',
+  'rape',
+  'rapee',
+  'rapes',
+  'rapees',
+  'cuit',
+  'cuite',
+  'cuits',
+  'cuites',
+  'cru',
+  'crue',
+  'crus',
+  'crues',
+  'sec',
+  'seche',
+  'secs',
+  'seches',
+])
+
+function getIngredientSemanticLabels(
+  ingredientId: string,
+  refData: ReferenceData
+): string[] {
+  const official =
+    refData.officialById.get(ingredientId)
+
+  const labels = new Set<string>()
+
+  if (official?.nom) {
+    labels.add(cleanText(official.nom))
+  }
+
+  for (const [synonym, mappedId] of refData.synonymMap.entries()) {
+    if (mappedId === ingredientId && synonym) {
+      labels.add(cleanText(synonym))
+    }
+  }
+
+  // Ajoute les équivalences métier connues pour la garde stock.
+  // Exemple : Gambas -> crevette -> permet de reconnaître
+  // « Crevettes roses » sans appeler Claude.
+  const seedLabels = Array.from(labels)
+  for (const label of seedLabels) {
+    const labelTokens = tokens(label, BASE_STOP_WORDS)
+
+    for (const token of labelTokens) {
+      for (const equivalent of STOCK_SEMANTIC_EQUIVALENCES[token] ?? []) {
+        labels.add(equivalent)
+      }
+    }
+  }
+
+  return Array.from(labels)
+}
+
+function hasSemanticStockEvidence(
+  ingredientId: string | null,
+  candidateName: string,
+  refData: ReferenceData,
+  stopWords: Set<string>
+): {
+  matched: boolean
+  label?: string
+  common?: string[]
+} {
+  if (!ingredientId) {
+    return { matched: true }
+  }
+
+  const labels = getIngredientSemanticLabels(
+    ingredientId,
+    refData
+  )
+
+  const candidateTokens = new Set(
+    tokens(candidateName, stopWords)
+  )
+
+  for (const label of labels) {
+    const coverage = tokenCoverage(
+      label,
+      candidateName,
+      stopWords
+    )
+
+    const meaningfulCommon = coverage.common.filter(
+      token => !STOCK_NON_DISCRIMINANT_TOKENS.has(token)
+    )
+
+    if (meaningfulCommon.length > 0) {
+      return {
+        matched: true,
+        label,
+        common: meaningfulCommon,
+      }
+    }
+
+    const labelNormalized = cleanText(
+      label,
+      stopWords
+    )
+
+    if (
+      labelNormalized &&
+      candidateTokens.has(labelNormalized)
+    ) {
+      return {
+        matched: true,
+        label,
+        common: [labelNormalized],
+      }
+    }
+  }
+
+  return { matched: false }
 }
 
 function bestIsSafe<T extends { score: number }>(
@@ -624,6 +827,10 @@ function normalizeUnitKey(
     gramme: 'g',
     grammes: 'g',
 
+    mg: 'mg',
+    milligramme: 'mg',
+    milligrammes: 'mg',
+
     kg: 'kg',
     kilogramme: 'kg',
     kilogrammes: 'kg',
@@ -650,6 +857,9 @@ function normalizeUnitKey(
 
     sachet: 'sachet',
     sachets: 'sachet',
+
+    paquet: 'paquet',
+    paquets: 'paquet',
 
     boite: 'boite',
     boîte: 'boite',
@@ -796,6 +1006,22 @@ async function saveAiResolution(
   }
 }
 
+function setIngredientDecision(
+  trace: MatcherTrace | undefined,
+  source: MatcherTrace['ingredient']['source'],
+  confidence: number | null,
+  reason: string
+) {
+  if (!trace) return
+  trace.ingredient.source = source
+  trace.ingredientDecision = {
+    kind: 'ingredient',
+    source,
+    confidence,
+    reason,
+  }
+}
+
 async function resolveOfficialIngredient(
   rawName: string,
   refData: ReferenceData,
@@ -834,8 +1060,7 @@ async function resolveOfficialIngredient(
 
     if (official) {
       if (trace) {
-        trace.ingredient.source =
-          'synonym'
+        setIngredientDecision(trace, 'synonym', 1, 'Synonyme explicite du référentiel')
 
         trace.events.push(
           `Synonyme trouvé : ${official.nom}`
@@ -874,8 +1099,7 @@ async function resolveOfficialIngredient(
 
   if (exact) {
     if (trace) {
-      trace.ingredient.source =
-        'exact'
+      setIngredientDecision(trace, 'exact', 1, 'Nom normalisé identique au référentiel officiel')
 
       trace.events.push(
         `Correspondance exacte : ${exact.item.nom}`
@@ -895,6 +1119,95 @@ async function resolveOfficialIngredient(
   }
 
   // ============================================================
+  // 5. MOTEUR LEXICAL
+  // ============================================================
+
+  const candidates =
+    refData.officialPrepared
+      .map(o => ({
+        ...o,
+        score: textScore(
+          rawName,
+          o.item.nom,
+          refData.ignoredSet
+        ),
+      }))
+      .filter(
+        o =>
+          o.score >=
+          CONFIG.MIN_CANDIDATE_SCORE
+      )
+      .sort(
+        (a, b) =>
+          b.score - a.score
+      )
+      .slice(
+        0,
+        CONFIG.CANDIDATE_LIMIT
+      )
+
+  if (trace) {
+    trace.ingredientCandidates = candidates.map(c => ({
+      id: c.item.id,
+      name: c.item.nom,
+      score: Number(c.score.toFixed(4)),
+    }))
+  }
+
+  const lexicalWinner = candidates[0]
+  const lexicalCoverage = lexicalWinner
+    ? tokenCoverage(
+        normalizedRaw,
+        lexicalWinner.item.nom,
+        refData.ignoredSet
+      )
+    : null
+
+  const lexicalIsDeterministic =
+    bestIsSafe(
+      candidates,
+      CONFIG.OFFICIAL_AUTO_SCORE,
+      CONFIG.OFFICIAL_AUTO_MARGIN
+    ) ||
+    Boolean(
+      lexicalWinner &&
+      lexicalCoverage &&
+      lexicalCoverage.candidateCoverage === 1 &&
+      lexicalCoverage.common.length > 0 &&
+      lexicalWinner.score >= 0.55 &&
+      (candidates.length === 1 ||
+        lexicalWinner.score - candidates[1].score >= 0.05)
+    )
+
+  if (lexicalIsDeterministic) {
+    if (trace) {
+      setIngredientDecision(
+        trace,
+        'lexical',
+        candidates[0].score,
+        lexicalCoverage && lexicalCoverage.candidateCoverage === 1 && candidates[0].score < CONFIG.OFFICIAL_AUTO_SCORE
+          ? `Tous les termes de « ${candidates[0].item.nom} » sont présents dans l'entrée ; score lexical ${candidates[0].score.toFixed(2)}`
+          : `Score lexical ${candidates[0].score.toFixed(2)} et marge suffisante`
+      )
+
+      trace.events.push(
+        `Match lexical automatique : ${candidates[0].item.nom} (${candidates[0].score.toFixed(2)})`
+      )
+    }
+
+    refData.aiCache.set(
+      key,
+      candidates[0].item.id
+    )
+
+    return {
+      id: candidates[0].item.id,
+      name: candidates[0].item.nom,
+      aiProposed: false,
+    }
+  }
+
+  // ============================================================
   // 3. MÉMOIRE IA PERSISTANTE
   // ============================================================
 
@@ -906,8 +1219,7 @@ async function resolveOfficialIngredient(
       trace.ingredientAiCacheHit =
         true
 
-      trace.ingredient.source =
-        'memory'
+      setIngredientDecision(trace, 'memory', previous.statut === 'valide' ? 1 : 0.9, `Décision mémorisée (${previous.statut})`)
 
       trace.events.push(
         `Mémoire IA utilisée : ${
@@ -1009,62 +1321,6 @@ async function resolveOfficialIngredient(
   }
 
   // ============================================================
-  // 5. MOTEUR LEXICAL
-  // ============================================================
-
-  const candidates =
-    refData.officialPrepared
-      .map(o => ({
-        ...o,
-        score: textScore(
-          rawName,
-          o.item.nom,
-          refData.ignoredSet
-        ),
-      }))
-      .filter(
-        o =>
-          o.score >=
-          CONFIG.MIN_CANDIDATE_SCORE
-      )
-      .sort(
-        (a, b) =>
-          b.score - a.score
-      )
-      .slice(
-        0,
-        CONFIG.CANDIDATE_LIMIT
-      )
-
-  if (
-    bestIsSafe(
-      candidates,
-      CONFIG.OFFICIAL_AUTO_SCORE,
-      CONFIG.OFFICIAL_AUTO_MARGIN
-    )
-  ) {
-    if (trace) {
-      trace.ingredient.source =
-        'lexical'
-
-      trace.events.push(
-        `Match lexical automatique : ${candidates[0].item.nom} (${candidates[0].score.toFixed(2)})`
-      )
-    }
-
-    refData.aiCache.set(
-      key,
-      candidates[0].item.id
-    )
-
-    return {
-      id: candidates[0].item.id,
-      name: candidates[0].item.nom,
-      aiProposed: false,
-    }
-  }
-
-  // ============================================================
   // 6. CANDIDATS IA
   // ============================================================
 
@@ -1159,8 +1415,7 @@ async function resolveOfficialIngredient(
     trace.ingredientAiConfidence =
       ai.confidence ?? null
 
-    trace.ingredient.source =
-      'ai'
+    setIngredientDecision(trace, 'ai', ai.confidence ?? null, ai.reason || 'Décision Claude')
 
     trace.events.push(
       `Claude a proposé : ${
@@ -1213,6 +1468,32 @@ async function resolveOfficialIngredient(
         name: null,
         aiProposed: false,
       }
+}
+
+export async function resolveIngredientDecision(
+  rawName: string,
+  refData?: ReferenceData
+): Promise<{
+  id: string | null
+  name: string | null
+  aiProposed: boolean
+  decision: MatcherDecision
+  candidates: Array<{ id: string; name: string; score: number }>
+}> {
+  const data = refData ?? await loadReferenceData()
+  const trace = createMatcherTrace(rawName)
+  const result = await resolveOfficialIngredient(rawName, data, trace)
+  const decision: MatcherDecision = {
+    kind: 'ingredient',
+    source: (trace.ingredientDecision?.source ?? trace.ingredient.source) as MatcherDecision['source'],
+    confidence: trace.ingredientDecision?.confidence ?? trace.ingredientAiConfidence ?? null,
+    reason: trace.ingredientDecision?.reason ?? 'Décision du moteur',
+  }
+  return {
+    ...result,
+    decision,
+    candidates: trace.ingredientCandidates ?? [],
+  }
 }
 
 export interface ResolvedIngredient {
@@ -1909,6 +2190,7 @@ async function matchOneRequirement(
   memory: Map<string, MemoryRow[]>,
   exclusions: Set<string>,
   stopWords: Set<string>,
+  refData: ReferenceData,
   trace?: MatcherTrace
 ): Promise<{
   matchedItems: StockItem[]
@@ -1928,6 +2210,14 @@ async function matchOneRequirement(
         item.needs_review,
     }
   }
+
+  // Ingrédient officiel déjà résolu à l'étape précédente.
+  // Cette valeur est utilisée uniquement pour la garde sémantique
+  // du rapprochement stock.
+  const officialIngredient =
+    item.ingredient_id
+      ? refData.officialById.get(item.ingredient_id) ?? null
+      : null
 
   // ============================================================
   // 1. MÉMOIRE PERSISTANTE
@@ -1993,6 +2283,13 @@ async function matchOneRequirement(
     if (trace) {
       trace.stock.source =
         'memory'
+
+      trace.stockDecision = {
+        kind: 'stock',
+        source: 'memory',
+        confidence: Number(row.confidence),
+        reason: `Rapprochement stock mémorisé (${row.source})`,
+      }
 
       trace.events.push(
         `Mémoire stock utilisée : ${found.item.produit} (${row.source}, confiance ${Number(row.confidence).toFixed(2)})`
@@ -2099,6 +2396,13 @@ async function matchOneRequirement(
       trace.stock.source =
         'exact'
 
+      trace.stockDecision = {
+        kind: 'stock',
+        source: 'exact',
+        confidence: 1,
+        reason: 'Libellé stock identique après normalisation',
+      }
+
       trace.events.push(
         `Correspondance stock exacte : ${exact.length} ligne(s)`
       )
@@ -2169,6 +2473,15 @@ async function matchOneRequirement(
         CONFIG.CANDIDATE_LIMIT
       )
 
+  if (trace) {
+    trace.stockCandidates = candidates.map(c => ({
+      id: c.item.id,
+      name: c.item.produit,
+      score: Number(c.score.toFixed(4)),
+      source: c.item.source,
+    }))
+  }
+
   // ============================================================
   // 4. CANDIDATS CLAUDE
   // ============================================================
@@ -2200,27 +2513,15 @@ async function matchOneRequirement(
             CONFIG.CANDIDATE_LIMIT
           )
 
-  if (!aiCandidates.length) {
-
-    if (trace) {
-      trace.stock.source =
-        'none'
-
-      trace.events.push(
-        'Aucun article stock disponible pour le rapprochement'
-      )
-    }
-
-    return {
-      matchedItems: [],
-      needsReview:
-        item.needs_review,
-    }
-  }
-
   // ============================================================
-  // 5. MATCH LEXICAL SÛR
+  // 4. MATCH LEXICAL SÛR
   // ============================================================
+
+  /*
+   * Un candidat lexical très sûr reste prioritaire.
+   * La garde sémantique ne doit pas bloquer un rapprochement
+   * déterministe déjà suffisamment fort.
+   */
 
   if (
     bestIsSafe(
@@ -2236,6 +2537,253 @@ async function matchOneRequirement(
     if (trace) {
       trace.stock.source =
         'lexical'
+
+      trace.stockDecision = {
+        kind: 'stock',
+        source: 'lexical',
+        confidence: selected.score,
+        reason: `Score lexical ${selected.score.toFixed(2)} avec marge suffisante`,
+      }
+
+      trace.events.push(
+        `Match stock lexical automatique : ${selected.item.produit} (${selected.score.toFixed(2)})`
+      )
+    }
+
+    const matchingItems =
+      preparedStock
+        .filter(
+          p =>
+            p.normalized ===
+              selected.normalized &&
+            !exclusions.has(
+              `${key}::${p.item.id}`
+            )
+        )
+        .map(
+          p => p.item
+        )
+
+    for (const stockItem of
+      matchingItems
+    ) {
+      await saveStockMemory(
+        key,
+        stockItem,
+        'text',
+        selected.score,
+        `Match automatique : score ${selected.score.toFixed(2)}`,
+        true
+      )
+    }
+
+    if (
+      trace &&
+      matchingItems.length >
+        1
+    ) {
+      trace.events.push(
+        `Plusieurs lignes stock retenues après match lexical : ${matchingItems.length}`
+      )
+    }
+
+    return {
+      matchedItems:
+        matchingItems,
+
+      needsReview:
+        item.needs_review,
+    }
+  }
+
+  // ============================================================
+  // 5. GARDE SÉMANTIQUE AVANT CLAUDE
+  // ============================================================
+
+  /*
+   * Phase 23.2 : la garde ne se contente plus de chercher
+   * n'importe quel mot commun.
+   *
+   * Elle utilise :
+   *   - le nom officiel de l'ingrédient ;
+   *   - ses synonymes connus dans ingredient_synonyms ;
+   *   - une liste de termes de préparation/état non discriminants
+   *     (ex. "haché", "frais", "tranché").
+   *
+   * Exemple :
+   *   Steak haché ↔ Épinards hachés
+   *
+   * Le seul terme commun est "haché". Il n'est pas discriminant,
+   * donc Claude n'est même pas appelé.
+   *
+   * En revanche :
+   *   Gambas ↔ Crevettes roses
+   *
+   * peut être accepté si "crevette" est enregistré comme synonyme
+   * de Gambas.
+   */
+
+  const semanticStockCandidates =
+    officialIngredient
+      ? (() => {
+          /*
+           * Important : un synonyme peut n'avoir AUCUN recouvrement
+           * lexical avec le libellé de la recette.
+           *
+           * Exemple :
+           *   besoin = Gambas
+           *   stock   = Crevettes roses
+           *
+           * "Crevettes roses" peut donc être absent des 5 meilleurs
+           * candidats lexicaux. On élargit ici le pool UNIQUEMENT pour
+           * rechercher les équivalences sémantiques connues du référentiel.
+           * Ce pool élargi n'est jamais envoyé tel quel à Claude : seuls
+           * les candidats validés par hasSemanticStockEvidence le sont.
+           */
+          const semanticPool = preparedStock
+            .map(p => ({
+              ...p,
+              score: textScore(
+                item.produit,
+                p.item.produit,
+                stopWords
+              ),
+            }))
+            .filter(
+              p =>
+                !exclusions.has(
+                  `${key}::${p.item.id}`
+                )
+            )
+
+          return semanticPool.filter(candidate => {
+            const evidence =
+              hasSemanticStockEvidence(
+                item.ingredient_id,
+                candidate.item.produit,
+                refData,
+                stopWords
+              )
+
+            if (evidence.matched && trace && evidence.label) {
+              trace.events.push(
+                `Candidat stock sémantiquement compatible : ${candidate.item.produit} via « ${evidence.label} »${
+                  evidence.common?.length
+                    ? ` (${evidence.common.join(', ')})`
+                    : ''
+                }`
+              )
+            }
+
+            return evidence.matched
+          })
+            .sort((a, b) => b.score - a.score)
+            .slice(0, CONFIG.CANDIDATE_LIMIT)
+        })()
+      : aiCandidates
+
+  if (!semanticStockCandidates.length) {
+    if (trace) {
+      trace.stock.source = 'none'
+      trace.stockDecision = {
+        kind: 'stock',
+        source: 'none',
+        confidence: 0,
+        reason: officialIngredient
+          ? `Aucun candidat stock sémantiquement compatible avec l'ingrédient officiel « ${officialIngredient.nom} »`
+          : 'Aucun candidat stock suffisamment pertinent avant Claude',
+      }
+      trace.events.push(
+        officialIngredient
+          ? `Claude non appelé : candidats stock incompatibles avec ${officialIngredient.nom}`
+          : 'Claude non appelé : aucun candidat stock suffisamment pertinent'
+      )
+    }
+
+    return {
+      matchedItems: [],
+      needsReview: item.needs_review,
+    }
+  }
+
+  // ============================================================
+  // 5. MATCH DÉTERMINISTE SÉMANTIQUE / LEXICAL SÛR
+  // ============================================================
+
+  // Si le référentiel apporte une preuve sémantique explicite (synonyme
+  // connu), celle-ci est plus forte qu'un score lexical faible. Cela permet
+  // par exemple : Gambas -> Crevette -> Crevettes roses, sans appeler Claude.
+  // Une seule équivalence sémantique validée est donc déterministe.
+  const semanticDeterministic =
+    officialIngredient &&
+    semanticStockCandidates.length === 1
+      ? semanticStockCandidates[0]
+      : null
+
+  if (semanticDeterministic) {
+    const selected = semanticDeterministic
+
+    if (trace) {
+      trace.stock.source = 'memory'
+      trace.stockDecision = {
+        kind: 'stock',
+        source: 'memory',
+        confidence: Math.max(selected.score, 0.9),
+        reason: `Équivalence sémantique déterministe via le référentiel : ${selected.item.produit}`,
+      }
+      trace.events.push(
+        `Match stock sémantique automatique : ${selected.item.produit} (référentiel)`
+      )
+    }
+
+    const matchingItems =
+      preparedStock
+        .filter(
+          p =>
+            p.normalized === selected.normalized &&
+            !exclusions.has(`${key}::${p.item.id}`)
+        )
+        .map(p => p.item)
+
+    for (const stockItem of matchingItems) {
+      await saveStockMemory(
+        key,
+        stockItem,
+        'text',
+        Math.max(selected.score, 0.9),
+        `Équivalence sémantique déterministe via le référentiel`,
+        true
+      )
+    }
+
+    return {
+      matchedItems: matchingItems,
+      needsReview: item.needs_review,
+    }
+  }
+
+  // Sinon, on conserve le garde-fou lexical historique.
+  if (
+    bestIsSafe(
+      candidates,
+      CONFIG.STOCK_AUTO_SCORE,
+      CONFIG.STOCK_AUTO_MARGIN
+    )
+  ) {
+
+    const selected =
+      candidates[0]
+
+    if (trace) {
+      trace.stock.source =
+        'lexical'
+
+      trace.stockDecision = {
+        kind: 'stock',
+        source: 'lexical',
+        confidence: selected.score,
+        reason: `Score lexical ${selected.score.toFixed(2)} avec marge suffisante`,
+      }
 
       trace.events.push(
         `Match stock lexical automatique : ${selected.item.produit} (${selected.score.toFixed(2)})`
@@ -2317,7 +2865,7 @@ async function matchOneRequirement(
   const ai =
     await matchStockWithClaude(
       item.produit,
-      aiCandidates.map(c => ({
+      semanticStockCandidates.map(c => ({
         id: c.item.id,
         label: c.item.produit,
         lexicalScore:
@@ -2332,6 +2880,13 @@ async function matchOneRequirement(
   if (trace) {
     trace.stock.aiConfidence =
       ai.confidence ?? null
+
+    trace.stockDecision = {
+      kind: 'stock',
+      source: 'ai',
+      confidence: ai.confidence ?? null,
+      reason: ai.reason || 'Décision Claude',
+    }
 
     trace.events.push(
       `Claude : ${
@@ -2457,7 +3012,12 @@ function canonicalUnit(
   refData: ReferenceData,
   unit: string
 ): {
-  unit: 'g' | 'mL' | 'pièce'
+  /**
+   * Unité canonique. Pour les unités discrètes, on conserve l'identité
+   * de l'unité normalisée (piece, tranche, gousse, sachet, paquet, ...).
+   * Elles ne doivent jamais être fusionnées artificiellement en "pièce".
+   */
+  unit: string
   factor: number
   type:
     | 'poids'
@@ -2467,6 +3027,14 @@ function canonicalUnit(
 
   const cleaned =
     normalizeUnitKey(unit)
+
+  if (cleaned === 'mg') {
+    return {
+      unit: 'g',
+      factor: 0.001,
+      type: 'poids',
+    }
+  }
 
   if (cleaned === 'g') {
     return {
@@ -2518,7 +3086,7 @@ function canonicalUnit(
 
   if (cleaned === 'piece') {
     return {
-      unit: 'pièce',
+      unit: 'piece',
       factor: 1,
       type: 'unité',
     }
@@ -2582,7 +3150,10 @@ function canonicalUnit(
 
   if (type === 'unité') {
     return {
-      unit: 'pièce',
+      // IMPORTANT : on conserve l'identité de l'unité discrète.
+      // Exemple : 1 tranche n'est pas 1 pièce, sauf équivalence
+      // explicite fournie par le référentiel de densité/conversion.
+      unit: cleaned,
       factor: 1,
       type,
     }
@@ -2597,9 +3168,34 @@ function canonicalUnit(
  * Règles :
  * - poids -> g
  * - volume -> mL
- * - unités -> pièce
+ * - unités discrètes : identité conservée
+ * - unités discrètes <-> poids uniquement avec une masse explicite
+ *   dans ingredient_densities
  * - volume <-> poids uniquement avec densité.
  */
+function resolveStockIngredientId(
+  refData: ReferenceData,
+  stockProduct: string | null | undefined
+): string | null {
+  if (!stockProduct) return null
+
+  const normalized = cleanText(stockProduct)
+  if (!normalized) return null
+
+  const exact = refData.officialList.find(
+    ingredient => cleanText(ingredient.nom) === normalized
+  )
+  if (exact) return exact.id
+
+  for (const [synonym, ingredientId] of refData.synonymMap.entries()) {
+    if (cleanText(synonym) === normalized) {
+      return ingredientId
+    }
+  }
+
+  return null
+}
+
 function convertStockQuantity(
   refData: ReferenceData,
   ingredientId: string | null,
@@ -2624,17 +3220,41 @@ function convertStockQuantity(
       targetUnit
     )
 
+  // Sécurité : lorsque les unités brutes sont réellement la même
+  // unité discrète (ex. "Pièce" / "Pièce"), on ne dépend pas du
+  // mapping de référence pour pouvoir comparer les quantités.
+  const normalizedFromUnit = normalizeUnitKey(fromUnit)
+  const normalizedTargetUnit = normalizeUnitKey(targetUnit)
+
+  if (
+    normalizedFromUnit &&
+    normalizedFromUnit === normalizedTargetUnit &&
+    ['piece', 'tranche', 'gousse', 'sachet', 'paquet', 'boite', 'bouteille', 'pot', 'barquette'].includes(normalizedFromUnit)
+  ) {
+    return {
+      qty,
+      unit: normalizedTargetUnit,
+      converted: cleanText(fromUnit) !== cleanText(targetUnit),
+      reason: cleanText(fromUnit) === cleanText(targetUnit)
+        ? 'Même unité'
+        : `${fromUnit} → ${targetUnit}`,
+    }
+  }
+
   if (!from || !target) {
     return null
   }
 
   // ============================================================
-  // MÊME UNITÉ CANONIQUE
+  // MÊME UNITÉ
   // ============================================================
+  // Pour poids/volume, les unités sont volontairement ramenées à
+  // g/mL. Pour les unités discrètes, l'identité est conservée :
+  // tranche != pièce != gousse != sachet != paquet.
 
   if (
-    from.unit ===
-    target.unit
+    from.type === target.type &&
+    from.unit === target.unit
   ) {
     return {
       qty:
@@ -2654,6 +3274,97 @@ function convertStockQuantity(
         cleanText(targetUnit)
           ? 'Même unité'
           : `${fromUnit} → ${targetUnit}`,
+    }
+  }
+
+  // ============================================================
+  // UNITÉ -> POIDS (pièce, tranche, gousse, sachet, ...)
+  // ============================================================
+  // Une unité discrète n'est convertie en poids QUE si le référentiel
+  // contient une masse approximative explicite pour cet ingrédient
+  // et cette unité. On n'invente donc jamais une masse par défaut.
+
+  if (
+    from.type === 'unité' &&
+    target.type === 'poids' &&
+    ingredientId
+  ) {
+    const density =
+      findDensity(
+        refData,
+        ingredientId,
+        fromUnit
+      ) ??
+      findDensity(
+        refData,
+        ingredientId,
+        from.unit
+      )
+
+    const gramsPerUnit =
+      density
+        ? Number(density.poids_g_approx)
+        : NaN
+
+    if (
+      density &&
+      Number.isFinite(gramsPerUnit) &&
+      gramsPerUnit > 0
+    ) {
+      const quantityInUnits =
+        qty * from.factor
+
+      return {
+        qty: quantityInUnits * gramsPerUnit / target.factor,
+        unit: target.unit,
+        converted: true,
+        reason: `${fromUnit} → ${targetUnit} via équivalence poids/unité`,
+      }
+    }
+  }
+
+  // ============================================================
+  // POIDS -> UNITÉ (pièce, tranche, gousse, sachet, ...)
+  // ============================================================
+  // Même règle dans l'autre sens : seulement si une masse moyenne
+  // explicite existe dans le référentiel.
+
+  if (
+    from.type === 'poids' &&
+    target.type === 'unité' &&
+    ingredientId
+  ) {
+    const density =
+      findDensity(
+        refData,
+        ingredientId,
+        targetUnit
+      ) ??
+      findDensity(
+        refData,
+        ingredientId,
+        target.unit
+      )
+
+    const gramsPerUnit =
+      density
+        ? Number(density.poids_g_approx)
+        : NaN
+
+    if (
+      density &&
+      Number.isFinite(gramsPerUnit) &&
+      gramsPerUnit > 0
+    ) {
+      const grams =
+        qty * from.factor
+
+      return {
+        qty: grams / gramsPerUnit,
+        unit: target.unit,
+        converted: true,
+        reason: `${fromUnit} → ${targetUnit} via équivalence poids/unité`,
+      }
     }
   }
 
@@ -2840,6 +3551,7 @@ export interface ComparedRequirement
   stock_details?: StockComparisonDetail[]
 }
 
+
 export async function compareToStock(
   aggregated: AggregatedRequirement[],
   globalStock: StockItem[],
@@ -2905,6 +3617,7 @@ export async function compareToStock(
         memory,
         exclusions,
         stopWords,
+        refData,
         trace
       )
 
@@ -2929,16 +3642,65 @@ export async function compareToStock(
       match.matchedItems
     ) {
 
-      const converted =
-        convertStockQuantity(
+      // Pour une ligne issue d'un rapprochement sémantique
+      // (ex. Gambas ← Crevette), la densité/équivalence peut être
+      // attachée à l'ingrédient officiel du STOCK et non à celui du BESOIN.
+      // On essaie donc d'abord l'identifiant stock, puis celui du besoin.
+      const stockIngredientId =
+        stock.ingredient_id ??
+        resolveStockIngredientId(
           refData,
-          item.ingredient_id,
-          Number(
-            stock.qte || 0
-          ),
-          stock.unite,
-          item.unite
+          stock.produit
         )
+
+      const ingredientIdsToTry =
+        Array.from(
+          new Set(
+            [
+              stockIngredientId,
+              item.ingredient_id ?? null,
+            ].filter(
+              (id): id is string =>
+                Boolean(id)
+            )
+          )
+        )
+
+      let converted: ConvertedStock | null = null
+
+      for (const ingredientId of
+        ingredientIdsToTry
+      ) {
+        converted =
+          convertStockQuantity(
+            refData,
+            ingredientId,
+            Number(
+              stock.qte || 0
+            ),
+            stock.unite,
+            item.unite
+          )
+
+        if (converted) {
+          break
+        }
+      }
+
+      // Les anciennes lignes de stock sans ingredient_id continuent
+      // d'utiliser l'identifiant de l'ingrédient demandé.
+      if (!converted) {
+        converted =
+          convertStockQuantity(
+            refData,
+            item.ingredient_id,
+            Number(
+              stock.qte || 0
+            ),
+            stock.unite,
+            item.unite
+          )
+      }
 
       if (!converted) {
 
@@ -3005,6 +3767,18 @@ export async function compareToStock(
           totalStockQty
       )
 
+    let stockMatchReview =
+      match.reviewReason ?? null
+
+    if (
+      hasUnitMismatch &&
+      !stockMatchReview &&
+      qte_a_acheter > 0
+    ) {
+      stockMatchReview =
+        `Mealio a trouvé du stock pour « ${item.produit} », mais une partie de ce stock ne peut pas être convertie en ${item.unite}. Seule la quantité convertible est prise en compte dans le calcul des courses.`
+    }
+
     let ai_status:
       | 'green'
       | 'orange'
@@ -3017,11 +3791,6 @@ export async function compareToStock(
     ) {
       ai_status =
         'green'
-    } else if (
-      totalStockQty > 0
-    ) {
-      ai_status =
-        'orange'
     } else if (
       hasUnitMismatch ||
       match.needsReview
@@ -3073,6 +3842,9 @@ export async function compareToStock(
 
       stock_details:
         stockDetails,
+
+      stock_match_review:
+        stockMatchReview,
     })
   }
 
