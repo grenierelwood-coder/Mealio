@@ -249,8 +249,10 @@ export async function searchCookiwikiIngredientLabels(
   const [refData, recipes] = await Promise.all([loadReferenceData(), loadCookiwikiRecipesForSearch()])
   const counts = new Map<string, number>()
   for (const recipe of recipes) {
-    const names = Array.isArray(recipe.ingredients)
-      ? recipe.ingredients.map((i: any) => String(i?.name ?? i?.nom ?? i?.ingredient ?? '').trim()).filter(Boolean)
+    const names: string[] = Array.isArray(recipe.ingredients)
+      ? recipe.ingredients
+          .map((i: any) => String(i?.name ?? i?.nom ?? i?.ingredient ?? '').trim())
+          .filter((name: string) => Boolean(name))
       : []
     for (const name of new Set(names)) {
       if (labelMatchesQuery(name, query)) counts.set(name, (counts.get(name) ?? 0) + 1)

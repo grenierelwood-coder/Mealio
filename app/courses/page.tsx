@@ -167,6 +167,7 @@ type ContinuationItem = {
   ingredient_id: string | null
   qte: number
   unite: string | null
+  quantity_mode?: 'quantity' | 'presence'
   rayon: string | null
   recipes: RecipeLink[]
 }

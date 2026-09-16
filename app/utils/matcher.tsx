@@ -1584,8 +1584,8 @@ export interface ResolvedIngredient {
   unite: string
   quantity_mode: QuantityMode
   needs_review: boolean
-  source_recipe_id: string
-  source_recipe_nom: string
+  source_recipe_id?: string
+  source_recipe_nom?: string
 }
 
 export async function resolveRecipeIngredients(
@@ -1797,10 +1797,10 @@ export function aggregateRequirements(
 
       const contribution = {
         recipe_id:
-          item.source_recipe_id,
+          item.source_recipe_id ?? '',
 
         recipe_nom:
-          item.source_recipe_nom,
+          item.source_recipe_nom ?? '',
 
         qte_contribuee:
           item.qte,
@@ -2309,6 +2309,7 @@ async function matchOneRequirement(
 ): Promise<{
   matchedItems: StockItem[]
   needsReview: boolean
+  reviewReason?: string | null
 }> {
 
   const key =
@@ -3706,6 +3707,7 @@ export interface ComparedRequirement
     | 'red'
   qte_stock?: number
   stock_details?: StockComparisonDetail[]
+  stock_match_review?: string | null
 }
 
 export interface MatcherComparisonTestContext {

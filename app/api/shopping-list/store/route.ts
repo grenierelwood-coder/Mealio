@@ -1,5 +1,6 @@
 import { getAuthSession } from '../../../utils/auth-server'
 import { NextResponse } from 'next/server'
+import { assertOfficialIngredientUnit } from '../../../utils/official-unit-policy'
 
 import {
   mealioServerDb,
@@ -591,7 +592,7 @@ export async function POST() {
           qte: delta,
           unite: item.unite?.trim() || 'pièce(s)',
           storage,
-          stock_item_id: stockItem.id,
+          stock_item_id: stockItemId,
           location_id: location.location_id,
           location_name: location.location_name,
           rule_label: location.rule_label,

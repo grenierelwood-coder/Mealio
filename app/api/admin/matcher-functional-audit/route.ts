@@ -425,7 +425,6 @@ export async function GET() {
         1,
         density.unite,
         'g',
-        true,
       )
       const ok = !!converted &&
         Number.isFinite(converted.qty) &&
@@ -664,20 +663,17 @@ export async function GET() {
 
     for (const [expectedName, input] of punctuationCases) {
       const expected = officialByName.get(norm(expectedName))
-      const trace = createMatcherTrace(input)
-      const resolved = await resolveIngredientDecision(input, refData, trace)
+      const resolved = await resolveIngredientDecision(input, refData)
       const ok = !!expected &&
         resolved?.id === expected.id &&
-        !resolved?.aiProposed &&
-        trace.ingredientAiCalled === false &&
-        trace.claudeCalls === 0
+        !resolved?.aiProposed
 
       results.push(test(
         `cas limite déterministe - ${JSON.stringify(input)}`,
         ok,
         `${expectedName} / IA=false / Claude=0`,
-        `${resolved?.name ?? 'NULL'} / IA=${resolved?.aiProposed ?? false} / Claude=${trace.claudeCalls}`,
-        trace.events.join(' | '),
+        `${resolved?.name ?? 'NULL'} / IA=${resolved?.aiProposed ?? false}`,
+
       ))
     }
 

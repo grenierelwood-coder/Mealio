@@ -222,7 +222,7 @@ export async function createStorageRoutingRule(
     throw new Error('L’emplacement choisi n’appartient pas à ce foyer.')
   }
 
-  const payload = source === 'frosti'
+  const payload: any = source === 'frosti'
     ? {
         user_id: userId,
         rule_type: input.scope === 'default'

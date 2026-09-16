@@ -10,6 +10,7 @@ import {
   aggregateRequirements,
   compareToStock,
   ResolvedIngredient,
+  ComparedRequirement,
 } from './matcher'
 import { assertOfficialIngredientUnit } from './official-unit-policy'
 
@@ -807,7 +808,7 @@ export async function generateShoppingListForPeriod(
    * vider la liste existante.
    */
 
-  const comparedForInsert: Array<any> = []
+  const comparedForInsert: Array<ComparedRequirement & { unite_db: string }> = []
 
   for (const item of compared.filter(item => item.ai_status !== 'green')) {
     try {

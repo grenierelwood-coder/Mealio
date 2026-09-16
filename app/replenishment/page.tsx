@@ -116,13 +116,14 @@ export default function ReplenishmentPage() {
     setError(null)
 
     const isFavorite = 'purchase_count' in s
+    const produit = isFavorite ? s.nom : s.produit
 
     try {
       const r = await fetch('/api/replenishment/add', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          produit: s.nom ?? s.produit,
+          produit,
           ingredient_id: s.ingredient_id,
           quantity: isFavorite ? 1 : s.quantity,
           unite: isFavorite ? s.unite : s.unite,
@@ -136,7 +137,7 @@ export default function ReplenishmentPage() {
       if (!r.ok) throw new Error(d.error ?? 'Impossible d’ajouter le produit.')
 
       setMessage(
-        `✓ ${s.nom ?? s.produit} ajouté aux courses${d.merged ? ' (fusionné avec la ligne existante)' : ''}.`
+        `✓ ${produit} ajouté aux courses${d.merged ? ' (fusionné avec la ligne existante)' : ''}.`
       )
 
       await load()
