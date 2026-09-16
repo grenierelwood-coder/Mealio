@@ -1,7 +1,7 @@
+import { getAuthSession } from '../../../utils/auth-server'
 import { NextRequest, NextResponse } from 'next/server'
-import { cookies } from 'next/headers'
 import { generateShoppingListForPeriod } from '../../../utils/shopping-list-generator'
-import { addReplenishmentToActiveList, getReplenishmentSuggestions } from '../../../utils/replenishment-server'
+import { processReplenishmentForCourses } from '../../../utils/replenishment-server'
 
 function getParisToday(): Date {
   const parts = new Intl.DateTimeFormat('en-CA', {
@@ -32,9 +32,9 @@ function addDays(date: Date, days: number): Date {
 }
 
 export async function POST(request: NextRequest) {
-  const cookieStore = await cookies()
-  const userId = cookieStore.get('congelo_user_id')?.value
-  const username = cookieStore.get('congelo_username')?.value?.trim()
+  const session = await getAuthSession()
+  const userId = session?.frostiUserId
+  const username = session?.username?.trim()
 
   if (!userId || !username) {
     return NextResponse.json({ error: 'Non authentifié.' }, { status: 401 })
@@ -67,30 +67,13 @@ export async function POST(request: NextRequest) {
       listName,
     )
 
-    // Les récurrents en mode « systématique » sont injectés par le même
-    // moteur de courses, mais uniquement lorsqu'ils sont arrivés à échéance.
-    const replenishmentSuggestions = await getReplenishmentSuggestions(username)
-    const systematic = replenishmentSuggestions.filter(s => s.source === 'recurring' && s.mode === 'systematic')
-    for (const suggestion of systematic) {
-      try {
-        await addReplenishmentToActiveList(username, {
-          produit: suggestion.produit,
-          ingredient_id: suggestion.ingredient_id,
-          quantity: suggestion.quantity,
-          unite: suggestion.unite,
-          source: 'recurring',
-          rule_id: suggestion.rule_id,
-        })
-      } catch (error) {
-        console.error(`⚠️ Récurrent systématique « ${suggestion.produit} » non ajouté :`, error)
-      }
-    }
+    const replenishment = await processReplenishmentForCourses(username)
 
     return NextResponse.json({
       ...result,
       replenishment: {
-        systematicAdded: systematic.map(s => s.produit),
-        suggestions: replenishmentSuggestions.filter(s => !(s.source === 'recurring' && s.mode === 'systematic')),
+        systematicAdded: replenishment.systematicAdded,
+        suggestions: replenishment.suggestions,
       },
       period: {
         start: dateStart,

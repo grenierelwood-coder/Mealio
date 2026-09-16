@@ -27,6 +27,7 @@ type ShoppingItem = {
   stock_stored_quantity: number | null
 
   unite: string | null
+  quantity_mode?: 'quantity' | 'presence'
   rayon: string | null
 
   is_checked: boolean
@@ -91,6 +92,23 @@ type StatusFilter =
   | 'a_acheter'
   | 'urgent'
   | 'recurrent'
+
+type ReplenishmentSuggestion = {
+  key: string
+  source: 'threshold' | 'recurring'
+  rule_id: string
+  ingredient_id: string | null
+  produit: string
+  quantity: number
+  unite: string
+  reason: string
+  mode: 'suggestion' | 'systematic'
+  stock_quantity: number | null
+  stock_unit: string | null
+  min_quantity: number | null
+  target_quantity: number | null
+  due_date: string | null
+}
 
 type FavoriteIngredient = {
   ingredient_id: string
@@ -176,8 +194,11 @@ function formatNumber(value: number): string {
 
 function formatQuantity(
   qte: number | null,
-  unite: string | null
+  unite: string | null,
+  quantityMode: 'quantity' | 'presence' = 'quantity'
 ): string {
+  if (quantityMode === 'presence') return 'Présence'
+
   if (qte === null) {
     return unite ?? ''
   }
@@ -699,6 +720,15 @@ export default function CoursesPage() {
   const [addingFavorite, setAddingFavorite] =
     useState<string | null>(null)
 
+  const [replenishmentSuggestions, setReplenishmentSuggestions] =
+    useState<ReplenishmentSuggestion[]>([])
+
+  const [loadingReplenishment, setLoadingReplenishment] =
+    useState(false)
+
+  const [addingReplenishment, setAddingReplenishment] =
+    useState<string | null>(null)
+
   const [manualProduct, setManualProduct] =
     useState('')
 
@@ -785,6 +815,49 @@ export default function CoursesPage() {
       setError(err instanceof Error ? err.message : 'Impossible d’ajouter le favori aux courses.')
     } finally {
       setAddingFavorite(null)
+    }
+  }
+
+  async function loadReplenishmentCockpit() {
+    try {
+      setLoadingReplenishment(true)
+      const response = await fetch('/api/replenishment/courses', { method: 'POST', cache: 'no-store' })
+      const result = await response.json()
+      if (!response.ok) throw new Error(result?.error ?? 'Impossible de vérifier les réapprovisionnements.')
+      setReplenishmentSuggestions((result?.suggestions ?? []) as ReplenishmentSuggestion[])
+    } catch (err) {
+      console.error('❌ Erreur contrôle réapprovisionnement :', err)
+    } finally {
+      setLoadingReplenishment(false)
+    }
+  }
+
+  async function addReplenishmentSuggestion(suggestion: ReplenishmentSuggestion) {
+    if (addingReplenishment) return
+    try {
+      setAddingReplenishment(suggestion.key)
+      setError(null)
+      const response = await fetch('/api/replenishment/add', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          produit: suggestion.produit,
+          ingredient_id: suggestion.ingredient_id,
+          quantity: suggestion.quantity,
+          unite: suggestion.unite,
+          source: suggestion.source,
+          rule_id: suggestion.rule_id,
+        }),
+      })
+      const result = await response.json()
+      if (!response.ok) throw new Error(result?.error ?? 'Impossible d’ajouter le réapprovisionnement aux courses.')
+      setReplenishmentSuggestions(current => current.filter(item => item.key !== suggestion.key))
+      await loadShoppingList(false)
+      setGenerationMessage(`${suggestion.produit} ajouté aux courses.`)
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Impossible d’ajouter le réapprovisionnement aux courses.')
+    } finally {
+      setAddingReplenishment(null)
     }
   }
 
@@ -888,8 +961,12 @@ export default function CoursesPage() {
   }
 
   useEffect(() => {
-    void loadShoppingList()
-    void loadPlanningPeriod()
+    void (async () => {
+      await loadReplenishmentCockpit()
+      await loadShoppingList()
+      await loadReplenishmentCockpit()
+      await loadPlanningPeriod()
+    })()
   }, [])
 
   // Synchronisation légère pour les foyers où plusieurs personnes font
@@ -904,6 +981,7 @@ export default function CoursesPage() {
     const onFocus = () => {
       if (generating || finishing || updatingItems.size > 0) return
       void loadShoppingList(false)
+      void loadReplenishmentCockpit()
     }
 
     window.addEventListener('focus', onFocus)
@@ -1000,6 +1078,7 @@ export default function CoursesPage() {
       )
 
       await loadShoppingList()
+      await loadReplenishmentCockpit()
       await loadPlanningPeriod()
     } catch (err) {
       console.error(
@@ -1152,6 +1231,7 @@ export default function CoursesPage() {
     item: ShoppingItem,
     delta: number
   ) {
+    if (item.quantity_mode === 'presence') return
     if (
       updatingItems.has(item.id)
     ) {
@@ -1199,6 +1279,7 @@ export default function CoursesPage() {
     item: ShoppingItem,
     delta: number
   ) {
+    if (item.quantity_mode === 'presence') return
     if (
       updatingItems.has(item.id)
     ) {
@@ -1816,15 +1897,29 @@ export default function CoursesPage() {
         )
       }
 
-      return Array.from(
-        groups.entries()
-      ).sort(
-        ([a], [b]) =>
-          a.localeCompare(
-            b,
-            'fr'
-          )
-      )
+      const rayonOrder = [
+        'Fruits & légumes',
+        'Boucherie',
+        'Charcuterie',
+        'Poissonnerie',
+        'Crèmerie',
+        'Boulangerie',
+        'Épicerie',
+        'Boissons',
+        'Surgelés',
+      ]
+      const rank = (value: string) => {
+        const index = rayonOrder.findIndex(item => item.localeCompare(value, 'fr', { sensitivity: 'base' }) === 0)
+        return index >= 0 ? index : 999
+      }
+      return Array.from(groups.entries()).sort(([a], [b]) => {
+        const ra = rank(a)
+        const rb = rank(b)
+        if (ra !== rb) return ra - rb
+        if (ra === 999 && a === 'Courses') return 1
+        if (rb === 999 && b === 'Courses') return -1
+        return a.localeCompare(b, 'fr')
+      })
     }, [
       visibleItems,
     ])
@@ -1985,7 +2080,7 @@ export default function CoursesPage() {
                     {remainingItems.map((item, index) => (
                       <div key={`${item.produit}-${item.ingredient_id ?? 'manual'}-${index}`} className="flex items-center justify-between gap-3 text-sm text-orange-900">
                         <span className="font-semibold">{item.produit}</span>
-                        <span className="shrink-0 font-black">{formatQuantity(item.qte, item.unite)}</span>
+                        <span className="shrink-0 font-black">{formatQuantity(item.qte, item.unite, item.quantity_mode)}</span>
                       </div>
                     ))}
                   </div>
@@ -2037,6 +2132,40 @@ export default function CoursesPage() {
                 </div>
               ))}
             </div>
+          </section>
+        )}
+
+        {/* ===================================================================
+            RÉAPPROVISIONNEMENT
+            =================================================================== */}
+
+        {!completedList && (loadingReplenishment || replenishmentSuggestions.length > 0) && (
+          <section className="mb-5 rounded-2xl border border-purple-200 bg-purple-50 p-4 shadow-sm sm:p-5">
+            <div className="flex items-start gap-3">
+              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-white text-2xl shadow-sm">🔔</div>
+              <div className="min-w-0 flex-1">
+                <div className="font-black text-purple-950">Réapprovisionnement détecté</div>
+                <p className="mt-1 text-xs leading-5 text-purple-900/80">Mealio surveille automatiquement les règles du foyer. Les propositions restent à ta décision.</p>
+              </div>
+            </div>
+
+            {loadingReplenishment ? (
+              <div className="mt-3 rounded-xl bg-white p-3 text-sm text-slate-500">Vérification des seuils et récurrents…</div>
+            ) : (
+              <div className="mt-3 space-y-2">
+                {replenishmentSuggestions.map(suggestion => (
+                  <div key={suggestion.key} className="flex flex-col gap-3 rounded-xl bg-white p-3 sm:flex-row sm:items-center sm:justify-between">
+                    <div className="min-w-0">
+                      <div className="font-black">{suggestion.produit} · {formatQuantity(suggestion.quantity, suggestion.unite)}</div>
+                      <div className="mt-1 text-xs text-slate-600">{suggestion.source === 'threshold' ? '⚖️ Seuil' : '🔁 Récurrent'} · {suggestion.reason}</div>
+                    </div>
+                    <button type="button" onClick={() => void addReplenishmentSuggestion(suggestion)} disabled={addingReplenishment !== null} className="shrink-0 rounded-xl bg-purple-700 px-4 py-2.5 text-sm font-black text-white hover:bg-purple-800 disabled:opacity-50">
+                      {addingReplenishment === suggestion.key ? '…' : 'Ajouter aux courses'}
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
           </section>
         )}
 
@@ -2663,7 +2792,8 @@ export default function CoursesPage() {
                                               <div className="mt-1 font-black">
                                                 {formatQuantity(
                                                   item.qte,
-                                                  item.unite
+                                                  item.unite,
+                                                  item.quantity_mode
                                                 )}
                                               </div>
                                             </div>
@@ -2673,6 +2803,9 @@ export default function CoursesPage() {
                                                 À acheter
                                               </div>
 
+                                              {item.quantity_mode === 'presence' ? (
+                                                <div className="mt-2 rounded-xl bg-amber-50 px-3 py-3 text-center text-sm font-black text-amber-900">Présence uniquement</div>
+                                              ) : (
                                               <div className="mt-2 flex items-center gap-2">
                                                 <button
                                                   type="button"
@@ -2695,7 +2828,8 @@ export default function CoursesPage() {
                                                 <div className="min-w-0 flex-1 text-center font-black">
                                                   {formatQuantity(
                                                     purchaseQuantity,
-                                                    item.unite
+                                                    item.unite,
+                                                    item.quantity_mode
                                                   )}
                                                 </div>
 
@@ -2716,12 +2850,16 @@ export default function CoursesPage() {
                                                 </button>
                                               </div>
 
-                                              <div className="mt-1 text-center text-[10px] text-slate-400">
-                                                Pas :{' '}
-                                                {formatNumber(
-                                                  step
-                                                )}
-                                              </div>
+                                              )}
+
+                                              {item.quantity_mode !== 'presence' && (
+                                                <div className="mt-1 text-center text-[10px] text-slate-400">
+                                                  Pas :{' '}
+                                                  {formatNumber(
+                                                    step
+                                                  )}
+                                                </div>
+                                              )}
                                             </div>
 
                                             <div className="rounded-xl bg-white/70 p-3">
@@ -2729,6 +2867,9 @@ export default function CoursesPage() {
                                                 Acheté
                                               </div>
 
+                                              {item.quantity_mode === 'presence' ? (
+                                                <div className="mt-2 rounded-xl bg-amber-50 px-3 py-3 text-center text-sm font-black text-amber-900">{getBoughtQuantity(item) > 0 ? 'Présent / acheté' : 'À acheter'}</div>
+                                              ) : (
                                               <div className="mt-2 flex items-center gap-2">
                                                 <button
                                                   type="button"
@@ -2751,7 +2892,8 @@ export default function CoursesPage() {
                                                 <div className="min-w-0 flex-1 text-center font-black">
                                                   {formatQuantity(
                                                     boughtQuantity,
-                                                    item.unite
+                                                    item.unite,
+                                                    item.quantity_mode
                                                   )}
                                                 </div>
 
@@ -2772,13 +2914,18 @@ export default function CoursesPage() {
                                                 </button>
                                               </div>
 
-                                              <div className="mt-1 text-center text-[10px] font-bold text-slate-400">
-                                                Reste :{' '}
-                                                {formatQuantity(
-                                                  remainingQuantity,
-                                                  item.unite
-                                                )}
-                                              </div>
+                                              )}
+
+                                              {item.quantity_mode !== 'presence' && (
+                                                <div className="mt-1 text-center text-[10px] font-bold text-slate-400">
+                                                  Reste :{' '}
+                                                  {formatQuantity(
+                                                    remainingQuantity,
+                                                    item.unite,
+                                                    item.quantity_mode
+                                                  )}
+                                                </div>
+                                              )}
                                             </div>
                                           </div>
 
@@ -2877,32 +3024,28 @@ export default function CoursesPage() {
                                           {getItemPurchaseProgress(item)}
                                         </div>
 
-                                        <div className="mt-1 flex flex-wrap items-center gap-2">
-                                          <span
-                                            className={`inline-flex items-center gap-1 text-xs font-bold ${
-                                              isItemBought(item)
-                                                ? 'text-slate-400'
-                                                : 'text-slate-600'
-                                            }`}
-                                          >
-                                            <span
-                                              className={`h-2 w-2 rounded-full ${getStatusDot(
-                                                item
-                                              )}`}
-                                            />
-
-                                            {formatQuantity(
-                                              item.qte,
-                                              item.unite
-                                            )}
+                                        <div className="mt-2 flex flex-wrap items-center gap-2">
+                                          <span className={`inline-flex items-center gap-1 text-xs font-bold ${isItemBought(item) ? 'text-slate-400' : 'text-slate-600'}`}>
+                                            <span className={`h-2 w-2 rounded-full ${getStatusDot(item)}`} />
+                                            Besoin {formatQuantity(item.qte, item.unite, item.quantity_mode)}
                                           </span>
-
-                                          <span className="rounded-full bg-white/70 px-2 py-1 text-[10px] font-bold text-slate-500">
-                                            {getStatusLabel(
-                                              item
-                                            )}
-                                          </span>
+                                          <span className="rounded-full bg-white/70 px-2 py-1 text-[10px] font-bold text-slate-500">{getStatusLabel(item)}</span>
                                         </div>
+                                        {item.quantity_mode === 'presence' ? (
+                                          <div className="mt-3 flex items-center justify-between rounded-xl bg-amber-50 px-3 py-2">
+                                            <span className="text-[10px] font-black uppercase tracking-wide text-amber-700">Besoin</span>
+                                            <span className="text-sm font-black text-amber-900">Présence uniquement</span>
+                                          </div>
+                                        ) : (
+                                          <div className="mt-3 flex items-center justify-between rounded-xl bg-white/70 px-3 py-2">
+                                            <span className="text-[10px] font-black uppercase tracking-wide text-slate-400">À acheter</span>
+                                            <div className="flex items-center gap-2">
+                                              <button type="button" onClick={() => void changePurchaseQuantity(item, -1)} disabled={updating || purchaseQuantity <= 0} className="flex h-8 w-8 items-center justify-center rounded-lg border border-slate-200 bg-white text-lg font-black disabled:opacity-40">−</button>
+                                              <span className="min-w-[90px] text-center text-sm font-black">{formatQuantity(purchaseQuantity, item.unite)}</span>
+                                              <button type="button" onClick={() => void changePurchaseQuantity(item, 1)} disabled={updating} className="flex h-8 w-8 items-center justify-center rounded-lg border border-slate-200 bg-white text-lg font-black disabled:opacity-40">+</button>
+                                            </div>
+                                          </div>
+                                        )}
 
                                         {data?.issues?.filter(issue => issue.shopping_item_id === item.id).map(issue => (
                                           <div key={issue.id ?? `${issue.issue_type}-${item.id}`} className="mt-3 rounded-xl border border-amber-200 bg-amber-50 px-3 py-2">

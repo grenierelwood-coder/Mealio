@@ -1,5 +1,5 @@
+import { getAuthSession } from '../../../utils/auth-server'
 import { NextResponse } from 'next/server'
-import { cookies } from 'next/headers'
 import {
   createHouseholdStockItem,
   updateHouseholdStockItem,
@@ -7,8 +7,8 @@ import {
 } from '../../../utils/household-server'
 
 async function getUsername(): Promise<string | null> {
-  const cookieStore = await cookies()
-  return cookieStore.get('congelo_username')?.value?.trim() || null
+  const session = await getAuthSession()
+  return session?.username?.trim() || null
 }
 
 export async function POST(request: Request) {

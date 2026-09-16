@@ -1,10 +1,9 @@
+import { getAuthSession } from '../../utils/auth-server'
 import { NextResponse } from 'next/server'
-import { cookies } from 'next/headers'
 import { getReplenishmentSuggestions, listFavoriteUnits, listFavorites, listRecurringRules, listThresholdRules } from '../../utils/replenishment-server'
 
 async function username() {
-  const c = await cookies()
-  return c.get('congelo_username')?.value?.trim() || null
+  return (await getAuthSession())?.username?.trim() || null
 }
 
 export async function GET() {

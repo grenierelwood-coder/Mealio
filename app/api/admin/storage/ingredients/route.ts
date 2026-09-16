@@ -1,10 +1,9 @@
+import { getAuthSession } from '../../../../utils/auth-server'
 import { NextResponse } from 'next/server'
-import { cookies } from 'next/headers'
 import { mealioServerDb } from '../../../../lib/supabase-server'
 
 async function getUsername() {
-  const store = await cookies()
-  return store.get('congelo_username')?.value?.trim() || null
+  return (await getAuthSession())?.username?.trim() || null
 }
 
 export async function GET() {

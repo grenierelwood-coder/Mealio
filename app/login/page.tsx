@@ -1,13 +1,10 @@
 'use client'
 
 import { useState } from 'react'
-import { frostiDb } from '../lib/supabase'
 import { useRouter } from 'next/navigation'
 
-// Mealio n'a pas sa propre table d'utilisateurs : un foyer Mealio correspond
-// exactement à un compte app_users déjà existant dans Frosti (cf. cahier
-// des charges §2). On vérifie donc les identifiants directement contre la
-// base Frosti via son client anon déjà configuré dans lib/supabase.tsx.
+// L'authentification Mealio utilise le même compte foyer que Frosti,
+// mais la vérification est désormais faite côté serveur.
 
 export default function LoginPage() {
   const [username, setUsername] = useState('')
@@ -22,25 +19,29 @@ export default function LoginPage() {
     setLoading(true)
     setError(null)
 
-    const { data, error } = await frostiDb
-      .from('app_users')
-      .select('*')
-      .eq('username', username)
-      .eq('password', password)
-      .single()
+    try {
+      const response = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password }),
+      })
 
-    if (error || !data) {
-      setError('Identifiant ou mot de passe incorrect.')
-      setLoading(false)
-    } else {
-      // Cookie ET localStorage (le localStorage sert de secours sur mobile
-      // — cf. le bug qu'on avait rencontré et corrigé côté Frosti).
-      document.cookie = `congelo_user_id=${data.id}; path=/; max-age=86400`
-      document.cookie = `congelo_username=${data.username}; path=/; max-age=86400`
-      localStorage.setItem('congelo_user_id', data.id)
+      const data = await response.json().catch(() => ({}))
+
+      if (!response.ok) {
+        setError(data?.error || 'Identifiant ou mot de passe incorrect.')
+        return
+      }
+
+      // Le localStorage sert uniquement à conserver l'affichage du foyer côté client.
+      // L'authentification réelle repose sur le cookie HttpOnly géré par le serveur.
       localStorage.setItem('congelo_username', data.username)
-
+      localStorage.removeItem('congelo_user_id')
       router.push('/')
+    } catch {
+      setError('Impossible de contacter le serveur.')
+    } finally {
+      setLoading(false)
     }
   }
 

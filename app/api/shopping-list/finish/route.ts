@@ -1,5 +1,5 @@
+import { getAuthSession } from '../../../utils/auth-server'
 import { NextResponse } from 'next/server'
-import { cookies } from 'next/headers'
 import { mealioServerDb } from '../../../lib/supabase-server'
 
 function numberOrZero(value: unknown): number {
@@ -20,8 +20,7 @@ export async function POST(request: Request) {
   } catch {
     // Corps vide autorisé. Le comportement par défaut est strict.
   }
-  const cookieStore = await cookies()
-  const username = cookieStore.get('congelo_username')?.value?.trim() || null
+  const username = (await getAuthSession())?.username?.trim() || null
 
   if (!username) {
     return NextResponse.json({ error: 'Non authentifié.' }, { status: 401 })

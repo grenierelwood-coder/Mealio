@@ -1,10 +1,10 @@
+import { getAuthSession } from '../../../utils/auth-server'
 import { NextRequest, NextResponse } from 'next/server'
-import { cookies } from 'next/headers'
 import { mealioServerDb } from '../../../lib/supabase-server'
+import { assertOfficialIngredientUnit } from '../../../utils/official-unit-policy'
 
 export async function POST(request: NextRequest) {
-  const cookieStore = await cookies()
-  const username = cookieStore.get('congelo_username')?.value?.trim()
+  const username = (await getAuthSession())?.username?.trim()
   if (!username) return NextResponse.json({ error: 'Non authentifié.' }, { status: 401 })
 
   const body = await request.json().catch(() => ({}))
@@ -23,9 +23,11 @@ export async function POST(request: NextRequest) {
   if (!ingredient) return NextResponse.json({ error: 'Ingrédient officiel introuvable.' }, { status: 404 })
 
   const { data: item, error: itemError } = await mealioServerDb
-    .from('shopping_items').select('id,produit').eq('id', shoppingItemId).eq('list_id', list.id).maybeSingle()
+    .from('shopping_items').select('id,produit,unite').eq('id', shoppingItemId).eq('list_id', list.id).maybeSingle()
   if (itemError) return NextResponse.json({ error: itemError.message }, { status: 500 })
   if (!item) return NextResponse.json({ error: 'Article de courses introuvable dans la liste active.' }, { status: 404 })
+
+  await assertOfficialIngredientUnit(ingredient.id, item.unite)
 
   const { data: updated, error: updateError } = await mealioServerDb
     .from('shopping_items').update({ ingredient_id: ingredient.id }).eq('id', item.id).eq('list_id', list.id).select('id,produit,ingredient_id').single()

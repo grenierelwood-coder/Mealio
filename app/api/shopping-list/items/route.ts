@@ -1,6 +1,7 @@
+import { getAuthSession } from '../../../utils/auth-server'
 import { NextRequest, NextResponse } from 'next/server'
-import { cookies } from 'next/headers'
 import { mealioServerDb } from '../../../lib/supabase-server'
+import { assertOfficialIngredientUnit } from '../../../utils/official-unit-policy'
 
 function normalizeUnit(value: string | null | undefined): string {
   return String(value ?? '')
@@ -92,8 +93,8 @@ async function resolveManualIngredientId(produit: string): Promise<string | null
 }
 
 async function getUsername(): Promise<string | null> {
-  const cookieStore = await cookies()
-  return cookieStore.get('congelo_username')?.value?.trim() || null
+  const session = await getAuthSession()
+  return session?.username?.trim() || null
 }
 
 /**
@@ -268,7 +269,9 @@ export async function POST(request: NextRequest) {
       ingredientId = await resolveManualIngredientId(produit)
     }
 
-    const unite = await resolveShoppingUnit(uniteDemandee)
+    const unite = ingredientId
+      ? await assertOfficialIngredientUnit(ingredientId, uniteDemandee)
+      : await resolveShoppingUnit(uniteDemandee)
     /*
      * On récupère la liste active du foyer.
      * Le client n'a pas le droit de choisir un list_id.

@@ -1,6 +1,7 @@
+import { getAuthSession } from '../../utils/auth-server'
 import { NextResponse } from 'next/server'
-import { cookies } from 'next/headers'
 import { mealioServerDb } from '../../lib/supabase-server'
+import { getQuantityMode } from '../../utils/quantity-policy'
 
 type ShoppingItemRow = {
   id: string
@@ -25,6 +26,8 @@ type ShoppingItemRow = {
 official_ingredients:
   | {
       rayon: string | null
+      categorie: string | null
+      nom: string | null
     }[]
   | null
 }
@@ -37,14 +40,8 @@ type RecipeLinkRow = {
 }
 
 async function getUsername(): Promise<string | null> {
-  const cookieStore = await cookies()
-
-  return (
-    cookieStore
-      .get('congelo_username')
-      ?.value
-      ?.trim() || null
-  )
+  const session = await getAuthSession()
+  return session?.username?.trim() || null
 }
 
 export async function GET() {
@@ -171,7 +168,9 @@ export async function GET() {
           is_manual,
           ai_status,
           official_ingredients (
-            rayon
+            rayon,
+            categorie,
+            nom
           )
         `
       )
@@ -328,9 +327,13 @@ export async function GET() {
          * On garde une sécurité supplémentaire au cas où il serait null.
          */
 
-const rayon =
-  item.official_ingredients?.[0]?.rayon?.trim() ||
-  null
+const relation = item.official_ingredients
+        const official = Array.isArray(relation) ? relation[0] : relation
+        const rayon = official?.rayon?.trim() || null
+        const quantity_mode = getQuantityMode({
+          nom: official?.nom ?? item.produit,
+          categorie: official?.categorie ?? null,
+        })
 
         const recipes =
           (
@@ -409,6 +412,8 @@ const rayon =
 
           unite:
             item.unite,
+
+          quantity_mode,
 
           /*
            * Rayon de l'ingrédient officiel.

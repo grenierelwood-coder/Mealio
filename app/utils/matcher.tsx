@@ -3,6 +3,7 @@ import {
   matchStockWithClaude,
   resolveOfficialIngredientWithClaude,
 } from '../lib/anthropic-server'
+import { getQuantityMode, type QuantityMode } from './quantity-policy'
 
 export interface RecipeIngredient {
   name: string
@@ -25,6 +26,8 @@ type OfficialIngredient = {
   nom: string
   rayon: string | null
   default_storage: string | null
+  categorie: string | null
+  unite_reference: string | null
 }
 
 type AiResolution = {
@@ -476,7 +479,7 @@ const STOCK_NON_DISCRIMINANT_TOKENS = new Set([
   'seches',
 ])
 
-function getIngredientSemanticLabels(
+export function getIngredientSemanticLabels(
   ingredientId: string,
   refData: ReferenceData
 ): string[] {
@@ -617,7 +620,7 @@ export async function loadReferenceData(): Promise<ReferenceData> {
     mealioServerDb
       .from('official_ingredients')
       .select(
-        'id, nom, rayon, default_storage'
+        'id, nom, rayon, default_storage, categorie, unite_reference'
       ),
 
     mealioServerDb
@@ -941,6 +944,14 @@ function findDensity(
   ingredientId: string,
   unit: string
 ) {
+  const ingredient = refData.officialById.get(ingredientId)
+
+  // Verrou central : un ingrédient en mode « Présence » ne peut jamais
+  // exploiter une densité, même si une vieille ligne existe encore en DB.
+  if (ingredient && getQuantityMode(ingredient) === 'presence') {
+    return undefined
+  }
+
   const key =
     normalizeUnitKey(unit)
 
@@ -958,6 +969,11 @@ function findDensityForType(
   ingredientId: string,
   type: 'poids' | 'volume'
 ) {
+  const ingredient = refData.officialById.get(ingredientId)
+  if (ingredient && getQuantityMode(ingredient) === 'presence') {
+    return undefined
+  }
+
   return refData.densities.find(
     d => {
       if (
@@ -1470,6 +1486,71 @@ async function resolveOfficialIngredient(
       }
 }
 
+export function resolveIngredientDeterministic(
+  rawName: string,
+  refData: ReferenceData
+): {
+  id: string | null
+  name: string | null
+  source: 'ignored' | 'synonym' | 'exact' | 'lexical' | 'unresolved'
+  score: number | null
+} {
+  const key = cleanText(rawName)
+
+  if (!key || refData.ignoredSet.has(key)) {
+    return { id: null, name: null, source: 'ignored', score: null }
+  }
+
+  const synonymId = refData.synonymMap.get(key)
+  if (synonymId) {
+    const official = refData.officialById.get(synonymId)
+    if (official) {
+      return { id: official.id, name: official.nom, source: 'synonym', score: 1 }
+    }
+  }
+
+  const normalizedRaw = cleanText(rawName, refData.ignoredSet)
+  const exact = refData.officialPrepared.find(o => o.normalized === normalizedRaw)
+  if (exact) {
+    return { id: exact.item.id, name: exact.item.nom, source: 'exact', score: 1 }
+  }
+
+  const candidates = refData.officialPrepared
+    .map(o => ({
+      ...o,
+      score: textScore(rawName, o.item.nom, refData.ignoredSet),
+    }))
+    .filter(o => o.score >= CONFIG.MIN_CANDIDATE_SCORE)
+    .sort((a, b) => b.score - a.score)
+    .slice(0, CONFIG.CANDIDATE_LIMIT)
+
+  const winner = candidates[0]
+  if (winner) {
+    const coverage = tokenCoverage(normalizedRaw, winner.item.nom, refData.ignoredSet)
+    const deterministic = bestIsSafe(
+      candidates,
+      CONFIG.OFFICIAL_AUTO_SCORE,
+      CONFIG.OFFICIAL_AUTO_MARGIN
+    ) || Boolean(
+      coverage.candidateCoverage === 1 &&
+      coverage.common.length > 0 &&
+      winner.score >= 0.55 &&
+      (candidates.length === 1 || winner.score - candidates[1].score >= 0.05)
+    )
+
+    if (deterministic) {
+      return {
+        id: winner.item.id,
+        name: winner.item.nom,
+        source: 'lexical',
+        score: winner.score,
+      }
+    }
+  }
+
+  return { id: null, name: null, source: 'unresolved', score: winner?.score ?? null }
+}
+
 export async function resolveIngredientDecision(
   rawName: string,
   refData?: ReferenceData
@@ -1501,6 +1582,7 @@ export interface ResolvedIngredient {
   ingredient_id: string | null
   qte: number
   unite: string
+  quantity_mode: QuantityMode
   needs_review: boolean
   source_recipe_id: string
   source_recipe_nom: string
@@ -1541,6 +1623,31 @@ export async function resolveRecipeIngredients(
 
     const standardProduct =
       official.name ?? ing.name
+
+    const officialIngredient = ingredientId
+      ? refData.officialById.get(ingredientId) ?? null
+      : null
+
+    const quantityMode = getQuantityMode({
+      nom: officialIngredient?.nom ?? standardProduct,
+      categorie: officialIngredient?.categorie ?? null,
+    })
+
+    // Les épices/assaisonnements sont des besoins de présence :
+    // on ne conserve ni quantité ni unité de recette pour le moteur de calcul.
+    if (quantityMode === 'presence') {
+      resolved.push({
+        produit: standardProduct,
+        ingredient_id: ingredientId,
+        qte: 1,
+        unite: officialIngredient?.unite_reference ?? 'Pièce',
+        quantity_mode: 'presence',
+        needs_review: official.aiProposed || !ingredientId,
+        source_recipe_id: recipeId,
+        source_recipe_nom: recipeNom,
+      })
+      continue
+    }
 
     let requiredQty =
       Number(ing.qty) *
@@ -1638,6 +1745,8 @@ export async function resolveRecipeIngredients(
       unite:
         requiredUnit,
 
+      quantity_mode: 'quantity',
+
       needs_review:
         official.aiProposed ||
         !unitResolved ||
@@ -1659,6 +1768,7 @@ export interface AggregatedRequirement {
   ingredient_id: string | null
   qte: number
   unite: string
+  quantity_mode: QuantityMode
   needs_review: boolean
   contributions: {
     recipe_id: string
@@ -1680,7 +1790,7 @@ export function aggregateRequirements(
     for (const item of list) {
 
       const key =
-        `${item.ingredient_id ?? cleanText(item.produit)}::${cleanText(item.unite)}`
+        `${item.ingredient_id ?? cleanText(item.produit)}::${item.quantity_mode}`
 
       const existing =
         map.get(key)
@@ -1721,6 +1831,9 @@ export function aggregateRequirements(
 
             unite:
               item.unite,
+
+            quantity_mode:
+              item.quantity_mode,
 
             needs_review:
               item.needs_review,
@@ -2191,7 +2304,8 @@ async function matchOneRequirement(
   exclusions: Set<string>,
   stopWords: Set<string>,
   refData: ReferenceData,
-  trace?: MatcherTrace
+  trace?: MatcherTrace,
+  persistMemory = true
 ): Promise<{
   matchedItems: StockItem[]
   needsReview: boolean
@@ -2421,6 +2535,8 @@ async function matchOneRequirement(
     for (const prepared of
       exact
     ) {
+      if (!persistMemory) continue
+
       await saveStockMemory(
         key,
         prepared.item,
@@ -2567,6 +2683,8 @@ async function matchOneRequirement(
     for (const stockItem of
       matchingItems
     ) {
+      if (!persistMemory) continue
+
       await saveStockMemory(
         key,
         stockItem,
@@ -2815,6 +2933,8 @@ async function matchOneRequirement(
     for (const stockItem of
       matchingItems
     ) {
+      if (!persistMemory) continue
+
       await saveStockMemory(
         key,
         stockItem,
@@ -2925,6 +3045,7 @@ async function matchOneRequirement(
   // ============================================================
 
   if (
+    persistMemory &&
     ai.confidence >=
     CONFIG.AI_LEARNING_THRESHOLD
   ) {
@@ -3171,9 +3292,11 @@ function canonicalUnit(
  * - unités discrètes : identité conservée
  * - unités discrètes <-> poids uniquement avec une masse explicite
  *   dans ingredient_densities
- * - volume <-> poids uniquement avec densité.
+ * - volume <-> volume uniquement si les deux unités ont une densité explicite ;
+ * - volume <-> poids uniquement avec la densité explicite de l'unité concernée ;
+ * - aucune conversion transitive ou densité générique par famille.
  */
-function resolveStockIngredientId(
+export function resolveStockIngredientId(
   refData: ReferenceData,
   stockProduct: string | null | undefined
 ): string | null {
@@ -3196,7 +3319,7 @@ function resolveStockIngredientId(
   return null
 }
 
-function convertStockQuantity(
+export function convertStockQuantity(
   refData: ReferenceData,
   ingredientId: string | null,
   qty: number,
@@ -3369,6 +3492,50 @@ function convertStockQuantity(
   }
 
   // ============================================================
+  // VOLUME -> VOLUME VIA DEUX DENSITÉS EXPLICITES
+  // ============================================================
+  // Une conversion culinaire entre deux unités de volume (ex. cc <-> cs)
+  // n'est autorisée que si les DEUX unités sont explicitement renseignées
+  // dans ingredient_densities pour cet ingrédient.
+  // Aucune conversion transitive ou générique n'est inventée.
+  if (
+    from.type === 'volume' &&
+    target.type === 'volume' &&
+    ingredientId
+  ) {
+    const fromDensity =
+      findDensity(refData, ingredientId, fromUnit) ??
+      findDensity(refData, ingredientId, from.unit)
+    const targetDensity =
+      findDensity(refData, ingredientId, targetUnit) ??
+      findDensity(refData, ingredientId, target.unit)
+
+    if (fromDensity && targetDensity) {
+      const fromWeight = Number(fromDensity.poids_g_approx)
+      const targetWeight = Number(targetDensity.poids_g_approx)
+
+      if (
+        Number.isFinite(fromWeight) && fromWeight > 0 &&
+        Number.isFinite(targetWeight) && targetWeight > 0
+      ) {
+        const qtyInFromDensityUnits = qty * from.factor / canonicalUnit(refData, fromDensity.unite)!.factor
+        const grams = qtyInFromDensityUnits * fromWeight
+        const targetDensityUnit = canonicalUnit(refData, targetDensity.unite)
+
+        if (targetDensityUnit) {
+          const targetDensityUnits = grams / targetWeight
+          return {
+            qty: targetDensityUnits * targetDensityUnit.factor / target.factor,
+            unit: target.unit,
+            converted: true,
+            reason: `${fromUnit} → ${targetUnit} via densités explicites`,
+          }
+        }
+      }
+    }
+  }
+
+  // ============================================================
   // VOLUME -> POIDS
   // ============================================================
 
@@ -3388,11 +3555,6 @@ function convertStockQuantity(
         refData,
         ingredientId,
         from.unit
-      ) ??
-      findDensityForType(
-        refData,
-        ingredientId,
-        'volume'
       )
 
     if (!density) {
@@ -3467,11 +3629,6 @@ function convertStockQuantity(
         refData,
         ingredientId,
         target.unit
-      ) ??
-      findDensityForType(
-        refData,
-        ingredientId,
-        'volume'
       )
 
     if (!density) {
@@ -3551,15 +3708,27 @@ export interface ComparedRequirement
   stock_details?: StockComparisonDetail[]
 }
 
+export interface MatcherComparisonTestContext {
+  /**
+   * Optional deterministic test seam. Production callers omit this object
+   * and therefore keep the existing database-backed behavior unchanged.
+   */
+  stopWords?: Set<string>
+  memory?: Map<string, MemoryRow[]>
+  exclusions?: Set<string>
+  persistMemory?: boolean
+}
 
 export async function compareToStock(
   aggregated: AggregatedRequirement[],
   globalStock: StockItem[],
   refData: ReferenceData,
-  trace?: MatcherTrace
+  trace?: MatcherTrace,
+  testContext?: MatcherComparisonTestContext
 ): Promise<ComparedRequirement[]> {
 
   const stopWords =
+    testContext?.stopWords ??
     await loadMatcherStopWords()
 
   /*
@@ -3597,11 +3766,18 @@ export async function compareToStock(
         )
     )
 
+  const loadedContext =
+    testContext?.memory && testContext?.exclusions
+      ? {
+          memory: testContext.memory,
+          exclusions: testContext.exclusions,
+        }
+      : await loadStockMemory(keys)
+
   const {
     memory,
     exclusions,
-  } =
-    await loadStockMemory(keys)
+  } = loadedContext
 
   const results:
     ComparedRequirement[] = []
@@ -3618,7 +3794,8 @@ export async function compareToStock(
         exclusions,
         stopWords,
         refData,
-        trace
+        trace,
+        testContext?.persistMemory ?? true
       )
 
     let totalStockQty = 0
@@ -3629,6 +3806,38 @@ export async function compareToStock(
     const stockDetails:
       StockComparisonDetail[] =
         []
+
+    // Pour les épices/assaisonnements, la présence du produit suffit.
+    // Aucune conversion ni comparaison de quantité n'est effectuée.
+    if (item.quantity_mode === 'presence') {
+      const present = match.matchedItems.length > 0
+      const stockMatchReview = match.reviewReason ?? null
+
+      if (present) {
+        totalStockQty = 1
+        for (const stock of match.matchedItems) {
+          stockDetails.push({
+            produit: stock.produit,
+            qte_stock: Number(stock.qte || 0),
+            unite_stock: stock.unite,
+            qte_convertie: 1,
+            unite_comparee: 'Présence',
+            conversion: null,
+          })
+        }
+      }
+
+      results.push({
+        ...item,
+        qte_a_acheter: present ? 0 : 1,
+        ai_status: present ? 'green' : (match.needsReview ? 'orange' : 'red'),
+        needs_review: item.needs_review || match.needsReview,
+        qte_stock: totalStockQty,
+        stock_details: stockDetails,
+        stock_match_review: stockMatchReview,
+      })
+      continue
+    }
 
     /*
      * V3.5 :
@@ -3792,6 +4001,11 @@ export async function compareToStock(
       ai_status =
         'green'
     } else if (
+      totalStockQty > 0
+    ) {
+      ai_status =
+        'orange'
+    } else if (
       hasUnitMismatch ||
       match.needsReview
     ) {
@@ -3902,7 +4116,8 @@ export async function analyzeRecipe(
   recipe: RecipeAnalysisInput,
   globalStock: StockItem[],
   refData?: ReferenceData,
-  trace?: MatcherTrace
+  trace?: MatcherTrace,
+  testContext?: MatcherComparisonTestContext
 ): Promise<RecipeAnalysisResult> {
 
   const data =
@@ -3952,7 +4167,8 @@ export async function analyzeRecipe(
       aggregated,
       globalStock,
       data,
-      trace
+      trace,
+      testContext
     )
 
   return {
@@ -3981,7 +4197,8 @@ export async function analyzeRecipes(
   recipes: RecipeAnalysisInput[],
   globalStock: StockItem[],
   refData?: ReferenceData,
-  trace?: MatcherTrace
+  trace?: MatcherTrace,
+  testContext?: MatcherComparisonTestContext
 ): Promise<{
   recipes: RecipeAnalysisResult[]
   aggregated: AggregatedRequirement[]
@@ -4076,7 +4293,8 @@ export async function analyzeRecipes(
       aggregated,
       globalStock,
       data,
-      trace
+      trace,
+      testContext
     )
 
   return {

@@ -1,10 +1,10 @@
+import { getAuthSession } from '../../../utils/auth-server'
 import { NextRequest, NextResponse } from 'next/server'
-import { cookies } from 'next/headers'
-import { mealioServerDb } from '../../../../lib/supabase-server'
+import { mealioServerDb } from '../../../lib/supabase-server'
+import { assertOfficialIngredientUnit, getOfficialIngredientReferenceUnit } from '../../../utils/official-unit-policy'
 
 async function getUser() {
-  const c = await cookies()
-  return c.get('congelo_username')?.value?.trim() || null
+  return (await getAuthSession())?.username?.trim() || null
 }
 
 function positiveNumber(value: unknown, label: string) {
@@ -22,13 +22,15 @@ export async function POST(request: NextRequest) {
     const unite = String(body.unite ?? '').trim()
     const min_quantity = positiveNumber(body.min_quantity, 'Le seuil')
     const target_quantity = positiveNumber(body.target_quantity, 'La quantité cible')
+    const mode = body.mode === 'systematic' ? 'systematic' : 'suggestion'
     if (!ingredient_id || !unite) throw new Error('Ingrédient et unité obligatoires.')
+    await assertOfficialIngredientUnit(ingredient_id, unite)
     if (target_quantity <= min_quantity) throw new Error('La quantité cible doit être supérieure au seuil.')
 
     const { data, error } = await mealioServerDb
       .from('stock_replenishment_thresholds')
-      .upsert({ user_id: user, ingredient_id, min_quantity, target_quantity, unite, active: body.active !== false }, { onConflict: 'user_id,ingredient_id' })
-      .select('id,user_id,ingredient_id,min_quantity,target_quantity,unite,active')
+      .upsert({ user_id: user, ingredient_id, min_quantity, target_quantity, unite, mode, active: body.active !== false }, { onConflict: 'user_id,ingredient_id' })
+      .select('id,user_id,ingredient_id,min_quantity,target_quantity,unite,active,mode')
       .single()
     if (error) throw new Error(error.message)
     return NextResponse.json({ threshold: data })
@@ -47,9 +49,16 @@ export async function PATCH(request: NextRequest) {
     const payload: Record<string, unknown> = {}
     if (body.min_quantity !== undefined) payload.min_quantity = positiveNumber(body.min_quantity, 'Le seuil')
     if (body.target_quantity !== undefined) payload.target_quantity = positiveNumber(body.target_quantity, 'La quantité cible')
-    if (body.unite !== undefined) payload.unite = String(body.unite).trim()
+    if (body.unite !== undefined) {
+      const current = await mealioServerDb.from('stock_replenishment_thresholds').select('ingredient_id,unite').eq('id', id).eq('user_id', user).maybeSingle()
+      if (current.error) throw new Error(current.error.message)
+      if (!current.data) throw new Error('Seuil introuvable.')
+      await assertOfficialIngredientUnit(String(current.data.ingredient_id), String(body.unite).trim())
+      throw new Error('L’unité d’un seuil existant ne peut pas être modifiée. Modifiez d’abord l’unité de référence de l’ingrédient.')
+    }
     if (body.active !== undefined) payload.active = Boolean(body.active)
-    const { data, error } = await mealioServerDb.from('stock_replenishment_thresholds').update(payload).eq('id', id).eq('user_id', user).select('id,user_id,ingredient_id,min_quantity,target_quantity,unite,active').single()
+    if (body.mode !== undefined) payload.mode = body.mode === 'systematic' ? 'systematic' : 'suggestion'
+    const { data, error } = await mealioServerDb.from('stock_replenishment_thresholds').update(payload).eq('id', id).eq('user_id', user).select('id,user_id,ingredient_id,min_quantity,target_quantity,unite,active,mode').single()
     if (error) throw new Error(error.message)
     if (Number(data.target_quantity) <= Number(data.min_quantity)) throw new Error('La quantité cible doit être supérieure au seuil.')
     return NextResponse.json({ threshold: data })

@@ -1,0 +1,13 @@
+MEALIO — TESTS AUTOMATIQUES DU MATCHER
+======================================
+
+1. Décompresse l'archive dans le dossier racine de Mealio.
+2. Double-clique simplement sur :
+
+   LANCER_MATCHER_TESTS.cmd
+
+3. À la fin, ouvre :
+
+   test-reports\matcher-lab-....txt
+
+C'est ce fichier TXT qu'il faut me renvoyer pour que j'analyse les résultats.

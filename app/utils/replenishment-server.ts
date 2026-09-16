@@ -1,5 +1,7 @@
 import { mealioServerDb } from '../lib/supabase-server'
+import { isPresenceOnlyIngredient } from './quantity-policy'
 import { getHouseholdStockServer } from './household-server'
+import { assertOfficialIngredientUnit } from './official-unit-policy'
 
 export type ReplenishmentMode = 'suggestion' | 'systematic'
 
@@ -21,6 +23,7 @@ export interface ThresholdRule {
   target_quantity: number
   unite: string
   active: boolean
+  mode: ReplenishmentMode
 }
 
 export interface RecurringRule {
@@ -185,9 +188,7 @@ export async function listFavorites(username: string): Promise<FavoriteIngredien
 }
 
 export async function updateFavoriteUnit(username: string, ingredientId: string, unite: string) {
-  const units = await loadCanonicalUnits()
-  const canonical = canonicalUnitFromRaw(unite, units)
-  if (!units.some(u => u.unite === canonical)) throw new Error('Unité invalide.')
+  const canonical = await assertOfficialIngredientUnit(ingredientId, unite)
 
   const { data, error } = await mealioServerDb
     .from('favorite_preferences')
@@ -205,7 +206,7 @@ export async function listFavoriteUnits() {
 export async function listThresholdRules(username: string): Promise<ThresholdRule[]> {
   const { data, error } = await mealioServerDb
     .from('stock_replenishment_thresholds')
-    .select('id,user_id,ingredient_id,min_quantity,target_quantity,unite,active')
+    .select('id,user_id,ingredient_id,min_quantity,target_quantity,unite,active,mode')
     .eq('user_id', username)
     .order('created_at', { ascending: true })
   if (error) throw new Error(`Impossible de charger les seuils : ${error.message}`)
@@ -217,6 +218,7 @@ export async function listThresholdRules(username: string): Promise<ThresholdRul
     target_quantity: Number(row.target_quantity),
     unite: row.unite,
     active: row.active !== false,
+    mode: row.mode === 'systematic' ? 'systematic' : 'suggestion',
   }))
 }
 
@@ -262,8 +264,18 @@ async function stockByIngredient(username: string) {
   for (const item of stock) {
     const ingredientId = maps.byKey.get(normalize(item.produit))
     if (!ingredientId) continue
+    const ingredient = maps.ingredients.find((i: any) => i.id === ingredientId)
+    const presenceOnly = ingredient ? isPresenceOnlyIngredient(ingredient) : false
     const unit = String(item.unite ?? '').trim()
     const current = result.get(ingredientId)
+
+    if (presenceOnly) {
+      // Pour les épices/assaisonnements, le stock est binaire :
+      // une ligne présente suffit à considérer l'ingrédient disponible.
+      result.set(ingredientId, { quantity: 1, unit: 'Pièce', compatible: true })
+      continue
+    }
+
     if (!current) {
       result.set(ingredientId, { quantity: Number(item.qte ?? 0), unit, compatible: true })
       continue
@@ -290,7 +302,33 @@ export async function getReplenishmentSuggestions(username: string): Promise<Rep
   const ingredientNames = new Map<string, string>((maps.ingredients ?? []).map((i: any) => [i.id, i.nom]))
 
   for (const rule of thresholds.filter(r => r.active)) {
+    const ingredient = maps.ingredients.find((i: any) => i.id === rule.ingredient_id)
+    const presenceOnly = ingredient ? isPresenceOnlyIngredient(ingredient) : false
     const stock = stocks.get(rule.ingredient_id)
+
+    if (presenceOnly) {
+      // Une épice/assaisonnement ne se réapprovisionne pas en grammes/ml :
+      // on vérifie seulement sa présence.
+      if (stock) continue
+      suggestions.push({
+        key: `threshold:${rule.id}`,
+        source: 'threshold',
+        rule_id: rule.id,
+        ingredient_id: rule.ingredient_id,
+        produit: ingredientNames.get(rule.ingredient_id) ?? 'Ingrédient',
+        quantity: 1,
+        unite: 'Pièce',
+        reason: 'Ingrédient absent du stock : présence requise.',
+        mode: rule.mode,
+        stock_quantity: null,
+        stock_unit: null,
+        min_quantity: null,
+        target_quantity: null,
+        due_date: null,
+      })
+      continue
+    }
+
     const stockQty = stock?.quantity ?? 0
     const compatible = !stock || stock.compatible
     if (!compatible) continue
@@ -307,7 +345,7 @@ export async function getReplenishmentSuggestions(username: string): Promise<Rep
       quantity: round(quantity),
       unite: rule.unite,
       reason: `Stock ${round(stockQty)} ${rule.unite} sous le seuil de ${round(rule.min_quantity)} ${rule.unite}`,
-      mode: 'suggestion',
+      mode: rule.mode,
       stock_quantity: round(stockQty),
       stock_unit: stock?.unit ?? rule.unite,
       min_quantity: rule.min_quantity,
@@ -317,15 +355,19 @@ export async function getReplenishmentSuggestions(username: string): Promise<Rep
   }
 
   for (const rule of recurring.filter(r => r.active && r.next_due_date <= today)) {
+    const ingredient = rule.ingredient_id ? maps.ingredients.find((i: any) => i.id === rule.ingredient_id) : null
+    const presenceOnly = ingredient ? isPresenceOnlyIngredient(ingredient) : false
     suggestions.push({
       key: `recurring:${rule.id}`,
       source: 'recurring',
       rule_id: rule.id,
       ingredient_id: rule.ingredient_id,
       produit: rule.produit,
-      quantity: rule.quantity,
-      unite: rule.unite,
-      reason: `Réapprovisionnement récurrent prévu le ${rule.next_due_date}`,
+      quantity: presenceOnly ? 1 : rule.quantity,
+      unite: presenceOnly ? 'Pièce' : rule.unite,
+      reason: presenceOnly
+        ? `Présence requise · réapprovisionnement récurrent prévu le ${rule.next_due_date}`
+        : `Réapprovisionnement récurrent prévu le ${rule.next_due_date}`,
       mode: rule.mode,
       stock_quantity: rule.ingredient_id ? stocks.get(rule.ingredient_id)?.quantity ?? null : null,
       stock_unit: rule.ingredient_id ? stocks.get(rule.ingredient_id)?.unit ?? null : null,
@@ -336,6 +378,78 @@ export async function getReplenishmentSuggestions(username: string): Promise<Rep
   }
 
   return suggestions
+}
+
+export async function processReplenishmentForCourses(username: string) {
+  const suggestions = await getReplenishmentSuggestions(username)
+  const systematic = suggestions.filter(s => s.mode === 'systematic')
+
+  const { data: existingList } = await mealioServerDb
+    .from('shopping_lists')
+    .select('id')
+    .eq('user_id', username)
+    .eq('status', 'en_cours')
+    .order('created_at', { ascending: false })
+    .limit(1)
+    .maybeSingle()
+
+  let activeItems: Array<{ produit: string; ingredient_id: string | null }> = []
+  if (existingList?.id) {
+    const { data, error } = await mealioServerDb
+      .from('shopping_items')
+      .select('produit,ingredient_id')
+      .eq('list_id', existingList.id)
+    if (error) throw new Error(error.message)
+    activeItems = (data ?? []).map((item: any) => ({
+      produit: String(item.produit ?? ''),
+      ingredient_id: item.ingredient_id ?? null,
+    }))
+  }
+
+  const systematicAdded: string[] = []
+  for (const suggestion of systematic) {
+    const alreadyInCourses = activeItems.some(item =>
+      (suggestion.ingredient_id && item.ingredient_id === suggestion.ingredient_id) ||
+      (!suggestion.ingredient_id && normalize(item.produit) === normalize(suggestion.produit))
+    )
+
+    if (alreadyInCourses) {
+      // A recurring rule already present in the active list has already been
+      // consumed by the Courses cockpit. Do not increase its quantity again.
+      if (suggestion.source === 'recurring') {
+        await markRecurringAdded(suggestion.rule_id, username)
+      }
+      systematicAdded.push(suggestion.produit)
+      continue
+    }
+
+    try {
+      await addReplenishmentToActiveList(username, {
+        produit: suggestion.produit,
+        ingredient_id: suggestion.ingredient_id,
+        quantity: suggestion.quantity,
+        unite: suggestion.unite,
+        source: suggestion.source,
+        rule_id: suggestion.rule_id,
+      })
+      systematicAdded.push(suggestion.produit)
+      activeItems.push({ produit: suggestion.produit, ingredient_id: suggestion.ingredient_id })
+    } catch (error) {
+      console.error(`⚠️ Réappro automatique « ${suggestion.produit} » non ajouté :`, error)
+    }
+  }
+
+  const pendingSuggestions = suggestions
+    .filter(s => s.mode !== 'systematic')
+    .filter(s => !activeItems.some(item =>
+      (s.ingredient_id && item.ingredient_id === s.ingredient_id) ||
+      (!s.ingredient_id && normalize(item.produit) === normalize(s.produit))
+    ))
+
+  return {
+    systematicAdded,
+    suggestions: pendingSuggestions,
+  }
 }
 
 export async function addReplenishmentToActiveList(
@@ -370,6 +484,10 @@ export async function addReplenishmentToActiveList(
   }
 
   const ingredientId = input.ingredient_id ?? null
+  if (ingredientId) {
+    await assertOfficialIngredientUnit(ingredientId, input.unite)
+  }
+
   const { data: candidates, error: candidateError } = await mealioServerDb
     .from('shopping_items')
     .select('id,produit,ingredient_id,qte,qte_achat')

@@ -1,10 +1,9 @@
+import { getAuthSession } from '../../../utils/auth-server'
 import { NextRequest, NextResponse } from 'next/server'
-import { cookies } from 'next/headers'
 import { addReplenishmentToActiveList } from '../../../utils/replenishment-server'
 
 async function getUser() {
-  const c = await cookies()
-  return c.get('congelo_username')?.value?.trim() || null
+  return (await getAuthSession())?.username?.trim() || null
 }
 
 export async function POST(request: NextRequest) {

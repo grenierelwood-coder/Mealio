@@ -1,5 +1,5 @@
+import { getAuthSession } from '../../../../utils/auth-server'
 import { NextResponse } from 'next/server'
-import { cookies } from 'next/headers'
 import { mealioServerDb } from '../../../../lib/supabase-server'
 import { resolveHousehold } from '../../../../utils/household-server'
 import { resolveStorageLocation, type StorageSource } from '../../../../utils/storage-routing-server'
@@ -9,8 +9,7 @@ function sourceOf(value: unknown): StorageSource | null {
 }
 
 export async function GET(request: Request) {
-  const cookieStore = await cookies()
-  const username = cookieStore.get('congelo_username')?.value?.trim()
+  const username = (await getAuthSession())?.username?.trim()
 
   if (!username) {
     return NextResponse.json({ error: 'Non authentifié.' }, { status: 401 })

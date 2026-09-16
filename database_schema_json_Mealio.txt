@@ -1,0 +1,337 @@
+{
+  "database": {
+    "tables": [
+      {
+        "name": "official_ingredients",
+        "columns": [
+          { "name": "id", "type": "uuid", "constraints": ["Primary"] },
+          { "name": "categorie", "type": "text", "constraints": [] },
+          { "name": "nom", "type": "text", "constraints": ["Unique"] },
+          { "name": "rayon", "type": "text", "constraints": ["Nullable"] },
+          { "name": "default_storage", "type": "text", "constraints": ["Nullable"] },
+          { "name": "default_is_fridge", "type": "bool", "constraints": ["Nullable"] },
+          { "name": "unite_reference", "type": "text", "constraints": ["Nullable"] }
+        ]
+      },
+      {
+        "name": "unit_mappings",
+        "columns": [
+          { "name": "id", "type": "uuid", "constraints": ["Primary"] },
+          { "name": "unite", "type": "text", "constraints": ["Unique"] },
+          { "name": "abreviation", "type": "text", "constraints": ["Nullable"] },
+          { "name": "type_unite", "type": "text", "constraints": ["Nullable"] },
+          { "name": "equivalence_reference", "type": "text", "constraints": ["Nullable"] },
+          { "name": "notes", "type": "text", "constraints": ["Nullable"] },
+          { "name": "multiplicateur", "type": "numeric", "constraints": ["Nullable"] }
+        ]
+      },
+      {
+        "name": "ignored_words",
+        "columns": [
+          { "name": "id", "type": "uuid", "constraints": ["Primary"] },
+          { "name": "mot", "type": "text", "constraints": ["Unique"] },
+          { "name": "type_ignore", "type": "text", "constraints": ["Nullable"] }
+        ]
+      },
+      {
+        "name": "ingredient_synonyms",
+        "columns": [
+          { "name": "id", "type": "uuid", "constraints": ["Primary"] },
+          { "name": "mot_recette", "type": "text", "constraints": ["Unique"] },
+          { "name": "ingredient_id", "type": "uuid", "constraints": [] }
+        ]
+      },
+      {
+        "name": "ingredient_densities",
+        "columns": [
+          { "name": "id", "type": "uuid", "constraints": ["Primary"] },
+          { "name": "ingredient_id", "type": "uuid", "constraints": [] },
+          { "name": "unite", "type": "text", "constraints": [] },
+          { "name": "poids_g_approx", "type": "numeric", "constraints": [] }
+        ]
+      },
+      {
+        "name": "ai_resolution_log",
+        "columns": [
+          { "name": "id", "type": "uuid", "constraints": ["Primary"] },
+          { "name": "created_at", "type": "timestamptz", "constraints": ["Nullable"] },
+          { "name": "mot_recette", "type": "text", "constraints": [] },
+          { "name": "proposition_ia", "type": "text", "constraints": ["Nullable"] },
+          { "name": "ingredient_id_propose", "type": "uuid", "constraints": ["Nullable"] },
+          { "name": "statut", "type": "text", "constraints": ["Nullable"] },
+          { "name": "valide_par", "type": "text", "constraints": ["Nullable"] }
+        ]
+      },
+      {
+        "name": "recurring_items",
+        "columns": [
+          { "name": "id", "type": "uuid", "constraints": ["Primary"] },
+          { "name": "user_id", "type": "text", "constraints": [] },
+          { "name": "produit", "type": "text", "constraints": [] },
+          { "name": "ingredient_id", "type": "uuid", "constraints": ["Nullable"] },
+          { "name": "qte_minimum", "type": "numeric", "constraints": [] },
+          { "name": "unite", "type": "text", "constraints": [] },
+          { "name": "mode", "type": "text", "constraints": ["Nullable"] }
+        ]
+      },
+      {
+        "name": "household_exclusions",
+        "columns": [
+          { "name": "id", "type": "uuid", "constraints": ["Primary"] },
+          { "name": "user_id", "type": "text", "constraints": [] },
+          { "name": "ingredient_id", "type": "uuid", "constraints": [] },
+          { "name": "type_exclusion", "type": "text", "constraints": ["Nullable"] },
+          { "name": "notes", "type": "text", "constraints": ["Nullable"] }
+        ]
+      },
+      {
+        "name": "meal_plans",
+        "columns": [
+          { "name": "id", "type": "uuid", "constraints": ["Primary"] },
+          { "name": "user_id", "type": "text", "constraints": [] },
+          { "name": "recipe_id", "type": "uuid", "constraints": [] },
+          { "name": "scheduled_date", "type": "date", "constraints": [] },
+          { "name": "meal_type", "type": "text", "constraints": ["Nullable"] },
+          { "name": "role", "type": "text", "constraints": ["Nullable"] },
+          { "name": "servings", "type": "int4", "constraints": ["Nullable"] }
+        ]
+      },
+      {
+        "name": "meal_templates",
+        "columns": [
+          { "name": "id", "type": "uuid", "constraints": ["Primary"] },
+          { "name": "user_id", "type": "text", "constraints": [] },
+          { "name": "nom", "type": "text", "constraints": [] }
+        ]
+      },
+      {
+        "name": "meal_template_items",
+        "columns": [
+          { "name": "id", "type": "uuid", "constraints": ["Primary"] },
+          { "name": "template_id", "type": "uuid", "constraints": [] },
+          { "name": "recipe_id", "type": "uuid", "constraints": [] },
+          { "name": "jour_semaine", "type": "int4", "constraints": [] },
+          { "name": "meal_type", "type": "text", "constraints": ["Nullable"] },
+          { "name": "role", "type": "text", "constraints": ["Nullable"] },
+          { "name": "servings", "type": "int4", "constraints": ["Nullable"] }
+        ]
+      },
+      {
+        "name": "shopping_lists",
+        "columns": [
+          { "name": "id", "type": "uuid", "constraints": ["Primary"] },
+          { "name": "created_at", "type": "timestamptz", "constraints": ["Nullable"] },
+          { "name": "user_id", "type": "text", "constraints": [] },
+          { "name": "name", "type": "text", "constraints": [] },
+          { "name": "status", "type": "text", "constraints": ["Nullable"] },
+          { "name": "period_start", "type": "date", "constraints": ["Nullable"] },
+          { "name": "period_end", "type": "date", "constraints": ["Nullable"] }
+        ]
+      },
+      {
+        "name": "shopping_items",
+        "columns": [
+          { "name": "id", "type": "uuid", "constraints": ["Primary"] },
+          { "name": "list_id", "type": "uuid", "constraints": [] },
+          { "name": "produit", "type": "text", "constraints": [] },
+          { "name": "ingredient_id", "type": "uuid", "constraints": ["Nullable"] },
+          { "name": "qte", "type": "numeric", "constraints": ["Nullable"] },
+          { "name": "unite", "type": "text", "constraints": ["Nullable"] },
+          { "name": "is_checked", "type": "bool", "constraints": ["Nullable"] },
+          { "name": "is_manual", "type": "bool", "constraints": ["Nullable"] },
+          { "name": "ai_status", "type": "text", "constraints": ["Nullable"] },
+          { "name": "qte_achat", "type": "numeric", "constraints": ["Nullable"] },
+          { "name": "qte_achetee", "type": "numeric", "constraints": ["Nullable"] },
+          { "name": "stock_stored_quantity", "type": "numeric", "constraints": [] },
+          { "name": "updated_at", "type": "timestamptz", "constraints": [] },
+          { "name": "unit_migration_status", "type": "text", "constraints": [] },
+          { "name": "unit_migration_note", "type": "text", "constraints": ["Nullable"] }
+        ]
+      },
+      {
+        "name": "shopping_item_recipes",
+        "columns": [
+          { "name": "id", "type": "uuid", "constraints": ["Primary"] },
+          { "name": "shopping_item_id", "type": "uuid", "constraints": [] },
+          { "name": "recipe_id", "type": "uuid", "constraints": [] },
+          { "name": "recipe_nom", "type": "text", "constraints": ["Nullable"] },
+          { "name": "qte_contribuee", "type": "numeric", "constraints": ["Nullable"] }
+        ]
+      },
+      {
+        "name": "matcher_memory",
+        "columns": [
+          { "name": "id", "type": "uuid", "constraints": ["Primary"] },
+          { "name": "ingredient_key", "type": "text", "constraints": [] },
+          { "name": "stock_item_id", "type": "text", "constraints": [] },
+          { "name": "source", "type": "text", "constraints": [] },
+          { "name": "confidence", "type": "numeric", "constraints": [] },
+          { "name": "validated", "type": "bool", "constraints": [] },
+          { "name": "reason", "type": "text", "constraints": ["Nullable"] },
+          { "name": "usage_count", "type": "int4", "constraints": [] },
+          { "name": "created_at", "type": "timestamptz", "constraints": [] },
+          { "name": "updated_at", "type": "timestamptz", "constraints": [] }
+        ]
+      },
+      {
+        "name": "matcher_exclusions",
+        "columns": [
+          { "name": "id", "type": "uuid", "constraints": ["Primary"] },
+          { "name": "ingredient_key", "type": "text", "constraints": [] },
+          { "name": "stock_item_id", "type": "text", "constraints": [] },
+          { "name": "reason", "type": "text", "constraints": ["Nullable"] },
+          { "name": "created_at", "type": "timestamptz", "constraints": [] }
+        ]
+      },
+      {
+        "name": "ingredient_unit_bridges",
+        "columns": [
+          { "name": "id", "type": "uuid", "constraints": ["Primary"] },
+          { "name": "ingredient_id", "type": "uuid", "constraints": [] },
+          { "name": "from_unit", "type": "text", "constraints": [] },
+          { "name": "to_unit", "type": "text", "constraints": [] },
+          { "name": "factor", "type": "numeric", "constraints": [] },
+          { "name": "reason", "type": "text", "constraints": ["Nullable"] },
+          { "name": "created_at", "type": "timestamptz", "constraints": [] },
+          { "name": "updated_at", "type": "timestamptz", "constraints": [] }
+        ]
+      },
+      {
+        "name": "shopping_item_stock_transfers",
+        "columns": [
+          { "name": "id", "type": "uuid", "constraints": ["Primary"] },
+          { "name": "shopping_item_id", "type": "uuid", "constraints": [] },
+          { "name": "stock_item_id", "type": "text", "constraints": ["Nullable"] },
+          { "name": "storage", "type": "text", "constraints": [] },
+          { "name": "location_id", "type": "uuid", "constraints": [] },
+          { "name": "location_name", "type": "text", "constraints": ["Nullable"] },
+          { "name": "rule_label", "type": "text", "constraints": ["Nullable"] },
+          { "name": "created_at", "type": "timestamptz", "constraints": [] },
+          { "name": "quantity", "type": "numeric", "constraints": [] },
+          { "name": "operation_key", "type": "text", "constraints": [] },
+          { "name": "status", "type": "text", "constraints": [] },
+          { "name": "attempted_at", "type": "timestamptz", "constraints": [] },
+          { "name": "unit_migration_status", "type": "text", "constraints": [] },
+          { "name": "unit_migration_note", "type": "text", "constraints": ["Nullable"] }
+        ]
+      },
+      {
+        "name": "shopping_issues",
+        "columns": [
+          { "name": "id", "type": "uuid", "constraints": ["Primary"] },
+          { "name": "list_id", "type": "uuid", "constraints": ["Nullable"] },
+          { "name": "shopping_item_id", "type": "uuid", "constraints": ["Nullable"] },
+          { "name": "phase", "type": "text", "constraints": [] },
+          { "name": "issue_type", "type": "text", "constraints": [] },
+          { "name": "produit", "type": "text", "constraints": [] },
+          { "name": "unit", "type": "text", "constraints": ["Nullable"] },
+          { "name": "message", "type": "text", "constraints": [] },
+          { "name": "resolution_hint", "type": "text", "constraints": [] },
+          { "name": "status", "type": "text", "constraints": [] },
+          { "name": "created_at", "type": "timestamptz", "constraints": [] },
+          { "name": "resolved_at", "type": "timestamptz", "constraints": ["Nullable"] },
+          { "name": "recipe_id", "type": "uuid", "constraints": ["Nullable"] },
+          { "name": "recipe_nom", "type": "text", "constraints": ["Nullable"] }
+        ]
+      },
+      {
+        "name": "shopping_purchase_events",
+        "columns": [
+          { "name": "id", "type": "uuid", "constraints": ["Primary"] },
+          { "name": "list_id", "type": "uuid", "constraints": [] },
+          { "name": "shopping_item_id", "type": "uuid", "constraints": [] },
+          { "name": "produit", "type": "text", "constraints": [] },
+          { "name": "ingredient_id", "type": "uuid", "constraints": ["Nullable"] },
+          { "name": "quantity", "type": "numeric", "constraints": [] },
+          { "name": "unite", "type": "text", "constraints": ["Nullable"] },
+          { "name": "purchased_at", "type": "timestamptz", "constraints": [] },
+          { "name": "status", "type": "text", "constraints": [] },
+          { "name": "storage", "type": "text", "constraints": ["Nullable"] },
+          { "name": "location_name", "type": "text", "constraints": ["Nullable"] },
+          { "name": "created_at", "type": "timestamptz", "constraints": [] },
+          { "name": "unit_migration_status", "type": "text", "constraints": [] },
+          { "name": "unit_migration_note", "type": "text", "constraints": ["Nullable"] }
+        ]
+      },
+      {
+        "name": "stock_replenishment_thresholds",
+        "columns": [
+          { "name": "id", "type": "uuid", "constraints": ["Primary"] },
+          { "name": "user_id", "type": "text", "constraints": [] },
+          { "name": "ingredient_id", "type": "uuid", "constraints": [] },
+          { "name": "min_quantity", "type": "numeric", "constraints": [] },
+          { "name": "target_quantity", "type": "numeric", "constraints": [] },
+          { "name": "unite", "type": "text", "constraints": [] },
+          { "name": "active", "type": "bool", "constraints": [] },
+          { "name": "created_at", "type": "timestamptz", "constraints": [] },
+          { "name": "updated_at", "type": "timestamptz", "constraints": [] },
+          { "name": "mode", "type": "text", "constraints": [] },
+          { "name": "unit_migration_status", "type": "text", "constraints": [] },
+          { "name": "unit_migration_note", "type": "text", "constraints": ["Nullable"] }
+        ]
+      },
+      {
+        "name": "recurring_purchase_rules",
+        "columns": [
+          { "name": "id", "type": "uuid", "constraints": ["Primary"] },
+          { "name": "user_id", "type": "text", "constraints": [] },
+          { "name": "ingredient_id", "type": "uuid", "constraints": ["Nullable"] },
+          { "name": "produit", "type": "text", "constraints": [] },
+          { "name": "quantity", "type": "numeric", "constraints": [] },
+          { "name": "unite", "type": "text", "constraints": [] },
+          { "name": "rayon", "type": "text", "constraints": ["Nullable"] },
+          { "name": "interval_days", "type": "int4", "constraints": [] },
+          { "name": "next_due_date", "type": "date", "constraints": [] },
+          { "name": "mode", "type": "text", "constraints": [] },
+          { "name": "active", "type": "bool", "constraints": [] },
+          { "name": "created_at", "type": "timestamptz", "constraints": [] },
+          { "name": "updated_at", "type": "timestamptz", "constraints": [] },
+          { "name": "unit_migration_status", "type": "text", "constraints": [] },
+          { "name": "unit_migration_note", "type": "text", "constraints": ["Nullable"] }
+        ]
+      },
+      {
+        "name": "favorite_preferences",
+        "columns": [
+          { "name": "id", "type": "uuid", "constraints": ["Primary"] },
+          { "name": "user_id", "type": "text", "constraints": [] },
+          { "name": "ingredient_id", "type": "uuid", "constraints": [] },
+          { "name": "unite", "type": "text", "constraints": [] },
+          { "name": "created_at", "type": "timestamptz", "constraints": [] },
+          { "name": "updated_at", "type": "timestamptz", "constraints": [] },
+          { "name": "unit_migration_status", "type": "text", "constraints": [] },
+          { "name": "unit_migration_note", "type": "text", "constraints": ["Nullable"] }
+        ]
+      },
+      {
+        "name": "meal_consumption_events",
+        "columns": [
+          { "name": "id", "type": "uuid", "constraints": ["Primary"] },
+          { "name": "user_id", "type": "text", "constraints": [] },
+          { "name": "meal_plan_id", "type": "uuid", "constraints": [] },
+          { "name": "recipe_id", "type": "uuid", "constraints": ["Nullable"] },
+          { "name": "recipe_nom", "type": "text", "constraints": ["Nullable"] },
+          { "name": "scheduled_date", "type": "date", "constraints": [] },
+          { "name": "servings", "type": "int4", "constraints": [] },
+          { "name": "status", "type": "text", "constraints": [] },
+          { "name": "consumed_items", "type": "jsonb", "constraints": [] },
+          { "name": "shortages", "type": "jsonb", "constraints": [] },
+          { "name": "created_at", "type": "timestamptz", "constraints": [] }
+        ]
+      },
+      {
+        "name": "ingredient_unit_conversions",
+        "columns": [
+          { "name": "id", "type": "uuid", "constraints": ["Primary"] },
+          { "name": "ingredient_id", "type": "uuid", "constraints": [] },
+          { "name": "from_unit", "type": "text", "constraints": [] },
+          { "name": "to_unit", "type": "text", "constraints": [] },
+          { "name": "multiplier", "type": "numeric", "constraints": [] },
+          { "name": "description", "type": "text", "constraints": ["Nullable"] },
+          { "name": "created_at", "type": "timestamptz", "constraints": [] },
+          { "name": "updated_at", "type": "timestamptz", "constraints": [] }
+        ]
+      }
+    ]
+  }
+}

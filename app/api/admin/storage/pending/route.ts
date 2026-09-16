@@ -1,5 +1,5 @@
+import { getAuthSession } from '../../../../utils/auth-server'
 import { NextResponse } from 'next/server'
-import { cookies } from 'next/headers'
 
 import {
   mealioServerDb,
@@ -404,7 +404,7 @@ async function loadPending(username: string) {
 
 export async function GET() {
   try {
-    const username = (await cookies()).get('congelo_username')?.value?.trim()
+    const username = (await getAuthSession())?.username?.trim()
     if (!username) return NextResponse.json({ error: 'Utilisateur non authentifié.' }, { status: 401 })
     const items = await loadPending(username)
     return NextResponse.json({ ok: true, username, items })
@@ -415,7 +415,7 @@ export async function GET() {
 
 export async function POST(request: Request) {
   try {
-    const username = (await cookies()).get('congelo_username')?.value?.trim()
+    const username = (await getAuthSession())?.username?.trim()
     if (!username) return NextResponse.json({ error: 'Utilisateur non authentifié.' }, { status: 401 })
 
     const body = await request.json().catch(() => ({}))

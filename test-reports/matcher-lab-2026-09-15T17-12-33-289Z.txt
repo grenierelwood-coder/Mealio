@@ -1,0 +1,38 @@
+MEALIO — MATCHER TEST LAB
+V33.1 — exécution clé en main
+Date : 15/09/2026 19:12:33
+
+Les tests sont exécutés avec des données de référence locales.
+Aucune écriture Supabase ni appel Claude n’est nécessaire pour cette batterie.
+
+PASS | 1 ms | Résolution exacte / synonyme / inconnu
+PASS | 1 ms | Normalisation ligne recette
+PASS | 1 ms | Redimensionnement portions
+PASS | 0 ms | Miel : densités explicites uniquement
+PASS | 1 ms | Presence-only : aucune densité utilisable
+PASS | 1 ms | Plusieurs lignes de stock sont additionnées
+PASS | 0 ms | Stock supérieur : aucun achat
+PASS | 0 ms | Stock insuffisant : achat = manque
+PASS | 1 ms | Anti-faux-positif : courgette ≠ poireau
+FAIL [CRITIQUE] | 7101 ms | Anti-faux-positif CRITIQUE : farine de blé ≠ farine de riz
+      AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+1000 !== 0
+
+    at Object.run (C:\Techtune\Devt\Courses\mealio\scripts\run-matcher-lab.ts:174:10)
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    at async main (C:\Techtune\Devt\Courses\mealio\scripts\run-matcher-lab.ts:256:5)
+PASS | 0 ms | Presence : stock présent = aucun achat
+PASS | 0 ms | Presence : stock absent = achat présence
+PASS | 0 ms | Pipeline complet recette → besoin → stock → achat
+PASS | 0 ms | Agrégation de deux recettes
+
+==============================
+RÉSULTAT
+==============================
+Tests exécutés : 14
+PASS : 13
+FAIL : 1
+Échecs critiques : 1
+
+STATUT : BLOQUÉ — au moins un test critique échoue.

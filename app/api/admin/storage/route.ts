@@ -1,5 +1,5 @@
+import { getAuthSession } from '../../../utils/auth-server'
 import { NextResponse } from 'next/server'
-import { cookies } from 'next/headers'
 import { resolveHousehold } from '../../../utils/household-server'
 import {
   createStorageRoutingRule,
@@ -10,8 +10,7 @@ import {
 } from '../../../utils/storage-routing-server'
 
 async function username() {
-  const store = await cookies()
-  return store.get('congelo_username')?.value?.trim() || null
+  return (await getAuthSession())?.username?.trim() || null
 }
 
 function sourceOf(value: unknown): 'frosti' | 'cellio' | null {

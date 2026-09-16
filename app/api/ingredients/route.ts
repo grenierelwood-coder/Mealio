@@ -1,10 +1,9 @@
+import { getAuthSession } from '../../utils/auth-server'
 import { NextResponse } from 'next/server'
-import { cookies } from 'next/headers'
 import { mealioServerDb } from '../../lib/supabase-server'
 
 export async function GET() {
-  const cookieStore = await cookies()
-  const username = cookieStore.get('congelo_username')?.value?.trim()
+  const username = (await getAuthSession())?.username?.trim()
 
   if (!username) {
     return NextResponse.json({ error: 'Non authentifié.' }, { status: 401 })
@@ -12,7 +11,7 @@ export async function GET() {
 
   const { data, error } = await mealioServerDb
     .from('official_ingredients')
-    .select('id,nom,categorie,default_storage,default_is_fridge')
+    .select('id,nom,categorie,default_storage,default_is_fridge,unite_reference')
     .order('nom', { ascending: true })
 
   if (error) {

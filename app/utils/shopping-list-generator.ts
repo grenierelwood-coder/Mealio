@@ -11,6 +11,7 @@ import {
   compareToStock,
   ResolvedIngredient,
 } from './matcher'
+import { assertOfficialIngredientUnit } from './official-unit-policy'
 
 export interface GenerateShoppingListResult {
   listId: string
@@ -894,6 +895,10 @@ export async function generateShoppingListForPeriod(
 
   for (const item of comparedForInsert) {
     try {
+    if (item.ingredient_id) {
+      await assertOfficialIngredientUnit(item.ingredient_id, item.unite_db)
+    }
+
     const key = itemKey({
       ingredient_id: item.ingredient_id,
       produit: item.produit,

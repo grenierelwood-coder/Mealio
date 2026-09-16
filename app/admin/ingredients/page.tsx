@@ -1,118 +1,159 @@
 'use client'
 
 import Link from 'next/link'
-import { useEffect, useMemo, useState } from 'react'
-import AdminHelp from '../../components/AdminHelp'
+import { useEffect, useMemo, useRef, useState } from 'react'
 
-type Ingredient = { id: string; nom: string; categorie: string | null; rayon: string | null; default_storage: 'frosti' | 'cellio' | null; default_is_fridge: boolean | null }
-type Synonym = { mot_recette: string; ingredient_id: string }
-type Unit = { unite: string; abreviation: string | null; type_unite: string | null; equivalence_reference: number | null; multiplicateur: number | null }
-type Density = { ingredient_id: string; unite: string; poids_g_approx: number }
-type Data = { ingredients: Ingredient[]; synonyms: Synonym[]; units: Unit[]; densities: Density[] }
+type Ingredient = { id:string; nom:string; categorie:string|null; rayon:string|null; default_storage:'frosti'|'cellio'|null; default_is_fridge:boolean|null; unite_reference:string|null }
+type Synonym = { mot_recette:string; ingredient_id:string }
+type Unit = { unite:string; abreviation:string|null; type_unite:string|null; equivalence_reference:number|null; multiplicateur:number|null }
+type Density = { ingredient_id:string; unite:string; poids_g_approx:number }
+type Conversion = Record<string,unknown> & { ingredient_id?:string; from_unit?:string; to_unit?:string; multiplier?:number; description?:string|null }
+type UsageRow = { ingredient_id:string; unite:string|null }
+type Data = { ingredients:Ingredient[]; synonyms:Synonym[]; units:Unit[]; densities:Density[]; conversions:Conversion[]; usage:{shopping:UsageRow[]; purchases:UsageRow[]; recurring:UsageRow[]; thresholds:UsageRow[]; favorites:UsageRow[]} }
+type AuditIssue = { code:string; severity:'error'|'warning'|'info'; category?:'referentiel'|'synonymes'|'equivalences'|'donnees'|'unites'; title:string; message:string; ingredientId?:string; ingredientName?:string; unit?:string|null; relatedTable?:string; relatedCount?:number; synonym?:string|null }
+type AuditResult = { generatedAt:string; summary:{ingredients:number;units:number;synonyms:number;densities:number;conversions:number;usageRows:number;errors:number;warnings:number;infos:number}; issues:AuditIssue[]; grouped:(AuditIssue&{count:number})[] }
+type CookAuditExample = { recipeId:string; recipeTitle:string; ingredient:string; quantity:number|string|null; unit:string|null }
+type CookAuditProblem = { raw:string; normalized:string; count:number; recipes:Array<{id:string;title:string}>; candidateScore:number|null; examples:CookAuditExample[]; ingredients:string[] }
+type CookAuditResult = { generatedAt:string; mode:string; note:string; summary:{recipes:number;ingredientLines:number;recognized:number;ignored:number;unresolved:number;ingredientCoverage:number;unitKnown:number;unitUnknown:number;unitCoverage:number;distinctUnresolvedIngredients:number;distinctUnknownUnits:number}; unresolved:CookAuditProblem[]; unknownUnits:CookAuditProblem[] }
 
-const emptyIngredient = { nom: '', categorie: '', rayon: '', default_storage: 'cellio', default_is_fridge: false }
-const emptySynonym = { mot_recette: '', ingredient_id: '' }
-const emptyUnit = { unite: '', abreviation: '', type_unite: 'unité', equivalence_reference: '', multiplicateur: '1' }
-const emptyDensity = { ingredient_id: '', unite: '', poids_g_approx: '' }
+const empty = { nom:'', categorie:'', rayon:'', default_storage:'cellio', default_is_fridge:false, unite_reference:'' }
 
-export default function IngredientsAdminPage() {
-  const [data, setData] = useState<Data>({ ingredients: [], synonyms: [], units: [], densities: [] })
-  const [search, setSearch] = useState('')
-  const [error, setError] = useState('')
-  const [loading, setLoading] = useState(true)
-  const [saving, setSaving] = useState(false)
-  const [ingredient, setIngredient] = useState<any>(emptyIngredient)
-  const [synonym, setSynonym] = useState<any>(emptySynonym)
-  const [unit, setUnit] = useState<any>(emptyUnit)
-  const [density, setDensity] = useState<any>(emptyDensity)
+function normalizePresenceText(value: unknown): string {
+  return String(value ?? '').normalize('NFD').replace(/[\u0300-\u036f]/g,'').trim().toLowerCase().replace(/\s+/g,' ')
+}
+function isPresenceOnly(input: { nom?: string|null; categorie?: string|null }): boolean {
+  const name=normalizePresenceText(input.nom)
+  const category=normalizePresenceText(input.categorie)
+  if(category==='epices & herbes sechees') return true
+  const names=new Set(['sel','sel fin','gros sel','fleur de sel','poivre','poivre noir','poivre blanc','poivre vert','paprika','piment',"piment d'espelette",'piment de cayenne','curry','curcuma','cumin','muscade','noix de muscade','cannelle','clou de girofle','gingembre moulu','coriandre moulue','cardamome','fenouil en graines','graines de cumin','graines de coriandre','herbes de provence','origan seche','origan séché','basilic séché','thym séché','romarin séché','laurier séché','ail en poudre','oignon en poudre','moutarde',"moutarde de dijon",'sauce soja','sriracha','sauce sriracha'])
+  if(names.has(name)) return true
+  return ['poivre','paprika','piment','curry','curcuma','cumin','muscade','cannelle','clou de girofle','cardamome','herbes de provence','moutarde','sriracha'].some(k=>name.includes(k)) || name.includes(' sel ') || name.startsWith('sel ')
+}
 
-  async function load() {
-    setLoading(true); setError('')
-    try {
-      const r = await fetch('/api/admin/ingredients', { cache: 'no-store' })
-      const j = await r.json()
-      if (!r.ok) throw new Error(j.error || 'Erreur de chargement.')
-      setData(j)
-    } catch (e) { setError(e instanceof Error ? e.message : 'Erreur de chargement.') }
-    finally { setLoading(false) }
-  }
+export default function IngredientsAdminPage(){
+  const [data,setData]=useState<Data>({ingredients:[],synonyms:[],units:[],densities:[],conversions:[],usage:{shopping:[],purchases:[],recurring:[],thresholds:[],favorites:[]}})
+  const [loading,setLoading]=useState(true); const [saving,setSaving]=useState(false); const [error,setError]=useState('')
+  const [search,setSearch]=useState(''); const [category,setCategory]=useState(''); const [rayon,setRayon]=useState(''); const [storage,setStorage]=useState(''); const [fridge,setFridge]=useState(''); const [unitFilter,setUnitFilter]=useState(''); const [sort,setSort]=useState<{key:keyof Ingredient;dir:'asc'|'desc'}>({key:'nom',dir:'asc'}); const [page,setPage]=useState(1)
+  const [selected,setSelected]=useState<Ingredient|null>(null);
+  const modalScrollRef=useRef<HTMLDivElement|null>(null); const [showTechnicalConversions,setShowTechnicalConversions]=useState(false); const [cookAudit,setCookAudit]=useState<CookAuditResult|null>(null); const [cookAuditLoading,setCookAuditLoading]=useState(false); const [draft,setDraft]=useState<any>(null); const [newSyn,setNewSyn]=useState(''); const [newDensity,setNewDensity]=useState({unite:'',poids:''}); const [audit,setAudit]=useState<AuditResult|null>(null); const [auditLoading,setAuditLoading]=useState(false); const [auditSeverity,setAuditSeverity]=useState<'all'|'error'|'warning'>('all'); const [auditCategory,setAuditCategory]=useState<'all'|'referentiel'|'synonymes'|'equivalences'|'donnees'|'unites'>('all'); const pageSize=25
 
-  useEffect(() => { load() }, [])
+  async function load(){ setLoading(true); setError(''); try{ const r=await fetch('/api/admin/ingredients',{cache:'no-store'}); const j=await r.json(); if(!r.ok) throw new Error(j.error||'Erreur de chargement.'); setData(j) }catch(e){setError(e instanceof Error?e.message:'Erreur de chargement.')}finally{setLoading(false)} }
+  useEffect(()=>{load()},[])
+  useEffect(()=>{setPage(1)},[search,category,rayon,storage,fridge,unitFilter])
 
-  const filteredIngredients = useMemo(() => {
-    const q = search.trim().toLowerCase()
-    if (!q) return data.ingredients
-    return data.ingredients.filter(i => `${i.nom} ${i.categorie ?? ''} ${i.rayon ?? ''}`.toLowerCase().includes(q))
-  }, [data.ingredients, search])
+  const categories=useMemo(()=>Array.from(new Set(data.ingredients.map(i=>i.categorie).filter(Boolean) as string[])).sort((a,b)=>a.localeCompare(b,'fr')),[data.ingredients])
+  const rayons=useMemo(()=>Array.from(new Set(data.ingredients.map(i=>i.rayon).filter(Boolean) as string[])).sort((a,b)=>a.localeCompare(b,'fr')),[data.ingredients])
+  const referenceUnits=useMemo(()=>data.units.map(u=>u.unite).sort((a,b)=>a.localeCompare(b,'fr')),[data.units])
+  const usageCount=(id:string)=>Object.values(data.usage).reduce((n,rows)=>n+rows.filter(r=>r.ingredient_id===id).length,0)
+  const synonymsFor=(id:string)=>data.synonyms.filter(s=>s.ingredient_id===id)
+  const densitiesFor=(id:string)=>data.densities.filter(d=>d.ingredient_id===id)
+  const conversionsFor=(id:string)=>data.conversions.filter(c=>c.ingredient_id===id)
 
-  const ingredientName = (id: string) => data.ingredients.find(i => i.id === id)?.nom ?? id
+  const filtered=useMemo(()=>{
+    const q=search.trim().toLowerCase()
+    const rows=data.ingredients.filter(i=>(!q||`${i.nom} ${i.categorie||''} ${i.rayon||''}`.toLowerCase().includes(q))&&(!category||i.categorie===category)&&(!rayon||i.rayon===rayon)&&(!storage||i.default_storage===storage)&&(!fridge||(fridge==='yes'?i.default_is_fridge===true:i.default_is_fridge===false))&&(!unitFilter||i.unite_reference===unitFilter))
+    rows.sort((a,b)=>String(a[sort.key]??'').localeCompare(String(b[sort.key]??''),'fr',{numeric:true})*(sort.dir==='asc'?1:-1)); return rows
+  },[data.ingredients,search,category,rayon,storage,fridge,unitFilter,sort])
+  const pages=Math.max(1,Math.ceil(filtered.length/pageSize)); const visible=filtered.slice((page-1)*pageSize,page*pageSize)
+  useEffect(()=>{if(page>pages)setPage(pages)},[page,pages])
 
-  async function mutate(method: 'POST' | 'PATCH' | 'DELETE', body: any) {
-    setSaving(true); setError('')
-    try {
-      const r = await fetch('/api/admin/ingredients', { method, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) })
-      const j = await r.json()
-      if (!r.ok) throw new Error(j.error || 'Erreur de sauvegarde.')
-      await load()
-      return true
-    } catch (e) { setError(e instanceof Error ? e.message : 'Erreur de sauvegarde.'); return false }
-    finally { setSaving(false) }
-  }
+  function toggleSort(key:keyof Ingredient){setSort(s=>s.key===key?{key,dir:s.dir==='asc'?'desc':'asc'}:{key,dir:'asc'})}
+  async function runCookAudit(){setCookAuditLoading(true);setError('');try{const r=await fetch('/api/admin/ingredients/audit/cookiwiki',{cache:'no-store'});const j=await r.json();if(!r.ok)throw new Error(j.error||'Erreur pendant l’audit Cookiwiki.');setCookAudit(j)}catch(e){setError(e instanceof Error?e.message:'Erreur pendant l’audit Cookiwiki.')}finally{setCookAuditLoading(false)}}
+  async function runAudit(){setAuditLoading(true);setError('');try{const r=await fetch('/api/admin/ingredients/audit',{cache:'no-store'});const j=await r.json();if(!r.ok)throw new Error(j.error||'Erreur pendant l’audit.');setAudit(j);setAuditSeverity('all');setAuditCategory('all')}catch(e){setError(e instanceof Error?e.message:'Erreur pendant l’audit.')}finally{setAuditLoading(false)}}
+  async function mutate(method:'POST'|'PATCH'|'DELETE',body:any){setSaving(true);setError('');try{const r=await fetch('/api/admin/ingredients',{method,headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});const j=await r.json();if(!r.ok)throw new Error(j.error||'Erreur de sauvegarde.');await load();return true}catch(e){setError(e instanceof Error?e.message:'Erreur de sauvegarde.');return false}finally{setSaving(false)}}
+  function open(i:Ingredient){setSelected(i);setDraft({...i});setNewSyn('');setNewDensity({unite:'',poids:''})}
+  useEffect(()=>{if(selected){setShowTechnicalConversions(false);requestAnimationFrame(()=>{if(modalScrollRef.current) modalScrollRef.current.scrollTop=0})}},[selected])
+  async function saveIngredient(){if(!draft)return;const current=selected?.unite_reference??'';const next=draft.unite_reference||'';const impact=selected?usageCount(selected.id):0;if(current!==next&&impact>0&&!confirm(`Cette modification d’unité concerne ${impact} donnée(s) historiques/règle(s). Les anciennes données ne seront pas supprimées. Continuer ?`))return;if(await mutate('PATCH',{entity:'ingredient',...draft,unite_reference:next||null}))setSelected(null)}
+  async function addSynonym(){if(!selected||!newSyn.trim())return;if(await mutate('POST',{entity:'synonym',mot_recette:newSyn.trim(),ingredient_id:selected.id}))setNewSyn('')}
+  async function addDensity(){if(!selected||!newDensity.unite||!newDensity.poids)return;if(await mutate('POST',{entity:'density',ingredient_id:selected.id,unite:newDensity.unite,poids_g_approx:newDensity.poids}))setNewDensity({unite:'',poids:''})}
+  function resetFilters(){setSearch('');setCategory('');setRayon('');setStorage('');setFridge('');setUnitFilter('')}
+  const header=(key:keyof Ingredient,label:string)=><button onClick={()=>toggleSort(key)} className="font-black hover:text-emerald-700">{label} {sort.key===key?(sort.dir==='asc'?'↑':'↓'):''}</button>
 
-  async function addIngredient(e: React.FormEvent) { e.preventDefault(); if (await mutate('POST', { entity: 'ingredient', ...ingredient })) setIngredient({ ...emptyIngredient }) }
-  async function addSynonym(e: React.FormEvent) { e.preventDefault(); if (await mutate('POST', { entity: 'synonym', ...synonym })) setSynonym({ ...emptySynonym }) }
-  async function addUnit(e: React.FormEvent) { e.preventDefault(); if (await mutate('POST', { entity: 'unit', ...unit })) setUnit({ ...emptyUnit }) }
-  async function addDensity(e: React.FormEvent) { e.preventDefault(); if (await mutate('POST', { entity: 'density', ...density })) setDensity({ ...emptyDensity }) }
-
-  async function remove(entity: string, body: any) {
-    if (!confirm('Supprimer cette donnée ?')) return
-    await mutate('DELETE', { entity, ...body })
-  }
-
-  return <main className="min-h-screen bg-stone-50 text-slate-900">
-    <div className="mx-auto max-w-7xl px-5 py-8">
-      <div className="flex flex-wrap items-start justify-between gap-4">
-        <div><p className="text-xs font-bold uppercase tracking-[.2em] text-emerald-700">Administration · Phase 24.1</p><h1 className="mt-1 text-3xl font-black">🥕 Référentiel ingrédients</h1><p className="mt-2 max-w-3xl text-slate-500">Ingrédients officiels, synonymes, unités et équivalences de poids. Ces données alimentent directement le Matcher et les Courses.</p></div>
-        <div className="flex gap-2"><Link href="/admin/storage" className="rounded-xl border bg-white px-4 py-2 text-sm font-semibold">⚙️ Rangement</Link><button onClick={load} className="rounded-xl border bg-white px-4 py-2 text-sm font-semibold">↻ Actualiser</button></div>
+  return <main className="min-h-screen bg-stone-50 text-slate-900"><div className="mx-auto max-w-[1500px] px-4 py-7 sm:px-6">
+    <div className="flex flex-wrap items-start justify-between gap-4"><div><p className="text-xs font-bold uppercase tracking-[.2em] text-emerald-700">Administration · outil métier</p><h1 className="mt-1 text-3xl font-black">🥕 Référentiel ingrédients</h1><p className="mt-2 max-w-4xl text-slate-500">La source de vérité métier de Mealio : identité, catégorie, rayon, destination de stock, frigo, unité de référence, synonymes et équivalences.</p></div><div className="flex gap-2"><Link href="/admin" className="rounded-xl border bg-white px-4 py-2 text-sm font-semibold">← Administration</Link><button onClick={load} className="rounded-xl border bg-white px-4 py-2 text-sm font-semibold">↻ Actualiser</button><button onClick={runAudit} disabled={auditLoading} className="rounded-xl bg-amber-500 px-4 py-2 text-sm font-black text-white shadow-sm disabled:opacity-60">{auditLoading?'Audit…':'🔎 Audit'}</button><button onClick={runCookAudit} disabled={cookAuditLoading} className="rounded-xl bg-indigo-600 px-4 py-2 text-sm font-black text-white shadow-sm disabled:opacity-60">{cookAuditLoading?'Cookiwiki…':'🍳 Audit Cookiwiki'}</button></div></div>
+    {error&&<div className="mt-4 rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-700">{error}</div>}
+    {cookAudit&&<div className="mt-6 rounded-2xl border-2 border-indigo-300 bg-white shadow-sm">
+      <div className="border-b bg-indigo-50 p-4 sm:p-5">
+        <div className="flex items-start justify-between gap-3"><div><div className="text-xs font-bold uppercase tracking-[.18em] text-indigo-700">Contrôle Cookiwiki → Mealio</div><h2 className="mt-1 text-2xl font-black">Audit de couverture des ingrédients</h2><p className="mt-1 max-w-3xl text-sm text-slate-600">Scan de toutes les recettes Cookiwiki, sans appel IA. Exact, synonymes, normalisation et lexical déterministe uniquement.</p></div><button onClick={()=>setCookAudit(null)} className="shrink-0 rounded-xl border bg-white px-3 py-2 text-xl leading-none">×</button></div>
+        <div className="mt-4 grid gap-2 sm:grid-cols-4">
+          <div className="rounded-xl border bg-white p-3"><div className="text-xs font-bold text-slate-500">Recettes</div><div className="text-xl font-black">{cookAudit.summary.recipes}</div></div>
+          <div className={`rounded-xl border p-3 ${cookAudit.summary.unresolved?'border-red-200 bg-red-50':'border-emerald-200 bg-emerald-50'}`}><div className="text-xs font-bold text-slate-500">Ingrédients à résoudre</div><div className="text-xl font-black">{cookAudit.summary.unresolved}</div></div>
+          <div className="rounded-xl border bg-white p-3"><div className="text-xs font-bold text-slate-500">Couverture ingrédients</div><div className="text-xl font-black">{cookAudit.summary.ingredientCoverage}%</div></div>
+          <div className="rounded-xl border bg-white p-3"><div className="text-xs font-bold text-slate-500">Couverture unités</div><div className="text-xl font-black">{cookAudit.summary.unitCoverage}%</div></div>
+        </div>
       </div>
-      {error && <div className="mt-5 rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-700">{error}</div>}
-
-      <div className="mt-5">
-        <AdminHelp
-          title="Comprendre le référentiel ingrédients"
-          intro="Ce menu contient les données de référence utilisées par Mealio pour reconnaître les ingrédients et interpréter leurs quantités. Il faut le voir comme le dictionnaire commun entre Cookiwiki, le Matcher et les Courses."
-          sections={[
-            { title: '🥕 Ingrédients officiels', children: <p>Un ingrédient officiel est l’identité canonique utilisée par Mealio. Sa <b>catégorie</b>, son <b>rayon</b> et son stockage par défaut servent notamment au rangement et à l’organisation des courses.</p> },
-            { title: '🔤 Synonymes', children: <p>Un synonyme relie un terme rencontré dans une recette à un ingrédient officiel. Par exemple, plusieurs formulations d’une même recette peuvent ainsi converger vers la même identité.</p> },
-            { title: '⚖️ Unités', children: <p>Les unités décrivent comment Mealio interprète une quantité : poids, volume ou unité discrète. Les équivalences et multiplicateurs servent aux conversions déterministes du Matcher.</p> },
-            { title: '🧪 Densités', children: <p>Une densité permet d’estimer un poids en grammes à partir d’une unité comme une cuillère ou une pièce lorsque cette conversion est réellement connue. Il ne faut pas inventer une densité pour forcer une conversion.</p> },
-          ]}
-          warning="Une modification du référentiel peut changer les rapprochements futurs et les calculs de courses. Les suppressions doivent donc être utilisées avec prudence, surtout pour un ingrédient déjà référencé ailleurs."
-        />
+      <div className="p-4 sm:p-5">
+        <div className="mb-4 rounded-xl border bg-slate-50 p-4 text-sm"><b>{cookAudit.summary.ingredientLines}</b> lignes d’ingrédients · <b>{cookAudit.summary.recognized}</b> reconnues · <b>{cookAudit.summary.ignored}</b> ignorées · <b>{cookAudit.summary.unresolved}</b> non résolues · <b>{cookAudit.summary.distinctUnresolvedIngredients}</b> libellés distincts à traiter.</div>
+        {cookAudit.unresolved.length===0?<div className="rounded-xl border border-emerald-200 bg-emerald-50 p-5 font-bold text-emerald-800">✅ Tous les ingrédients Cookiwiki sont reconnus déterministiquement par Mealio.</div>:<div className="space-y-3">{cookAudit.unresolved.map((p,i)=><div key={`${p.normalized}-${i}`} className="rounded-2xl border border-red-200 bg-red-50/60 p-4"><div className="flex flex-wrap items-start justify-between gap-3"><div><div className="font-black">{p.raw} <span className="ml-2 rounded-full bg-white px-2 py-1 text-xs">×{p.count}</span></div><div className="mt-1 text-xs text-slate-600">Normalisé : {p.normalized}{p.candidateScore!==null?` · meilleur score lexical : ${p.candidateScore.toFixed(2)}`:''}</div><div className="mt-2 text-xs font-semibold text-slate-500">{p.recipes.slice(0,5).map(r=>r.title).join(' · ')}{p.recipes.length>5?` · +${p.recipes.length-5} recette(s)`:''}</div></div><span className="rounded-xl bg-red-600 px-3 py-2 text-xs font-black text-white">À traiter</span></div></div>)}</div>}
+        {cookAudit.unknownUnits.length>0&&<div className="mt-5"><h3 className="font-black">Unités Cookiwiki inconnues</h3><p className="mt-1 text-sm text-slate-600">Chaque unité est accompagnée des ingrédients et recettes concernés : c'est cette information qui permet de corriger le référentiel.</p><div className="mt-3 space-y-3">{cookAudit.unknownUnits.map((u,i)=><div key={`${u.normalized}-${i}`} className="rounded-2xl border border-amber-200 bg-amber-50/60 p-4"><div className="flex flex-wrap items-center gap-2"><span className="rounded-lg bg-white px-2.5 py-1 text-sm font-black">{u.raw}</span><span className="rounded-full bg-amber-200 px-2 py-1 text-xs font-black">×{u.count}</span><span className="text-xs font-semibold text-slate-600">{u.ingredients.slice(0,8).join(' · ')}{u.ingredients.length>8?` · +${u.ingredients.length-8}`:''}</span></div><div className="mt-3 overflow-x-auto rounded-xl border bg-white"><table className="w-full min-w-[650px] text-left text-xs"><thead className="border-b bg-slate-50"><tr><th className="p-2">Ingrédient</th><th className="p-2">Quantité</th><th className="p-2">Recette</th></tr></thead><tbody className="divide-y">{u.examples.map((e,j)=><tr key={`${e.recipeId}-${j}`}><td className="p-2 font-bold">{e.ingredient}</td><td className="p-2">{e.quantity ?? '—'} {e.unit ?? ''}</td><td className="p-2">{e.recipeTitle}</td></tr>)}</tbody></table></div>{u.count>u.examples.length&&<div className="mt-2 text-xs font-semibold text-slate-500">{u.count-u.examples.length} autre(s) occurrence(s) non affichée(s).</div>}</div>)}</div></div>}
       </div>
-
-      <section className="mt-6 rounded-2xl border bg-white p-5 shadow-sm">
-        <div className="flex flex-wrap items-center justify-between gap-3"><h2 className="font-black">Ingrédients officiels <span className="text-sm font-normal text-slate-400">({data.ingredients.length})</span></h2><input value={search} onChange={e => setSearch(e.target.value)} placeholder="Rechercher…" className="w-full rounded-xl border px-3 py-2 text-sm md:w-72" /></div>
-        <form onSubmit={addIngredient} className="mt-4 grid gap-3 rounded-xl bg-stone-50 p-4 md:grid-cols-6">
-          <input required placeholder="Nom" value={ingredient.nom} onChange={e => setIngredient({ ...ingredient, nom: e.target.value })} className="rounded-lg border px-3 py-2 text-sm" />
-          <input placeholder="Catégorie" value={ingredient.categorie} onChange={e => setIngredient({ ...ingredient, categorie: e.target.value })} className="rounded-lg border px-3 py-2 text-sm" />
-          <input placeholder="Rayon" value={ingredient.rayon} onChange={e => setIngredient({ ...ingredient, rayon: e.target.value })} className="rounded-lg border px-3 py-2 text-sm" />
-          <select value={ingredient.default_storage ?? ''} onChange={e => setIngredient({ ...ingredient, default_storage: e.target.value })} className="rounded-lg border px-3 py-2 text-sm"><option value="cellio">Cellio</option><option value="frosti">Frosti</option></select>
-          <label className="flex items-center gap-2 rounded-lg border bg-white px-3 py-2 text-sm"><input type="checkbox" checked={ingredient.default_is_fridge} onChange={e => setIngredient({ ...ingredient, default_is_fridge: e.target.checked })} /> Frigo</label>
-          <button disabled={saving} className="rounded-lg bg-emerald-700 px-4 py-2 text-sm font-bold text-white">Ajouter</button>
-        </form>
-        <div className="mt-4 max-h-[420px] overflow-auto rounded-xl border"><table className="w-full text-left text-sm"><thead className="sticky top-0 bg-stone-100"><tr><th className="p-3">Nom</th><th className="p-3">Catégorie</th><th className="p-3">Rayon</th><th className="p-3">Stock</th><th className="p-3">Frigo</th><th className="p-3"></th></tr></thead><tbody className="divide-y">{filteredIngredients.map(i => <tr key={i.id}><td className="p-3 font-semibold">{i.nom}</td><td className="p-3">{i.categorie ?? '—'}</td><td className="p-3">{i.rayon ?? '—'}</td><td className="p-3">{i.default_storage ?? '—'}</td><td className="p-3">{i.default_is_fridge ? 'Oui' : 'Non'}</td><td className="p-3 text-right"><button onClick={() => remove('ingredient', { id: i.id })} className="text-xs font-semibold text-red-600">Supprimer</button></td></tr>)}</tbody></table></div>
-      </section>
-
-      <div className="mt-6 grid gap-6 lg:grid-cols-2">
-        <section className="rounded-2xl border bg-white p-5 shadow-sm"><h2 className="font-black">🔤 Synonymes <span className="text-sm font-normal text-slate-400">({data.synonyms.length})</span></h2><form onSubmit={addSynonym} className="mt-4 grid gap-3 md:grid-cols-[1fr_1.4fr_auto]"><input required placeholder="mot recette" value={synonym.mot_recette} onChange={e => setSynonym({ ...synonym, mot_recette: e.target.value })} className="rounded-lg border px-3 py-2 text-sm" /><select required value={synonym.ingredient_id} onChange={e => setSynonym({ ...synonym, ingredient_id: e.target.value })} className="rounded-lg border px-3 py-2 text-sm"><option value="">Ingrédient…</option>{data.ingredients.map(i => <option key={i.id} value={i.id}>{i.nom}</option>)}</select><button disabled={saving} className="rounded-lg bg-emerald-700 px-4 py-2 text-sm font-bold text-white">Ajouter</button></form><div className="mt-4 max-h-72 overflow-auto divide-y">{data.synonyms.map(s => <div key={`${s.mot_recette}-${s.ingredient_id}`} className="flex items-center justify-between gap-3 py-2 text-sm"><span><b>{s.mot_recette}</b> → {ingredientName(s.ingredient_id)}</span><button onClick={() => remove('synonym', { mot_recette: s.mot_recette })} className="text-xs font-semibold text-red-600">Supprimer</button></div>)}</div></section>
-
-        <section className="rounded-2xl border bg-white p-5 shadow-sm"><h2 className="font-black">⚖️ Unités <span className="text-sm font-normal text-slate-400">({data.units.length})</span></h2><form onSubmit={addUnit} className="mt-4 grid gap-3 md:grid-cols-3"><input required placeholder="Unité canonique" value={unit.unite} onChange={e => setUnit({ ...unit, unite: e.target.value })} className="rounded-lg border px-3 py-2 text-sm" /><input placeholder="Abréviation" value={unit.abreviation} onChange={e => setUnit({ ...unit, abreviation: e.target.value })} className="rounded-lg border px-3 py-2 text-sm" /><input placeholder="Type" value={unit.type_unite} onChange={e => setUnit({ ...unit, type_unite: e.target.value })} className="rounded-lg border px-3 py-2 text-sm" /><input placeholder="Équivalence" value={unit.equivalence_reference} onChange={e => setUnit({ ...unit, equivalence_reference: e.target.value })} className="rounded-lg border px-3 py-2 text-sm" /><input placeholder="Multiplicateur" value={unit.multiplicateur} onChange={e => setUnit({ ...unit, multiplicateur: e.target.value })} className="rounded-lg border px-3 py-2 text-sm" /><button disabled={saving} className="rounded-lg bg-emerald-700 px-4 py-2 text-sm font-bold text-white">Ajouter</button></form><div className="mt-4 max-h-72 overflow-auto divide-y">{data.units.map(u => <div key={u.unite} className="flex items-center justify-between gap-3 py-2 text-sm"><span><b>{u.unite}</b> {u.abreviation ? `(${u.abreviation})` : ''} · {u.type_unite ?? '—'} · ×{u.multiplicateur ?? '—'}</span><button onClick={() => remove('unit', { unite: u.unite })} className="text-xs font-semibold text-red-600">Supprimer</button></div>)}</div></section>
+    </div>}
+    {audit&&<div className="mt-6 rounded-2xl border-2 border-amber-300 bg-white shadow-sm">
+    <div className="border-b bg-amber-50 p-4 sm:p-5">
+      <div className="flex items-start justify-between gap-3">
+        <div>
+          <div className="text-xs font-bold uppercase tracking-[.18em] text-amber-700">Contrôle de cohérence</div>
+          <h2 className="mt-1 text-2xl font-black">Audit du référentiel</h2>
+          <p className="mt-1 max-w-3xl text-sm text-slate-600">L’audit détecte les anomalies structurelles et les écarts historiques. Il ne modifie aucune donnée.</p>
+        </div>
+        <button onClick={()=>setAudit(null)} className="shrink-0 rounded-xl border bg-white px-3 py-2 text-xl leading-none">×</button>
       </div>
-
-      <section className="mt-6 rounded-2xl border bg-white p-5 shadow-sm"><h2 className="font-black">⚗️ Équivalences de poids <span className="text-sm font-normal text-slate-400">({data.densities.length})</span></h2><p className="mt-1 text-sm text-slate-500">Exemple : 1 cuillère à soupe de miel ≈ 21 g. Cette table permet de convertir une unité en grammes quand le Matcher ne peut pas utiliser une conversion générique.</p><form onSubmit={addDensity} className="mt-4 grid gap-3 md:grid-cols-4"><select required value={density.ingredient_id} onChange={e => setDensity({ ...density, ingredient_id: e.target.value })} className="rounded-lg border px-3 py-2 text-sm"><option value="">Ingrédient…</option>{data.ingredients.map(i => <option key={i.id} value={i.id}>{i.nom}</option>)}</select><input required placeholder="Unité" value={density.unite} onChange={e => setDensity({ ...density, unite: e.target.value })} className="rounded-lg border px-3 py-2 text-sm" /><input required type="number" min="0.0001" step="0.0001" placeholder="Poids en g" value={density.poids_g_approx} onChange={e => setDensity({ ...density, poids_g_approx: e.target.value })} className="rounded-lg border px-3 py-2 text-sm" /><button disabled={saving} className="rounded-lg bg-emerald-700 px-4 py-2 text-sm font-bold text-white">Ajouter / mettre à jour</button></form><div className="mt-4 grid gap-2 md:grid-cols-2 lg:grid-cols-3">{data.densities.map(d => <div key={`${d.ingredient_id}-${d.unite}`} className="rounded-xl border bg-stone-50 p-3 text-sm"><div className="font-bold">{ingredientName(d.ingredient_id)}</div><div className="mt-1 text-slate-600">1 {d.unite} ≈ <b>{d.poids_g_approx} g</b></div><button onClick={() => remove('density', { ingredient_id: d.ingredient_id, unite: d.unite })} className="mt-2 text-xs font-semibold text-red-600">Supprimer</button></div>)}</div></section>
-
-      {loading && <div className="fixed inset-0 grid place-items-center bg-white/60 text-sm font-semibold">Chargement…</div>}
+      <div className="mt-4 grid gap-2 sm:grid-cols-4">
+        <div className="rounded-xl border bg-white p-3"><div className="text-xs font-bold text-slate-500">Ingrédients</div><div className="text-xl font-black">{audit.summary.ingredients}</div></div>
+        <div className={`rounded-xl border p-3 ${audit.summary.errors?'border-red-200 bg-red-50':'border-emerald-200 bg-emerald-50'}`}><div className="text-xs font-bold text-slate-500">Erreurs</div><div className="text-xl font-black">{audit.summary.errors}</div></div>
+        <div className={`rounded-xl border p-3 ${audit.summary.warnings?'border-amber-200 bg-amber-50':'border-emerald-200 bg-emerald-50'}`}><div className="text-xs font-bold text-slate-500">À examiner</div><div className="text-xl font-black">{audit.summary.warnings}</div></div>
+        <div className="rounded-xl border bg-white p-3"><div className="text-xs font-bold text-slate-500">Données contrôlées</div><div className="text-xl font-black">{audit.summary.synonyms+audit.summary.densities+audit.summary.conversions+audit.summary.usageRows}</div></div>
+      </div>
+      <div className="mt-4 rounded-2xl border bg-white p-3 shadow-sm">
+        <div className="text-[11px] font-black uppercase tracking-[.16em] text-slate-500">Afficher</div>
+        <div className="mt-2 grid gap-2 sm:grid-cols-2">
+          <div className="flex flex-wrap gap-2">
+            <button type="button" aria-pressed={auditSeverity==='all'} onClick={()=>setAuditSeverity('all')} className={`min-h-10 rounded-xl border-2 px-4 py-2 text-sm font-black ${auditSeverity==='all'?'border-slate-900 bg-slate-900':'border-slate-300 bg-white'}`} style={{color:auditSeverity==='all'?'#fff':'#0f172a'}}> {auditSeverity==='all'?'✓ ':''}Toutes ({audit.issues.length})</button>
+            <button type="button" aria-pressed={auditSeverity==='error'} onClick={()=>setAuditSeverity('error')} className={`min-h-10 rounded-xl border-2 px-4 py-2 text-sm font-black ${auditSeverity==='error'?'border-red-600 bg-red-600':'border-slate-300 bg-white'}`} style={{color:auditSeverity==='error'?'#fff':'#0f172a'}}> {auditSeverity==='error'?'✓ ':''}Erreurs ({audit.summary.errors})</button>
+            <button type="button" aria-pressed={auditSeverity==='warning'} onClick={()=>setAuditSeverity('warning')} className={`min-h-10 rounded-xl border-2 px-4 py-2 text-sm font-black ${auditSeverity==='warning'?'border-amber-500 bg-amber-500':'border-slate-300 bg-white'}`} style={{color:auditSeverity==='warning'?'#fff':'#0f172a'}}> {auditSeverity==='warning'?'✓ ':''}À examiner ({audit.summary.warnings})</button>
+          </div>
+          <div className="flex flex-wrap gap-2">
+            <select value={auditCategory} onChange={e=>setAuditCategory(e.target.value as any)} className="min-w-[190px] rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-black text-slate-800">
+              <option value="all">Toutes natures</option><option value="synonymes">Synonymes</option><option value="donnees">Historique</option><option value="unites">Unités</option><option value="equivalences">Équivalences</option><option value="referentiel">Référentiel</option>
+            </select>
+            <button type="button" onClick={runAudit} disabled={auditLoading} className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-black text-slate-800 hover:bg-slate-50 disabled:opacity-50">↻ Relancer</button>
+          </div>
+        </div>
+        <div className="mt-3 rounded-xl bg-slate-900 px-3 py-2 text-sm font-black text-white">
+          {auditSeverity==='all'?'Toutes les anomalies':auditSeverity==='error'?'Erreurs uniquement':'À examiner uniquement'} · {auditCategory==='all'?'Toutes natures':({referentiel:'Référentiel',synonymes:'Synonymes',equivalences:'Équivalences',donnees:'Historique',unites:'Unités'} as any)[auditCategory]}
+        </div>
+      </div>
     </div>
-  </main>
+    <div className="p-4 sm:p-5">
+      {(()=>{const shown=audit.issues.filter(i=>(auditSeverity==='all'||i.severity===auditSeverity)&&(auditCategory==='all'||i.category===auditCategory)); return <><div className="mb-4 rounded-xl border bg-slate-50 px-3 py-2"><div className="text-sm font-black text-slate-900">{auditSeverity==='all'?'Toutes les anomalies':auditSeverity==='error'?'Erreurs': 'À examiner'} · {auditCategory==='all'?'Toutes natures':({referentiel:'Référentiel',synonymes:'Synonymes',equivalences:'Équivalences',donnees:'Historique',unites:'Unités'} as any)[auditCategory]}</div><div className="mt-1 text-xs font-semibold text-slate-500">{shown.length} résultat(s) affiché(s) sur {audit.issues.length} anomalie(s).</div></div>
+      {audit.issues.length===0 ? <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-6 text-center"><div className="text-3xl">✅</div><div className="mt-2 text-lg font-black text-emerald-800">Aucune anomalie détectée</div><p className="mt-1 text-sm text-emerald-700">Le référentiel et les données contrôlées sont structurellement cohérents.</p></div> : shown.length===0 ? <div className="rounded-2xl border border-slate-200 bg-slate-50 p-6 text-center"><div className="text-2xl">🔎</div><div className="mt-2 text-lg font-black text-slate-800">Aucun résultat pour cette sélection</div><p className="mt-1 text-sm text-slate-600">Change le niveau ou la nature du contrôle ci-dessus.</p></div> : <div className="space-y-3">
+        {shown.map((i,n)=><div key={`${i.code}-${n}`} className={`rounded-2xl border p-4 ${i.severity==='error'?'border-red-200 bg-red-50/60':'border-amber-200 bg-amber-50/60'}`}>
+          <div className="min-w-0">
+            <div className="flex flex-wrap items-center gap-2"><span className={`rounded-full px-2 py-1 text-[11px] font-black uppercase ${i.severity==='error'?'bg-red-600 text-white':'bg-amber-500 text-white'}`}>{i.severity==='error'?'Erreur':'À examiner'}</span><span className="font-black text-slate-900">{i.title}</span>{i.relatedCount&&<span className="rounded-full bg-white px-2 py-1 text-[11px] font-bold">×{i.relatedCount}</span>}</div>
+            <p className="mt-2 text-sm leading-6 text-slate-700">{i.message}</p>
+            <div className="mt-2 flex flex-wrap gap-2 text-xs font-semibold text-slate-600">{i.category&&<span className="rounded-lg bg-white px-2 py-1">Nature : {({referentiel:'Référentiel',synonymes:'Synonymes',equivalences:'Équivalences',donnees:'Historique',unites:'Unités'} as any)[i.category]||i.category}</span>}{i.ingredientName&&<span className="rounded-lg bg-white px-2 py-1">Ingrédient : <b>{i.ingredientName}</b></span>}{i.synonym&&<span className="rounded-lg bg-white px-2 py-1">Synonyme : <b>{i.synonym}</b></span>}{i.unit&&<span className="rounded-lg bg-white px-2 py-1">Unité : <b>{i.unit}</b></span>}{i.relatedTable&&<span className="rounded-lg bg-white px-2 py-1">Table : <b>{i.relatedTable}</b></span>}</div>
+          </div>
+          <div className="mt-4 border-t border-black/5 pt-3">
+            <div className="mb-2 text-[11px] font-black uppercase tracking-wide text-slate-500">Action disponible</div>
+            <div className="flex flex-wrap gap-2">
+            {i.code==='REDUNDANT_SYNONYM'?<button type="button" onClick={async()=>{if(!i.synonym)return;if(confirm(`Supprimer le synonyme redondant « ${i.synonym} » ?`)){await mutate('DELETE',{entity:'synonym',mot_recette:i.synonym});await runAudit()}}} className="inline-flex min-h-11 items-center justify-center whitespace-nowrap rounded-xl border-2 border-red-600 bg-red-600 px-5 py-2.5 text-sm font-black shadow-sm hover:bg-red-700" style={{color:'#fff',backgroundColor:'#dc2626'}}>🗑 Supprimer le synonyme</button>:i.ingredientId?<button type="button" onClick={()=>{const found=data.ingredients.find(x=>x.id===i.ingredientId);if(found){setAudit(null);open(found)}}} className="inline-flex min-h-11 items-center justify-center whitespace-nowrap rounded-xl border-2 border-slate-400 bg-white px-5 py-2.5 text-sm font-black shadow-sm hover:bg-slate-100" style={{color:'#0f172a',backgroundColor:'#fff'}}>👁 Voir / corriger la fiche</button>:i.relatedTable?<Link href={`/admin/data?table=${encodeURIComponent(i.relatedTable)}`} className="inline-flex min-h-11 items-center justify-center whitespace-nowrap rounded-xl border-2 border-slate-400 bg-white px-5 py-2.5 text-sm font-black shadow-sm hover:bg-slate-100" style={{color:'#0f172a',backgroundColor:'#fff'}}>👁 Voir l'enregistrement</Link>:<span className="inline-flex min-h-11 items-center rounded-xl border-2 border-slate-200 bg-slate-50 px-4 py-2 text-sm font-semibold text-slate-500">Aucune action directe</span>}
+            </div>
+          </div>
+        </div>)}
+      </div>}
+      </>})()}
+    </div>
+  </div>}
+    <section className="mt-6 rounded-2xl border bg-white p-4 shadow-sm"><div className="grid gap-3 lg:grid-cols-6"><input value={search} onChange={e=>setSearch(e.target.value)} placeholder="🔎 Rechercher un ingrédient…" className="rounded-xl border px-3 py-2 text-sm lg:col-span-2"/><select value={category} onChange={e=>setCategory(e.target.value)} className="rounded-xl border px-3 py-2 text-sm"><option value="">Toutes les catégories</option>{categories.map(v=><option key={v}>{v}</option>)}</select><select value={rayon} onChange={e=>setRayon(e.target.value)} className="rounded-xl border px-3 py-2 text-sm"><option value="">Tous les rayons</option>{rayons.map(v=><option key={v}>{v}</option>)}</select><select value={storage} onChange={e=>setStorage(e.target.value)} className="rounded-xl border px-3 py-2 text-sm"><option value="">Frosti + Cellio</option><option value="frosti">Frosti</option><option value="cellio">Cellio</option></select><select value={fridge} onChange={e=>setFridge(e.target.value)} className="rounded-xl border px-3 py-2 text-sm"><option value="">Frigo : tous</option><option value="yes">Frigo : oui</option><option value="no">Frigo : non</option></select></div><div className="mt-3 flex flex-wrap gap-2"><select value={unitFilter} onChange={e=>setUnitFilter(e.target.value)} className="rounded-xl border px-3 py-2 text-sm"><option value="">Toutes les unités de référence</option>{referenceUnits.map(v=><option key={v}>{v}</option>)}</select><button onClick={resetFilters} className="rounded-xl border px-3 py-2 text-sm font-semibold">Réinitialiser</button><span className="ml-auto self-center text-xs font-semibold text-slate-500">{filtered.length} résultat(s) · page {page}/{pages}</span></div></section>
+
+    <section className="mt-4 overflow-hidden rounded-2xl border bg-white shadow-sm"><div className="overflow-x-auto"><table className="w-full min-w-[1050px] text-left text-sm"><thead className="border-b bg-slate-50"><tr><th className="p-3">{header('nom','Nom')}</th><th className="p-3">{header('categorie','Catégorie')}</th><th className="p-3">{header('rayon','Rayon')}</th><th className="p-3">{header('default_storage','Stock')}</th><th className="p-3">{header('default_is_fridge','Frigo')}</th><th className="p-3">{header('unite_reference','Unité référence')}</th><th className="p-3 text-right">Action</th></tr></thead><tbody className="divide-y">{visible.map(i=><tr key={i.id} className="hover:bg-emerald-50/40"><td className="p-3 font-bold"><button onClick={()=>open(i)} className="text-left text-emerald-800 hover:underline">{i.nom}</button></td><td className="p-3">{i.categorie||'—'}</td><td className="p-3">{i.rayon||'—'}</td><td className="p-3 uppercase text-xs font-bold">{i.default_storage||'—'}</td><td className="p-3">{i.default_is_fridge?'Oui':'Non'}</td><td className="p-3"><span className="rounded-full bg-slate-100 px-2 py-1 text-xs font-bold">{i.unite_reference||'⚠️ non définie'}</span></td><td className="p-3 text-right"><button onClick={()=>open(i)} className="rounded-lg border px-3 py-1.5 text-xs font-bold">Modifier</button></td></tr>)}</tbody></table></div><div className="flex flex-wrap items-center justify-between gap-3 border-t bg-slate-50 p-3"><span className="text-xs text-slate-500">Affichage {(page-1)*pageSize+1}-{Math.min(page*pageSize,filtered.length)} sur {filtered.length}</span><div className="flex items-center gap-1"><button disabled={page<=1} onClick={()=>setPage(p=>p-1)} className="rounded-lg border bg-white px-3 py-2 text-xs font-bold disabled:opacity-40">←</button>{Array.from({length:Math.min(7,pages)},(_,idx)=>{const n=pages<=7?idx+1:Math.min(Math.max(1,page-3)+idx,pages-6+idx);return n}).filter((n,i,a)=>a.indexOf(n)===i).map(n=><button key={n} onClick={()=>setPage(n)} className={`rounded-lg px-3 py-2 text-xs font-bold ${page===n?'bg-emerald-700 text-white':'border bg-white'}`}>{n}</button>)}<button disabled={page>=pages} onClick={()=>setPage(p=>p+1)} className="rounded-lg border bg-white px-3 py-2 text-xs font-bold disabled:opacity-40">→</button></div></div></section>
+
+    <p className="mt-4 text-xs text-slate-500">Clique sur un ingrédient pour modifier ses données métier et accéder à ses synonymes et équivalences. Les changements d’unité de référence sont signalés lorsqu’il existe déjà un historique.</p>
+  </div>{selected&&<div className="fixed inset-x-0 top-[72px] bottom-0 z-[250] bg-slate-950/40 px-1.5 pb-6 sm:px-4" style={{overscrollBehavior:'contain'}} onMouseDown={e=>{if(e.target===e.currentTarget)setSelected(null)}}><div className="mx-auto flex max-h-[calc(100dvh-1.5rem)] w-full max-w-4xl flex-col overflow-hidden rounded-2xl bg-white shadow-2xl sm:max-h-[calc(100dvh-2rem)] sm:rounded-3xl"><div className="flex shrink-0 items-start justify-between border-b bg-white p-3 sm:p-5"><div className="min-w-0 pr-3"><div className="text-xs font-bold uppercase tracking-[.18em] text-emerald-700">Fiche ingrédient</div><h2 className="mt-1 truncate text-xl font-black sm:text-2xl">{selected.nom}</h2><p className="mt-1 text-xs leading-4 text-slate-500">{usageCount(selected.id)} donnée(s) historique(s) ou règle(s) référencent cet ingrédient.</p></div><button onClick={()=>setSelected(null)} className="shrink-0 rounded-xl border px-3 py-2 text-xl leading-none">×</button></div><div ref={modalScrollRef} className="min-h-0 flex-1 overflow-y-auto overscroll-contain p-3 sm:p-5"><div className="grid gap-6 lg:grid-cols-2"><section><h3 className="font-black">Données métier</h3><div className="mt-3 grid gap-3"><label className="text-sm font-semibold">Nom<input value={draft.nom} onChange={e=>setDraft({...draft,nom:e.target.value})} className="mt-1 w-full rounded-xl border px-3 py-2 font-normal"/></label><label className="text-sm font-semibold">Catégorie<select value={draft.categorie||''} onChange={e=>setDraft({...draft,categorie:e.target.value})} className="mt-1 w-full rounded-xl border px-3 py-2 font-normal"><option value="">—</option>{categories.map(v=><option key={v}>{v}</option>)}</select></label><label className="text-sm font-semibold">Rayon<select value={draft.rayon||''} onChange={e=>setDraft({...draft,rayon:e.target.value})} className="mt-1 w-full rounded-xl border px-3 py-2 font-normal"><option value="">—</option>{rayons.map(v=><option key={v}>{v}</option>)}</select></label><label className="text-sm font-semibold">Destination<select value={draft.default_storage||''} onChange={e=>setDraft({...draft,default_storage:e.target.value})} className="mt-1 w-full rounded-xl border px-3 py-2 font-normal"><option value="">—</option><option value="frosti">Frosti</option><option value="cellio">Cellio</option></select></label><label className="flex items-center gap-2 rounded-xl border p-3 text-sm font-semibold"><input type="checkbox" checked={Boolean(draft.default_is_fridge)} onChange={e=>setDraft({...draft,default_is_fridge:e.target.checked})}/> Stocké au frigo</label><label className="text-sm font-semibold">Unité de référence<select value={draft.unite_reference||''} onChange={e=>setDraft({...draft,unite_reference:e.target.value})} className="mt-1 w-full rounded-xl border px-3 py-2 font-normal"><option value="">⚠️ aucune</option>{referenceUnits.map(v=><option key={v}>{v}</option>)}</select></label><div className="rounded-xl border border-slate-200 bg-slate-50 p-3 text-sm"><div className="font-black text-slate-800">Mode de gestion</div><div className="mt-1 font-semibold text-slate-700">{isPresenceOnly(draft)?'Présence uniquement':'Quantité'}</div><p className="mt-1 text-xs leading-5 text-slate-500">{isPresenceOnly(draft)?'Cet ingrédient est géré comme un assaisonnement : Mealio ne calcule pas de quantité à acheter. L’unité de référence reste celle du référentiel.':'Les achats officiels utilisent strictement l’unité de référence ci-dessus.'}</p></div></div><div className="mt-4 flex justify-end gap-2"><button onClick={()=>setSelected(null)} className="rounded-xl border px-4 py-2 text-sm font-bold">Annuler</button><button disabled={saving} onClick={saveIngredient} className="rounded-xl bg-emerald-700 px-4 py-2 text-sm font-bold text-white">Enregistrer</button></div></section><section><h3 className="font-black">🔤 Synonymes</h3><div className="mt-3 flex gap-2"><input value={newSyn} onChange={e=>setNewSyn(e.target.value)} placeholder="Ex. oignon" className="min-w-0 flex-1 rounded-xl border px-3 py-2 text-sm"/><button onClick={addSynonym} className="rounded-xl bg-emerald-700 px-3 py-2 text-sm font-bold text-white">+ Ajouter</button></div><div className="mt-3 max-h-40 overflow-auto rounded-xl border divide-y">{synonymsFor(selected.id).length?synonymsFor(selected.id).map(s=><div key={s.mot_recette} className="flex justify-between gap-2 p-2 text-sm"><span>{s.mot_recette}</span><button onClick={()=>mutate('DELETE',{entity:'synonym',mot_recette:s.mot_recette})} className="text-xs font-bold text-red-600">Supprimer</button></div>):<div className="p-3 text-sm text-slate-500">Aucun synonyme.</div>}</div><h3 className="mt-6 font-black">⚖️ Densités culinaires</h3><div className="mt-3 grid grid-cols-[1fr_1fr_auto] gap-2"><input value={newDensity.unite} onChange={e=>setNewDensity({...newDensity,unite:e.target.value})} placeholder="Unité" className="rounded-xl border px-3 py-2 text-sm"/><input type="number" value={newDensity.poids} onChange={e=>setNewDensity({...newDensity,poids:e.target.value})} placeholder="Grammes" className="rounded-xl border px-3 py-2 text-sm"/><button onClick={addDensity} className="rounded-xl bg-emerald-700 px-3 py-2 text-sm font-bold text-white">+ Ajouter</button></div><div className="mt-3 rounded-xl border divide-y">{densitiesFor(selected.id).length?densitiesFor(selected.id).map(d=><div key={d.unite} className="flex justify-between p-2 text-sm"><span>1 {d.unite} ≈ <b>{d.poids_g_approx} g</b></span><button onClick={()=>mutate('DELETE',{entity:'density',ingredient_id:d.ingredient_id,unite:d.unite})} className="text-xs font-bold text-red-600">Supprimer</button></div>):<div className="p-3 text-sm text-slate-500">Aucune équivalence enregistrée.</div>}</div><div className="mt-6 rounded-xl border bg-slate-50"><button type="button" onClick={()=>setShowTechnicalConversions(v=>!v)} aria-expanded={showTechnicalConversions} className="flex w-full items-center justify-between gap-3 p-3 text-left text-sm font-black"><span>🔗 Conversions techniques obsolètes (lecture seule)</span><span className="shrink-0 rounded-lg border bg-white px-2 py-1 text-xs font-bold">{showTechnicalConversions?'▲ Fermer':'▼ Ouvrir'}</span></button>{showTechnicalConversions&&<div className="border-t p-3"><div
+  className="h-64 w-full overflow-y-scroll overscroll-contain rounded-lg border bg-white p-2 text-xs text-slate-600"
+  style={{ WebkitOverflowScrolling:'touch', touchAction:'pan-y' }}
+  onWheel={e=>e.stopPropagation()}
+  onTouchMove={e=>e.stopPropagation()}
+>{conversionsFor(selected.id).length?conversionsFor(selected.id).map((c,i)=><div key={i} className="border-b border-slate-100 py-1.5 last:border-b-0">{String(c.from_unit)} → {String(c.to_unit)} · ×{String(c.multiplier)}{c.description?` · ${String(c.description)}`:''}</div>):<span>Aucune conversion technique générée.</span>}</div></div>}</div></section></div></div></div></div>}
+  {loading&&<div className="fixed inset-0 z-[300] grid place-items-center bg-white/60 text-sm font-bold">Chargement…</div>}</main>
 }

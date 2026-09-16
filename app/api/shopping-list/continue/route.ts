@@ -1,6 +1,7 @@
+import { getAuthSession } from '../../../utils/auth-server'
 import { NextRequest, NextResponse } from 'next/server'
-import { cookies } from 'next/headers'
 import { mealioServerDb } from '../../../lib/supabase-server'
+import { assertOfficialIngredientUnit } from '../../../utils/official-unit-policy'
 
 type RecipeLinkRow = {
   shopping_item_id: string
@@ -20,8 +21,7 @@ function effectiveBought(item: any): number {
 
 export async function POST(request: NextRequest) {
   try {
-    const cookieStore = await cookies()
-    const username = cookieStore.get('congelo_username')?.value?.trim()
+    const username = (await getAuthSession())?.username?.trim()
 
     if (!username) {
       return NextResponse.json({ error: 'Utilisateur non authentifié.' }, { status: 401 })
@@ -58,6 +58,14 @@ export async function POST(request: NextRequest) {
       ...item,
       remaining: Math.max(numberOrZero(item.qte) - effectiveBought(item), 0),
     })).filter(item => item.remaining > 0)
+
+    // Une nouvelle liste ne doit jamais recopier une unité historique différente
+    // de la référence actuelle d'un ingrédient officiel.
+    for (const item of items) {
+      if (item.ingredient_id) {
+        await assertOfficialIngredientUnit(item.ingredient_id, item.unite)
+      }
+    }
 
     if (items.length === 0) {
       return NextResponse.json({

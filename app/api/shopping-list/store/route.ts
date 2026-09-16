@@ -1,5 +1,5 @@
+import { getAuthSession } from '../../../utils/auth-server'
 import { NextResponse } from 'next/server'
-import { cookies } from 'next/headers'
 
 import {
   mealioServerDb,
@@ -209,8 +209,7 @@ async function claimStorageOperation(args: {
 
 export async function POST() {
   try {
-    const cookieStore = await cookies()
-    const username = cookieStore.get('congelo_username')?.value?.trim()
+    const username = (await getAuthSession())?.username?.trim()
 
     if (!username) {
       return NextResponse.json({ error: 'Utilisateur non authentifié.' }, { status: 401 })
@@ -385,6 +384,12 @@ export async function POST() {
       let pendingPurchaseEventId: string | null = null
 
       if (purchaseDelta > 0) {
+        // Défense en profondeur : un historique d'achat officiel ne peut pas
+        // être créé avec une unité différente de la référence Mealio.
+        if (item.ingredient_id) {
+          await assertOfficialIngredientUnit(item.ingredient_id, item.unite)
+        }
+
         const { data: purchaseEvent, error: purchaseInsertError } = await mealioServerDb
           .from('shopping_purchase_events')
           .insert({
