@@ -2,18 +2,18 @@ import { mealioServerDb } from '../lib/supabase-server'
 import {
   getHouseholdStockServer,
   updateHouseholdStockItem,
-  HouseholdStockItem,
+  type HouseholdStockItem,
 } from './household-server'
 import {
   loadReferenceData,
   resolveRecipeIngredients,
   resolveStockIngredientId,
   convertStockQuantity,
-  ResolvedIngredient,
-  ReferenceData,
+  type ResolvedIngredient,
+  type ReferenceData,
 } from './matcher'
 import { getRecipeDetailsFromCookiwiki } from './cookiwiki-fetcher'
-import { getMealPlans, MealPlan } from './meal-planner-server'
+import { getMealPlans, type MealPlan } from './meal-planner-server'
 
 export type MealConsumptionStatus = 'confirmed' | 'skipped'
 
@@ -113,12 +113,14 @@ async function decrementForPlan(
   plan: MealPlan,
 ): Promise<ConsumptionResult> {
   const recipe = await getRecipeDetailsFromCookiwiki(plan.recipe_id)
-  const refData = await loadReferenceData()
+  const refData = await loadReferenceData(username)
   const resolved = await resolveRecipeIngredients(
     recipe.ingredients.map(ingredient => ({
       name: ingredient.name,
       qty: ingredient.qty,
       unit: ingredient.unit,
+      inferredFromInstructions: ingredient.inferredFromInstructions,
+      preparationIssue: ingredient.preparationIssue,
     })),
     refData,
     recipe.id,
@@ -136,6 +138,8 @@ async function decrementForPlan(
   const shortages: ConsumptionResult['shortages'] = []
 
   for (const need of resolved) {
+    // Presence is a household choice, not a virtual quantity to consume.
+    if (need.quantity_mode === 'presence') continue
     if (!need.ingredient_id || need.needs_review || !Number.isFinite(need.qte) || need.qte <= 0) {
       shortages.push({ produit: need.produit, qte: need.qte, unite: need.unite })
       continue

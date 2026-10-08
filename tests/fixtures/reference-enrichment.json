@@ -1,0 +1,348 @@
+{
+  "aliases": [
+    {
+      "alias": "oeuf",
+      "ingredient_name": "Œuf (poule)"
+    },
+    {
+      "alias": "oeufs",
+      "ingredient_name": "Œuf (poule)"
+    },
+    {
+      "alias": "œuf",
+      "ingredient_name": "Œuf (poule)"
+    },
+    {
+      "alias": "œufs",
+      "ingredient_name": "Œuf (poule)"
+    },
+    {
+      "alias": "Œufs frais",
+      "ingredient_name": "Œuf (poule)"
+    },
+    {
+      "alias": "œufs extra-frais",
+      "ingredient_name": "Œuf (poule)"
+    },
+    {
+      "alias": "œufs frais",
+      "ingredient_name": "Œuf (poule)"
+    },
+    {
+      "alias": "œufs battus",
+      "ingredient_name": "Œuf (poule)"
+    },
+    {
+      "alias": "jaunes d'œufs",
+      "ingredient_name": "Jaune d'œuf"
+    },
+    {
+      "alias": "jaune d'oeuf",
+      "ingredient_name": "Jaune d'œuf"
+    },
+    {
+      "alias": "jaunes d'oeufs",
+      "ingredient_name": "Jaune d'œuf"
+    },
+    {
+      "alias": "blancs d'œufs",
+      "ingredient_name": "Blanc d'œuf"
+    },
+    {
+      "alias": "blanc d'oeuf",
+      "ingredient_name": "Blanc d'œuf"
+    },
+    {
+      "alias": "blancs d'oeufs",
+      "ingredient_name": "Blanc d'œuf"
+    },
+    {
+      "alias": "amandes en poudre",
+      "ingredient_name": "Poudre d'amande"
+    },
+    {
+      "alias": "poudre d'amandes",
+      "ingredient_name": "Poudre d'amande"
+    },
+    {
+      "alias": "beurre doux",
+      "ingredient_name": "Beurre"
+    },
+    {
+      "alias": "beurre fondu",
+      "ingredient_name": "Beurre"
+    },
+    {
+      "alias": "beurre mou",
+      "ingredient_name": "Beurre"
+    },
+    {
+      "alias": "beurre pommade",
+      "ingredient_name": "Beurre"
+    },
+    {
+      "alias": "beurre pour le plat",
+      "ingredient_name": "Beurre"
+    },
+    {
+      "alias": "beurre (pour la mirepoix)",
+      "ingredient_name": "Beurre"
+    },
+    {
+      "alias": "beurre demi-sel",
+      "ingredient_name": "Beurre demi-sel"
+    },
+    {
+      "alias": "crème fraîche liquide",
+      "ingredient_name": "Crème liquide"
+    },
+    {
+      "alias": "crème fraîche épaisse",
+      "ingredient_name": "Crème épaisse"
+    },
+    {
+      "alias": "figues fraîches",
+      "ingredient_name": "Figue"
+    },
+    {
+      "alias": "eau froide",
+      "ingredient_name": "Eau"
+    },
+    {
+      "alias": "eau (pour le caramel)",
+      "ingredient_name": "Eau"
+    },
+    {
+      "alias": "citrons non traités (jus et zestes)",
+      "ingredient_name": "Citron"
+    },
+    {
+      "alias": "citrons verts (zeste et jus)",
+      "ingredient_name": "Citron vert"
+    },
+    {
+      "alias": "jus de citron frais",
+      "ingredient_name": "Jus de citron"
+    },
+    {
+      "alias": "emmental râpé",
+      "ingredient_name": "Emmental"
+    },
+    {
+      "alias": "emmenthal râpé",
+      "ingredient_name": "Emmental"
+    },
+    {
+      "alias": "gruyère râpé",
+      "ingredient_name": "Gruyère"
+    },
+    {
+      "alias": "fromage gruyère râpé",
+      "ingredient_name": "Gruyère"
+    },
+    {
+      "alias": "comté râpé",
+      "ingredient_name": "Comté"
+    },
+    {
+      "alias": "courgettes",
+      "ingredient_name": "Courgette"
+    },
+    {
+      "alias": "courgettes moyennes",
+      "ingredient_name": "Courgette"
+    },
+    {
+      "alias": "carottes",
+      "ingredient_name": "Carotte"
+    },
+    {
+      "alias": "tomates",
+      "ingredient_name": "Tomate"
+    },
+    {
+      "alias": "tomates bien mûres",
+      "ingredient_name": "Tomate"
+    },
+    {
+      "alias": "tomates cerises",
+      "ingredient_name": "Tomate cerise"
+    },
+    {
+      "alias": "échalotes",
+      "ingredient_name": "Échalote"
+    },
+    {
+      "alias": "poireaux",
+      "ingredient_name": "Poireau"
+    },
+    {
+      "alias": "navets",
+      "ingredient_name": "Navet"
+    },
+    {
+      "alias": "gros oignons blancs",
+      "ingredient_name": "Oignon blanc"
+    },
+    {
+      "alias": "oignons jaunes émincés",
+      "ingredient_name": "Oignon jaune"
+    },
+    {
+      "alias": "oignons frais",
+      "ingredient_name": "Oignon"
+    },
+    {
+      "alias": "gros oignon",
+      "ingredient_name": "Oignon"
+    },
+    {
+      "alias": "poivrons rouges",
+      "ingredient_name": "Poivron rouge"
+    },
+    {
+      "alias": "pommes de terre",
+      "ingredient_name": "Pomme de terre"
+    },
+    {
+      "alias": "cuisses de canard confites",
+      "ingredient_name": "Canard (cuisse confite)"
+    },
+    {
+      "alias": "saumon frais",
+      "ingredient_name": "Saumon"
+    },
+    {
+      "alias": "graines de sésame",
+      "ingredient_name": "Graine de sésame"
+    },
+    {
+      "alias": "sucre semoule",
+      "ingredient_name": "Sucre en poudre"
+    },
+    {
+      "alias": "sucre en poudre (pour la crème)",
+      "ingredient_name": "Sucre en poudre"
+    },
+    {
+      "alias": "sucre en poudre (pour le sirop)",
+      "ingredient_name": "Sucre en poudre"
+    },
+    {
+      "alias": "sucre glace (pour le glaçage)",
+      "ingredient_name": "Sucre glace"
+    },
+    {
+      "alias": "cumin en poudre",
+      "ingredient_name": "Cumin"
+    },
+    {
+      "alias": "branche de thym",
+      "ingredient_name": "Thym frais"
+    },
+    {
+      "alias": "branches de thym frais",
+      "ingredient_name": "Thym frais"
+    },
+    {
+      "alias": "branche de romarin",
+      "ingredient_name": "Romarin frais"
+    },
+    {
+      "alias": "branche de laurier",
+      "ingredient_name": "Laurier frais"
+    },
+    {
+      "alias": "feuille de laurier",
+      "ingredient_name": "Laurier frais"
+    },
+    {
+      "alias": "persil plat frais haché",
+      "ingredient_name": "Persil plat"
+    },
+    {
+      "alias": "olives noires dénoyautées",
+      "ingredient_name": "Olive noire"
+    },
+    {
+      "alias": "vin blanc",
+      "ingredient_name": "Vin blanc (cuisine)"
+    },
+    {
+      "alias": "vin blanc (pour le riz)",
+      "ingredient_name": "Vin blanc (cuisine)"
+    },
+    {
+      "alias": "vin blanc (pour les champignons)",
+      "ingredient_name": "Vin blanc (cuisine)"
+    },
+    {
+      "alias": "vin rouge (Mercurey)",
+      "ingredient_name": "Vin rouge (cuisine)"
+    },
+    {
+      "alias": "vin rouge (type Bourgogne)",
+      "ingredient_name": "Vin rouge (cuisine)"
+    },
+    {
+      "alias": "bouillon de légumes (cubes)",
+      "ingredient_name": "Bouillon cube (légumes)"
+    },
+    {
+      "alias": "gousse de vanille",
+      "ingredient_name": "Vanille (gousse)"
+    },
+    {
+      "alias": "bouquet garni (thym, laurier)",
+      "ingredient_name": "Bouquet garni"
+    },
+    {
+      "alias": "haricots cocos de Paimpol AOP écossés",
+      "ingredient_name": "Cocos de Paimpol AOP écossés"
+    }
+  ],
+  "units": [
+    {
+      "unite": "Bouteille",
+      "abreviation": null,
+      "type_unite": "divers",
+      "equivalence_reference": "1 bouteille",
+      "multiplicateur": 1
+    },
+    {
+      "unite": "Bouquet",
+      "abreviation": null,
+      "type_unite": "divers",
+      "equivalence_reference": "1 bouquet",
+      "multiplicateur": 1
+    },
+    {
+      "unite": "Tête",
+      "abreviation": null,
+      "type_unite": "divers",
+      "equivalence_reference": "1 tête",
+      "multiplicateur": 1
+    },
+    {
+      "unite": "Grain",
+      "abreviation": null,
+      "type_unite": "divers",
+      "equivalence_reference": "1 grain",
+      "multiplicateur": 1
+    },
+    {
+      "unite": "Tour",
+      "abreviation": null,
+      "type_unite": "divers",
+      "equivalence_reference": "1 tour",
+      "multiplicateur": 1
+    },
+    {
+      "unite": "Poignée",
+      "abreviation": null,
+      "type_unite": "divers",
+      "equivalence_reference": "1 poignée",
+      "multiplicateur": 1
+    }
+  ]
+}

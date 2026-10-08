@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { cookies } from 'next/headers'
+import { getAuthSession } from '../../../utils/auth-server'
 
 import {
   loadReferenceData,
@@ -15,8 +15,7 @@ import { getRecipeDetailsFromCookiwiki } from '../../../utils/cookiwiki-fetcher'
 
 export async function POST(request: NextRequest) {
   try {
-    const cookieStore = await cookies()
-const username = cookieStore.get('congelo_username')?.value
+    const username = (await getAuthSession())?.username
 
 if (!username) {
   return NextResponse.json(
@@ -25,7 +24,10 @@ if (!username) {
   )
 }
 
-    const body = await request.json()
+    const body = await request.json().catch(() => null)
+    if (!body || typeof body !== 'object' || Array.isArray(body)) {
+      return NextResponse.json({ error: 'Corps JSON invalide.' }, { status: 400 })
+    }
     const recipeId = String(body.recipeId ?? '').trim()
 
     const refData = await loadReferenceData()

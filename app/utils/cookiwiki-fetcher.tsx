@@ -1,9 +1,14 @@
+import { activeRecipeStructure, loadRecipeStructures } from './recipe-structure-server'
+import { expandRecipeLines } from './recipe-quality-policy'
 import { cookiwikiServerDb } from '../lib/supabase-server'
 
 export interface RawRecipeIngredient {
   name: string
   qty: number
   unit: string
+  quantityEstimated?: boolean
+  qualityNote?: string
+  preparationIssue?: string
   inferredFromInstructions?: boolean
 }
 
@@ -14,22 +19,36 @@ export interface RecipeDetails {
   ingredients: RawRecipeIngredient[]
 }
 
-function parseIngredients(raw: unknown): RawRecipeIngredient[] {
-  const arr = Array.isArray(raw) ? raw : []
+export function parseIngredients(raw: unknown): RawRecipeIngredient[] {
+  const arr = expandRecipeLines(raw)
 
   return arr
-    .map((ing: any) => ({
-      name: ing?.name || ing?.nom || ing?.ingredient || '',
-      qty: Number(
-        ing?.qty ??
-          ing?.quantite ??
-          ing?.quantity ??
-          ing?.amount ??
-          0,
-      ) || 0,
-      unit: ing?.unit || ing?.unite || 'pièce',
-    }))
+    .map((ing: any) => {
+      let name = String(ing?.name || ing?.nom || ing?.ingredient || '').trim()
+      let unit = String(ing?.unit || ing?.unite || '').trim()
+      // Une unité explicite dans le libellé ne doit pas devenir « pièce ».
+      // Limité à l'ail : « gousse de vanille » est une identité distincte.
+      if ((!unit || /^(pi[eè]ces?|unit[eé]s?)$/i.test(unit)) && /^gousses?\s+(?:d['’]\s*|de\s+)ail$/i.test(name)) {
+        name = 'Ail'
+        unit = 'gousse'
+      }
+      if (!unit || /^(pi[eè]ces?|unit[eé]s?)$/i.test(unit)) {
+        if (/^branches?\s+(?:de\s+)?(?:thym|romarin|laurier)/i.test(name)) unit = 'Brin'
+        else if (/^feuilles?\s+de\s+laurier/i.test(name)) unit = 'Feuille'
+        else if (/^tranches?\s+de\s+(?:pain|baguette)/i.test(name)) unit = 'Tranche'
+      }
+      if (/^t[eê]te\s+d['’]ail/i.test(name) && (!unit || /^(pi[eè]ces?|unit[eé]s?)$/i.test(unit))) { name = 'Ail'; unit = 'Tête' }
+      return {
+        ...ing,
+        name,
+        qty: Number(ing?.qty ?? ing?.quantite ?? ing?.quantity ?? ing?.amount ?? 0) || 0,
+        unit: unit || 'pièce',
+      }
+    })
     .filter((ing) => ing.name.trim().length > 0)
+    .flatMap(ing => /^sel\s+et\s+poivre$/i.test(ing.name) && (ing.qty === 0 || /^pinc[eé]es?$/i.test(ing.unit))
+      ? [{ name: 'Sel fin', qty: 0, unit: '' }, { name: 'Poivre noir', qty: 0, unit: '' }]
+      : [ing])
 }
 
 /**
@@ -119,9 +138,11 @@ export async function getRecipeDetailsFromCookiwiki(
     throw new Error(`Recette introuvable dans Cookiwiki (id : ${normalizedRecipeId}).`)
   }
 
-  let ingredients = parseIngredients(data.ingredients)
+  const structures=await loadRecipeStructures(normalizedRecipeId)
+  const rawIngredients=activeRecipeStructure(data,structures[0])
+  let ingredients = parseIngredients(rawIngredients)
 
-  if (ingredients.length === 0) {
+  if (ingredients.length === 0 && (!Array.isArray(rawIngredients) || rawIngredients.length === 0)) {
     const inferred = parseIngredientsFromInstructions(data.instructions)
 
     if (inferred.length > 0) {

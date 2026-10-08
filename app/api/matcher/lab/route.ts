@@ -1,5 +1,8 @@
+import { recordRecipeAnalysis } from '../../../utils/recipe-watch-server'
+import { quantitativeRecipeEstimates } from '../../../utils/recipe-test-estimates'
+import { prepareShoppingRequirement } from '../../../utils/shopping-requirement-policy'
 import { NextRequest, NextResponse } from 'next/server'
-import { cookies } from 'next/headers'
+import { getAuthSession } from '../../../utils/auth-server'
 
 import {
   loadReferenceData,
@@ -191,16 +194,12 @@ export async function POST(request: NextRequest) {
      * 1. AUTHENTIFICATION
      * ============================================================
      *
-     * Le login Mealio pose notamment :
-     *   congelo_username
+     * Le login Mealio pose une session signée mealio_session.
      *
      * Le Matcher utilise le username du foyer pour résoudre
      * séparément l'utilisateur Frosti et l'utilisateur Cellio.
      */
-    const cookieStore = await cookies()
-
-    const username =
-      cookieStore.get('congelo_username')?.value?.trim() || ''
+    const username = (await getAuthSession())?.username ?? ''
 
     if (!username) {
       return NextResponse.json(
@@ -217,7 +216,10 @@ export async function POST(request: NextRequest) {
      * 2. LECTURE DU BODY
      * ============================================================
      */
-    const body = await request.json()
+    const body = await request.json().catch(() => null)
+    if (!body || typeof body !== 'object' || Array.isArray(body)) {
+      return NextResponse.json({ error: 'Corps JSON invalide.' }, { status: 400 })
+    }
     const mode = String(body.mode ?? 'ingredient').trim().toLowerCase()
 
     /*
@@ -225,7 +227,7 @@ export async function POST(request: NextRequest) {
      * 3. RÉFÉRENTIEL MATCHER
      * ============================================================
      */
-    const refData = await loadReferenceData()
+    const refData = await loadReferenceData(username)
 
     /*
      * ============================================================
@@ -336,9 +338,13 @@ export async function POST(request: NextRequest) {
         trace
       )
 
+      const watchWarning=await recordRecipeAnalysis(username,recipe.id)
       return NextResponse.json({
         ok: true,
         mode: 'recipe',
+        watchWarning,
+        effectiveEstimates: quantitativeRecipeEstimates(recipe.ingredients, resolved),
+        effectiveModes: resolved.map(i=>({name:i.source_ingredient_name||i.produit,product:i.produit,ingredient_id:i.ingredient_id,mode:i.quantity_mode,configured:!!refData.pantryProducts?.has(i.ingredient_id||'')})),
 
         recipe: {
           ...recipe,
@@ -349,6 +355,7 @@ export async function POST(request: NextRequest) {
         resolved,
         aggregated,
         compared,
+        prepared: compared.map(item=>prepareShoppingRequirement(item,refData)),
 
         stock: stockSummary,
 

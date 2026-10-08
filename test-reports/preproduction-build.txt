@@ -1,0 +1,97 @@
+
+> mealio@1.2.27 build
+> next build
+
+▲ Next.js 16.3.3 (Turbopack)
+- Environments: .env.local
+✓ Running next.config.ts took 28ms
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 2.8s
+  Running TypeScript ...
+  Finished TypeScript in 3.2s ...
+  Collecting page data using 7 workers ...
+  Generating static pages using 7 workers (0/70) ...
+  Generating static pages using 7 workers (17/70) 
+  Generating static pages using 7 workers (34/70) 
+  Generating static pages using 7 workers (52/70) 
+✓ Generating static pages using 7 workers (70/70) in 602ms
+  Finalizing page optimization ...
+
+Route (app)
+┌ ○ /
+├ ○ /_not-found
+├ ○ /admin
+├ ○ /admin/data
+├ ○ /admin/ingredients
+├ ○ /admin/integration
+├ ○ /admin/pantry
+├ ○ /admin/recipes
+├ ○ /admin/storage
+├ ○ /admin/storage/pending
+├ ○ /admin/storage/test
+├ ○ /anti-gaspi
+├ ƒ /api/admin/data
+├ ƒ /api/admin/ingredients
+├ ƒ /api/admin/ingredients/audit
+├ ƒ /api/admin/ingredients/audit/cookiwiki
+├ ƒ /api/admin/matcher-functional-audit
+├ ƒ /api/admin/pantry
+├ ƒ /api/admin/preparations
+├ ƒ /api/admin/readiness
+├ ƒ /api/admin/recipe-watch
+├ ƒ /api/admin/recipes
+├ ƒ /api/admin/reference-audit
+├ ƒ /api/admin/storage
+├ ƒ /api/admin/storage/ingredients
+├ ƒ /api/admin/storage/pending
+├ ƒ /api/admin/storage/preview
+├ ƒ /api/anti-gaspi
+├ ƒ /api/auth/login
+├ ƒ /api/auth/logout
+├ ƒ /api/auth/me
+├ ƒ /api/ingredients
+├ ƒ /api/inventory/reminders
+├ ƒ /api/matcher/association
+├ ƒ /api/matcher/feedback
+├ ƒ /api/matcher/lab
+├ ƒ /api/matcher/resolve
+├ ƒ /api/matcher/test
+├ ƒ /api/meal-consumption
+├ ƒ /api/meal-plans
+├ ƒ /api/pantry/signals
+├ ƒ /api/point-frigo
+├ ƒ /api/purchases
+├ ƒ /api/recipes
+├ ƒ /api/replenishment
+├ ƒ /api/replenishment/add
+├ ƒ /api/replenishment/courses
+├ ƒ /api/replenishment/favorites
+├ ƒ /api/replenishment/recurring
+├ ƒ /api/replenishment/thresholds
+├ ƒ /api/shopping-list
+├ ƒ /api/shopping-list/continue
+├ ƒ /api/shopping-list/finish
+├ ƒ /api/shopping-list/generate
+├ ƒ /api/shopping-list/items
+├ ƒ /api/shopping-list/resolve
+├ ƒ /api/shopping-list/store
+├ ƒ /api/stock
+├ ƒ /api/stock/items
+├ ○ /courses
+├ ○ /inventaire
+├ ○ /login
+├ ○ /matcher
+├ ○ /matcher/correction
+├ ○ /planning
+├ ○ /point-frigo
+├ ○ /purchases
+├ ○ /replenishment
+└ ○ /stock
+
+
+ƒ Proxy (Middleware)
+
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand
+

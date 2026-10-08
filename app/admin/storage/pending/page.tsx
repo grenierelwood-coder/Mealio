@@ -2,7 +2,6 @@
 
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
-import AdminHelp from '../../../components/AdminHelp'
 
 type PendingRow = {
   issue: {
@@ -81,6 +80,7 @@ export default function PendingStoragePage() {
   useEffect(() => { void load() }, [])
 
   async function retry(issueId?: string) {
+    if (running !== null) return
     const key = issueId || 'all'
     setRunning(key)
     setError('')
@@ -114,26 +114,14 @@ export default function PendingStoragePage() {
             <p className="mt-2 max-w-3xl text-slate-500">Les achats qui n’ont pas pu être rangés automatiquement sont conservés ici. Après correction des règles, relance le même moteur de rangement.</p>
           </div>
           <div className="flex gap-2">
-            <Link href="/admin/storage" className="rounded-xl border bg-white px-4 py-2 text-sm font-semibold">← Règles de rangement</Link>
+            <Link href="/courses" className="rounded-xl border bg-white px-4 py-2 text-sm font-semibold">← Courses</Link><Link href="/admin/storage" className="rounded-xl border bg-white px-4 py-2 text-sm font-semibold">← Règles de rangement</Link>
             <button onClick={() => retry()} disabled={running !== null || rows.length === 0} className="rounded-xl bg-emerald-700 px-4 py-2 text-sm font-bold text-white disabled:opacity-50">
-              {running === 'all' ? 'Relancement…' : '🔄 Relancer tout'}
+              {running === 'all' ? 'Rangement en cours…' : '🔄 Relancer tout'}
             </button>
           </div>
         </div>
 
-        <div className="mt-5">
-          <AdminHelp
-            title="Comment fonctionne le rangement différé ?"
-            intro="Un article non rangé pendant la clôture des courses n’est pas perdu. Il reste dans cette file d’attente jusqu’à ce qu’une règle ou une donnée nécessaire soit corrigée."
-            sections={[
-              { title: '🔒 Même moteur', children: <p>Le bouton « Relancer » appelle <b>exactement le moteur existant</b> <code>resolveStorageLocation()</code>. Cette page ne recopie aucune règle de rangement.</p> },
-              { title: '✏️ Corriger puis relancer', children: <p>Corrige d’abord la règle dans <b>Admin → Règles de rangement</b>, puis relance l’article. Si une règle est maintenant applicable, l’article est créé dans le bon stock et disparaît de cette file.</p> },
-              { title: '🔄 Relancer tout', children: <p>Le bouton traite tous les articles encore en attente. Les articles qui restent impossibles à ranger restent visibles avec leur dernier motif.</p> },
-              { title: '🛡️ Pas de doublon', children: <p>Chaque transfert utilise le même mécanisme d’opération idempotente que le rangement normal. Une relance ne doit pas créer deux fois le même stock.</p> },
-            ]}
-            warning="Cette page ne modifie pas les règles de fonctionnement du rangement. Elle permet uniquement de rejouer le rangement après correction des données ou des règles."
-          />
-        </div>
+        <ol className="mt-5 grid gap-3 rounded-2xl border bg-white p-4 text-sm sm:grid-cols-3"><li><b>1. Corriger le motif</b><br/>Ouvrir le lien de l’article en attente.</li><li><b>2. Relancer le rangement</b><br/>Revenir ici, puis relancer l’article ou toute la file.</li><li><b>3. Vérifier le stock</b><br/>Le résultat indique le lieu précis de destination.</li></ol>
 
         {error && <div className="mt-5 rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-700">{error}</div>}
         {message && <div className="mt-5 rounded-xl border border-emerald-200 bg-emerald-50 p-4 text-sm text-emerald-800">{message}</div>}
@@ -145,7 +133,7 @@ export default function PendingStoragePage() {
               {results.map(result => (
                 <div key={result.issue_id} className={`rounded-xl border p-3 text-sm ${result.ok ? 'border-emerald-200 bg-emerald-50' : 'border-amber-200 bg-amber-50'}`}>
                   <b>{result.ok ? '✓' : '⚠️'} {result.produit}</b> · {result.message}
-                  {result.destination && <span className="ml-1 text-slate-600">({result.destination.storage} · {result.destination.location_name} · {result.destination.rule_label})</span>}
+                  {result.ok && <Link href={`/inventaire?search=${encodeURIComponent(result.produit)}`} className="ml-2 font-bold text-emerald-800 underline">Vérifier dans l’inventaire →</Link>}{result.destination && <span className="ml-1 text-slate-600">({result.destination.storage} · {result.destination.location_name} · {result.destination.rule_label})</span>}
                 </div>
               ))}
             </div>
@@ -194,6 +182,7 @@ export default function PendingStoragePage() {
                     <div className="font-bold">Pourquoi il n’a pas été rangé ?</div>
                     <div className="mt-1">{row.issue.message}</div>
                     {row.issue.resolution_hint && <div className="mt-2 text-xs text-amber-800">💡 {row.issue.resolution_hint}</div>}
+                    <div className="mt-3 flex flex-wrap gap-3 font-bold text-emerald-800">{!row.ingredient?<Link href="/courses" className="underline">Associer l’article dans Courses →</Link>:!row.ingredient.default_storage?<Link href={`/admin/ingredients?ingredient_id=${encodeURIComponent(row.ingredient.id)}`} className="underline">Choisir le stockage de l’ingrédient →</Link>:<Link href={`/admin/storage?ingredient_id=${encodeURIComponent(row.ingredient.id)}&source=${encodeURIComponent(row.ingredient.default_storage)}`} className="underline">Vérifier sa règle et son lieu →</Link>}{row.ingredient&&<Link href={`/admin/ingredients?ingredient_id=${encodeURIComponent(row.ingredient.id)}`} className="underline">Unités et équivalences →</Link>}</div>
                   </div>
                 </article>
               ))}

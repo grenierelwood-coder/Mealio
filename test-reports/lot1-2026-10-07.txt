@@ -1,0 +1,149 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> mealio@1.2.1 test
+> node scripts/test-offline.mjs
+
+✔ PASS: référentiel cohérent et conversions obsolètes vides (4.7533ms)
+✔ FAIL: une conversion obsolète matérialisée est interdite (0.982299ms)
+✔ FAIL: un pont obsolète matérialisé est interdit (0.226671ms)
+✔ FAIL: une unité officielle inconnue est détectée (1.454671ms)
+✔ FAIL: une densité invalide est détectée (0.63695ms)
+✔ FAIL: un synonyme ambigu est détecté (1.371936ms)
+✔ WARNING: une ancienne unité opérationnelle différente de la référence est signalée (0.791071ms)
+✔ PASS: tout ingrédient en mode Présence est protégé contre les densités (0.967758ms)
+✔ PASS: un ingrédient quantifiable peut recevoir une densité (0.686013ms)
+✔ résolution déterministe : exact, synonyme et refus du faux positif (8.91014ms)
+✔ normalisation de ligne : quantité, unité et synonymes (3.575805ms)
+✔ servings : le besoin est correctement redimensionné (4.204221ms)
+✔ miel : cs et cc utilisent uniquement les densités explicites (6.025435ms)
+✔ presence-only : jamais de calcul quantitatif ni de densité (0.778904ms)
+✔ plusieurs lignes de stock exactes sont toutes additionnées (5.588317ms)
+✔ stock supérieur au besoin : aucun achat (0.356917ms)
+✔ stock insuffisant : achat égal au manque (1.246898ms)
+✔ anti-faux-positif : courgette ne doit pas matcher poireau (0.3186ms)
+✔ anti-faux-positif : farine de blé ne doit pas consommer farine de riz (0.901057ms)
+✔ presence : stock présent = aucun achat, stock absent = présence à acheter (1.731913ms)
+✔ pipeline complet : recette → résolution → agrégation → stock → achat (19.823327ms)
+✔ agrégation : deux recettes partagent correctement le même besoin (0.237197ms)
+[MATCHER LAB] ERREUR : Error: Erreur résolution utilisateur Cellio : offline
+    at resolveHousehold (file:///tmp/mealio-tests-vIii2M/app/utils/household-server.mjs:84:11)
+    at async getHouseholdStock (file:///tmp/mealio-tests-vIii2M/app/utils/stock-fetcher.mjs:24:21)
+    at async POST (file:///tmp/mealio-tests-vIii2M/app/api/matcher/lab/route.mjs:247:19)
+    at async TestContext.<anonymous> (file:///tmp/mealio-tests-vIii2M/tests/lot1/api-session.test.mjs:105:18)
+    at async Test.run (node:internal/test_runner/test:1389:7)
+    at async Test.processPendingSubtests (node:internal/test_runner/test:960:7)
+✔ lab refuse une session absent avant accès aux données (33.773493ms)
+✔ lab refuse une session old avant accès aux données (5.608898ms)
+✔ lab refuse une session tampered avant accès aux données (7.857294ms)
+✔ lab refuse une session expired avant accès aux données (5.406373ms)
+✔ matcherTest refuse une session absent avant accès aux données (3.11335ms)
+✔ matcherTest refuse une session old avant accès aux données (0.549567ms)
+✔ matcherTest refuse une session tampered avant accès aux données (0.502527ms)
+✔ matcherTest refuse une session expired avant accès aux données (2.982783ms)
+✔ resolve refuse une session absent avant accès aux données (0.755698ms)
+✔ resolve refuse une session old avant accès aux données (0.636348ms)
+✔ resolve refuse une session tampered avant accès aux données (4.213005ms)
+✔ resolve refuse une session expired avant accès aux données (0.441064ms)
+✔ feedback refuse une session absent avant accès aux données (0.50454ms)
+✔ feedback refuse une session old avant accès aux données (3.839884ms)
+✔ feedback refuse une session tampered avant accès aux données (0.552372ms)
+✔ feedback refuse une session expired avant accès aux données (4.225444ms)
+✔ la session conserve le nom du foyer et son UUID Frosti distinct (0.223136ms)
+✔ resolve accepte mealio_session et résout un ingrédient exact (16.711541ms)
+✔ lab inventaire utilise le foyer signé et les UUID de chaque application (14.293197ms)
+✔ feedback refuse un identifiant de stock extérieur au foyer (1.055349ms)
+✔ feedback refuse une validation entre deux ingrédients officiels différents (2.77507ms)
+✔ feedback utilise la vraie ligne du foyer, pas le produit envoyé par le navigateur (5.063367ms)
+✔ lecture Frosti indisponible : aucune réponse de stock vide (2.928791ms)
+✔ lookup Cellio indisponible : le laboratoire remonte une erreur (7.160925ms)
+✔ lab renvoie 400 pour un corps invalide avec une session valide (3.724675ms)
+✔ matcherTest renvoie 400 pour un corps invalide avec une session valide (2.111651ms)
+✔ resolve renvoie 400 pour un corps invalide avec une session valide (1.039281ms)
+✔ feedback renvoie 400 pour un corps invalide avec une session valide (0.281595ms)
+❌ Erreur Claude résolution ingrédient : Error: Simulated outage
+    at globalThis.fetch (file:///tmp/mealio-tests-vIii2M/tests/lot1/matcher-safety.test.mjs:17:34)
+    at callClaude (file:///tmp/mealio-tests-vIii2M/app/lib/anthropic-server.mjs:35:26)
+    at resolveOfficialIngredientWithClaude (file:///tmp/mealio-tests-vIii2M/app/lib/anthropic-server.mjs:96:26)
+    at resolveOfficialIngredient (file:///tmp/mealio-tests-vIii2M/app/utils/matcher.mjs:1375:11)
+    at resolveIngredientDecision (file:///tmp/mealio-tests-vIii2M/app/utils/matcher.mjs:1526:24)
+    at TestContext.<anonymous> (file:///tmp/mealio-tests-vIii2M/tests/lot1/matcher-safety.test.mjs:136:24)
+    at Test.runInAsyncScope (node:async_hooks:227:14)
+    at Test.run (node:internal/test_runner/test:1382:25)
+    at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+    at Test.postRun (node:internal/test_runner/test:1522:19)
+✔ présence : un stock 0 n'est pas disponible (7.279855ms)
+✔ présence : un stock -1 n'est pas disponible (0.512281ms)
+✔ présence : un stock NaN n'est pas disponible (0.470398ms)
+✔ présence : un stock Infinity n'est pas disponible (0.253752ms)
+✔ une ancienne mémoire validée ne peut pas contourner une identité contradictoire (2.047774ms)
+✔ le libellé ne peut pas contourner un ingredient_id contradictoire (1.594061ms)
+✔ le refus reste effectif même si la farine de riz manque au référentiel (11.824879ms)
+✔ ignored_words ne peut pas effacer les qualificatifs de la garde stock (0.54483ms)
+✔ un synonyme explicite sans mots communs reste utilisable sans IA (2.603501ms)
+✔ une exclusion humaine reste prioritaire sur une correspondance exacte (0.76334ms)
+✔ un besoin non validé ne diminue jamais les achats (6.164495ms)
+✔ une proposition IA de stock attend une validation et ne déduit rien (24.277ms)
+✔ persistMemory=false interdit aussi les écritures du chemin synonyme (7.660789ms)
+✔ conversion 2 cs vers cc : quantité et unité canonique cohérentes (1.924529ms)
+✔ conversion 42 g vers cs : quantité et unité canonique cohérentes (0.396077ms)
+✔ conversion 1 kg vers kg : quantité et unité canonique cohérentes (0.206602ms)
+✔ conversion 2 l vers l : quantité et unité canonique cohérentes (0.183987ms)
+✔ conversion 1000 mg vers kg : quantité et unité canonique cohérentes (0.194663ms)
+✔ conversion 500 mL vers l : quantité et unité canonique cohérentes (0.161613ms)
+✔ une quantité négative ne peut pas être convertie (0.13943ms)
+✔ une quantité inférée reste inconnue de la recette aux achats (2.601308ms)
+✔ une quantité recette 0 n'est jamais un besoin fiable (0.323808ms)
+✔ une quantité recette -2 n'est jamais un besoin fiable (0.374704ms)
+✔ une quantité recette NaN n'est jamais un besoin fiable (8.811691ms)
+✔ une quantité recette Infinity n'est jamais un besoin fiable (0.769579ms)
+✔ 500 g et 2 pièces restent séparés lors de l’agrégation (1.072906ms)
+✔ une quantité inconnue ne contamine pas un besoin connu du même ingrédient (0.229355ms)
+✔ une panne Claude ne produit pas de décision AUCUN persistante (4.354188ms)
+✔ un ancien AUCUN en attente ne bloque plus une nouvelle résolution (2.026041ms)
+✔ référentiel indisponible : interruption au lieu de données vides (0.925053ms)
+✔ exclusions indisponibles : interruption du rapprochement (3.322234ms)
+✔ ignored_words ne peut pas transformer farine de riz en farine de blé au stade recette (1.324385ms)
+✔ un dépassement numérique des portions reste une quantité inconnue (0.24552ms)
+ℹ tests 83
+ℹ suites 0
+ℹ pass 83
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 632.243221
+MEALIO — MATCHER TEST LAB
+V33.1 — exécution clé en main
+Date : 07/10/2026 21:46:33
+
+Les tests sont exécutés avec des données de référence locales.
+Aucune écriture Supabase ni appel Claude n’est nécessaire pour cette batterie.
+
+PASS | 4 ms | Résolution exacte / synonyme / inconnu
+PASS | 8 ms | Normalisation ligne recette
+PASS | 1 ms | Redimensionnement portions
+PASS | 1 ms | Miel : densités explicites uniquement
+PASS | 8 ms | Presence-only : aucune densité utilisable
+PASS | 5 ms | Plusieurs lignes de stock sont additionnées
+PASS | 0 ms | Stock supérieur : aucun achat
+PASS | 0 ms | Stock insuffisant : achat = manque
+PASS | 0 ms | Anti-faux-positif : courgette ≠ poireau
+PASS | 1 ms | Anti-faux-positif CRITIQUE : farine de blé ≠ farine de riz
+PASS | 0 ms | Presence : stock présent = aucun achat
+PASS | 0 ms | Presence : stock absent = achat présence
+PASS | 3 ms | Pipeline complet recette → besoin → stock → achat
+PASS | 0 ms | Agrégation de deux recettes
+
+==============================
+RÉSULTAT
+==============================
+Tests exécutés : 14
+PASS : 14
+FAIL : 0
+Échecs critiques : 0
+
+STATUT : PASS — batterie Matcher verte.
+
+Rapport TXT : /tmp/mealio-tests-vIii2M/test-reports/matcher-lab-2026-10-07T19-46-33-829Z.txt
+(node:20) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)

@@ -1,3 +1,6 @@
+import { loadPantryProducts } from '../../../utils/pantry-server'
+import { pantryMode } from '../../../utils/pantry-policy'
+import { getQuantityMode } from '../../../utils/quantity-policy'
 import { NextResponse } from 'next/server'
 import { getAuthSession } from '../../../utils/auth-server'
 import { mealioServerDb } from '../../../lib/supabase-server'
@@ -36,8 +39,10 @@ async function loadAll() {
   for (const result of [ingredients, synonyms, units, densities, conversions, shopping, purchases, recurring, thresholds, favorites]) {
     if (result.error) throw new Error(result.error.message)
   }
+  const pantry = await loadPantryProducts()
   return {
-    ingredients: ingredients.data ?? [],
+    ingredients: (ingredients.data ?? []).map((row: any) => ({ ...row,
+      quantity_mode: getQuantityMode({ ...row, quantity_mode: pantryMode(pantry.get(row.id)) ?? 'quantity' }) })),
     synonyms: synonyms.data ?? [],
     units: units.data ?? [],
     densities: densities.data ?? [],
@@ -67,6 +72,7 @@ export async function POST(request: Request) {
       const nom = text(body.nom)
       if (!nom) return NextResponse.json({ error: 'Le nom de l’ingrédient est obligatoire.' }, { status: 400 })
       const reference = text(body.unite_reference)
+      if (nom === 'Ail' && reference !== 'Gousse') return NextResponse.json({ error: 'Ail : unité de référence Gousse obligatoire.' }, { status: 400 })
       if (reference) {
         const unit = await mealioServerDb.from('unit_mappings').select('unite').eq('unite', reference).maybeSingle()
         if (unit.error) throw new Error(unit.error.message)
@@ -89,7 +95,7 @@ export async function POST(request: Request) {
       const ingredient = await mealioServerDb.from('official_ingredients').select('nom,categorie').eq('id', ingredientId).maybeSingle()
       if (ingredient.error) throw new Error(ingredient.error.message)
       if (!ingredient.data) return NextResponse.json({ error: 'Ingrédient officiel introuvable.' }, { status: 400 })
-      try { assertDensityAllowed(ingredient.data) }
+      try { assertDensityAllowed({ ...ingredient.data, quantity_mode: pantryMode((await loadPantryProducts()).get(ingredientId)) ?? 'quantity' }) }
       catch (error) { return NextResponse.json({ error: error instanceof Error ? error.message : 'Densité interdite pour cet ingrédient.' }, { status: 400 }) }
       const result = await mealioServerDb.from('ingredient_densities').upsert({ ingredient_id: ingredientId, unite, poids_g_approx: poids }, { onConflict: 'ingredient_id,unite' }).select('ingredient_id,unite,poids_g_approx').single()
       if (result.error) throw new Error(result.error.message)
@@ -108,6 +114,7 @@ export async function PATCH(request: Request) {
       const payload: Record<string, unknown> = { nom: text(body.nom), categorie: text(body.categorie), rayon: text(body.rayon), default_storage: body.default_storage === 'frosti' || body.default_storage === 'cellio' ? body.default_storage : null, default_is_fridge: Boolean(body.default_is_fridge) }
       if ('unite_reference' in body) {
         const reference = text(body.unite_reference)
+        if (payload.nom === 'Ail' && reference !== 'Gousse') return NextResponse.json({ error: 'Ail : unité de référence Gousse obligatoire.' }, { status: 400 })
         if (reference) {
           const unit = await mealioServerDb.from('unit_mappings').select('unite').eq('unite', reference).maybeSingle()
           if (unit.error) throw new Error(unit.error.message)
@@ -132,7 +139,7 @@ export async function PATCH(request: Request) {
       const ingredient = await mealioServerDb.from('official_ingredients').select('nom,categorie').eq('id', ingredientId).maybeSingle()
       if (ingredient.error) throw new Error(ingredient.error.message)
       if (!ingredient.data) return NextResponse.json({ error: 'Ingrédient officiel introuvable.' }, { status: 400 })
-      try { assertDensityAllowed(ingredient.data) }
+      try { assertDensityAllowed({ ...ingredient.data, quantity_mode: pantryMode((await loadPantryProducts()).get(ingredientId)) ?? 'quantity' }) }
       catch (error) { return NextResponse.json({ error: error instanceof Error ? error.message : 'Densité interdite pour cet ingrédient.' }, { status: 400 }) }
       const { data, error } = await mealioServerDb.from('ingredient_densities').update({ unite, poids_g_approx: poids }).eq('ingredient_id', ingredientId).eq('unite', originalUnit).select('ingredient_id,unite,poids_g_approx').single()
       if (error) throw new Error(error.message); return NextResponse.json({ density: data })

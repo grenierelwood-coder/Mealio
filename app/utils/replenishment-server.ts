@@ -1,7 +1,12 @@
+import { loadPantrySignals, loadHouseholdPurchases } from './pantry-signals-server'
+import { activeAlmostFinished, forecastPurchases, latestPurchase } from './pantry-history-policy'
+import { loadPantryProducts } from './pantry-server'
+import { pantryMode, pantryPack } from './pantry-policy'
 import { mealioServerDb } from '../lib/supabase-server'
 import { isPresenceOnlyIngredient } from './quantity-policy'
 import { getHouseholdStockServer } from './household-server'
-import { assertOfficialIngredientUnit } from './official-unit-policy'
+import { convertQuantityToUnit, loadReferenceData } from './matcher'
+import { assertOfficialIngredientUnit, getOfficialIngredientReferenceUnit } from './official-unit-policy'
 
 export type ReplenishmentMode = 'suggestion' | 'systematic'
 
@@ -10,6 +15,7 @@ export interface FavoriteIngredient {
   nom: string
   categorie: string | null
   default_storage: string | null
+  default_purchase_quantity?: number
   purchase_count: number
   last_purchased_at: string | null
   unite: string
@@ -42,7 +48,7 @@ export interface RecurringRule {
 
 export interface ReplenishmentSuggestion {
   key: string
-  source: 'threshold' | 'recurring'
+  source: 'threshold' | 'recurring' | 'almost_finished' | 'history'
   rule_id: string
   ingredient_id: string | null
   produit: string
@@ -173,6 +179,7 @@ export async function listFavorites(username: string): Promise<FavoriteIngredien
 
   if (ingredientError) throw new Error(`Impossible de charger les ingrédients favoris : ${ingredientError.message}`)
 
+  const pantry = await loadPantryProducts(username)
   return (ingredients ?? [])
     .map(row => ({
       ingredient_id: row.id,
@@ -181,14 +188,15 @@ export async function listFavorites(username: string): Promise<FavoriteIngredien
       default_storage: row.default_storage ?? null,
       purchase_count: counts.get(row.id)?.count ?? 0,
       last_purchased_at: counts.get(row.id)?.last ?? null,
-      unite: preferences.get(row.id) ?? counts.get(row.id)?.unit ?? 'Pièce',
+      default_purchase_quantity: pantryPack(pantry.get(row.id)) ?? 1,
+      unite: pantry.get(row.id)?.enabled ? pantry.get(row.id)!.default_unit : preferences.get(row.id) ?? counts.get(row.id)?.unit ?? 'Pièce',
     }))
     .sort((a, b) => b.purchase_count - a.purchase_count || String(b.last_purchased_at).localeCompare(String(a.last_purchased_at)))
     .slice(0, 15)
 }
 
 export async function updateFavoriteUnit(username: string, ingredientId: string, unite: string) {
-  const canonical = await assertOfficialIngredientUnit(ingredientId, unite)
+  const canonical = await assertOfficialIngredientUnit(ingredientId, unite, username)
 
   const { data, error } = await mealioServerDb
     .from('favorite_preferences')
@@ -244,7 +252,7 @@ export async function listRecurringRules(username: string): Promise<RecurringRul
   }))
 }
 
-async function ingredientMap() {
+async function ingredientMap(username: string) {
   const [{ data: ingredients, error: ingredientsError }, { data: synonyms, error: synonymsError }] = await Promise.all([
     mealioServerDb.from('official_ingredients').select('id,nom,categorie,default_storage'),
     mealioServerDb.from('ingredient_synonyms').select('mot_recette,ingredient_id'),
@@ -255,13 +263,16 @@ async function ingredientMap() {
   const byKey = new Map<string, string>()
   for (const row of ingredients ?? []) byKey.set(normalize(row.nom), row.id)
   for (const row of synonyms ?? []) byKey.set(normalize(row.mot_recette), row.ingredient_id)
-  return { ingredients: ingredients ?? [], byKey }
+  const pantry = await loadPantryProducts(username)
+  return { ingredients: (ingredients ?? []).map((row: any) => ({ ...row,
+    quantity_mode: pantryMode(pantry.get(row.id)) ?? 'quantity' })), byKey, pantry }
 }
 
 async function stockByIngredient(username: string) {
-  const [stock, maps] = await Promise.all([getHouseholdStockServer(username), ingredientMap()])
+  const [stock, maps] = await Promise.all([getHouseholdStockServer(username), ingredientMap(username)])
   const result = new Map<string, { quantity: number; unit: string; compatible: boolean }>()
   for (const item of stock) {
+    if (!Number.isFinite(Number(item.qte)) || Number(item.qte) <= 0) continue
     const ingredientId = maps.byKey.get(normalize(item.produit))
     if (!ingredientId) continue
     const ingredient = maps.ingredients.find((i: any) => i.id === ingredientId)
@@ -290,11 +301,13 @@ async function stockByIngredient(username: string) {
 }
 
 export async function getReplenishmentSuggestions(username: string): Promise<ReplenishmentSuggestion[]> {
-  const [thresholds, recurring, stocks, maps] = await Promise.all([
+  const [thresholds, recurring, stocks, maps, signals, purchases] = await Promise.all([
     listThresholdRules(username),
     listRecurringRules(username),
     stockByIngredient(username),
-    ingredientMap(),
+    ingredientMap(username),
+    loadPantrySignals(username),
+    loadHouseholdPurchases(username),
   ])
 
   const suggestions: ReplenishmentSuggestion[] = []
@@ -316,9 +329,9 @@ export async function getReplenishmentSuggestions(username: string): Promise<Rep
         rule_id: rule.id,
         ingredient_id: rule.ingredient_id,
         produit: ingredientNames.get(rule.ingredient_id) ?? 'Ingrédient',
-        quantity: 1,
-        unite: 'Pièce',
-        reason: 'Ingrédient absent du stock : présence requise.',
+        quantity: pantryPack(maps.pantry.get(rule.ingredient_id)) ?? 1,
+        unite: maps.pantry.get(rule.ingredient_id)?.default_unit ?? 'Pièce',
+        reason: 'Produit épuisé ou absent : achat du format habituel.',
         mode: rule.mode,
         stock_quantity: null,
         stock_unit: null,
@@ -363,8 +376,8 @@ export async function getReplenishmentSuggestions(username: string): Promise<Rep
       rule_id: rule.id,
       ingredient_id: rule.ingredient_id,
       produit: rule.produit,
-      quantity: presenceOnly ? 1 : rule.quantity,
-      unite: presenceOnly ? 'Pièce' : rule.unite,
+      quantity: presenceOnly ? pantryPack(maps.pantry.get(rule.ingredient_id!)) ?? 1 : rule.quantity,
+      unite: presenceOnly ? maps.pantry.get(rule.ingredient_id!)?.default_unit ?? 'Pièce' : rule.unite,
       reason: presenceOnly
         ? `Présence requise · réapprovisionnement récurrent prévu le ${rule.next_due_date}`
         : `Réapprovisionnement récurrent prévu le ${rule.next_due_date}`,
@@ -377,6 +390,22 @@ export async function getReplenishmentSuggestions(username: string): Promise<Rep
     })
   }
 
+  // Manual signals override forecasts. Both remain suggestions even when stock exists.
+  for (const policy of maps.pantry.values()) {
+    if (!policy.enabled) continue
+    const id=policy.ingredient_id
+    if(suggestions.some(s=>s.ingredient_id===id)) continue
+    const almost=signals.find(s=>s.ingredient_id===id && s.kind==='almost_finished')
+    const manual=activeAlmostFinished(almost,latestPurchase(purchases,id))
+    const snooze=signals.find(s=>s.ingredient_id===id && s.kind==='history_snooze')
+    const forecast=manual ? null : forecastPurchases(purchases,id)
+    if(!manual && (!forecast || forecast.alert_date>today || (snooze?.until_date && snooze.until_date>today))) continue
+    suggestions.push({key:`${manual?'almost_finished':'history'}:${id}`,source:manual?'almost_finished':'history',rule_id:id,
+      ingredient_id:id,produit:ingredientNames.get(id) ?? 'Ingrédient',quantity:pantryPack(policy)!,unite:policy.default_unit,
+      reason:manual ? 'Vous avez signalé ce produit presque terminé. Le stock reste présent.' :
+        `À vérifier : ${forecast!.purchases} jours d’achat distincts, intervalle médian ${forecast!.interval_days} jours ; prochain achat estimé le ${forecast!.due_date}. Ce rythme ne mesure pas le stock restant.`,
+      mode:'suggestion',stock_quantity:null,stock_unit:null,min_quantity:null,target_quantity:null,due_date:forecast?.due_date ?? null})
+  }
   return suggestions
 }
 
@@ -459,10 +488,37 @@ export async function addReplenishmentToActiveList(
     ingredient_id?: string | null
     quantity: number
     unite: string
-    source: 'threshold' | 'recurring' | 'favorite'
+    source: 'threshold' | 'recurring' | 'almost_finished' | 'history' | 'favorite'
     rule_id?: string | null
   },
 ) {
+  if(input.source==='almost_finished' || input.source==='history') {
+    const id=input.ingredient_id
+    if(!id) throw new Error('Ingrédient officiel obligatoire pour cette alerte.')
+    const policy=(await loadPantryProducts(username)).get(id)
+    if(!policy?.enabled) throw new Error('Ce produit n’est plus géré en présence.')
+    const unit=await assertOfficialIngredientUnit(id,policy.default_unit,username)
+    const {data,error}=await mealioServerDb.rpc('add_pantry_alert_to_courses',{
+      p_user_id:username,p_ingredient_id:id,p_produit:input.produit,p_quantity:pantryPack(policy)!,p_unite:unit,
+    })
+    if(error || !data?.item) throw new Error(error?.message ?? 'Ajout épicerie impossible.')
+    return data
+  }
+  // Older rules/favorites may use the previous reference unit. Convert their
+  // amount when adding to Courses; keep the original rule and purchase history.
+  const referenceIngredientId = input.ingredient_id
+  if (referenceIngredientId) {
+    try { input = { ...input, unite: await assertOfficialIngredientUnit(referenceIngredientId, input.unite, username) } }
+    catch (error) {
+      const reference = await getOfficialIngredientReferenceUnit(referenceIngredientId)
+      const ref = await loadReferenceData()
+      const amount = convertQuantityToUnit(ref, referenceIngredientId, input.quantity, input.unite, reference)
+      if (!amount || !Number.isFinite(amount.qty) || amount.qty <= 0) throw error
+      const whole = ['Pièce','Gousse','Tranche','Rouleau','Bouquet','Brin','Feuille','Sachet','Bouteille'].includes(reference)
+      input = { ...input, quantity: whole ? Math.ceil(amount.qty - 1e-9) : amount.qty,
+        unite: await assertOfficialIngredientUnit(referenceIngredientId, reference, username) }
+    }
+  }
   let { data: list, error: listError } = await mealioServerDb
     .from('shopping_lists')
     .select('id')
@@ -485,16 +541,19 @@ export async function addReplenishmentToActiveList(
 
   const ingredientId = input.ingredient_id ?? null
   if (ingredientId) {
-    await assertOfficialIngredientUnit(ingredientId, input.unite)
+    await assertOfficialIngredientUnit(ingredientId, input.unite, username)
   }
 
   const { data: candidates, error: candidateError } = await mealioServerDb
     .from('shopping_items')
-    .select('id,produit,ingredient_id,qte,qte_achat')
+    .select('id,produit,ingredient_id,qte,qte_achat,unite,pantry_pack_quantity')
     .eq('list_id', list.id)
   if (candidateError) throw new Error(candidateError.message)
 
+  const pantry = ingredientId ? (await loadPantryProducts(username)).get(ingredientId) : undefined
+  const pack = pantry?.enabled && unitKey(pantry.default_unit) === unitKey(input.unite) ? pantryPack(pantry) : null
   const existing = (candidates ?? []).find((item: any) => {
+    if (unitKey(item.unite) !== unitKey(input.unite)) return false
     if (ingredientId && item.ingredient_id === ingredientId) return true
     return !ingredientId && normalize(item.produit) === normalize(input.produit)
   })
@@ -505,6 +564,7 @@ export async function addReplenishmentToActiveList(
       .update({
         qte: Number(existing.qte ?? 0) + input.quantity,
         qte_achat: Number(existing.qte_achat ?? 0) + input.quantity,
+        pantry_pack_quantity: existing.pantry_pack_quantity ?? pack,
         is_checked: false,
       })
       .eq('id', existing.id)
@@ -523,6 +583,7 @@ export async function addReplenishmentToActiveList(
       ingredient_id: ingredientId,
       qte: input.quantity,
       qte_achat: input.quantity,
+      pantry_pack_quantity: pack,
       qte_achetee: 0,
       unite: input.unite,
       is_checked: false,

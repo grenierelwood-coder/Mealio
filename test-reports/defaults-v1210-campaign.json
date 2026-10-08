@@ -1,0 +1,531 @@
+{
+  "recipes": 56,
+  "resolved": 448,
+  "report": [
+    {
+      "recipe": "Tian de tomates, courgettes et aubergines",
+      "lines": 10,
+      "resolved": 10,
+      "remaining": [],
+      "conversions": []
+    },
+    {
+      "recipe": "Pommes de terre rôties à la suédoise",
+      "lines": 6,
+      "resolved": 6,
+      "remaining": [],
+      "conversions": []
+    },
+    {
+      "recipe": "Gougères au fromage de Valí ",
+      "lines": 6,
+      "resolved": 6,
+      "remaining": [],
+      "conversions": []
+    },
+    {
+      "recipe": "Recette œuf Bénédicte",
+      "lines": 9,
+      "resolved": 9,
+      "remaining": [],
+      "conversions": []
+    },
+    {
+      "recipe": "Tarte aux épinards et chèvre",
+      "lines": 7,
+      "resolved": 7,
+      "remaining": [],
+      "conversions": []
+    },
+    {
+      "recipe": "Tarte fine aux courgettes et Boursin",
+      "lines": 5,
+      "resolved": 4,
+      "remaining": [
+        {
+          "name": "Gruyère",
+          "reason": "La quantité de « Gruyère » est inconnue.",
+          "unknown": true
+        }
+      ],
+      "conversions": [
+        {
+          "name": "Gruyère",
+          "reason": "Besoin conservé : 0 parsemer de « Gruyère ». Aucune équivalence explicite ne permet de convertir en Gramme. L'association officielle et le rangement automatique restent en attente."
+        }
+      ]
+    },
+    {
+      "recipe": "Cake d'été",
+      "lines": 10,
+      "resolved": 9,
+      "remaining": [
+        {
+          "name": "olives dénoyautées (noires et/ou vertes) et/ou tomates séchées",
+          "reason": "« olives dénoyautées (noires et/ou vertes) et/ou tomates séchées » n'est pas encore associé à un ingrédient officiel. Aucun stock n'a été déduit.",
+          "unknown": false
+        }
+      ],
+      "conversions": []
+    },
+    {
+      "recipe": "Tendrons de veau à la gardiane",
+      "lines": 12,
+      "resolved": 11,
+      "remaining": [
+        {
+          "name": "olives noires et vertes",
+          "reason": "« olives noires et vertes » n'est pas encore associé à un ingrédient officiel. Aucun stock n'a été déduit.",
+          "unknown": false
+        }
+      ],
+      "conversions": []
+    },
+    {
+      "recipe": "Le crumble aux pommes du chat qui tousse",
+      "lines": 7,
+      "resolved": 7,
+      "remaining": [],
+      "conversions": []
+    },
+    {
+      "recipe": "Crème brûlée géante ",
+      "lines": 5,
+      "resolved": 5,
+      "remaining": [],
+      "conversions": []
+    },
+    {
+      "recipe": "Gâteau aux pêches de Jeanine Laurent",
+      "lines": 9,
+      "resolved": 8,
+      "remaining": [
+        {
+          "name": "Eau",
+          "reason": "La quantité de « Eau » est inconnue.",
+          "unknown": true
+        }
+      ],
+      "conversions": [
+        {
+          "name": "Eau",
+          "reason": "Besoin conservé : 0 selon besoin de « Eau ». Aucune équivalence explicite ne permet de convertir en Millilitre. L'association officielle et le rangement automatique restent en attente."
+        }
+      ]
+    },
+    {
+      "recipe": "Pommes de terre vigneronnes",
+      "lines": 6,
+      "resolved": 6,
+      "remaining": [],
+      "conversions": []
+    },
+    {
+      "recipe": "Gratin de courgettes",
+      "lines": 10,
+      "resolved": 9,
+      "remaining": [
+        {
+          "name": "Beurre",
+          "reason": "La quantité de « Beurre » est inconnue.",
+          "unknown": true
+        }
+      ],
+      "conversions": [
+        {
+          "name": "Beurre",
+          "reason": "Besoin conservé : 0 piece de « Beurre ». Aucune équivalence explicite ne permet de convertir en Gramme. L'association officielle et le rangement automatique restent en attente."
+        }
+      ]
+    },
+    {
+      "recipe": "Barbotton",
+      "lines": 6,
+      "resolved": 5,
+      "remaining": [
+        {
+          "name": "Beurre",
+          "reason": "La quantité de « Beurre » est inconnue.",
+          "unknown": true
+        }
+      ],
+      "conversions": [
+        {
+          "name": "Beurre",
+          "reason": "Besoin conservé : 0 cuisson de « Beurre ». Aucune équivalence explicite ne permet de convertir en Gramme. L'association officielle et le rangement automatique restent en attente."
+        }
+      ]
+    },
+    {
+      "recipe": "Pâte brisée, salée ou sucrée façon Vali",
+      "lines": 3,
+      "resolved": 3,
+      "remaining": [],
+      "conversions": []
+    },
+    {
+      "recipe": "Rillettes de saumon frais et fumé / recette d'Oma pour nos fiançailles !!",
+      "lines": 8,
+      "resolved": 7,
+      "remaining": [
+        {
+          "name": "Vin blanc (cuisine)",
+          "reason": "La quantité de « Vin blanc (cuisine) » est inconnue.",
+          "unknown": true
+        }
+      ],
+      "conversions": [
+        {
+          "name": "Vin blanc (cuisine)",
+          "reason": "Besoin conservé : 0 selon convenance de « Vin blanc (cuisine) ». Aucune équivalence explicite ne permet de convertir en Millilitre. L'association officielle et le rangement automatique restent en attente."
+        }
+      ]
+    },
+    {
+      "recipe": "Œufs en meurette",
+      "lines": 16,
+      "resolved": 15,
+      "remaining": [
+        {
+          "name": "Persil plat",
+          "reason": "La quantité de « Persil plat » est inconnue.",
+          "unknown": true
+        }
+      ],
+      "conversions": [
+        {
+          "name": "Persil plat",
+          "reason": "Besoin conservé : 0 selon gout de « Persil plat ». Aucune équivalence explicite ne permet de convertir en Gramme. L'association officielle et le rangement automatique restent en attente."
+        }
+      ]
+    },
+    {
+      "recipe": "La Tartiflette au Reblochon ",
+      "lines": 7,
+      "resolved": 7,
+      "remaining": [],
+      "conversions": []
+    },
+    {
+      "recipe": "Risotto aux champignons",
+      "lines": 14,
+      "resolved": 14,
+      "remaining": [],
+      "conversions": []
+    },
+    {
+      "recipe": "Le michon breton",
+      "lines": 8,
+      "resolved": 7,
+      "remaining": [
+        {
+          "name": "Confiture d'abricot",
+          "reason": "La quantité de « Confiture d'abricot » est inconnue.",
+          "unknown": true
+        }
+      ],
+      "conversions": [
+        {
+          "name": "Confiture d'abricot",
+          "reason": "Besoin conservé : 0 piece de « Confiture d'abricot ». Aucune équivalence explicite ne permet de convertir en Gramme. L'association officielle et le rangement automatique restent en attente."
+        }
+      ]
+    },
+    {
+      "recipe": "Hachis parmentier",
+      "lines": 7,
+      "resolved": 7,
+      "remaining": [],
+      "conversions": []
+    },
+    {
+      "recipe": "Œufs en meurette faciles",
+      "lines": 12,
+      "resolved": 12,
+      "remaining": [],
+      "conversions": []
+    },
+    {
+      "recipe": "Filet mignon séché maison",
+      "lines": 5,
+      "resolved": 5,
+      "remaining": [],
+      "conversions": []
+    },
+    {
+      "recipe": "Mousse au chocolat",
+      "lines": 4,
+      "resolved": 4,
+      "remaining": [],
+      "conversions": []
+    },
+    {
+      "recipe": "Courgettes au Air Fryer",
+      "lines": 6,
+      "resolved": 6,
+      "remaining": [],
+      "conversions": []
+    },
+    {
+      "recipe": "Poulet à la Gaston Gérard facile",
+      "lines": 10,
+      "resolved": 10,
+      "remaining": [],
+      "conversions": []
+    },
+    {
+      "recipe": "Filet mignon rôti au Airfryer",
+      "lines": 6,
+      "resolved": 6,
+      "remaining": [],
+      "conversions": []
+    },
+    {
+      "recipe": "Tarte Rustique à la crème de noix et prunes",
+      "lines": 7,
+      "resolved": 6,
+      "remaining": [
+        {
+          "name": "demi-quetsches et demi-reines-claudes congelées",
+          "reason": "« demi-quetsches et demi-reines-claudes congelées » n'est pas encore associé à un ingrédient officiel. Aucun stock n'a été déduit.",
+          "unknown": false
+        }
+      ],
+      "conversions": []
+    },
+    {
+      "recipe": "Quiche aux figues, chèvre, miel et romarin",
+      "lines": 9,
+      "resolved": 9,
+      "remaining": [],
+      "conversions": []
+    },
+    {
+      "recipe": "Tarte amandine aux figues",
+      "lines": 6,
+      "resolved": 6,
+      "remaining": [],
+      "conversions": []
+    },
+    {
+      "recipe": "Sablé Breton de Christophe Felder",
+      "lines": 6,
+      "resolved": 6,
+      "remaining": [],
+      "conversions": []
+    },
+    {
+      "recipe": "Croque-monsieur aux figues, chèvre et jambon",
+      "lines": 6,
+      "resolved": 6,
+      "remaining": [],
+      "conversions": []
+    },
+    {
+      "recipe": "Tarte fine aux raisins, figues et fromage de chèvre",
+      "lines": 9,
+      "resolved": 9,
+      "remaining": [],
+      "conversions": []
+    },
+    {
+      "recipe": "Figues grillées à la pancetta",
+      "lines": 5,
+      "resolved": 5,
+      "remaining": [],
+      "conversions": []
+    },
+    {
+      "recipe": "Tarte aux tomates cerises à la moutarde et à l'emmental",
+      "lines": 8,
+      "resolved": 8,
+      "remaining": [],
+      "conversions": []
+    },
+    {
+      "recipe": "Mijoté de cocos de Paimpol au porc et oignons de Roscoff",
+      "lines": 13,
+      "resolved": 13,
+      "remaining": [],
+      "conversions": []
+    },
+    {
+      "recipe": "Sauce hollandaise",
+      "lines": 6,
+      "resolved": 6,
+      "remaining": [],
+      "conversions": []
+    },
+    {
+      "recipe": "Popcorn de poulet au sesame",
+      "lines": 0,
+      "resolved": 0,
+      "remaining": [],
+      "conversions": []
+    },
+    {
+      "recipe": "Crevettes au bacon ",
+      "lines": 8,
+      "resolved": 4,
+      "remaining": [
+        {
+          "name": "Crevette",
+          "reason": "La quantité de « Crevette » est inconnue.",
+          "unknown": true
+        },
+        {
+          "name": "Ail",
+          "reason": "Ail : Pièce est interdite. Préciser Gousse, ou une masse en grammes, dans la recette.",
+          "unknown": true
+        },
+        {
+          "name": "Bacon",
+          "reason": "La quantité de « Bacon » est inconnue.",
+          "unknown": true
+        },
+        {
+          "name": "Mayonnaise",
+          "reason": "La quantité de « Mayonnaise » est inconnue.",
+          "unknown": true
+        }
+      ],
+      "conversions": [
+        {
+          "name": "Mayonnaise",
+          "reason": "Besoin conservé : 0 piece de « Mayonnaise ». Aucune équivalence explicite ne permet de convertir en Gramme. L'association officielle et le rangement automatique restent en attente."
+        }
+      ]
+    },
+    {
+      "recipe": "Méli-mélo de fruits d'été",
+      "lines": 10,
+      "resolved": 10,
+      "remaining": [],
+      "conversions": []
+    },
+    {
+      "recipe": "Mijoté de cocos de Paimpol au porc et oignons de Roscoff",
+      "lines": 13,
+      "resolved": 13,
+      "remaining": [],
+      "conversions": []
+    },
+    {
+      "recipe": "Comment préparer et cuire le Coco de Paimpol AOP",
+      "lines": 7,
+      "resolved": 7,
+      "remaining": [],
+      "conversions": []
+    },
+    {
+      "recipe": "Salade estivale de Coco de Paimpol AOP",
+      "lines": 10,
+      "resolved": 9,
+      "remaining": [
+        {
+          "name": "Ciboulette et persil frais",
+          "reason": "« Ciboulette et persil frais » n'est pas encore associé à un ingrédient officiel. Aucun stock n'a été déduit.",
+          "unknown": false
+        }
+      ],
+      "conversions": []
+    },
+    {
+      "recipe": "Tajine de légumes",
+      "lines": 15,
+      "resolved": 15,
+      "remaining": [],
+      "conversions": []
+    },
+    {
+      "recipe": "Soupe à l’oignon (la meilleure)",
+      "lines": 13,
+      "resolved": 13,
+      "remaining": [],
+      "conversions": []
+    },
+    {
+      "recipe": "Tarte amandine aux poires pochées",
+      "lines": 10,
+      "resolved": 10,
+      "remaining": [],
+      "conversions": []
+    },
+    {
+      "recipe": "Tarte aux pêches, citron vert et romarin façon Ottolenghi",
+      "lines": 9,
+      "resolved": 9,
+      "remaining": [],
+      "conversions": []
+    },
+    {
+      "recipe": "Pot-au-feu",
+      "lines": 12,
+      "resolved": 12,
+      "remaining": [],
+      "conversions": []
+    },
+    {
+      "recipe": "Hachis parmentier de canard",
+      "lines": 11,
+      "resolved": 11,
+      "remaining": [],
+      "conversions": []
+    },
+    {
+      "recipe": "Cake à la compote de pommes",
+      "lines": 9,
+      "resolved": 8,
+      "remaining": [
+        {
+          "name": "morceaux de pommes, noix ou noisettes (facultatif)",
+          "reason": "La quantité de « morceaux de pommes, noix ou noisettes (facultatif) » est inconnue.",
+          "unknown": true
+        }
+      ],
+      "conversions": []
+    },
+    {
+      "recipe": "Poulet à la Gaston Gérard facile",
+      "lines": 9,
+      "resolved": 9,
+      "remaining": [],
+      "conversions": []
+    },
+    {
+      "recipe": "Gambas aux échalotes et vin blanc",
+      "lines": 9,
+      "resolved": 9,
+      "remaining": [],
+      "conversions": []
+    },
+    {
+      "recipe": "Gâteau au citron ultra fondant",
+      "lines": 8,
+      "resolved": 8,
+      "remaining": [],
+      "conversions": []
+    },
+    {
+      "recipe": "Quatre-quarts traditionnel",
+      "lines": 4,
+      "resolved": 4,
+      "remaining": [],
+      "conversions": []
+    },
+    {
+      "recipe": "Cassoulet breton de Coco de Paimpol AOP",
+      "lines": 11,
+      "resolved": 11,
+      "remaining": [],
+      "conversions": []
+    },
+    {
+      "recipe": "Velouté de châtaigne de Cyril Lignac",
+      "lines": 7,
+      "resolved": 7,
+      "remaining": [],
+      "conversions": []
+    }
+  ]
+}

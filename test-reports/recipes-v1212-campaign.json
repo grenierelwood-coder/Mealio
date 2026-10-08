@@ -1,0 +1,567 @@
+{
+  "recipes": 56,
+  "scope": "56 recettes exportées + propositions v1.2.12 ; stock et Claude simulés. Pas un test Supabase réel.",
+  "resolved": 475,
+  "report": [
+    {
+      "id": "e2035bf0-c847-42e4-9f7a-adeb8059301e",
+      "title": "Tian de tomates, courgettes et aubergines",
+      "lines": 10,
+      "resolved": 10,
+      "estimated": 0,
+      "unknown": [],
+      "unresolved": [],
+      "conversionIssues": []
+    },
+    {
+      "id": "6e02c3f8-1baf-40a2-a0c8-e800686fa169",
+      "title": "Pommes de terre rôties à la suédoise",
+      "lines": 6,
+      "resolved": 6,
+      "estimated": 0,
+      "unknown": [],
+      "unresolved": [],
+      "conversionIssues": []
+    },
+    {
+      "id": "4993b615-7302-4683-b38d-6e82b3ed5ffb",
+      "title": "Gougères au fromage de Valí ",
+      "lines": 5,
+      "resolved": 5,
+      "estimated": 0,
+      "unknown": [],
+      "unresolved": [],
+      "conversionIssues": []
+    },
+    {
+      "id": "9093f24a-ba08-47d6-8f96-8db0bdeec87f",
+      "title": "Recette œuf Bénédicte",
+      "lines": 9,
+      "resolved": 9,
+      "estimated": 2,
+      "unknown": [],
+      "unresolved": [],
+      "conversionIssues": []
+    },
+    {
+      "id": "377291a6-cf3c-416e-b927-46b128d650f1",
+      "title": "Tarte aux épinards et chèvre",
+      "lines": 7,
+      "resolved": 7,
+      "estimated": 0,
+      "unknown": [],
+      "unresolved": [],
+      "conversionIssues": []
+    },
+    {
+      "id": "86599d6b-428d-458d-af49-36784456c09f",
+      "title": "Tarte fine aux courgettes et Boursin",
+      "lines": 5,
+      "resolved": 5,
+      "estimated": 1,
+      "unknown": [],
+      "unresolved": [],
+      "conversionIssues": []
+    },
+    {
+      "id": "96b805d2-75fe-4f9c-ac6f-a7bd98f21756",
+      "title": "Cake d'été",
+      "lines": 11,
+      "resolved": 11,
+      "estimated": 3,
+      "unknown": [],
+      "unresolved": [],
+      "conversionIssues": []
+    },
+    {
+      "id": "e682d519-3874-4ed7-859b-f68666150282",
+      "title": "Tendrons de veau à la gardiane",
+      "lines": 13,
+      "resolved": 13,
+      "estimated": 4,
+      "unknown": [],
+      "unresolved": [],
+      "conversionIssues": []
+    },
+    {
+      "id": "09603a0f-6dbb-4bf7-a971-281d06cb7fda",
+      "title": "Le crumble aux pommes du chat qui tousse",
+      "lines": 7,
+      "resolved": 7,
+      "estimated": 0,
+      "unknown": [],
+      "unresolved": [],
+      "conversionIssues": []
+    },
+    {
+      "id": "19305dab-f838-4477-a330-89f4ad5757d8",
+      "title": "Crème brûlée géante ",
+      "lines": 5,
+      "resolved": 5,
+      "estimated": 0,
+      "unknown": [],
+      "unresolved": [],
+      "conversionIssues": []
+    },
+    {
+      "id": "9428614f-76ad-4fc0-a05a-6db45ec14f84",
+      "title": "Gâteau aux pêches de Jeanine Laurent",
+      "lines": 8,
+      "resolved": 8,
+      "estimated": 0,
+      "unknown": [],
+      "unresolved": [],
+      "conversionIssues": []
+    },
+    {
+      "id": "c558eff5-c8fc-4200-ada6-3c05febc6991",
+      "title": "Pommes de terre vigneronnes",
+      "lines": 6,
+      "resolved": 6,
+      "estimated": 1,
+      "unknown": [],
+      "unresolved": [],
+      "conversionIssues": []
+    },
+    {
+      "id": "50391f36-35dd-4e4e-b6d8-a5d59b51cffa",
+      "title": "Gratin de courgettes",
+      "lines": 10,
+      "resolved": 10,
+      "estimated": 5,
+      "unknown": [],
+      "unresolved": [],
+      "conversionIssues": []
+    },
+    {
+      "id": "08788652-f0cc-4140-be73-495ee4ebb2ad",
+      "title": "Barbotton",
+      "lines": 6,
+      "resolved": 6,
+      "estimated": 2,
+      "unknown": [],
+      "unresolved": [],
+      "conversionIssues": []
+    },
+    {
+      "id": "0dd5a4e1-be8c-4d33-ad36-7480d2963aa7",
+      "title": "Pâte brisée, salée ou sucrée façon Vali",
+      "lines": 3,
+      "resolved": 3,
+      "estimated": 0,
+      "unknown": [],
+      "unresolved": [],
+      "conversionIssues": []
+    },
+    {
+      "id": "be542b36-ca36-411c-ba1c-a188a9133296",
+      "title": "Rillettes de saumon frais et fumé / recette d'Oma pour nos fiançailles !!",
+      "lines": 8,
+      "resolved": 8,
+      "estimated": 3,
+      "unknown": [],
+      "unresolved": [],
+      "conversionIssues": []
+    },
+    {
+      "id": "452a35a5-0962-4002-8075-2bf57a8ddb2e",
+      "title": "Œufs en meurette",
+      "lines": 16,
+      "resolved": 16,
+      "estimated": 3,
+      "unknown": [],
+      "unresolved": [],
+      "conversionIssues": []
+    },
+    {
+      "id": "4e93c746-3b57-4374-90d4-bfec92a8b670",
+      "title": "La Tartiflette au Reblochon ",
+      "lines": 7,
+      "resolved": 7,
+      "estimated": 3,
+      "unknown": [],
+      "unresolved": [],
+      "conversionIssues": []
+    },
+    {
+      "id": "9b3f1c94-e80d-4894-8953-8e688878750f",
+      "title": "Risotto aux champignons",
+      "lines": 13,
+      "resolved": 13,
+      "estimated": 2,
+      "unknown": [],
+      "unresolved": [],
+      "conversionIssues": []
+    },
+    {
+      "id": "ea5ec85d-c789-45ba-a311-07562c901537",
+      "title": "Le michon breton",
+      "lines": 8,
+      "resolved": 8,
+      "estimated": 1,
+      "unknown": [],
+      "unresolved": [],
+      "conversionIssues": []
+    },
+    {
+      "id": "cb58fecb-27a9-4e18-9ddc-cf5f6fed96cd",
+      "title": "Hachis parmentier",
+      "lines": 7,
+      "resolved": 7,
+      "estimated": 0,
+      "unknown": [],
+      "unresolved": [],
+      "conversionIssues": []
+    },
+    {
+      "id": "23970d8e-5e26-4c51-a624-71fc1269c94b",
+      "title": "Œufs en meurette faciles",
+      "lines": 12,
+      "resolved": 12,
+      "estimated": 2,
+      "unknown": [],
+      "unresolved": [],
+      "conversionIssues": []
+    },
+    {
+      "id": "b291e0a3-15ad-4c90-8db3-6097150b4781",
+      "title": "Filet mignon séché maison",
+      "lines": 5,
+      "resolved": 5,
+      "estimated": 0,
+      "unknown": [],
+      "unresolved": [],
+      "conversionIssues": []
+    },
+    {
+      "id": "206d7cfe-5e67-40ba-8db3-5978fe520f5d",
+      "title": "Mousse au chocolat",
+      "lines": 4,
+      "resolved": 4,
+      "estimated": 0,
+      "unknown": [],
+      "unresolved": [],
+      "conversionIssues": []
+    },
+    {
+      "id": "e416b5ea-5ef1-4c76-9172-b4f6207720b8",
+      "title": "Courgettes au Air Fryer",
+      "lines": 6,
+      "resolved": 6,
+      "estimated": 0,
+      "unknown": [],
+      "unresolved": [],
+      "conversionIssues": []
+    },
+    {
+      "id": "970eed2f-8df4-4f36-85fa-9e6b65e64e8d",
+      "title": "Poulet à la Gaston Gérard facile",
+      "lines": 10,
+      "resolved": 10,
+      "estimated": 0,
+      "unknown": [],
+      "unresolved": [],
+      "conversionIssues": []
+    },
+    {
+      "id": "99728d24-9fe2-4941-919e-1a39704a22a3",
+      "title": "Filet mignon rôti au Airfryer",
+      "lines": 6,
+      "resolved": 6,
+      "estimated": 0,
+      "unknown": [],
+      "unresolved": [],
+      "conversionIssues": []
+    },
+    {
+      "id": "458083ef-40d4-41d2-9fa9-b109a07007e9",
+      "title": "Tarte Rustique à la crème de noix et prunes",
+      "lines": 8,
+      "resolved": 8,
+      "estimated": 2,
+      "unknown": [],
+      "unresolved": [],
+      "conversionIssues": []
+    },
+    {
+      "id": "818bb95d-32fd-421c-87a2-192a9582680e",
+      "title": "Quiche aux figues, chèvre, miel et romarin",
+      "lines": 9,
+      "resolved": 9,
+      "estimated": 0,
+      "unknown": [],
+      "unresolved": [],
+      "conversionIssues": []
+    },
+    {
+      "id": "41a77930-b1e8-4545-ac0e-ebfa2cd7af7b",
+      "title": "Tarte amandine aux figues",
+      "lines": 6,
+      "resolved": 6,
+      "estimated": 0,
+      "unknown": [],
+      "unresolved": [],
+      "conversionIssues": []
+    },
+    {
+      "id": "0876a07b-60b9-4be3-a74c-76183adf4540",
+      "title": "Sablé Breton de Christophe Felder",
+      "lines": 6,
+      "resolved": 6,
+      "estimated": 0,
+      "unknown": [],
+      "unresolved": [],
+      "conversionIssues": []
+    },
+    {
+      "id": "055ac3ce-22b3-4724-8772-3f40521d8b8f",
+      "title": "Croque-monsieur aux figues, chèvre et jambon",
+      "lines": 6,
+      "resolved": 6,
+      "estimated": 0,
+      "unknown": [],
+      "unresolved": [],
+      "conversionIssues": []
+    },
+    {
+      "id": "57cb92d4-a44f-41a6-9202-8436f081ccb0",
+      "title": "Tarte fine aux raisins, figues et fromage de chèvre",
+      "lines": 9,
+      "resolved": 9,
+      "estimated": 2,
+      "unknown": [],
+      "unresolved": [],
+      "conversionIssues": []
+    },
+    {
+      "id": "302c03dc-da58-48e7-8284-36f9a38cf982",
+      "title": "Figues grillées à la pancetta",
+      "lines": 5,
+      "resolved": 5,
+      "estimated": 0,
+      "unknown": [],
+      "unresolved": [],
+      "conversionIssues": []
+    },
+    {
+      "id": "30aa216f-0e58-4ac5-bc5d-3d4caa26d069",
+      "title": "Tarte aux tomates cerises à la moutarde et à l'emmental",
+      "lines": 8,
+      "resolved": 8,
+      "estimated": 0,
+      "unknown": [],
+      "unresolved": [],
+      "conversionIssues": []
+    },
+    {
+      "id": "c794f891-2240-41bf-aee2-e32e8df17c6b",
+      "title": "Mijoté de cocos de Paimpol au porc et oignons de Roscoff",
+      "lines": 13,
+      "resolved": 13,
+      "estimated": 1,
+      "unknown": [],
+      "unresolved": [],
+      "conversionIssues": []
+    },
+    {
+      "id": "f5fa2b24-be9d-477e-bdfb-a10347e21463",
+      "title": "Sauce hollandaise",
+      "lines": 6,
+      "resolved": 6,
+      "estimated": 0,
+      "unknown": [],
+      "unresolved": [],
+      "conversionIssues": []
+    },
+    {
+      "id": "2b6ecb9a-77d4-4398-9e95-f8fe8cdb6aed",
+      "title": "Popcorn de poulet au sesame",
+      "lines": 13,
+      "resolved": 13,
+      "estimated": 12,
+      "unknown": [],
+      "unresolved": [],
+      "conversionIssues": []
+    },
+    {
+      "id": "c36b54b2-4f83-488c-b3db-4b465df01e6f",
+      "title": "Crevettes au bacon ",
+      "lines": 8,
+      "resolved": 8,
+      "estimated": 8,
+      "unknown": [],
+      "unresolved": [],
+      "conversionIssues": []
+    },
+    {
+      "id": "81e08e94-0225-47a2-99aa-58f35040fab3",
+      "title": "Méli-mélo de fruits d'été",
+      "lines": 10,
+      "resolved": 10,
+      "estimated": 0,
+      "unknown": [],
+      "unresolved": [],
+      "conversionIssues": []
+    },
+    {
+      "id": "a70ca0a7-b231-47b7-bc04-58b83ba8025c",
+      "title": "Mijoté de cocos de Paimpol au porc et oignons de Roscoff",
+      "lines": 13,
+      "resolved": 13,
+      "estimated": 1,
+      "unknown": [],
+      "unresolved": [],
+      "conversionIssues": []
+    },
+    {
+      "id": "b9497dc8-897c-4387-8ca8-41ce2e771e92",
+      "title": "Comment préparer et cuire le Coco de Paimpol AOP",
+      "lines": 7,
+      "resolved": 7,
+      "estimated": 0,
+      "unknown": [],
+      "unresolved": [],
+      "conversionIssues": []
+    },
+    {
+      "id": "e0275312-464b-4586-bf84-84258a6946f9",
+      "title": "Salade estivale de Coco de Paimpol AOP",
+      "lines": 11,
+      "resolved": 11,
+      "estimated": 2,
+      "unknown": [],
+      "unresolved": [],
+      "conversionIssues": []
+    },
+    {
+      "id": "0829e021-fd21-4ef3-8cca-95b2e5487e85",
+      "title": "Tajine de légumes",
+      "lines": 15,
+      "resolved": 15,
+      "estimated": 0,
+      "unknown": [],
+      "unresolved": [],
+      "conversionIssues": []
+    },
+    {
+      "id": "7a5ced7f-a3ea-4719-b12a-349429c6459c",
+      "title": "Soupe à l’oignon (la meilleure)",
+      "lines": 13,
+      "resolved": 13,
+      "estimated": 2,
+      "unknown": [],
+      "unresolved": [],
+      "conversionIssues": []
+    },
+    {
+      "id": "4b2a51db-0dc5-40e6-aa37-550a56a450af",
+      "title": "Tarte amandine aux poires pochées",
+      "lines": 8,
+      "resolved": 8,
+      "estimated": 0,
+      "unknown": [],
+      "unresolved": [],
+      "conversionIssues": []
+    },
+    {
+      "id": "a9340473-1f59-4d05-8599-5ff607a48a96",
+      "title": "Tarte aux pêches, citron vert et romarin façon Ottolenghi",
+      "lines": 9,
+      "resolved": 9,
+      "estimated": 0,
+      "unknown": [],
+      "unresolved": [],
+      "conversionIssues": []
+    },
+    {
+      "id": "83d7443d-30d3-4f51-ad33-a85ef231cd8d",
+      "title": "Pot-au-feu",
+      "lines": 12,
+      "resolved": 12,
+      "estimated": 2,
+      "unknown": [],
+      "unresolved": [],
+      "conversionIssues": []
+    },
+    {
+      "id": "1c7d3210-a7d2-4956-804a-2e893f70eeb5",
+      "title": "Hachis parmentier de canard",
+      "lines": 11,
+      "resolved": 11,
+      "estimated": 0,
+      "unknown": [],
+      "unresolved": [],
+      "conversionIssues": []
+    },
+    {
+      "id": "e0a837b2-6012-4f5a-867c-68c17d823c0c",
+      "title": "Cake à la compote de pommes",
+      "lines": 8,
+      "resolved": 8,
+      "estimated": 0,
+      "unknown": [],
+      "unresolved": [],
+      "conversionIssues": []
+    },
+    {
+      "id": "a1cfaf0a-c0b8-40c1-a5a5-45ded138315b",
+      "title": "Poulet à la Gaston Gérard facile",
+      "lines": 9,
+      "resolved": 9,
+      "estimated": 0,
+      "unknown": [],
+      "unresolved": [],
+      "conversionIssues": []
+    },
+    {
+      "id": "34784d16-6980-4530-96b1-1797fa0e5864",
+      "title": "Gambas aux échalotes et vin blanc",
+      "lines": 9,
+      "resolved": 9,
+      "estimated": 0,
+      "unknown": [],
+      "unresolved": [],
+      "conversionIssues": []
+    },
+    {
+      "id": "14faa023-4542-40e4-b2fb-86ce03b3ae20",
+      "title": "Gâteau au citron ultra fondant",
+      "lines": 8,
+      "resolved": 8,
+      "estimated": 0,
+      "unknown": [],
+      "unresolved": [],
+      "conversionIssues": []
+    },
+    {
+      "id": "3c2f1578-bdc5-4cba-94d4-e46fe87cb382",
+      "title": "Quatre-quarts traditionnel",
+      "lines": 4,
+      "resolved": 4,
+      "estimated": 0,
+      "unknown": [],
+      "unresolved": [],
+      "conversionIssues": []
+    },
+    {
+      "id": "70e831d1-cf92-4ca9-b566-ce3e86c65d88",
+      "title": "Cassoulet breton de Coco de Paimpol AOP",
+      "lines": 11,
+      "resolved": 11,
+      "estimated": 2,
+      "unknown": [],
+      "unresolved": [],
+      "conversionIssues": []
+    },
+    {
+      "id": "65ba7320-a9c2-4cf4-ad08-be7059168734",
+      "title": "Velouté de châtaigne de Cyril Lignac",
+      "lines": 7,
+      "resolved": 7,
+      "estimated": 0,
+      "unknown": [],
+      "unresolved": [],
+      "conversionIssues": []
+    }
+  ]
+}

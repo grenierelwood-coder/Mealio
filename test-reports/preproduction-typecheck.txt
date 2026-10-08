@@ -1,0 +1,4 @@
+
+> mealio@1.2.27 typecheck
+> tsc --noEmit
+

@@ -1,3 +1,4 @@
+import { parseIngredients } from '../../../../../utils/cookiwiki-fetcher'
 import { NextResponse } from 'next/server'
 import { cookiwikiServerDb } from '../../../../../lib/supabase-server'
 import { getAuthSession } from '../../../../../utils/auth-server'
@@ -33,7 +34,7 @@ export async function GET() {
     const session = await getAuthSession()
     if (!session) return NextResponse.json({ error: 'Non authentifié.' }, { status: 401 })
 
-    const [recipes, refData] = await Promise.all([loadAllRecipes(), loadReferenceData()])
+    const [recipes, refData] = await Promise.all([loadAllRecipes(), loadReferenceData(session.username)])
     const unitMap = new Map(refData.unitMappings.map(u => [normalizeUnitKey(u.unite), u.unite]))
     const aliasMap = new Map<string, string>()
     for (const unit of refData.unitMappings) if (unit.abreviation) aliasMap.set(normalizeUnitKey(unit.abreviation), unit.unite)
@@ -43,11 +44,11 @@ export async function GET() {
 
     for (const recipe of recipes) {
       recipeCount += 1
-      for (const ingredient of recipe.ingredients ?? []) {
+      for (const ingredient of parseIngredients(recipe.ingredients)) {
         const raw = String(ingredient.name ?? '').trim()
         if (!raw) continue
         ingredientLineCount += 1
-        const result = resolveIngredientDeterministic(raw, refData)
+        const result = ingredient.preparationIssue ? {source:'unresolved',id:null,score:0} : resolveIngredientDeterministic(raw, refData)
         if (result.source === 'ignored') ignoredCount += 1
         else if (result.id) recognizedCount += 1
         else {

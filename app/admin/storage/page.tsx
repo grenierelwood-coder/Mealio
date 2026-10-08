@@ -135,7 +135,7 @@ export default function StorageAdminPage() {
 
     fetch('/api/admin/storage/ingredients', { cache: 'no-store' })
       .then(r => (r.ok ? r.json() : null))
-      .then(j => setIngredients(Array.isArray(j?.ingredients) ? j.ingredients : []))
+      .then(j => {const items=Array.isArray(j?.ingredients)?j.ingredients:[];setIngredients(items);const params=new URLSearchParams(window.location.search);const id=params.get('ingredient_id');if(id&&items.some((i:{id:string})=>i.id===id)){const source=params.get('source')==='frosti'?'frosti':'cellio';setForm({...initialForm,source,scope:'ingredient',ingredient_id:id,location_id:''})}})
       .catch(() => {})
   }, [])
 
@@ -280,7 +280,7 @@ export default function StorageAdminPage() {
               Administration
             </p>
 
-            <h1 className="mt-1 text-2xl font-black sm:text-3xl">
+            <Link href="/admin/storage/pending" className="mt-2 inline-block font-bold text-emerald-700 underline">Articles à ranger · revenir après correction →</Link><h1 className="mt-1 text-2xl font-black sm:text-3xl">
               Règles de rangement
             </h1>
 

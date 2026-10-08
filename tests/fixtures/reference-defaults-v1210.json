@@ -1,0 +1,1434 @@
+{
+  "masses": [
+    {
+      "ingredient_name": "Ail",
+      "unite": "Gousse",
+      "grams": 5
+    },
+    {
+      "ingredient_name": "Ail",
+      "unite": "Tête",
+      "grams": 50
+    },
+    {
+      "ingredient_name": "Ail",
+      "unite": "Cuillère à café",
+      "grams": 3
+    },
+    {
+      "ingredient_name": "Ail",
+      "unite": "Cuillère à soupe",
+      "grams": 9
+    },
+    {
+      "ingredient_name": "Oignon",
+      "unite": "Pièce",
+      "grams": 150
+    },
+    {
+      "ingredient_name": "Oignon jaune",
+      "unite": "Pièce",
+      "grams": 150
+    },
+    {
+      "ingredient_name": "Oignon blanc",
+      "unite": "Pièce",
+      "grams": 150
+    },
+    {
+      "ingredient_name": "Oignon rouge",
+      "unite": "Pièce",
+      "grams": 150
+    },
+    {
+      "ingredient_name": "Échalote",
+      "unite": "Pièce",
+      "grams": 25
+    },
+    {
+      "ingredient_name": "Carotte",
+      "unite": "Pièce",
+      "grams": 80
+    },
+    {
+      "ingredient_name": "Courgette",
+      "unite": "Pièce",
+      "grams": 250
+    },
+    {
+      "ingredient_name": "Aubergine",
+      "unite": "Pièce",
+      "grams": 300
+    },
+    {
+      "ingredient_name": "Navet",
+      "unite": "Pièce",
+      "grams": 150
+    },
+    {
+      "ingredient_name": "Poivron rouge",
+      "unite": "Pièce",
+      "grams": 150
+    },
+    {
+      "ingredient_name": "Poivron jaune",
+      "unite": "Pièce",
+      "grams": 150
+    },
+    {
+      "ingredient_name": "Poivron vert",
+      "unite": "Pièce",
+      "grams": 150
+    },
+    {
+      "ingredient_name": "Pomme de terre",
+      "unite": "Pièce",
+      "grams": 150
+    },
+    {
+      "ingredient_name": "Pomme",
+      "unite": "Pièce",
+      "grams": 180
+    },
+    {
+      "ingredient_name": "Poire",
+      "unite": "Pièce",
+      "grams": 180
+    },
+    {
+      "ingredient_name": "Pêche",
+      "unite": "Pièce",
+      "grams": 150
+    },
+    {
+      "ingredient_name": "Nectarine",
+      "unite": "Pièce",
+      "grams": 150
+    },
+    {
+      "ingredient_name": "Prune",
+      "unite": "Pièce",
+      "grams": 40
+    },
+    {
+      "ingredient_name": "Figue",
+      "unite": "Pièce",
+      "grams": 50
+    },
+    {
+      "ingredient_name": "Citron",
+      "unite": "Pièce",
+      "grams": 100
+    },
+    {
+      "ingredient_name": "Citron vert",
+      "unite": "Pièce",
+      "grams": 70
+    },
+    {
+      "ingredient_name": "Tomate",
+      "unite": "Pièce",
+      "grams": 150
+    },
+    {
+      "ingredient_name": "Tomate cerise",
+      "unite": "Pièce",
+      "grams": 15
+    },
+    {
+      "ingredient_name": "Poireau",
+      "unite": "Pièce",
+      "grams": 200
+    },
+    {
+      "ingredient_name": "Champignon de Paris",
+      "unite": "Pièce",
+      "grams": 20
+    },
+    {
+      "ingredient_name": "Œuf (poule)",
+      "unite": "Pièce",
+      "grams": 50
+    },
+    {
+      "ingredient_name": "Jaune d'œuf",
+      "unite": "Pièce",
+      "grams": 18
+    },
+    {
+      "ingredient_name": "Blanc d'œuf",
+      "unite": "Pièce",
+      "grams": 30
+    },
+    {
+      "ingredient_name": "Saucisse fraîche",
+      "unite": "Pièce",
+      "grams": 100
+    },
+    {
+      "ingredient_name": "Saucisse de Toulouse",
+      "unite": "Pièce",
+      "grams": 125
+    },
+    {
+      "ingredient_name": "Canard (cuisse confite)",
+      "unite": "Pièce",
+      "grams": 250
+    },
+    {
+      "ingredient_name": "Filet mignon de porc",
+      "unite": "Pièce",
+      "grams": 500
+    },
+    {
+      "ingredient_name": "Crevette",
+      "unite": "Pièce",
+      "grams": 10
+    },
+    {
+      "ingredient_name": "Gambas",
+      "unite": "Pièce",
+      "grams": 20
+    },
+    {
+      "ingredient_name": "Bacon",
+      "unite": "Tranche",
+      "grams": 20
+    },
+    {
+      "ingredient_name": "Bacon",
+      "unite": "Pièce",
+      "grams": 20
+    },
+    {
+      "ingredient_name": "Pancetta",
+      "unite": "Tranche",
+      "grams": 15
+    },
+    {
+      "ingredient_name": "Jambon blanc",
+      "unite": "Tranche",
+      "grams": 40
+    },
+    {
+      "ingredient_name": "Jambon cru",
+      "unite": "Tranche",
+      "grams": 25
+    },
+    {
+      "ingredient_name": "Pain de mie",
+      "unite": "Tranche",
+      "grams": 30
+    },
+    {
+      "ingredient_name": "Baguette",
+      "unite": "Tranche",
+      "grams": 20
+    },
+    {
+      "ingredient_name": "Baguette",
+      "unite": "Pièce",
+      "grams": 250
+    },
+    {
+      "ingredient_name": "Pâte brisée",
+      "unite": "Rouleau",
+      "grams": 230
+    },
+    {
+      "ingredient_name": "Pâte brisée",
+      "unite": "Pièce",
+      "grams": 230
+    },
+    {
+      "ingredient_name": "Pâte feuilletée",
+      "unite": "Rouleau",
+      "grams": 230
+    },
+    {
+      "ingredient_name": "Pâte feuilletée",
+      "unite": "Pièce",
+      "grams": 230
+    },
+    {
+      "ingredient_name": "Pâte sablée",
+      "unite": "Rouleau",
+      "grams": 230
+    },
+    {
+      "ingredient_name": "Pâte sablée",
+      "unite": "Pièce",
+      "grams": 230
+    },
+    {
+      "ingredient_name": "Chèvre (fromage)",
+      "unite": "Pièce",
+      "grams": 200
+    },
+    {
+      "ingredient_name": "Reblochon",
+      "unite": "Pièce",
+      "grams": 450
+    },
+    {
+      "ingredient_name": "Feta",
+      "unite": "Morceau",
+      "grams": 30
+    },
+    {
+      "ingredient_name": "Coriandre fraîche",
+      "unite": "Bouquet",
+      "grams": 30
+    },
+    {
+      "ingredient_name": "Coriandre fraîche",
+      "unite": "Botte",
+      "grams": 30
+    },
+    {
+      "ingredient_name": "Coriandre fraîche",
+      "unite": "Brin",
+      "grams": 1
+    },
+    {
+      "ingredient_name": "Basilic",
+      "unite": "Bouquet",
+      "grams": 30
+    },
+    {
+      "ingredient_name": "Basilic",
+      "unite": "Botte",
+      "grams": 30
+    },
+    {
+      "ingredient_name": "Basilic",
+      "unite": "Brin",
+      "grams": 1
+    },
+    {
+      "ingredient_name": "Persil plat",
+      "unite": "Bouquet",
+      "grams": 30
+    },
+    {
+      "ingredient_name": "Persil plat",
+      "unite": "Botte",
+      "grams": 30
+    },
+    {
+      "ingredient_name": "Persil plat",
+      "unite": "Brin",
+      "grams": 1
+    },
+    {
+      "ingredient_name": "Persil plat",
+      "unite": "Cuillère à soupe",
+      "grams": 3
+    },
+    {
+      "ingredient_name": "Persil frisé",
+      "unite": "Bouquet",
+      "grams": 30
+    },
+    {
+      "ingredient_name": "Persil frisé",
+      "unite": "Botte",
+      "grams": 30
+    },
+    {
+      "ingredient_name": "Persil frisé",
+      "unite": "Brin",
+      "grams": 1
+    },
+    {
+      "ingredient_name": "Romarin frais",
+      "unite": "Brin",
+      "grams": 2
+    },
+    {
+      "ingredient_name": "Thym frais",
+      "unite": "Brin",
+      "grams": 1
+    },
+    {
+      "ingredient_name": "Laurier frais",
+      "unite": "Feuille",
+      "grams": 0.2
+    },
+    {
+      "ingredient_name": "Laurier frais",
+      "unite": "Brin",
+      "grams": 1
+    },
+    {
+      "ingredient_name": "Bouquet garni",
+      "unite": "Pièce",
+      "grams": 5
+    },
+    {
+      "ingredient_name": "Amande",
+      "unite": "Poignée",
+      "grams": 30
+    },
+    {
+      "ingredient_name": "Noix",
+      "unite": "Poignée",
+      "grams": 30
+    },
+    {
+      "ingredient_name": "Levure chimique",
+      "unite": "Sachet",
+      "grams": 11
+    },
+    {
+      "ingredient_name": "Levure chimique",
+      "unite": "Paquet",
+      "grams": 11
+    },
+    {
+      "ingredient_name": "Sucre vanillé",
+      "unite": "Sachet",
+      "grams": 8
+    },
+    {
+      "ingredient_name": "Sucre en morceaux",
+      "unite": "Pièce",
+      "grams": 5
+    },
+    {
+      "ingredient_name": "Beurre",
+      "unite": "Noix (de beurre)",
+      "grams": 10
+    },
+    {
+      "ingredient_name": "Jus de citron",
+      "unite": "Pièce",
+      "grams": 30
+    },
+    {
+      "ingredient_name": "Jus de citron",
+      "unite": "Filet",
+      "grams": 5
+    },
+    {
+      "ingredient_name": "Jus de citron",
+      "unite": "Millilitre",
+      "grams": 1
+    },
+    {
+      "ingredient_name": "Huile d'olive",
+      "unite": "Millilitre",
+      "grams": 0.92
+    },
+    {
+      "ingredient_name": "Huile de tournesol",
+      "unite": "Millilitre",
+      "grams": 0.92
+    },
+    {
+      "ingredient_name": "Huile de colza",
+      "unite": "Millilitre",
+      "grams": 0.92
+    },
+    {
+      "ingredient_name": "Mayonnaise",
+      "unite": "Cuillère à soupe",
+      "grams": 15
+    },
+    {
+      "ingredient_name": "Crème épaisse",
+      "unite": "Millilitre",
+      "grams": 1
+    },
+    {
+      "ingredient_name": "Crème liquide",
+      "unite": "Millilitre",
+      "grams": 1
+    },
+    {
+      "ingredient_name": "Lait demi-écrémé",
+      "unite": "Millilitre",
+      "grams": 1.03
+    },
+    {
+      "ingredient_name": "Lait entier",
+      "unite": "Millilitre",
+      "grams": 1.03
+    },
+    {
+      "ingredient_name": "Farine de blé",
+      "unite": "Millilitre",
+      "grams": 0.55
+    },
+    {
+      "ingredient_name": "Sucre en poudre",
+      "unite": "Millilitre",
+      "grams": 0.85
+    },
+    {
+      "ingredient_name": "Miel",
+      "unite": "Millilitre",
+      "grams": 1.4
+    },
+    {
+      "ingredient_name": "Concentré de tomate",
+      "unite": "Cuillère à soupe",
+      "grams": 18
+    },
+    {
+      "ingredient_name": "Cuisse de poulet",
+      "unite": "Pièce",
+      "grams": 250
+    },
+    {
+      "ingredient_name": "Poulet entier",
+      "unite": "Pièce",
+      "grams": 1200
+    },
+    {
+      "ingredient_name": "Vin blanc (cuisine)",
+      "unite": "Bouteille",
+      "grams": 750
+    },
+    {
+      "ingredient_name": "Vin blanc (cuisine)",
+      "unite": "Millilitre",
+      "grams": 1
+    },
+    {
+      "ingredient_name": "Vin rouge (cuisine)",
+      "unite": "Bouteille",
+      "grams": 750
+    },
+    {
+      "ingredient_name": "Vin rouge (cuisine)",
+      "unite": "Millilitre",
+      "grams": 1
+    },
+    {
+      "ingredient_name": "Tomate pelée (boîte)",
+      "unite": "Boîte",
+      "grams": 400
+    },
+    {
+      "ingredient_name": "Bouillon cube (bœuf)",
+      "unite": "Cube",
+      "grams": 10
+    },
+    {
+      "ingredient_name": "Bouillon cube (bœuf)",
+      "unite": "Pièce",
+      "grams": 10
+    },
+    {
+      "ingredient_name": "Bouillon cube (volaille)",
+      "unite": "Cube",
+      "grams": 10
+    },
+    {
+      "ingredient_name": "Bouillon cube (volaille)",
+      "unite": "Pièce",
+      "grams": 10
+    },
+    {
+      "ingredient_name": "Bouillon cube (légumes)",
+      "unite": "Cube",
+      "grams": 10
+    },
+    {
+      "ingredient_name": "Bouillon cube (légumes)",
+      "unite": "Pièce",
+      "grams": 10
+    },
+    {
+      "ingredient_name": "Ail en poudre",
+      "unite": "Cuillère à café",
+      "grams": 3
+    },
+    {
+      "ingredient_name": "Ail en poudre",
+      "unite": "Cuillère à soupe",
+      "grams": 9
+    },
+    {
+      "ingredient_name": "Moutarde de Dijon",
+      "unite": "Cuillère à soupe",
+      "grams": 15
+    },
+    {
+      "ingredient_name": "Moutarde à l'ancienne",
+      "unite": "Cuillère à soupe",
+      "grams": 15
+    },
+    {
+      "ingredient_name": "Pêche au sirop",
+      "unite": "Boîte",
+      "grams": 400
+    },
+    {
+      "ingredient_name": "Croûtons de pain",
+      "unite": "Pièce",
+      "grams": 3
+    },
+    {
+      "ingredient_name": "Céleri branche",
+      "unite": "Pièce",
+      "grams": 50
+    },
+    {
+      "ingredient_name": "Céleri branche",
+      "unite": "Brin",
+      "grams": 50
+    },
+    {
+      "ingredient_name": "Pâte sablée au parmesan",
+      "unite": "Pièce",
+      "grams": 230
+    },
+    {
+      "ingredient_name": "Ras-el-hanout",
+      "unite": "Cuillère à soupe",
+      "grams": 6
+    },
+    {
+      "ingredient_name": "Ras-el-hanout",
+      "unite": "Cuillère à café",
+      "grams": 2
+    }
+  ],
+  "reference_units": {
+    "Ail": "Gousse",
+    "Oignon": "Pièce",
+    "Oignon jaune": "Pièce",
+    "Oignon blanc": "Pièce",
+    "Oignon rouge": "Pièce",
+    "Échalote": "Pièce",
+    "Œuf (poule)": "Pièce",
+    "Jaune d'œuf": "Pièce",
+    "Blanc d'œuf": "Pièce",
+    "Bouquet garni": "Pièce",
+    "Saucisse fraîche": "Pièce",
+    "Saucisse de Toulouse": "Pièce",
+    "Carotte": "Pièce",
+    "Courgette": "Pièce",
+    "Aubergine": "Pièce",
+    "Navet": "Pièce",
+    "Poivron rouge": "Pièce",
+    "Poivron jaune": "Pièce",
+    "Poivron vert": "Pièce",
+    "Tomate": "Pièce",
+    "Tomate cerise": "Pièce",
+    "Pomme": "Pièce",
+    "Poire": "Pièce",
+    "Pêche": "Pièce",
+    "Nectarine": "Pièce",
+    "Prune": "Pièce",
+    "Figue": "Pièce",
+    "Citron": "Pièce",
+    "Citron vert": "Pièce",
+    "Poireau": "Pièce",
+    "Thym frais": "Brin",
+    "Romarin frais": "Brin",
+    "Laurier frais": "Feuille",
+    "Coriandre fraîche": "Bouquet",
+    "Basilic": "Bouquet",
+    "Pain de mie": "Tranche"
+  },
+  "new_ingredients": [
+    {
+      "nom": "Oignon",
+      "categorie": "Légumes frais",
+      "rayon": "Fruits & légumes",
+      "default_storage": "cellio",
+      "unite_reference": "Pièce"
+    },
+    {
+      "nom": "Saucisse fraîche",
+      "categorie": "Viandes",
+      "rayon": "Boucherie",
+      "default_storage": "frosti",
+      "unite_reference": "Pièce"
+    },
+    {
+      "nom": "Poitrine de porc fumée",
+      "categorie": "Charcuterie",
+      "rayon": "Charcuterie",
+      "default_storage": "frosti",
+      "unite_reference": "Gramme"
+    },
+    {
+      "nom": "Bouquet garni",
+      "categorie": "Herbes fraîches",
+      "rayon": "Fruits & légumes",
+      "default_storage": "frosti",
+      "unite_reference": "Pièce"
+    },
+    {
+      "nom": "Cocos de Paimpol AOP écossés",
+      "categorie": "Légumes",
+      "rayon": "Fruits & légumes",
+      "default_storage": "frosti",
+      "unite_reference": "Gramme"
+    },
+    {
+      "nom": "Cocos de Paimpol AOP à écosser",
+      "categorie": "Légumes",
+      "rayon": "Fruits & légumes",
+      "default_storage": "frosti",
+      "unite_reference": "Gramme"
+    },
+    {
+      "nom": "Ail en poudre",
+      "categorie": "Épices",
+      "rayon": "Épicerie",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme"
+    },
+    {
+      "nom": "Cognac",
+      "categorie": "Boissons",
+      "rayon": "Boissons",
+      "default_storage": "cellio",
+      "unite_reference": "Millilitre"
+    },
+    {
+      "nom": "Calvados",
+      "categorie": "Boissons",
+      "rayon": "Boissons",
+      "default_storage": "cellio",
+      "unite_reference": "Millilitre"
+    },
+    {
+      "nom": "Boursin ail et fines herbes",
+      "categorie": "Fromages",
+      "rayon": "Crèmerie",
+      "default_storage": "frosti",
+      "unite_reference": "Gramme"
+    },
+    {
+      "nom": "Chèvre frais",
+      "categorie": "Fromages",
+      "rayon": "Crèmerie",
+      "default_storage": "frosti",
+      "unite_reference": "Gramme"
+    },
+    {
+      "nom": "Compote de pommes",
+      "categorie": "Épicerie",
+      "rayon": "Épicerie",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme"
+    },
+    {
+      "nom": "Confiture d'abricot",
+      "categorie": "Épicerie",
+      "rayon": "Épicerie",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme"
+    },
+    {
+      "nom": "Croûtons de pain",
+      "categorie": "Boulangerie",
+      "rayon": "Boulangerie",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme"
+    },
+    {
+      "nom": "Châtaigne cuite",
+      "categorie": "Légumes",
+      "rayon": "Épicerie",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme"
+    },
+    {
+      "nom": "Riz arborio",
+      "categorie": "Céréales",
+      "rayon": "Épicerie",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme"
+    },
+    {
+      "nom": "Saumon fumé",
+      "categorie": "Poissons",
+      "rayon": "Poissonnerie",
+      "default_storage": "frosti",
+      "unite_reference": "Gramme"
+    },
+    {
+      "nom": "Lardons fumés",
+      "categorie": "Charcuterie",
+      "rayon": "Charcuterie",
+      "default_storage": "frosti",
+      "unite_reference": "Gramme"
+    },
+    {
+      "nom": "Lard gras",
+      "categorie": "Charcuterie",
+      "rayon": "Charcuterie",
+      "default_storage": "frosti",
+      "unite_reference": "Gramme"
+    },
+    {
+      "nom": "Poitrine de porc salée",
+      "categorie": "Charcuterie",
+      "rayon": "Charcuterie",
+      "default_storage": "frosti",
+      "unite_reference": "Gramme"
+    },
+    {
+      "nom": "Échine de porc",
+      "categorie": "Viandes",
+      "rayon": "Boucherie",
+      "default_storage": "frosti",
+      "unite_reference": "Gramme"
+    },
+    {
+      "nom": "Poitrine de veau",
+      "categorie": "Viandes",
+      "rayon": "Boucherie",
+      "default_storage": "frosti",
+      "unite_reference": "Gramme"
+    },
+    {
+      "nom": "Bœuf (gîte)",
+      "categorie": "Viandes",
+      "rayon": "Boucherie",
+      "default_storage": "frosti",
+      "unite_reference": "Gramme"
+    },
+    {
+      "nom": "Bœuf (macreuse)",
+      "categorie": "Viandes",
+      "rayon": "Boucherie",
+      "default_storage": "frosti",
+      "unite_reference": "Gramme"
+    },
+    {
+      "nom": "Bœuf (plat de côte)",
+      "categorie": "Viandes",
+      "rayon": "Boucherie",
+      "default_storage": "frosti",
+      "unite_reference": "Gramme"
+    },
+    {
+      "nom": "Os à moelle",
+      "categorie": "Viandes",
+      "rayon": "Boucherie",
+      "default_storage": "frosti",
+      "unite_reference": "Pièce"
+    },
+    {
+      "nom": "Épinard haché surgelé",
+      "categorie": "Légumes",
+      "rayon": "Surgelés",
+      "default_storage": "frosti",
+      "unite_reference": "Gramme"
+    },
+    {
+      "nom": "Pois chiche cuit",
+      "categorie": "Légumineuses",
+      "rayon": "Épicerie",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme"
+    },
+    {
+      "nom": "Pêche au sirop",
+      "categorie": "Fruits",
+      "rayon": "Épicerie",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme"
+    },
+    {
+      "nom": "Muffin anglais",
+      "categorie": "Boulangerie",
+      "rayon": "Boulangerie",
+      "default_storage": "cellio",
+      "unite_reference": "Pièce"
+    },
+    {
+      "nom": "Reblochon",
+      "categorie": "Fromages",
+      "rayon": "Crèmerie",
+      "default_storage": "frosti",
+      "unite_reference": "Gramme"
+    },
+    {
+      "nom": "Sucre vanillé",
+      "categorie": "Épicerie",
+      "rayon": "Épicerie",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme"
+    },
+    {
+      "nom": "Sucre en morceaux",
+      "categorie": "Épicerie",
+      "rayon": "Épicerie",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme"
+    },
+    {
+      "nom": "Ras-el-hanout",
+      "categorie": "Épices",
+      "rayon": "Épicerie",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme"
+    },
+    {
+      "nom": "Bouillon de bœuf liquide",
+      "categorie": "Bouillons",
+      "rayon": "Épicerie",
+      "default_storage": "cellio",
+      "unite_reference": "Millilitre"
+    },
+    {
+      "nom": "Bouillon de volaille liquide",
+      "categorie": "Bouillons",
+      "rayon": "Épicerie",
+      "default_storage": "cellio",
+      "unite_reference": "Millilitre"
+    },
+    {
+      "nom": "Moutarde de Dijon",
+      "categorie": "Condiments",
+      "rayon": "Épicerie",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme"
+    },
+    {
+      "nom": "Moutarde à l'ancienne",
+      "categorie": "Condiments",
+      "rayon": "Épicerie",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme"
+    },
+    {
+      "nom": "Pâte sablée au parmesan",
+      "categorie": "Boulangerie",
+      "rayon": "Boulangerie",
+      "default_storage": "frosti",
+      "unite_reference": "Gramme"
+    }
+  ],
+  "aliases": [
+    {
+      "alias": "farine",
+      "ingredient_name": "Farine de blé",
+      "default_choice": true
+    },
+    {
+      "alias": "farine tout usage",
+      "ingredient_name": "Farine de blé",
+      "default_choice": false
+    },
+    {
+      "alias": "lait",
+      "ingredient_name": "Lait demi-écrémé",
+      "default_choice": true
+    },
+    {
+      "alias": "huile",
+      "ingredient_name": "Huile de tournesol",
+      "default_choice": true
+    },
+    {
+      "alias": "huile neutre",
+      "ingredient_name": "Huile de tournesol",
+      "default_choice": true
+    },
+    {
+      "alias": "sucre",
+      "ingredient_name": "Sucre en poudre",
+      "default_choice": true
+    },
+    {
+      "alias": "sucre de canne",
+      "ingredient_name": "Sucre roux",
+      "default_choice": false
+    },
+    {
+      "alias": "poivre",
+      "ingredient_name": "Poivre noir",
+      "default_choice": false
+    },
+    {
+      "alias": "poivre du moulin",
+      "ingredient_name": "Poivre noir",
+      "default_choice": false
+    },
+    {
+      "alias": "poivre en grains",
+      "ingredient_name": "Poivre noir",
+      "default_choice": false
+    },
+    {
+      "alias": "sel",
+      "ingredient_name": "Sel fin",
+      "default_choice": false
+    },
+    {
+      "alias": "pincée de sel",
+      "ingredient_name": "Sel fin",
+      "default_choice": false
+    },
+    {
+      "alias": "gros sel",
+      "ingredient_name": "Sel gros / Fleur de sel",
+      "default_choice": false
+    },
+    {
+      "alias": "gros sel de mer",
+      "ingredient_name": "Sel gros / Fleur de sel",
+      "default_choice": false
+    },
+    {
+      "alias": "fleur de sel",
+      "ingredient_name": "Sel gros / Fleur de sel",
+      "default_choice": false
+    },
+    {
+      "alias": "crème fraîche",
+      "ingredient_name": "Crème épaisse",
+      "default_choice": true
+    },
+    {
+      "alias": "crème fraîche entière",
+      "ingredient_name": "Crème épaisse",
+      "default_choice": false
+    },
+    {
+      "alias": "chocolat",
+      "ingredient_name": "Chocolat noir",
+      "default_choice": true
+    },
+    {
+      "alias": "champignons",
+      "ingredient_name": "Champignon de Paris",
+      "default_choice": true
+    },
+    {
+      "alias": "petits champignons",
+      "ingredient_name": "Champignon de Paris",
+      "default_choice": false
+    },
+    {
+      "alias": "persil",
+      "ingredient_name": "Persil plat",
+      "default_choice": false
+    },
+    {
+      "alias": "persil haché",
+      "ingredient_name": "Persil plat",
+      "default_choice": false
+    },
+    {
+      "alias": "beurre salé",
+      "ingredient_name": "Beurre demi-sel",
+      "default_choice": false
+    },
+    {
+      "alias": "beurre (idéalement demi-sel)",
+      "ingredient_name": "Beurre demi-sel",
+      "default_choice": false
+    },
+    {
+      "alias": "bouillon",
+      "ingredient_name": "Bouillon liquide",
+      "default_choice": false
+    },
+    {
+      "alias": "bouillon de bœuf",
+      "ingredient_name": "Bouillon de bœuf liquide",
+      "default_choice": false
+    },
+    {
+      "alias": "bouillon de volaille",
+      "ingredient_name": "Bouillon de volaille liquide",
+      "default_choice": false
+    },
+    {
+      "alias": "levure",
+      "ingredient_name": "Levure chimique",
+      "default_choice": true
+    },
+    {
+      "alias": "thym",
+      "ingredient_name": "Thym séché",
+      "default_choice": true
+    },
+    {
+      "alias": "thym émietté",
+      "ingredient_name": "Thym séché",
+      "default_choice": false
+    },
+    {
+      "alias": "gousses d'ail",
+      "ingredient_name": "Ail",
+      "default_choice": false
+    },
+    {
+      "alias": "gousse d'ail",
+      "ingredient_name": "Ail",
+      "default_choice": false
+    },
+    {
+      "alias": "tête d'ail rose de Lautrec",
+      "ingredient_name": "Ail",
+      "default_choice": false
+    },
+    {
+      "alias": "oignons frais",
+      "ingredient_name": "Oignon",
+      "default_choice": false
+    },
+    {
+      "alias": "gros oignon",
+      "ingredient_name": "Oignon",
+      "default_choice": false
+    },
+    {
+      "alias": "oignons piqués d'un clou de girofle",
+      "ingredient_name": "Oignon",
+      "default_choice": false
+    },
+    {
+      "alias": "oignons rosés de Roscoff AOP",
+      "ingredient_name": "Oignon",
+      "default_choice": false
+    },
+    {
+      "alias": "petits oignons",
+      "ingredient_name": "Oignon",
+      "default_choice": false
+    },
+    {
+      "alias": "courgettes moyennes",
+      "ingredient_name": "Courgette",
+      "default_choice": false
+    },
+    {
+      "alias": "tomates bien mûres",
+      "ingredient_name": "Tomate",
+      "default_choice": false
+    },
+    {
+      "alias": "cerneaux de noix",
+      "ingredient_name": "Noix",
+      "default_choice": false
+    },
+    {
+      "alias": "amandes effilées",
+      "ingredient_name": "Amande",
+      "default_choice": false
+    },
+    {
+      "alias": "bûche de chèvre",
+      "ingredient_name": "Chèvre (fromage)",
+      "default_choice": false
+    },
+    {
+      "alias": "bûche de fromage de chèvre",
+      "ingredient_name": "Chèvre (fromage)",
+      "default_choice": false
+    },
+    {
+      "alias": "croûtons de pain",
+      "ingredient_name": "Croûtons de pain",
+      "default_choice": false
+    },
+    {
+      "alias": "châtaignes cuites au naturel",
+      "ingredient_name": "Châtaigne cuite",
+      "default_choice": false
+    },
+    {
+      "alias": "riz arborio spécial risotto",
+      "ingredient_name": "Riz arborio",
+      "default_choice": false
+    },
+    {
+      "alias": "lardons fumés",
+      "ingredient_name": "Lardons fumés",
+      "default_choice": false
+    },
+    {
+      "alias": "poitrine fumée en tranches très minces",
+      "ingredient_name": "Poitrine de porc fumée",
+      "default_choice": false
+    },
+    {
+      "alias": "poitrine salée en tranches très minces",
+      "ingredient_name": "Poitrine de porc salée",
+      "default_choice": false
+    },
+    {
+      "alias": "épinards hachés surgelés",
+      "ingredient_name": "Épinard haché surgelé",
+      "default_choice": false
+    },
+    {
+      "alias": "pois chiches cuits",
+      "ingredient_name": "Pois chiche cuit",
+      "default_choice": false
+    },
+    {
+      "alias": "pêches au sirop",
+      "ingredient_name": "Pêche au sirop",
+      "default_choice": false
+    },
+    {
+      "alias": "poitrine de veau en morceaux",
+      "ingredient_name": "Poitrine de veau",
+      "default_choice": false
+    },
+    {
+      "alias": "gîte à la noix",
+      "ingredient_name": "Bœuf (gîte)",
+      "default_choice": false
+    },
+    {
+      "alias": "macreuse",
+      "ingredient_name": "Bœuf (macreuse)",
+      "default_choice": false
+    },
+    {
+      "alias": "plat de côte",
+      "ingredient_name": "Bœuf (plat de côte)",
+      "default_choice": false
+    },
+    {
+      "alias": "pommes de terre BF15",
+      "ingredient_name": "Pomme de terre",
+      "default_choice": false
+    },
+    {
+      "alias": "pommes de terre à chair ferme",
+      "ingredient_name": "Pomme de terre",
+      "default_choice": false
+    },
+    {
+      "alias": "pommes de terre (BF15 ou Charlotte)",
+      "ingredient_name": "Pomme de terre",
+      "default_choice": true
+    },
+    {
+      "alias": "pommes de terre (chair jaune BF ou charlotte)",
+      "ingredient_name": "Pomme de terre",
+      "default_choice": true
+    },
+    {
+      "alias": "pommes de terre épluchées (type Bintje ou Manon)",
+      "ingredient_name": "Pomme de terre",
+      "default_choice": true
+    },
+    {
+      "alias": "poires fraîches (Conférence ou Comice)",
+      "ingredient_name": "Poire",
+      "default_choice": true
+    },
+    {
+      "alias": "Coco de Paimpol AOP frais à écosser",
+      "ingredient_name": "Cocos de Paimpol AOP à écosser",
+      "default_choice": false
+    },
+    {
+      "alias": "Cocos de Paimpol AOP en gousses",
+      "ingredient_name": "Cocos de Paimpol AOP à écosser",
+      "default_choice": false
+    },
+    {
+      "alias": "vin blanc sec",
+      "ingredient_name": "Vin blanc (cuisine)",
+      "default_choice": false
+    },
+    {
+      "alias": "vin blanc sec (type Aligoté)",
+      "ingredient_name": "Vin blanc (cuisine)",
+      "default_choice": false
+    },
+    {
+      "alias": "compote de pommes (idéalement sans sucres ajoutés)",
+      "ingredient_name": "Compote de pommes",
+      "default_choice": false
+    },
+    {
+      "alias": "sucre en morceaux (pour le caramel)",
+      "ingredient_name": "Sucre en morceaux",
+      "default_choice": false
+    },
+    {
+      "alias": "tranches de baguette grillées",
+      "ingredient_name": "Baguette",
+      "default_choice": false
+    },
+    {
+      "alias": "Saucisses bretonnes (ou saucisses fraîches)",
+      "ingredient_name": "Saucisse fraîche",
+      "default_choice": true
+    },
+    {
+      "alias": "saucisses",
+      "ingredient_name": "Saucisse fraîche",
+      "default_choice": false
+    },
+    {
+      "alias": "Bacon ou jambon",
+      "ingredient_name": "Bacon",
+      "default_choice": true
+    },
+    {
+      "alias": "pêches jaunes ou nectarines",
+      "ingredient_name": "Pêche",
+      "default_choice": true
+    },
+    {
+      "alias": "pêches ou nectarines",
+      "ingredient_name": "Pêche",
+      "default_choice": true
+    },
+    {
+      "alias": "Poivron jaune ou rouge",
+      "ingredient_name": "Poivron jaune",
+      "default_choice": true
+    },
+    {
+      "alias": "pâte brisée ou sablée",
+      "ingredient_name": "Pâte brisée",
+      "default_choice": true
+    },
+    {
+      "alias": "sucre (ou miel)",
+      "ingredient_name": "Sucre en poudre",
+      "default_choice": true
+    },
+    {
+      "alias": "jambon cru ou blanc",
+      "ingredient_name": "Jambon cru",
+      "default_choice": true
+    },
+    {
+      "alias": "lardons fumés ou nature",
+      "ingredient_name": "Lardons fumés",
+      "default_choice": true
+    },
+    {
+      "alias": "thym séché ou herbes de Provence",
+      "ingredient_name": "Thym séché",
+      "default_choice": true
+    },
+    {
+      "alias": "vin blanc sec ou bouillon de volaille",
+      "ingredient_name": "Vin blanc (cuisine)",
+      "default_choice": true
+    },
+    {
+      "alias": "Vinaigre de cidre ou de Xérès",
+      "ingredient_name": "Vinaigre de cidre",
+      "default_choice": true
+    },
+    {
+      "alias": "lambig (ou calvados)",
+      "ingredient_name": "Calvados",
+      "default_choice": true
+    },
+    {
+      "alias": "Fromage de chèvre frais (ou bûche)",
+      "ingredient_name": "Chèvre frais",
+      "default_choice": true
+    },
+    {
+      "alias": "gousse de vanille ou bâton de cannelle (facultatif)",
+      "ingredient_name": "Vanille (gousse)",
+      "default_choice": true
+    },
+    {
+      "alias": "tranches de pain (mie ou campagne)",
+      "ingredient_name": "Pain de mie",
+      "default_choice": true
+    },
+    {
+      "alias": "bouillon de volaille ou de viande",
+      "ingredient_name": "Bouillon de volaille liquide",
+      "default_choice": true
+    },
+    {
+      "alias": "moutarde de Dijon",
+      "ingredient_name": "Moutarde de Dijon",
+      "default_choice": false
+    },
+    {
+      "alias": "moutarde forte de Dijon",
+      "ingredient_name": "Moutarde de Dijon",
+      "default_choice": false
+    },
+    {
+      "alias": "moutarde à l'ancienne",
+      "ingredient_name": "Moutarde à l'ancienne",
+      "default_choice": false
+    },
+    {
+      "alias": "bouquet de basilic petit vert",
+      "ingredient_name": "Basilic",
+      "default_choice": false
+    },
+    {
+      "alias": "tomates pelées",
+      "ingredient_name": "Tomate pelée (boîte)",
+      "default_choice": false
+    },
+    {
+      "alias": "petits morceaux de céleri",
+      "ingredient_name": "Céleri branche",
+      "default_choice": false
+    },
+    {
+      "alias": "poulet découpé",
+      "ingredient_name": "Poulet entier",
+      "default_choice": false
+    },
+    {
+      "alias": "chapelure ou fromage râpé",
+      "ingredient_name": "Chapelure",
+      "default_choice": true
+    },
+    {
+      "alias": "semoule fine ou biscuits écrasés",
+      "ingredient_name": "Semoule fine",
+      "default_choice": true
+    },
+    {
+      "alias": "jambon haché gros ou lardons",
+      "ingredient_name": "Jambon blanc",
+      "default_choice": true
+    },
+    {
+      "alias": "fromage de chèvre ou fromage bleu",
+      "ingredient_name": "Chèvre (fromage)",
+      "default_choice": true
+    },
+    {
+      "alias": "morceaux de poulet (cuisses ou filets)",
+      "ingredient_name": "Cuisse de poulet",
+      "default_choice": true
+    },
+    {
+      "alias": "ventrèche ou lard demi-sel séché",
+      "ingredient_name": "Poitrine de porc salée",
+      "default_choice": true
+    },
+    {
+      "alias": "Grappe de raisin (blanc ou noir)",
+      "ingredient_name": "Raisin",
+      "default_choice": true
+    },
+    {
+      "alias": "huile ou beurre",
+      "ingredient_name": "Huile de tournesol",
+      "default_choice": true
+    },
+    {
+      "alias": "farine (ou 150g farine + 50g poudre d'amandes, noisette ou pistache)",
+      "ingredient_name": "Farine de blé",
+      "default_choice": true
+    }
+  ]
+}

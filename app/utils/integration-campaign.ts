@@ -1,0 +1,66 @@
+export type IntegrationRequest = (url:string,method?:string,body?:unknown)=>Promise<any>
+export type CycleEvent = {step:string;status:'pass'|'skipped';detail:string}
+function requireCondition(condition:unknown,message:string):asserts condition {if(!condition)throw new Error(message)}
+const signature=(items:any[])=>JSON.stringify(items.map(i=>({id:i.id,source:i.source,qte:Number(i.qte),unite:i.unite,location:i.location_id})).sort((a,b)=>`${a.source}:${a.id}`.localeCompare(`${b.source}:${b.id}`)))
+const listSignature=(list:any)=>JSON.stringify(list.items.map((i:any)=>({id:i.id,product:i.produit,unit:i.unite,need:Number(i.qte),buy:Number(i.qte_achat)})).sort((a:any,b:any)=>a.id.localeCompare(b.id)))
+
+/** Actual HTTP cycle, restricted to an empty, explicitly named test household. No silent cleanup. */
+export async function runPurchaseCycle(request:IntegrationRequest,recipeId:string,expectedUsername:string,onStep:(event:CycleEvent)=>void){
+  const session=await request('/api/auth/me')
+  requireCondition(expectedUsername===session.username&&/[-_]test$/i.test(session.username||''),'Le cycle exige un foyer dédié dont le nom finit par -test ou _test, saisi exactement.')
+  const plans=await request('/api/meal-plans'), stock=await request('/api/stock'), initial=await request('/api/shopping-list'),history=await request('/api/purchases')
+  requireCondition(!plans.plans?.length&&!stock.items?.length&&!initial.list&&!history.purchases?.length,'Le foyer de test doit être vide : aucun planning, stock, liste active ou historique d’achat.')
+  requireCondition(stock.locations?.some((l:any)=>l.source==='frosti')&&stock.locations?.some((l:any)=>l.source==='cellio'),'Créer les lieux Frosti et Cellio et configurer les règles de rangement du foyer de test.')
+  const laboratory=await request('/api/matcher/lab','POST',{recipeId,servings:4})
+  requireCondition(laboratory.recipe?.ingredients?.length&&laboratory.prepared?.length&&laboratory.prepared.every((i:any)=>i.ingredient_id&&!i.quantity_unknown&&!i.needs_review&&!i.reference_unit_issue),'La recette doit être entièrement résolue avant de créer les données du cycle.')
+  const date=new Intl.DateTimeFormat('en-CA',{timeZone:'Europe/Paris',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date())
+  const {plan}=await request('/api/meal-plans','POST',{recipe_id:recipeId,scheduled_date:date,meal_type:'midi',role:'plat',servings:4})
+  requireCondition(plan?.id,'Le planning n’a pas été créé.')
+  onStep({step:'Planning',status:'pass',detail:`Repas de test créé (${plan.id}).`})
+  await request('/api/shopping-list/generate','POST',{listName:'Campagne intégration Mealio'})
+  const first=await request('/api/shopping-list')
+  requireCondition(first.items?.length,'Aucun article généré.')
+  requireCondition(first.items.every((i:any)=>i.ingredient_id&&Number(i.qte_achat)>0&&Number.isFinite(Number(i.qte_achat))),'Des articles ont une association ou une quantité non exploitable. Corriger la recette avant le cycle.')
+  requireCondition(!(first.issues||[]).some((i:any)=>/RECIPE_(PROCESSING_ERROR|QUANTITY_UNKNOWN|STRUCTURE_REVIEW)|STOCK_MATCH_REVIEW|CONVERSION|UNIT/.test(i.issue_type)),'La liste contient encore des anomalies de rapprochement ou conversion.')
+  await request('/api/shopping-list/generate','POST',{})
+  const second=await request('/api/shopping-list')
+  requireCondition(first.list.id===second.list?.id&&listSignature(first)===listSignature(second),'La régénération a changé les articles ou leurs besoins sans changement d’entrée.')
+  onStep({step:'Génération et régénération',status:'pass',detail:`${second.items.length} articles, besoins et identifiants stables.`})
+  for(const item of second.items) await request('/api/shopping-list/items','PATCH',{id:item.id,qte_achetee:Number(item.qte_achat),expected_updated_at:item.updated_at})
+  onStep({step:'Achats',status:'pass',detail:'Les quantités prévues ont été enregistrées comme achetées.'})
+  const transfer=await request('/api/shopping-list/store','POST',{})
+  requireCondition(transfer.totalSkipped===0&&transfer.totalStored>0,'Certains achats ne peuvent pas être rangés. Vérifier les règles et les lieux du foyer de test.')
+  const stored=await request('/api/stock')
+  requireCondition(stored.items?.length&&stored.items.every((i:any)=>i.location_id&&i.location_name),'Un achat rangé n’a pas de lieu précis.')
+  const history1=await request('/api/purchases')
+  for(const item of second.items) {
+    const events=history1.purchases.filter((p:any)=>p.shopping_item_id===item.id&&p.status==='range')
+    requireCondition(events.length===1&&Math.abs(Number(events[0].quantity)-Number(item.qte_achat))<1e-8,`Historique manquant, dupliqué ou quantité incorrecte : ${item.produit}.`)
+  }
+  await request('/api/shopping-list/store','POST',{})
+  requireCondition(signature(stored.items)===signature((await request('/api/stock')).items),'Le second rangement a dupliqué ou modifié le stock.')
+  const history2=await request('/api/purchases')
+  requireCondition(history1.purchases.length===history2.purchases.length,'Le second rangement a dupliqué l’historique.')
+  onStep({step:'Rangement et historique',status:'pass',detail:'Lieux précis, un achat par article, second rangement sans doublon.'})
+  await request('/api/shopping-list/finish','POST',{})
+  requireCondition(!(await request('/api/shopping-list')).list,'La liste reste active après clôture.')
+  onStep({step:'Clôture',status:'pass',detail:'La liste a quitté les courses actives.'})
+  const consumed=await request('/api/meal-consumption','POST',{meal_plan_id:plan.id,confirmed:true})
+  requireCondition(!consumed.result?.shortages?.length,'Des besoins ne sont pas couverts lors de la consommation.')
+  const after=await request('/api/stock')
+  requireCondition(stored.items.filter((i:any)=>i.pantry_ingredient_id).every((i:any)=>after.items.some((a:any)=>a.id===i.id&&a.source===i.source&&Number(a.qte)===Number(i.qte))),'La consommation a déduit un produit géré en présence.')
+  const afterSignature=signature(after.items)
+  await request('/api/meal-consumption','POST',{meal_plan_id:plan.id,confirmed:true})
+  requireCondition(afterSignature===signature((await request('/api/stock')).items),'La deuxième confirmation a consommé le repas deux fois.')
+  onStep({step:'Consommation',status:'pass',detail:'Besoins couverts, présence conservée, confirmation répétée sans double déduction.'})
+  const pantry=after.items.find((i:any)=>i.pantry_ingredient_id&&Number(i.qte)>0)
+  if(pantry){
+    const ingredientId=pantry.pantry_ingredient_id
+    await request('/api/pantry/signals','PATCH',{ingredient_id:ingredientId,action:'almost_finished'})
+    const suggestions=(await request('/api/replenishment')).suggestions
+    requireCondition(suggestions.some((s:any)=>s.ingredient_id===ingredientId&&s.source==='almost_finished'),'Le signal presque terminé n’a produit aucune proposition.')
+    await request('/api/pantry/signals','PATCH',{ingredient_id:ingredientId,action:'cancel'})
+    onStep({step:'Presque terminé',status:'pass',detail:'Proposition de réapprovisionnement créée puis signal annulé.'})
+  }else onStep({step:'Presque terminé',status:'skipped',detail:'Aucun produit de cette recette n’est configuré en présence pour ce foyer.'})
+  onStep({step:'Apprentissage historique',status:'skipped',detail:'Un seul achat ne suffit pas à apprendre une fréquence : utiliser plusieurs achats réellement espacés. Les scénarios temporels restent couverts par les tests automatiques.'})
+}

@@ -1,0 +1,1650 @@
+[
+  {
+    "request_key": "measure:Courgette:Pièce",
+    "kind": "unit_mass",
+    "source_label": "Courgette",
+    "ingredient_name": "Courgette",
+    "unite": "Pièce",
+    "source_note": "Besoin conservé : 2 piece de « Courgette ». Aucune équivalence explicite ne permet de convertir en Gramme. L'association officielle et le rangement automatique restent en attente. Mesurer le poids/volume ou préciser l’unité de la recette ; ne pas inventer de poids moyen."
+  },
+  {
+    "request_key": "measure:Aubergine:Pièce",
+    "kind": "unit_mass",
+    "source_label": "Aubergine",
+    "ingredient_name": "Aubergine",
+    "unite": "Pièce",
+    "source_note": "Besoin conservé : 1 piece de « Aubergine ». Aucune équivalence explicite ne permet de convertir en Gramme. L'association officielle et le rangement automatique restent en attente. Mesurer le poids/volume ou préciser l’unité de la recette ; ne pas inventer de poids moyen."
+  },
+  {
+    "request_key": "measure:Oignon jaune:Pièce",
+    "kind": "unit_mass",
+    "source_label": "Oignon jaune",
+    "ingredient_name": "Oignon jaune",
+    "unite": "Pièce",
+    "source_note": "Besoin conservé : 1 piece de « Oignon jaune ». Aucune équivalence explicite ne permet de convertir en Gramme. L'association officielle et le rangement automatique restent en attente. Mesurer le poids/volume ou préciser l’unité de la recette ; ne pas inventer de poids moyen."
+  },
+  {
+    "request_key": "measure:Feta:morceau",
+    "kind": "unit_mass",
+    "source_label": "Feta",
+    "ingredient_name": "Feta",
+    "unite": "morceau",
+    "source_note": "Besoin conservé : 1 morceau de « Feta ». Aucune équivalence explicite ne permet de convertir en Gramme. L'association officielle et le rangement automatique restent en attente. Mesurer le poids/volume ou préciser l’unité de la recette ; ne pas inventer de poids moyen."
+  },
+  {
+    "request_key": "measure:Thym frais:Brin",
+    "kind": "unit_mass",
+    "source_label": "Thym frais",
+    "ingredient_name": "Thym frais",
+    "unite": "Brin",
+    "source_note": "Besoin conservé : 2 brin de « Thym frais ». Aucune équivalence explicite ne permet de convertir en Gramme. L'association officielle et le rangement automatique restent en attente. Mesurer le poids/volume ou préciser l’unité de la recette ; ne pas inventer de poids moyen."
+  },
+  {
+    "request_key": "measure:Jus de citron:Pièce",
+    "kind": "unit_definition",
+    "source_label": "Jus de citron",
+    "ingredient_name": "Jus de citron",
+    "unite": "Pièce",
+    "source_note": "Besoin conservé : 0.5 piece de « Jus de citron ». Aucune équivalence explicite ne permet de convertir en Millilitre. L'association officielle et le rangement automatique restent en attente. Mesurer le poids/volume ou préciser l’unité de la recette ; ne pas inventer de poids moyen."
+  },
+  {
+    "request_key": "measure:Pâte feuilletée:Pièce",
+    "kind": "unit_mass",
+    "source_label": "Pâte feuilletée",
+    "ingredient_name": "Pâte feuilletée",
+    "unite": "Pièce",
+    "source_note": "Besoin conservé : 1 piece de « Pâte feuilletée ». Aucune équivalence explicite ne permet de convertir en Gramme. L'association officielle et le rangement automatique restent en attente. Mesurer le poids/volume ou préciser l’unité de la recette ; ne pas inventer de poids moyen."
+  },
+  {
+    "request_key": "measure:Gruyère:parsemer",
+    "kind": "unit_definition",
+    "source_label": "Gruyère",
+    "ingredient_name": "Gruyère",
+    "unite": "parsemer",
+    "source_note": "Besoin conservé : 0 parsemer de « Gruyère ». Aucune équivalence explicite ne permet de convertir en Gramme. L'association officielle et le rangement automatique restent en attente. Mesurer le poids/volume ou préciser l’unité de la recette ; ne pas inventer de poids moyen."
+  },
+  {
+    "request_key": "recipe:86599d6b-428d-458d-af49-36784456c09f:Gruyère",
+    "kind": "recipe_quantity",
+    "source_label": "Gruyère",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Recette Tarte fine aux courgettes et Boursin : quantité à compléter dans Cookiwiki, pas dans une densité globale."
+  },
+  {
+    "request_key": "recipe:96b805d2-75fe-4f9c-ac6f-a7bd98f21756:Thym",
+    "kind": "recipe_quantity",
+    "source_label": "Thym",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Recette Cake d'été : quantité à compléter dans Cookiwiki, pas dans une densité globale."
+  },
+  {
+    "request_key": "measure:Ail:Gousse",
+    "kind": "unit_definition",
+    "source_label": "Ail",
+    "ingredient_name": "Ail",
+    "unite": "Gousse",
+    "source_note": "Besoin conservé : 2 gousse de « Ail ». Aucune équivalence explicite ne permet de convertir en Pièce. L'association officielle et le rangement automatique restent en attente. Mesurer le poids/volume ou préciser l’unité de la recette ; ne pas inventer de poids moyen."
+  },
+  {
+    "request_key": "recipe:e682d519-3874-4ed7-859b-f68666150282:sel",
+    "kind": "recipe_quantity",
+    "source_label": "sel",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Recette Tendrons de veau à la gardiane : quantité à compléter dans Cookiwiki, pas dans une densité globale."
+  },
+  {
+    "request_key": "recipe:e682d519-3874-4ed7-859b-f68666150282:poivre",
+    "kind": "recipe_quantity",
+    "source_label": "poivre",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Recette Tendrons de veau à la gardiane : quantité à compléter dans Cookiwiki, pas dans une densité globale."
+  },
+  {
+    "request_key": "measure:Pomme:Pièce",
+    "kind": "unit_mass",
+    "source_label": "Pomme",
+    "ingredient_name": "Pomme",
+    "unite": "Pièce",
+    "source_note": "Besoin conservé : 6 piece de « Pomme ». Aucune équivalence explicite ne permet de convertir en Gramme. L'association officielle et le rangement automatique restent en attente. Mesurer le poids/volume ou préciser l’unité de la recette ; ne pas inventer de poids moyen."
+  },
+  {
+    "request_key": "measure:Jus de citron:filet",
+    "kind": "unit_definition",
+    "source_label": "Jus de citron",
+    "ingredient_name": "Jus de citron",
+    "unite": "filet",
+    "source_note": "Besoin conservé : 1 filet de « Jus de citron ». Aucune équivalence explicite ne permet de convertir en Millilitre. L'association officielle et le rangement automatique restent en attente. Mesurer le poids/volume ou préciser l’unité de la recette ; ne pas inventer de poids moyen."
+  },
+  {
+    "request_key": "recipe:9428614f-76ad-4fc0-a05a-6db45ec14f84:eau (pour le caramel)",
+    "kind": "recipe_quantity",
+    "source_label": "eau (pour le caramel)",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Recette Gâteau aux pêches de Jeanine Laurent : quantité à compléter dans Cookiwiki, pas dans une densité globale."
+  },
+  {
+    "request_key": "recipe:c558eff5-c8fc-4200-ada6-3c05febc6991:poivre",
+    "kind": "recipe_quantity",
+    "source_label": "poivre",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Recette Pommes de terre vigneronnes : quantité à compléter dans Cookiwiki, pas dans une densité globale."
+  },
+  {
+    "request_key": "recipe:50391f36-35dd-4e4e-b6d8-a5d59b51cffa:thym émietté",
+    "kind": "recipe_quantity",
+    "source_label": "thym émietté",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Recette Gratin de courgettes : quantité à compléter dans Cookiwiki, pas dans une densité globale."
+  },
+  {
+    "request_key": "recipe:50391f36-35dd-4e4e-b6d8-a5d59b51cffa:poivre",
+    "kind": "recipe_quantity",
+    "source_label": "poivre",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Recette Gratin de courgettes : quantité à compléter dans Cookiwiki, pas dans une densité globale."
+  },
+  {
+    "request_key": "recipe:50391f36-35dd-4e4e-b6d8-a5d59b51cffa:sel",
+    "kind": "recipe_quantity",
+    "source_label": "sel",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Recette Gratin de courgettes : quantité à compléter dans Cookiwiki, pas dans une densité globale."
+  },
+  {
+    "request_key": "recipe:50391f36-35dd-4e4e-b6d8-a5d59b51cffa:beurre pour le plat",
+    "kind": "recipe_quantity",
+    "source_label": "beurre pour le plat",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Recette Gratin de courgettes : quantité à compléter dans Cookiwiki, pas dans une densité globale."
+  },
+  {
+    "request_key": "measure:Beurre:cuisson",
+    "kind": "unit_definition",
+    "source_label": "Beurre",
+    "ingredient_name": "Beurre",
+    "unite": "cuisson",
+    "source_note": "Besoin conservé : 0 cuisson de « Beurre ». Aucune équivalence explicite ne permet de convertir en Gramme. L'association officielle et le rangement automatique restent en attente. Mesurer le poids/volume ou préciser l’unité de la recette ; ne pas inventer de poids moyen."
+  },
+  {
+    "request_key": "recipe:08788652-f0cc-4140-be73-495ee4ebb2ad:huile",
+    "kind": "recipe_quantity",
+    "source_label": "huile",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Recette Barbotton : quantité à compléter dans Cookiwiki, pas dans une densité globale."
+  },
+  {
+    "request_key": "recipe:08788652-f0cc-4140-be73-495ee4ebb2ad:Beurre",
+    "kind": "recipe_quantity",
+    "source_label": "Beurre",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Recette Barbotton : quantité à compléter dans Cookiwiki, pas dans une densité globale."
+  },
+  {
+    "request_key": "recipe:be542b36-ca36-411c-ba1c-a188a9133296:vin blanc sec",
+    "kind": "recipe_quantity",
+    "source_label": "vin blanc sec",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Recette Rillettes de saumon frais et fumé / recette d'Oma pour nos fiançailles !! : quantité à compléter dans Cookiwiki, pas dans une densité globale."
+  },
+  {
+    "request_key": "recipe:be542b36-ca36-411c-ba1c-a188a9133296:sel",
+    "kind": "recipe_quantity",
+    "source_label": "sel",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Recette Rillettes de saumon frais et fumé / recette d'Oma pour nos fiançailles !! : quantité à compléter dans Cookiwiki, pas dans une densité globale."
+  },
+  {
+    "request_key": "recipe:be542b36-ca36-411c-ba1c-a188a9133296:poivre",
+    "kind": "recipe_quantity",
+    "source_label": "poivre",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Recette Rillettes de saumon frais et fumé / recette d'Oma pour nos fiançailles !! : quantité à compléter dans Cookiwiki, pas dans une densité globale."
+  },
+  {
+    "request_key": "measure:Carotte:Pièce",
+    "kind": "unit_mass",
+    "source_label": "Carotte",
+    "ingredient_name": "Carotte",
+    "unite": "Pièce",
+    "source_note": "Besoin conservé : 2 piece de « Carotte ». Aucune équivalence explicite ne permet de convertir en Gramme. L'association officielle et le rangement automatique restent en attente. Mesurer le poids/volume ou préciser l’unité de la recette ; ne pas inventer de poids moyen."
+  },
+  {
+    "request_key": "recipe:452a35a5-0962-4002-8075-2bf57a8ddb2e:persil haché",
+    "kind": "recipe_quantity",
+    "source_label": "persil haché",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Recette Œufs en meurette : quantité à compléter dans Cookiwiki, pas dans une densité globale."
+  },
+  {
+    "request_key": "recipe:452a35a5-0962-4002-8075-2bf57a8ddb2e:sel",
+    "kind": "recipe_quantity",
+    "source_label": "sel",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Recette Œufs en meurette : quantité à compléter dans Cookiwiki, pas dans une densité globale."
+  },
+  {
+    "request_key": "recipe:452a35a5-0962-4002-8075-2bf57a8ddb2e:poivre du moulin",
+    "kind": "recipe_quantity",
+    "source_label": "poivre du moulin",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Recette Œufs en meurette : quantité à compléter dans Cookiwiki, pas dans une densité globale."
+  },
+  {
+    "request_key": "recipe:4e93c746-3b57-4374-90d4-bfec92a8b670:huile ou beurre",
+    "kind": "recipe_quantity",
+    "source_label": "huile ou beurre",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Recette La Tartiflette au Reblochon  : quantité à compléter dans Cookiwiki, pas dans une densité globale."
+  },
+  {
+    "request_key": "recipe:4e93c746-3b57-4374-90d4-bfec92a8b670:sel",
+    "kind": "recipe_quantity",
+    "source_label": "sel",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Recette La Tartiflette au Reblochon  : quantité à compléter dans Cookiwiki, pas dans une densité globale."
+  },
+  {
+    "request_key": "recipe:4e93c746-3b57-4374-90d4-bfec92a8b670:poivre",
+    "kind": "recipe_quantity",
+    "source_label": "poivre",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Recette La Tartiflette au Reblochon  : quantité à compléter dans Cookiwiki, pas dans une densité globale."
+  },
+  {
+    "request_key": "measure:Beurre:noix",
+    "kind": "unit_definition",
+    "source_label": "Beurre",
+    "ingredient_name": "Beurre",
+    "unite": "noix",
+    "source_note": "Besoin conservé : 1 noix de « Beurre ». Aucune équivalence explicite ne permet de convertir en Gramme. L'association officielle et le rangement automatique restent en attente. Mesurer le poids/volume ou préciser l’unité de la recette ; ne pas inventer de poids moyen."
+  },
+  {
+    "request_key": "recipe:9b3f1c94-e80d-4894-8953-8e688878750f:sel",
+    "kind": "recipe_quantity",
+    "source_label": "sel",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Recette Risotto aux champignons : quantité à compléter dans Cookiwiki, pas dans une densité globale."
+  },
+  {
+    "request_key": "recipe:9b3f1c94-e80d-4894-8953-8e688878750f:poivre",
+    "kind": "recipe_quantity",
+    "source_label": "poivre",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Recette Risotto aux champignons : quantité à compléter dans Cookiwiki, pas dans une densité globale."
+  },
+  {
+    "request_key": "recipe:ea5ec85d-c789-45ba-a311-07562c901537:confiture d'abricot",
+    "kind": "recipe_quantity",
+    "source_label": "confiture d'abricot",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Recette Le michon breton : quantité à compléter dans Cookiwiki, pas dans une densité globale."
+  },
+  {
+    "request_key": "measure:Échalote:Pièce",
+    "kind": "unit_mass",
+    "source_label": "Échalote",
+    "ingredient_name": "Échalote",
+    "unite": "Pièce",
+    "source_note": "Besoin conservé : 3 piece de « Échalote ». Aucune équivalence explicite ne permet de convertir en Gramme. L'association officielle et le rangement automatique restent en attente. Mesurer le poids/volume ou préciser l’unité de la recette ; ne pas inventer de poids moyen."
+  },
+  {
+    "request_key": "recipe:23970d8e-5e26-4c51-a624-71fc1269c94b:sel",
+    "kind": "recipe_quantity",
+    "source_label": "sel",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Recette Œufs en meurette faciles : quantité à compléter dans Cookiwiki, pas dans une densité globale."
+  },
+  {
+    "request_key": "recipe:23970d8e-5e26-4c51-a624-71fc1269c94b:poivre",
+    "kind": "recipe_quantity",
+    "source_label": "poivre",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Recette Œufs en meurette faciles : quantité à compléter dans Cookiwiki, pas dans une densité globale."
+  },
+  {
+    "request_key": "measure:Filet mignon de porc:Pièce",
+    "kind": "unit_mass",
+    "source_label": "Filet mignon de porc",
+    "ingredient_name": "Filet mignon de porc",
+    "unite": "Pièce",
+    "source_note": "Besoin conservé : 1 piece de « Filet mignon de porc ». Aucune équivalence explicite ne permet de convertir en Gramme. L'association officielle et le rangement automatique restent en attente. Mesurer le poids/volume ou préciser l’unité de la recette ; ne pas inventer de poids moyen."
+  },
+  {
+    "request_key": "measure:Ail:c c",
+    "kind": "unit_definition",
+    "source_label": "Ail",
+    "ingredient_name": "Ail",
+    "unite": "c c",
+    "source_note": "Besoin conservé : 1 c c de « Ail ». Aucune équivalence explicite ne permet de convertir en Pièce. L'association officielle et le rangement automatique restent en attente. Mesurer le poids/volume ou préciser l’unité de la recette ; ne pas inventer de poids moyen."
+  },
+  {
+    "request_key": "measure:Pâte brisée:Pièce",
+    "kind": "unit_mass",
+    "source_label": "Pâte brisée",
+    "ingredient_name": "Pâte brisée",
+    "unite": "Pièce",
+    "source_note": "Besoin conservé : 1 piece de « Pâte brisée ». Aucune équivalence explicite ne permet de convertir en Gramme. L'association officielle et le rangement automatique restent en attente. Mesurer le poids/volume ou préciser l’unité de la recette ; ne pas inventer de poids moyen."
+  },
+  {
+    "request_key": "measure:Romarin frais:Brin",
+    "kind": "unit_mass",
+    "source_label": "Romarin frais",
+    "ingredient_name": "Romarin frais",
+    "unite": "Brin",
+    "source_note": "Besoin conservé : 2 brin de « Romarin frais ». Aucune équivalence explicite ne permet de convertir en Gramme. L'association officielle et le rangement automatique restent en attente. Mesurer le poids/volume ou préciser l’unité de la recette ; ne pas inventer de poids moyen."
+  },
+  {
+    "request_key": "measure:Pâte sablée:Rouleau",
+    "kind": "unit_mass",
+    "source_label": "Pâte sablée",
+    "ingredient_name": "Pâte sablée",
+    "unite": "Rouleau",
+    "source_note": "Besoin conservé : 1 rouleau de « Pâte sablée ». Aucune équivalence explicite ne permet de convertir en Gramme. L'association officielle et le rangement automatique restent en attente. Mesurer le poids/volume ou préciser l’unité de la recette ; ne pas inventer de poids moyen."
+  },
+  {
+    "request_key": "measure:Pain de mie:Tranche",
+    "kind": "unit_mass",
+    "source_label": "Pain de mie",
+    "ingredient_name": "Pain de mie",
+    "unite": "Tranche",
+    "source_note": "Besoin conservé : 8 tranche de « Pain de mie ». Aucune équivalence explicite ne permet de convertir en Gramme. L'association officielle et le rangement automatique restent en attente. Mesurer le poids/volume ou préciser l’unité de la recette ; ne pas inventer de poids moyen."
+  },
+  {
+    "request_key": "measure:Pâte feuilletée:Rouleau",
+    "kind": "unit_mass",
+    "source_label": "Pâte feuilletée",
+    "ingredient_name": "Pâte feuilletée",
+    "unite": "Rouleau",
+    "source_note": "Besoin conservé : 1 rouleau de « Pâte feuilletée ». Aucune équivalence explicite ne permet de convertir en Gramme. L'association officielle et le rangement automatique restent en attente. Mesurer le poids/volume ou préciser l’unité de la recette ; ne pas inventer de poids moyen."
+  },
+  {
+    "request_key": "measure:Pancetta:Tranche",
+    "kind": "unit_mass",
+    "source_label": "Pancetta",
+    "ingredient_name": "Pancetta",
+    "unite": "Tranche",
+    "source_note": "Besoin conservé : 8 tranche de « Pancetta ». Aucune équivalence explicite ne permet de convertir en Gramme. L'association officielle et le rangement automatique restent en attente. Mesurer le poids/volume ou préciser l’unité de la recette ; ne pas inventer de poids moyen."
+  },
+  {
+    "request_key": "measure:Pâte brisée:Rouleau",
+    "kind": "unit_mass",
+    "source_label": "Pâte brisée",
+    "ingredient_name": "Pâte brisée",
+    "unite": "Rouleau",
+    "source_note": "Besoin conservé : 1 rouleau de « Pâte brisée ». Aucune équivalence explicite ne permet de convertir en Gramme. L'association officielle et le rangement automatique restent en attente. Mesurer le poids/volume ou préciser l’unité de la recette ; ne pas inventer de poids moyen."
+  },
+  {
+    "request_key": "measure:Poivron rouge:Pièce",
+    "kind": "unit_mass",
+    "source_label": "Poivron rouge",
+    "ingredient_name": "Poivron rouge",
+    "unite": "Pièce",
+    "source_note": "Besoin conservé : 2 piece de « Poivron rouge ». Aucune équivalence explicite ne permet de convertir en Gramme. L'association officielle et le rangement automatique restent en attente. Mesurer le poids/volume ou préciser l’unité de la recette ; ne pas inventer de poids moyen."
+  },
+  {
+    "request_key": "recipe:c794f891-2240-41bf-aee2-e32e8df17c6b:poivre du moulin",
+    "kind": "recipe_quantity",
+    "source_label": "poivre du moulin",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Recette Mijoté de cocos de Paimpol au porc et oignons de Roscoff : quantité à compléter dans Cookiwiki, pas dans une densité globale."
+  },
+  {
+    "request_key": "measure:Crevette:Pièce",
+    "kind": "unit_mass",
+    "source_label": "Crevette",
+    "ingredient_name": "Crevette",
+    "unite": "Pièce",
+    "source_note": "Besoin conservé : 0 piece de « Crevette ». Aucune équivalence explicite ne permet de convertir en Gramme. L'association officielle et le rangement automatique restent en attente. Mesurer le poids/volume ou préciser l’unité de la recette ; ne pas inventer de poids moyen."
+  },
+  {
+    "request_key": "measure:Bacon:Pièce",
+    "kind": "unit_mass",
+    "source_label": "Bacon",
+    "ingredient_name": "Bacon",
+    "unite": "Pièce",
+    "source_note": "Besoin conservé : 0 piece de « Bacon ». Aucune équivalence explicite ne permet de convertir en Gramme. L'association officielle et le rangement automatique restent en attente. Mesurer le poids/volume ou préciser l’unité de la recette ; ne pas inventer de poids moyen."
+  },
+  {
+    "request_key": "measure:Mayonnaise:Pièce",
+    "kind": "unit_mass",
+    "source_label": "Mayonnaise",
+    "ingredient_name": "Mayonnaise",
+    "unite": "Pièce",
+    "source_note": "Besoin conservé : 0 piece de « Mayonnaise ». Aucune équivalence explicite ne permet de convertir en Gramme. L'association officielle et le rangement automatique restent en attente. Mesurer le poids/volume ou préciser l’unité de la recette ; ne pas inventer de poids moyen."
+  },
+  {
+    "request_key": "recipe:c36b54b2-4f83-488c-b3db-4b465df01e6f:Crevette",
+    "kind": "recipe_quantity",
+    "source_label": "Crevette",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Recette Crevettes au bacon  : quantité à compléter dans Cookiwiki, pas dans une densité globale."
+  },
+  {
+    "request_key": "recipe:c36b54b2-4f83-488c-b3db-4b465df01e6f:Ail",
+    "kind": "recipe_quantity",
+    "source_label": "Ail",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Recette Crevettes au bacon  : quantité à compléter dans Cookiwiki, pas dans une densité globale."
+  },
+  {
+    "request_key": "recipe:c36b54b2-4f83-488c-b3db-4b465df01e6f:Bacon",
+    "kind": "recipe_quantity",
+    "source_label": "Bacon",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Recette Crevettes au bacon  : quantité à compléter dans Cookiwiki, pas dans une densité globale."
+  },
+  {
+    "request_key": "recipe:c36b54b2-4f83-488c-b3db-4b465df01e6f:Mayonnaise",
+    "kind": "recipe_quantity",
+    "source_label": "Mayonnaise",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Recette Crevettes au bacon  : quantité à compléter dans Cookiwiki, pas dans une densité globale."
+  },
+  {
+    "request_key": "measure:Prune:Pièce",
+    "kind": "unit_mass",
+    "source_label": "Prune",
+    "ingredient_name": "Prune",
+    "unite": "Pièce",
+    "source_note": "Besoin conservé : 8 piece de « Prune ». Aucune équivalence explicite ne permet de convertir en Gramme. L'association officielle et le rangement automatique restent en attente. Mesurer le poids/volume ou préciser l’unité de la recette ; ne pas inventer de poids moyen."
+  },
+  {
+    "request_key": "recipe:a70ca0a7-b231-47b7-bc04-58b83ba8025c:poivre du moulin",
+    "kind": "recipe_quantity",
+    "source_label": "poivre du moulin",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Recette Mijoté de cocos de Paimpol au porc et oignons de Roscoff : quantité à compléter dans Cookiwiki, pas dans une densité globale."
+  },
+  {
+    "request_key": "measure:Oignon rouge:Pièce",
+    "kind": "unit_mass",
+    "source_label": "Oignon rouge",
+    "ingredient_name": "Oignon rouge",
+    "unite": "Pièce",
+    "source_note": "Besoin conservé : 1 piece de « Oignon rouge ». Aucune équivalence explicite ne permet de convertir en Gramme. L'association officielle et le rangement automatique restent en attente. Mesurer le poids/volume ou préciser l’unité de la recette ; ne pas inventer de poids moyen."
+  },
+  {
+    "request_key": "measure:Pomme de terre:Pièce",
+    "kind": "unit_mass",
+    "source_label": "Pomme de terre",
+    "ingredient_name": "Pomme de terre",
+    "unite": "Pièce",
+    "source_note": "Besoin conservé : 3 piece de « Pomme de terre ». Aucune équivalence explicite ne permet de convertir en Gramme. L'association officielle et le rangement automatique restent en attente. Mesurer le poids/volume ou préciser l’unité de la recette ; ne pas inventer de poids moyen."
+  },
+  {
+    "request_key": "measure:Navet:Pièce",
+    "kind": "unit_mass",
+    "source_label": "Navet",
+    "ingredient_name": "Navet",
+    "unite": "Pièce",
+    "source_note": "Besoin conservé : 2 piece de « Navet ». Aucune équivalence explicite ne permet de convertir en Gramme. L'association officielle et le rangement automatique restent en attente. Mesurer le poids/volume ou préciser l’unité de la recette ; ne pas inventer de poids moyen."
+  },
+  {
+    "request_key": "measure:Coriandre fraîche:Bouquet",
+    "kind": "unit_mass",
+    "source_label": "Coriandre fraîche",
+    "ingredient_name": "Coriandre fraîche",
+    "unite": "Bouquet",
+    "source_note": "Besoin conservé : 1 bouquet de « Coriandre fraîche ». Aucune équivalence explicite ne permet de convertir en Gramme. L'association officielle et le rangement automatique restent en attente. Mesurer le poids/volume ou préciser l’unité de la recette ; ne pas inventer de poids moyen."
+  },
+  {
+    "request_key": "recipe:83d7443d-30d3-4f51-ad33-a85ef231cd8d:gros sel",
+    "kind": "recipe_quantity",
+    "source_label": "gros sel",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Recette Pot-au-feu : quantité à compléter dans Cookiwiki, pas dans une densité globale."
+  },
+  {
+    "request_key": "recipe:83d7443d-30d3-4f51-ad33-a85ef231cd8d:poivre",
+    "kind": "recipe_quantity",
+    "source_label": "poivre",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Recette Pot-au-feu : quantité à compléter dans Cookiwiki, pas dans une densité globale."
+  },
+  {
+    "request_key": "measure:Canard (cuisse confite):Pièce",
+    "kind": "unit_mass",
+    "source_label": "Canard (cuisse confite)",
+    "ingredient_name": "Canard (cuisse confite)",
+    "unite": "Pièce",
+    "source_note": "Besoin conservé : 4 piece de « Canard (cuisse confite) ». Aucune équivalence explicite ne permet de convertir en Gramme. L'association officielle et le rangement automatique restent en attente. Mesurer le poids/volume ou préciser l’unité de la recette ; ne pas inventer de poids moyen."
+  },
+  {
+    "request_key": "recipe:e0a837b2-6012-4f5a-867c-68c17d823c0c:morceaux de pommes, noix ou noisettes (facultatif)",
+    "kind": "recipe_quantity",
+    "source_label": "morceaux de pommes, noix ou noisettes (facultatif)",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Recette Cake à la compote de pommes : quantité à compléter dans Cookiwiki, pas dans une densité globale."
+  },
+  {
+    "request_key": "measure:Gambas:Pièce",
+    "kind": "unit_mass",
+    "source_label": "Gambas",
+    "ingredient_name": "Gambas",
+    "unite": "Pièce",
+    "source_note": "Besoin conservé : 16 piece de « Gambas ». Aucune équivalence explicite ne permet de convertir en Gramme. L'association officielle et le rangement automatique restent en attente. Mesurer le poids/volume ou préciser l’unité de la recette ; ne pas inventer de poids moyen."
+  },
+  {
+    "request_key": "review:Ail",
+    "kind": "alias",
+    "source_label": "Ail",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Association à valider ; conserver les différences de variété, frais/sec, cru/cuit, fumé/non fumé et les alternatives."
+  },
+  {
+    "request_key": "review:Bacon",
+    "kind": "alias",
+    "source_label": "Bacon",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Association à valider ; conserver les différences de variété, frais/sec, cru/cuit, fumé/non fumé et les alternatives."
+  },
+  {
+    "request_key": "review:Bacon ou jambon",
+    "kind": "compound",
+    "source_label": "Bacon ou jambon",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Association à valider ; conserver les différences de variété, frais/sec, cru/cuit, fumé/non fumé et les alternatives."
+  },
+  {
+    "request_key": "review:Beurre",
+    "kind": "alias",
+    "source_label": "Beurre",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Association à valider ; conserver les différences de variété, frais/sec, cru/cuit, fumé/non fumé et les alternatives."
+  },
+  {
+    "request_key": "review:Bouquet garni",
+    "kind": "alias",
+    "source_label": "Bouquet garni",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Association à valider ; conserver les différences de variété, frais/sec, cru/cuit, fumé/non fumé et les alternatives."
+  },
+  {
+    "request_key": "review:Boursin ail et fines herbes",
+    "kind": "compound",
+    "source_label": "Boursin ail et fines herbes",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Association à valider ; conserver les différences de variété, frais/sec, cru/cuit, fumé/non fumé et les alternatives."
+  },
+  {
+    "request_key": "review:Ciboulette et persil frais",
+    "kind": "compound",
+    "source_label": "Ciboulette et persil frais",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Association à valider ; conserver les différences de variété, frais/sec, cru/cuit, fumé/non fumé et les alternatives."
+  },
+  {
+    "request_key": "review:Coco de Paimpol AOP frais à écosser",
+    "kind": "alias",
+    "source_label": "Coco de Paimpol AOP frais à écosser",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Association à valider ; conserver les différences de variété, frais/sec, cru/cuit, fumé/non fumé et les alternatives."
+  },
+  {
+    "request_key": "review:Cocos de Paimpol AOP en gousses",
+    "kind": "alias",
+    "source_label": "Cocos de Paimpol AOP en gousses",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Association à valider ; conserver les différences de variété, frais/sec, cru/cuit, fumé/non fumé et les alternatives."
+  },
+  {
+    "request_key": "review:Cocos de Paimpol AOP écossés",
+    "kind": "alias",
+    "source_label": "Cocos de Paimpol AOP écossés",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Association à valider ; conserver les différences de variété, frais/sec, cru/cuit, fumé/non fumé et les alternatives."
+  },
+  {
+    "request_key": "review:Cognac",
+    "kind": "alias",
+    "source_label": "Cognac",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Association à valider ; conserver les différences de variété, frais/sec, cru/cuit, fumé/non fumé et les alternatives."
+  },
+  {
+    "request_key": "review:Coriandre fraîche",
+    "kind": "alias",
+    "source_label": "Coriandre fraîche",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Association à valider ; conserver les différences de variété, frais/sec, cru/cuit, fumé/non fumé et les alternatives."
+  },
+  {
+    "request_key": "review:Crevette",
+    "kind": "alias",
+    "source_label": "Crevette",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Association à valider ; conserver les différences de variété, frais/sec, cru/cuit, fumé/non fumé et les alternatives."
+  },
+  {
+    "request_key": "review:Crème fraîche",
+    "kind": "alias",
+    "source_label": "Crème fraîche",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Association à valider ; conserver les différences de variété, frais/sec, cru/cuit, fumé/non fumé et les alternatives."
+  },
+  {
+    "request_key": "review:Farine",
+    "kind": "alias",
+    "source_label": "Farine",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Association à valider ; conserver les différences de variété, frais/sec, cru/cuit, fumé/non fumé et les alternatives."
+  },
+  {
+    "request_key": "review:Fromage de chèvre frais (ou bûche)",
+    "kind": "compound",
+    "source_label": "Fromage de chèvre frais (ou bûche)",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Association à valider ; conserver les différences de variété, frais/sec, cru/cuit, fumé/non fumé et les alternatives."
+  },
+  {
+    "request_key": "review:Gousses d'ail",
+    "kind": "alias",
+    "source_label": "Gousses d'ail",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Association à valider ; conserver les différences de variété, frais/sec, cru/cuit, fumé/non fumé et les alternatives."
+  },
+  {
+    "request_key": "review:Grappe de raisin (blanc ou noir)",
+    "kind": "compound",
+    "source_label": "Grappe de raisin (blanc ou noir)",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Association à valider ; conserver les différences de variété, frais/sec, cru/cuit, fumé/non fumé et les alternatives."
+  },
+  {
+    "request_key": "review:Gruyère",
+    "kind": "alias",
+    "source_label": "Gruyère",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Association à valider ; conserver les différences de variété, frais/sec, cru/cuit, fumé/non fumé et les alternatives."
+  },
+  {
+    "request_key": "review:Lait",
+    "kind": "alias",
+    "source_label": "Lait",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Association à valider ; conserver les différences de variété, frais/sec, cru/cuit, fumé/non fumé et les alternatives."
+  },
+  {
+    "request_key": "review:Mayonnaise",
+    "kind": "alias",
+    "source_label": "Mayonnaise",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Association à valider ; conserver les différences de variété, frais/sec, cru/cuit, fumé/non fumé et les alternatives."
+  },
+  {
+    "request_key": "review:Muffins anglais",
+    "kind": "alias",
+    "source_label": "Muffins anglais",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Association à valider ; conserver les différences de variété, frais/sec, cru/cuit, fumé/non fumé et les alternatives."
+  },
+  {
+    "request_key": "review:Oignon",
+    "kind": "alias",
+    "source_label": "Oignon",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Association à valider ; conserver les différences de variété, frais/sec, cru/cuit, fumé/non fumé et les alternatives."
+  },
+  {
+    "request_key": "review:Poitrine de porc fumée",
+    "kind": "alias",
+    "source_label": "Poitrine de porc fumée",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Association à valider ; conserver les différences de variété, frais/sec, cru/cuit, fumé/non fumé et les alternatives."
+  },
+  {
+    "request_key": "review:Poivre",
+    "kind": "alias",
+    "source_label": "Poivre",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Association à valider ; conserver les différences de variété, frais/sec, cru/cuit, fumé/non fumé et les alternatives."
+  },
+  {
+    "request_key": "review:Poivre du moulin",
+    "kind": "alias",
+    "source_label": "Poivre du moulin",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Association à valider ; conserver les différences de variété, frais/sec, cru/cuit, fumé/non fumé et les alternatives."
+  },
+  {
+    "request_key": "review:Poivre en grains",
+    "kind": "alias",
+    "source_label": "Poivre en grains",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Association à valider ; conserver les différences de variété, frais/sec, cru/cuit, fumé/non fumé et les alternatives."
+  },
+  {
+    "request_key": "review:Poivron jaune ou rouge",
+    "kind": "compound",
+    "source_label": "Poivron jaune ou rouge",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Association à valider ; conserver les différences de variété, frais/sec, cru/cuit, fumé/non fumé et les alternatives."
+  },
+  {
+    "request_key": "review:Saucisses bretonnes (ou saucisses fraîches)",
+    "kind": "compound",
+    "source_label": "Saucisses bretonnes (ou saucisses fraîches)",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Association à valider ; conserver les différences de variété, frais/sec, cru/cuit, fumé/non fumé et les alternatives."
+  },
+  {
+    "request_key": "review:Sel",
+    "kind": "alias",
+    "source_label": "Sel",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Association à valider ; conserver les différences de variété, frais/sec, cru/cuit, fumé/non fumé et les alternatives."
+  },
+  {
+    "request_key": "review:Sel et poivre",
+    "kind": "compound",
+    "source_label": "Sel et poivre",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Association à valider ; conserver les différences de variété, frais/sec, cru/cuit, fumé/non fumé et les alternatives."
+  },
+  {
+    "request_key": "review:Thym",
+    "kind": "alias",
+    "source_label": "Thym",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Association à valider ; conserver les différences de variété, frais/sec, cru/cuit, fumé/non fumé et les alternatives."
+  },
+  {
+    "request_key": "review:Vinaigre de cidre ou de Xérès",
+    "kind": "compound",
+    "source_label": "Vinaigre de cidre ou de Xérès",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Association à valider ; conserver les différences de variété, frais/sec, cru/cuit, fumé/non fumé et les alternatives."
+  },
+  {
+    "request_key": "review:amandes effilées",
+    "kind": "alias",
+    "source_label": "amandes effilées",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Association à valider ; conserver les différences de variété, frais/sec, cru/cuit, fumé/non fumé et les alternatives."
+  },
+  {
+    "request_key": "review:beurre (idéalement demi-sel)",
+    "kind": "alias",
+    "source_label": "beurre (idéalement demi-sel)",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Association à valider ; conserver les différences de variété, frais/sec, cru/cuit, fumé/non fumé et les alternatives."
+  },
+  {
+    "request_key": "review:beurre salé",
+    "kind": "alias",
+    "source_label": "beurre salé",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Association à valider ; conserver les différences de variété, frais/sec, cru/cuit, fumé/non fumé et les alternatives."
+  },
+  {
+    "request_key": "review:bouillon",
+    "kind": "alias",
+    "source_label": "bouillon",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Association à valider ; conserver les différences de variété, frais/sec, cru/cuit, fumé/non fumé et les alternatives."
+  },
+  {
+    "request_key": "review:bouillon de bœuf",
+    "kind": "alias",
+    "source_label": "bouillon de bœuf",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Association à valider ; conserver les différences de variété, frais/sec, cru/cuit, fumé/non fumé et les alternatives."
+  },
+  {
+    "request_key": "review:bouillon de volaille",
+    "kind": "alias",
+    "source_label": "bouillon de volaille",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Association à valider ; conserver les différences de variété, frais/sec, cru/cuit, fumé/non fumé et les alternatives."
+  },
+  {
+    "request_key": "review:bouillon de volaille ou de viande",
+    "kind": "compound",
+    "source_label": "bouillon de volaille ou de viande",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Association à valider ; conserver les différences de variété, frais/sec, cru/cuit, fumé/non fumé et les alternatives."
+  },
+  {
+    "request_key": "review:bouquet de basilic petit vert",
+    "kind": "alias",
+    "source_label": "bouquet de basilic petit vert",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Association à valider ; conserver les différences de variété, frais/sec, cru/cuit, fumé/non fumé et les alternatives."
+  },
+  {
+    "request_key": "review:bouquet garni",
+    "kind": "alias",
+    "source_label": "bouquet garni",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Association à valider ; conserver les différences de variété, frais/sec, cru/cuit, fumé/non fumé et les alternatives."
+  },
+  {
+    "request_key": "review:bûche de chèvre",
+    "kind": "alias",
+    "source_label": "bûche de chèvre",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Association à valider ; conserver les différences de variété, frais/sec, cru/cuit, fumé/non fumé et les alternatives."
+  },
+  {
+    "request_key": "review:bûche de fromage de chèvre",
+    "kind": "alias",
+    "source_label": "bûche de fromage de chèvre",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Association à valider ; conserver les différences de variété, frais/sec, cru/cuit, fumé/non fumé et les alternatives."
+  },
+  {
+    "request_key": "review:cerneaux de noix",
+    "kind": "alias",
+    "source_label": "cerneaux de noix",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Association à valider ; conserver les différences de variété, frais/sec, cru/cuit, fumé/non fumé et les alternatives."
+  },
+  {
+    "request_key": "review:champignons",
+    "kind": "alias",
+    "source_label": "champignons",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Association à valider ; conserver les différences de variété, frais/sec, cru/cuit, fumé/non fumé et les alternatives."
+  },
+  {
+    "request_key": "review:chapelure ou fromage râpé",
+    "kind": "compound",
+    "source_label": "chapelure ou fromage râpé",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Association à valider ; conserver les différences de variété, frais/sec, cru/cuit, fumé/non fumé et les alternatives."
+  },
+  {
+    "request_key": "review:chocolat",
+    "kind": "alias",
+    "source_label": "chocolat",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Association à valider ; conserver les différences de variété, frais/sec, cru/cuit, fumé/non fumé et les alternatives."
+  },
+  {
+    "request_key": "review:châtaignes cuites au naturel",
+    "kind": "alias",
+    "source_label": "châtaignes cuites au naturel",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Association à valider ; conserver les différences de variété, frais/sec, cru/cuit, fumé/non fumé et les alternatives."
+  },
+  {
+    "request_key": "review:compote de pommes (idéalement sans sucres ajoutés)",
+    "kind": "alias",
+    "source_label": "compote de pommes (idéalement sans sucres ajoutés)",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Association à valider ; conserver les différences de variété, frais/sec, cru/cuit, fumé/non fumé et les alternatives."
+  },
+  {
+    "request_key": "review:confiture d'abricot",
+    "kind": "alias",
+    "source_label": "confiture d'abricot",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Association à valider ; conserver les différences de variété, frais/sec, cru/cuit, fumé/non fumé et les alternatives."
+  },
+  {
+    "request_key": "review:croûtons de pain",
+    "kind": "alias",
+    "source_label": "croûtons de pain",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Association à valider ; conserver les différences de variété, frais/sec, cru/cuit, fumé/non fumé et les alternatives."
+  },
+  {
+    "request_key": "review:crème fraîche",
+    "kind": "alias",
+    "source_label": "crème fraîche",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Association à valider ; conserver les différences de variété, frais/sec, cru/cuit, fumé/non fumé et les alternatives."
+  },
+  {
+    "request_key": "review:crème fraîche entière",
+    "kind": "alias",
+    "source_label": "crème fraîche entière",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Association à valider ; conserver les différences de variété, frais/sec, cru/cuit, fumé/non fumé et les alternatives."
+  },
+  {
+    "request_key": "review:demi-quetsches et demi-reines-claudes congelées",
+    "kind": "compound",
+    "source_label": "demi-quetsches et demi-reines-claudes congelées",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Association à valider ; conserver les différences de variété, frais/sec, cru/cuit, fumé/non fumé et les alternatives."
+  },
+  {
+    "request_key": "review:farine",
+    "kind": "alias",
+    "source_label": "farine",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Association à valider ; conserver les différences de variété, frais/sec, cru/cuit, fumé/non fumé et les alternatives."
+  },
+  {
+    "request_key": "review:farine (ou 150g farine + 50g poudre d'amandes, noisette ou pistache)",
+    "kind": "compound",
+    "source_label": "farine (ou 150g farine + 50g poudre d'amandes, noisette ou pistache)",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Association à valider ; conserver les différences de variété, frais/sec, cru/cuit, fumé/non fumé et les alternatives."
+  },
+  {
+    "request_key": "review:farine tout usage",
+    "kind": "alias",
+    "source_label": "farine tout usage",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Association à valider ; conserver les différences de variété, frais/sec, cru/cuit, fumé/non fumé et les alternatives."
+  },
+  {
+    "request_key": "review:fleur de sel",
+    "kind": "alias",
+    "source_label": "fleur de sel",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Association à valider ; conserver les différences de variété, frais/sec, cru/cuit, fumé/non fumé et les alternatives."
+  },
+  {
+    "request_key": "review:fromage de chèvre ou fromage bleu",
+    "kind": "compound",
+    "source_label": "fromage de chèvre ou fromage bleu",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Association à valider ; conserver les différences de variété, frais/sec, cru/cuit, fumé/non fumé et les alternatives."
+  },
+  {
+    "request_key": "review:gousse de vanille ou bâton de cannelle (facultatif)",
+    "kind": "compound",
+    "source_label": "gousse de vanille ou bâton de cannelle (facultatif)",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Association à valider ; conserver les différences de variété, frais/sec, cru/cuit, fumé/non fumé et les alternatives."
+  },
+  {
+    "request_key": "review:gousses d'ail",
+    "kind": "alias",
+    "source_label": "gousses d'ail",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Association à valider ; conserver les différences de variété, frais/sec, cru/cuit, fumé/non fumé et les alternatives."
+  },
+  {
+    "request_key": "review:gros sel",
+    "kind": "alias",
+    "source_label": "gros sel",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Association à valider ; conserver les différences de variété, frais/sec, cru/cuit, fumé/non fumé et les alternatives."
+  },
+  {
+    "request_key": "review:gros sel de mer",
+    "kind": "alias",
+    "source_label": "gros sel de mer",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Association à valider ; conserver les différences de variété, frais/sec, cru/cuit, fumé/non fumé et les alternatives."
+  },
+  {
+    "request_key": "review:gîte à la noix",
+    "kind": "alias",
+    "source_label": "gîte à la noix",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Association à valider ; conserver les différences de variété, frais/sec, cru/cuit, fumé/non fumé et les alternatives."
+  },
+  {
+    "request_key": "review:huile",
+    "kind": "alias",
+    "source_label": "huile",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Association à valider ; conserver les différences de variété, frais/sec, cru/cuit, fumé/non fumé et les alternatives."
+  },
+  {
+    "request_key": "review:huile neutre",
+    "kind": "alias",
+    "source_label": "huile neutre",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Association à valider ; conserver les différences de variété, frais/sec, cru/cuit, fumé/non fumé et les alternatives."
+  },
+  {
+    "request_key": "review:huile ou beurre",
+    "kind": "compound",
+    "source_label": "huile ou beurre",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Association à valider ; conserver les différences de variété, frais/sec, cru/cuit, fumé/non fumé et les alternatives."
+  },
+  {
+    "request_key": "review:jambon cru ou blanc",
+    "kind": "compound",
+    "source_label": "jambon cru ou blanc",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Association à valider ; conserver les différences de variété, frais/sec, cru/cuit, fumé/non fumé et les alternatives."
+  },
+  {
+    "request_key": "review:jambon haché gros ou lardons",
+    "kind": "compound",
+    "source_label": "jambon haché gros ou lardons",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Association à valider ; conserver les différences de variété, frais/sec, cru/cuit, fumé/non fumé et les alternatives."
+  },
+  {
+    "request_key": "review:lait",
+    "kind": "alias",
+    "source_label": "lait",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Association à valider ; conserver les différences de variété, frais/sec, cru/cuit, fumé/non fumé et les alternatives."
+  },
+  {
+    "request_key": "review:lambig (ou calvados)",
+    "kind": "compound",
+    "source_label": "lambig (ou calvados)",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Association à valider ; conserver les différences de variété, frais/sec, cru/cuit, fumé/non fumé et les alternatives."
+  },
+  {
+    "request_key": "review:lard gras",
+    "kind": "alias",
+    "source_label": "lard gras",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Association à valider ; conserver les différences de variété, frais/sec, cru/cuit, fumé/non fumé et les alternatives."
+  },
+  {
+    "request_key": "review:lardons fumés",
+    "kind": "alias",
+    "source_label": "lardons fumés",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Association à valider ; conserver les différences de variété, frais/sec, cru/cuit, fumé/non fumé et les alternatives."
+  },
+  {
+    "request_key": "review:lardons fumés ou nature",
+    "kind": "compound",
+    "source_label": "lardons fumés ou nature",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Association à valider ; conserver les différences de variété, frais/sec, cru/cuit, fumé/non fumé et les alternatives."
+  },
+  {
+    "request_key": "review:levure",
+    "kind": "alias",
+    "source_label": "levure",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Association à valider ; conserver les différences de variété, frais/sec, cru/cuit, fumé/non fumé et les alternatives."
+  },
+  {
+    "request_key": "review:macreuse",
+    "kind": "alias",
+    "source_label": "macreuse",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Association à valider ; conserver les différences de variété, frais/sec, cru/cuit, fumé/non fumé et les alternatives."
+  },
+  {
+    "request_key": "review:morceaux de pommes, noix ou noisettes (facultatif)",
+    "kind": "compound",
+    "source_label": "morceaux de pommes, noix ou noisettes (facultatif)",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Association à valider ; conserver les différences de variété, frais/sec, cru/cuit, fumé/non fumé et les alternatives."
+  },
+  {
+    "request_key": "review:morceaux de poulet (cuisses ou filets)",
+    "kind": "compound",
+    "source_label": "morceaux de poulet (cuisses ou filets)",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Association à valider ; conserver les différences de variété, frais/sec, cru/cuit, fumé/non fumé et les alternatives."
+  },
+  {
+    "request_key": "review:moutarde de Dijon",
+    "kind": "alias",
+    "source_label": "moutarde de Dijon",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Association à valider ; conserver les différences de variété, frais/sec, cru/cuit, fumé/non fumé et les alternatives."
+  },
+  {
+    "request_key": "review:moutarde forte de Dijon",
+    "kind": "alias",
+    "source_label": "moutarde forte de Dijon",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Association à valider ; conserver les différences de variété, frais/sec, cru/cuit, fumé/non fumé et les alternatives."
+  },
+  {
+    "request_key": "review:moutarde à l'ancienne",
+    "kind": "alias",
+    "source_label": "moutarde à l'ancienne",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Association à valider ; conserver les différences de variété, frais/sec, cru/cuit, fumé/non fumé et les alternatives."
+  },
+  {
+    "request_key": "review:oignon",
+    "kind": "alias",
+    "source_label": "oignon",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Association à valider ; conserver les différences de variété, frais/sec, cru/cuit, fumé/non fumé et les alternatives."
+  },
+  {
+    "request_key": "review:oignons piqués d'un clou de girofle",
+    "kind": "alias",
+    "source_label": "oignons piqués d'un clou de girofle",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Association à valider ; conserver les différences de variété, frais/sec, cru/cuit, fumé/non fumé et les alternatives."
+  },
+  {
+    "request_key": "review:oignons rosés de Roscoff AOP",
+    "kind": "alias",
+    "source_label": "oignons rosés de Roscoff AOP",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Association à valider ; conserver les différences de variété, frais/sec, cru/cuit, fumé/non fumé et les alternatives."
+  },
+  {
+    "request_key": "review:olives dénoyautées (noires et/ou vertes) et/ou tomates séchées",
+    "kind": "compound",
+    "source_label": "olives dénoyautées (noires et/ou vertes) et/ou tomates séchées",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Association à valider ; conserver les différences de variété, frais/sec, cru/cuit, fumé/non fumé et les alternatives."
+  },
+  {
+    "request_key": "review:olives noires et vertes",
+    "kind": "compound",
+    "source_label": "olives noires et vertes",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Association à valider ; conserver les différences de variété, frais/sec, cru/cuit, fumé/non fumé et les alternatives."
+  },
+  {
+    "request_key": "review:os à moelle",
+    "kind": "alias",
+    "source_label": "os à moelle",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Association à valider ; conserver les différences de variété, frais/sec, cru/cuit, fumé/non fumé et les alternatives."
+  },
+  {
+    "request_key": "review:persil",
+    "kind": "alias",
+    "source_label": "persil",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Association à valider ; conserver les différences de variété, frais/sec, cru/cuit, fumé/non fumé et les alternatives."
+  },
+  {
+    "request_key": "review:persil haché",
+    "kind": "alias",
+    "source_label": "persil haché",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Association à valider ; conserver les différences de variété, frais/sec, cru/cuit, fumé/non fumé et les alternatives."
+  },
+  {
+    "request_key": "review:petits champignons",
+    "kind": "alias",
+    "source_label": "petits champignons",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Association à valider ; conserver les différences de variété, frais/sec, cru/cuit, fumé/non fumé et les alternatives."
+  },
+  {
+    "request_key": "review:petits morceaux de céleri",
+    "kind": "alias",
+    "source_label": "petits morceaux de céleri",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Association à valider ; conserver les différences de variété, frais/sec, cru/cuit, fumé/non fumé et les alternatives."
+  },
+  {
+    "request_key": "review:pincée de sel",
+    "kind": "alias",
+    "source_label": "pincée de sel",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Association à valider ; conserver les différences de variété, frais/sec, cru/cuit, fumé/non fumé et les alternatives."
+  },
+  {
+    "request_key": "review:plat de côte",
+    "kind": "alias",
+    "source_label": "plat de côte",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Association à valider ; conserver les différences de variété, frais/sec, cru/cuit, fumé/non fumé et les alternatives."
+  },
+  {
+    "request_key": "review:poires fraîches (Conférence ou Comice)",
+    "kind": "compound",
+    "source_label": "poires fraîches (Conférence ou Comice)",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Association à valider ; conserver les différences de variété, frais/sec, cru/cuit, fumé/non fumé et les alternatives."
+  },
+  {
+    "request_key": "review:poitrine de veau en morceaux",
+    "kind": "alias",
+    "source_label": "poitrine de veau en morceaux",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Association à valider ; conserver les différences de variété, frais/sec, cru/cuit, fumé/non fumé et les alternatives."
+  },
+  {
+    "request_key": "review:poitrine fumée en tranches très minces",
+    "kind": "alias",
+    "source_label": "poitrine fumée en tranches très minces",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Association à valider ; conserver les différences de variété, frais/sec, cru/cuit, fumé/non fumé et les alternatives."
+  },
+  {
+    "request_key": "review:poitrine salée en tranches très minces",
+    "kind": "alias",
+    "source_label": "poitrine salée en tranches très minces",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Association à valider ; conserver les différences de variété, frais/sec, cru/cuit, fumé/non fumé et les alternatives."
+  },
+  {
+    "request_key": "review:poivre",
+    "kind": "alias",
+    "source_label": "poivre",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Association à valider ; conserver les différences de variété, frais/sec, cru/cuit, fumé/non fumé et les alternatives."
+  },
+  {
+    "request_key": "review:poivre du moulin",
+    "kind": "alias",
+    "source_label": "poivre du moulin",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Association à valider ; conserver les différences de variété, frais/sec, cru/cuit, fumé/non fumé et les alternatives."
+  },
+  {
+    "request_key": "review:pommes de terre (BF15 ou Charlotte)",
+    "kind": "compound",
+    "source_label": "pommes de terre (BF15 ou Charlotte)",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Association à valider ; conserver les différences de variété, frais/sec, cru/cuit, fumé/non fumé et les alternatives."
+  },
+  {
+    "request_key": "review:pommes de terre (chair jaune BF ou charlotte)",
+    "kind": "compound",
+    "source_label": "pommes de terre (chair jaune BF ou charlotte)",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Association à valider ; conserver les différences de variété, frais/sec, cru/cuit, fumé/non fumé et les alternatives."
+  },
+  {
+    "request_key": "review:pommes de terre BF15",
+    "kind": "alias",
+    "source_label": "pommes de terre BF15",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Association à valider ; conserver les différences de variété, frais/sec, cru/cuit, fumé/non fumé et les alternatives."
+  },
+  {
+    "request_key": "review:pommes de terre à chair ferme",
+    "kind": "alias",
+    "source_label": "pommes de terre à chair ferme",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Association à valider ; conserver les différences de variété, frais/sec, cru/cuit, fumé/non fumé et les alternatives."
+  },
+  {
+    "request_key": "review:pommes de terre épluchées (type Bintje ou Manon)",
+    "kind": "compound",
+    "source_label": "pommes de terre épluchées (type Bintje ou Manon)",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Association à valider ; conserver les différences de variété, frais/sec, cru/cuit, fumé/non fumé et les alternatives."
+  },
+  {
+    "request_key": "review:poulet découpé",
+    "kind": "alias",
+    "source_label": "poulet découpé",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Association à valider ; conserver les différences de variété, frais/sec, cru/cuit, fumé/non fumé et les alternatives."
+  },
+  {
+    "request_key": "review:pâte brisée ou sablée",
+    "kind": "compound",
+    "source_label": "pâte brisée ou sablée",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Association à valider ; conserver les différences de variété, frais/sec, cru/cuit, fumé/non fumé et les alternatives."
+  },
+  {
+    "request_key": "review:pâte sablée au parmesan",
+    "kind": "alias",
+    "source_label": "pâte sablée au parmesan",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Association à valider ; conserver les différences de variété, frais/sec, cru/cuit, fumé/non fumé et les alternatives."
+  },
+  {
+    "request_key": "review:pêches au sirop",
+    "kind": "alias",
+    "source_label": "pêches au sirop",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Association à valider ; conserver les différences de variété, frais/sec, cru/cuit, fumé/non fumé et les alternatives."
+  },
+  {
+    "request_key": "review:pêches jaunes ou nectarines",
+    "kind": "compound",
+    "source_label": "pêches jaunes ou nectarines",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Association à valider ; conserver les différences de variété, frais/sec, cru/cuit, fumé/non fumé et les alternatives."
+  },
+  {
+    "request_key": "review:pêches ou nectarines",
+    "kind": "compound",
+    "source_label": "pêches ou nectarines",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Association à valider ; conserver les différences de variété, frais/sec, cru/cuit, fumé/non fumé et les alternatives."
+  },
+  {
+    "request_key": "review:ras-el-hanout",
+    "kind": "alias",
+    "source_label": "ras-el-hanout",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Association à valider ; conserver les différences de variété, frais/sec, cru/cuit, fumé/non fumé et les alternatives."
+  },
+  {
+    "request_key": "review:reblochon",
+    "kind": "alias",
+    "source_label": "reblochon",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Association à valider ; conserver les différences de variété, frais/sec, cru/cuit, fumé/non fumé et les alternatives."
+  },
+  {
+    "request_key": "review:riz arborio spécial risotto",
+    "kind": "alias",
+    "source_label": "riz arborio spécial risotto",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Association à valider ; conserver les différences de variété, frais/sec, cru/cuit, fumé/non fumé et les alternatives."
+  },
+  {
+    "request_key": "review:saumon fumé",
+    "kind": "alias",
+    "source_label": "saumon fumé",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Association à valider ; conserver les différences de variété, frais/sec, cru/cuit, fumé/non fumé et les alternatives."
+  },
+  {
+    "request_key": "review:sel",
+    "kind": "alias",
+    "source_label": "sel",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Association à valider ; conserver les différences de variété, frais/sec, cru/cuit, fumé/non fumé et les alternatives."
+  },
+  {
+    "request_key": "review:semoule fine ou biscuits écrasés",
+    "kind": "compound",
+    "source_label": "semoule fine ou biscuits écrasés",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Association à valider ; conserver les différences de variété, frais/sec, cru/cuit, fumé/non fumé et les alternatives."
+  },
+  {
+    "request_key": "review:sucre",
+    "kind": "alias",
+    "source_label": "sucre",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Association à valider ; conserver les différences de variété, frais/sec, cru/cuit, fumé/non fumé et les alternatives."
+  },
+  {
+    "request_key": "review:sucre (ou miel)",
+    "kind": "compound",
+    "source_label": "sucre (ou miel)",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Association à valider ; conserver les différences de variété, frais/sec, cru/cuit, fumé/non fumé et les alternatives."
+  },
+  {
+    "request_key": "review:sucre de canne",
+    "kind": "alias",
+    "source_label": "sucre de canne",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Association à valider ; conserver les différences de variété, frais/sec, cru/cuit, fumé/non fumé et les alternatives."
+  },
+  {
+    "request_key": "review:sucre en morceaux (pour le caramel)",
+    "kind": "alias",
+    "source_label": "sucre en morceaux (pour le caramel)",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Association à valider ; conserver les différences de variété, frais/sec, cru/cuit, fumé/non fumé et les alternatives."
+  },
+  {
+    "request_key": "review:sucre vanillé",
+    "kind": "alias",
+    "source_label": "sucre vanillé",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Association à valider ; conserver les différences de variété, frais/sec, cru/cuit, fumé/non fumé et les alternatives."
+  },
+  {
+    "request_key": "review:thym séché ou herbes de Provence",
+    "kind": "compound",
+    "source_label": "thym séché ou herbes de Provence",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Association à valider ; conserver les différences de variété, frais/sec, cru/cuit, fumé/non fumé et les alternatives."
+  },
+  {
+    "request_key": "review:thym émietté",
+    "kind": "alias",
+    "source_label": "thym émietté",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Association à valider ; conserver les différences de variété, frais/sec, cru/cuit, fumé/non fumé et les alternatives."
+  },
+  {
+    "request_key": "review:tomates pelées",
+    "kind": "alias",
+    "source_label": "tomates pelées",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Association à valider ; conserver les différences de variété, frais/sec, cru/cuit, fumé/non fumé et les alternatives."
+  },
+  {
+    "request_key": "review:tranches de baguette grillées",
+    "kind": "alias",
+    "source_label": "tranches de baguette grillées",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Association à valider ; conserver les différences de variété, frais/sec, cru/cuit, fumé/non fumé et les alternatives."
+  },
+  {
+    "request_key": "review:tranches de pain (mie ou campagne)",
+    "kind": "compound",
+    "source_label": "tranches de pain (mie ou campagne)",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Association à valider ; conserver les différences de variété, frais/sec, cru/cuit, fumé/non fumé et les alternatives."
+  },
+  {
+    "request_key": "review:tête d'ail rose de Lautrec",
+    "kind": "alias",
+    "source_label": "tête d'ail rose de Lautrec",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Association à valider ; conserver les différences de variété, frais/sec, cru/cuit, fumé/non fumé et les alternatives."
+  },
+  {
+    "request_key": "review:ventrèche ou lard demi-sel séché",
+    "kind": "compound",
+    "source_label": "ventrèche ou lard demi-sel séché",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Association à valider ; conserver les différences de variété, frais/sec, cru/cuit, fumé/non fumé et les alternatives."
+  },
+  {
+    "request_key": "review:vin blanc sec",
+    "kind": "alias",
+    "source_label": "vin blanc sec",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Association à valider ; conserver les différences de variété, frais/sec, cru/cuit, fumé/non fumé et les alternatives."
+  },
+  {
+    "request_key": "review:vin blanc sec (type Aligoté)",
+    "kind": "alias",
+    "source_label": "vin blanc sec (type Aligoté)",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Association à valider ; conserver les différences de variété, frais/sec, cru/cuit, fumé/non fumé et les alternatives."
+  },
+  {
+    "request_key": "review:vin blanc sec ou bouillon de volaille",
+    "kind": "compound",
+    "source_label": "vin blanc sec ou bouillon de volaille",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Association à valider ; conserver les différences de variété, frais/sec, cru/cuit, fumé/non fumé et les alternatives."
+  },
+  {
+    "request_key": "review:échine de porc",
+    "kind": "alias",
+    "source_label": "échine de porc",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Association à valider ; conserver les différences de variété, frais/sec, cru/cuit, fumé/non fumé et les alternatives."
+  },
+  {
+    "request_key": "review:épinards hachés surgelés",
+    "kind": "alias",
+    "source_label": "épinards hachés surgelés",
+    "ingredient_name": null,
+    "unite": null,
+    "source_note": "Association à valider ; conserver les différences de variété, frais/sec, cru/cuit, fumé/non fumé et les alternatives."
+  },
+  {
+    "request_key": "identity:Ail:Pièce:Gousse",
+    "kind": "unit_definition",
+    "source_label": "Ail · Pièce → Gousse",
+    "ingredient_name": "Ail",
+    "unite": "Pièce",
+    "source_note": "Pièce peut désigner une tête ou une gousse. Compter les gousses en stock ; aucune conversion universelle tête/gousse."
+  },
+  {
+    "request_key": "identity:Saucisse fraîche:Pièce:Gramme",
+    "kind": "unit_mass",
+    "source_label": "Saucisse fraîche",
+    "ingredient_name": "Saucisse fraîche",
+    "unite": "Pièce",
+    "source_note": "Peser le format réellement acheté. Un paquet de 870 g ne donne pas le poids par saucisse sans connaître son nombre."
+  }
+]

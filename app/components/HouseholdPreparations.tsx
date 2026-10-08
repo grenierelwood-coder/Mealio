@@ -1,0 +1,9 @@
+'use client'
+import { useEffect,useState } from 'react'
+type Preparation={ingredient_id:string;nom:string;enabled:boolean;components:{name:string;qty:number;unit:string}[]}
+export default function HouseholdPreparations(){
+ const [rows,setRows]=useState<Preparation[]>([]),[error,setError]=useState(''),[busy,setBusy]=useState('')
+ useEffect(()=>{fetch('/api/admin/preparations',{cache:'no-store'}).then(async r=>{const d=await r.json();if(!r.ok)throw new Error(d.error);setRows(d.preparations||[])}).catch(e=>setError(e.message))},[])
+ async function toggle(row:Preparation){if(busy)return;setBusy(row.ingredient_id);setError('');try{const r=await fetch('/api/admin/preparations',{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({ingredient_id:row.ingredient_id,enabled:!row.enabled})});const d=await r.json();if(!r.ok)throw new Error(d.error);setRows(items=>items.map(i=>i.ingredient_id===row.ingredient_id?{...i,enabled:!i.enabled}:i))}catch(e){setError(e instanceof Error?e.message:'Sauvegarde impossible.')}finally{setBusy('')}}
+ return <section className="my-4 rounded-xl border bg-white p-4"><h2 className="font-black">Préparations maison du foyer</h2>{error&&<p role="alert" className="mt-2 text-sm text-red-700">{error}</p>}{!rows.length&&!error&&<p className="mt-2 text-sm text-slate-500">Aucune préparation configurée.</p>}{rows.map(row=><div key={row.ingredient_id} className="mt-3"><label className="font-bold"><input type="checkbox" disabled={Boolean(busy)} checked={row.enabled} onChange={()=>void toggle(row)}/> Préparer {row.nom} maison</label><p className="mt-1 text-sm">Composition par recette de base : {row.components.map(c=>`${c.qty?`${c.qty} ${c.unit}`:'Présence'} ${c.name}`).join(' · ')}. Les portions du planning ajustent les besoins. Activé : le stock du produit préparé est ignoré ; désactivé : le produit est acheté ou pris dans le stock normalement.</p></div>)}</section>
+}

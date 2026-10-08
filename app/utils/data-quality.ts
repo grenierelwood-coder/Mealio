@@ -1,3 +1,4 @@
+import { pantryMode, type PantryProduct } from './pantry-policy'
 import { isPresenceOnlyIngredient } from './quantity-policy'
 
 export type DataQualitySeverity = 'error' | 'warning' | 'info'
@@ -18,6 +19,7 @@ export type DataQualityIssue = {
 }
 
 export type DataQualityDataset = {
+  pantryProducts?: PantryProduct[]
   ingredients: Array<{
     id: string
     nom: string | null
@@ -103,6 +105,9 @@ function pushIssue(issues: DataQualityIssue[], issue: Omit<DataQualityIssue, 'ca
 
 export function runDataQualityAudit(dataset: DataQualityDataset): DataQualityReport {
   const issues: DataQualityIssue[] = []
+  const pantry = new Map((dataset.pantryProducts ?? []).map(p => [p.ingredient_id, p]))
+  const presence = (ingredient: DataQualityDataset['ingredients'][number]) =>
+    isPresenceOnlyIngredient({ ...ingredient, quantity_mode: pantryMode(pantry.get(ingredient.id)) ?? (dataset.pantryProducts ? 'quantity' : undefined) })
   const ingredients = dataset.ingredients
   const ingredientById = new Map(ingredients.map(i => [i.id, i]))
   const unitByNorm = new Map<string, DataQualityDataset['units'][number]>()
@@ -110,6 +115,8 @@ export function runDataQualityAudit(dataset: DataQualityDataset): DataQualityRep
   for (const unit of dataset.units) {
     const key = normalizeDataQualityValue(unit.unite)
     if (key) unitByNorm.set(key, unit)
+    const alias = normalizeDataQualityValue(unit.abreviation)
+    if (alias) unitByNorm.set(alias, unit)
   }
 
   // ---------------------------------------------------------------------------
@@ -158,7 +165,7 @@ export function runDataQualityAudit(dataset: DataQualityDataset): DataQualityRep
     }
 
     // Les ingrédients « présence » n'ont pas besoin d'une unité de calcul.
-    if (!isPresenceOnlyIngredient(ingredient)) {
+    if (!presence(ingredient)) {
       const reference = String(ingredient.unite_reference ?? '').trim()
       if (!reference) {
         pushIssue(issues, {
@@ -235,7 +242,7 @@ export function runDataQualityAudit(dataset: DataQualityDataset): DataQualityRep
         title: 'Famille d’unité manquante', message: `« ${name} » n’a pas de famille.`,
         relatedTable: 'unit_mappings', unit: name,
       })
-    } else if (!['poids', 'volume', 'divers'].includes(family)) {
+    } else if (!['poids', 'volume', 'divers', 'unite'].includes(family)) {
       pushIssue(issues, {
         code: 'UNIT_FAMILY_UNKNOWN', severity: 'error',
         title: 'Famille d’unité inconnue', message: `« ${name} » a une famille « ${unit.type_unite} » non reconnue.`,
@@ -336,7 +343,7 @@ export function runDataQualityAudit(dataset: DataQualityDataset): DataQualityRep
       })
       continue
     }
-    if (isPresenceOnlyIngredient(ingredient)) {
+    if (presence(ingredient)) {
       pushIssue(issues, {
         code: 'PRESENCE_DENSITY_UNEXPECTED', severity: 'warning',
         title: 'Densité sur un ingrédient « présence »',
@@ -363,7 +370,8 @@ export function runDataQualityAudit(dataset: DataQualityDataset): DataQualityRep
         ingredientName: ingredient.nom ?? undefined, unit: density.unite,
       })
     }
-    const key = `${density.ingredient_id}|${normalizeDataQualityValue(density.unite)}`
+    const densityUnit = unitByNorm.get(normalizeDataQualityValue(density.unite))
+    const key = `${density.ingredient_id}|${normalizeDataQualityValue(densityUnit?.unite ?? density.unite)}`
     const group = densitiesByIngredient.get(key) ?? []
     group.push(density)
     densitiesByIngredient.set(key, group)
@@ -422,7 +430,7 @@ export function runDataQualityAudit(dataset: DataQualityDataset): DataQualityRep
         })
         continue
       }
-      if (isPresenceOnlyIngredient(ingredient)) continue
+      if (presence(ingredient)) continue
       const unit = String(row.unite ?? '').trim()
       if (!unit) {
         pushIssue(issues, {

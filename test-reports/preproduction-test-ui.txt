@@ -1,0 +1,17 @@
+
+> mealio@1.2.27 test:ui
+> node scripts/test-admin-render.cjs && node scripts/test-inventory-integration-render.cjs
+
+Admin: chargement sans fiche, édition du poids et sauvegarde 120 g — OK
+Aide : repliée, contextualisée et sans réseau ; préparation production : lecture seule et état en cours — OK
+Inventaire : présence sans unités, confirmation distincte du lieu et rappels contextualisés — OK
+KH : notification exclusive, nouvelles recettes seules et question quantitative explicite — OK
+Intégration : import du bon foyer, reprise sans répétition, indicateur en cours et diagnostic de conversion ; rangement : liens contextualisés — OK
+Rapport : estimations des produits en présence exclues — OK
+Recettes et épicerie : aucune dose en présence, unité à choisir en sortie de présence — OK
+Corrections : estimation ciblée, autres ingrédients conservés, retour et restauration de la liste — OK
+Correspondance déjà officielle et choix de préparation maison — OK
+Courses : association préremplie, conversion 120 g, conflit et reprise sans double enregistrement — OK
+Anti-gaspi : choix ET transmis avec le produit du stock — OK
+Menus : rangement retiré ; recettes : quantité absente et édition du seul choix actif — OK
+Inventaire : recherche globale et sauvegarde par lieu ; intégration : recette sélectionnée et campagne — OK

@@ -1,0 +1,1396 @@
+
+> mealio@1.2.27 test
+> node scripts/test-offline.mjs
+
+✔ PASS: référentiel cohérent et conversions obsolètes vides (3.4808ms)
+✔ FAIL: une conversion obsolète matérialisée est interdite (0.7321ms)
+✔ FAIL: un pont obsolète matérialisé est interdit (0.4503ms)
+✔ FAIL: une unité officielle inconnue est détectée (0.4941ms)
+✔ FAIL: une densité invalide est détectée (0.5098ms)
+✔ FAIL: un synonyme ambigu est détecté (0.406ms)
+✔ WARNING: une ancienne unité opérationnelle différente de la référence est signalée (0.3952ms)
+✔ PASS: tout ingrédient en mode Présence est protégé contre les densités (0.8039ms)
+✔ PASS: un ingrédient quantifiable peut recevoir une densité (0.3633ms)
+✔ résolution déterministe : exact, synonyme et refus du faux positif (3.3235ms)
+✔ normalisation de ligne : quantité, unité et synonymes (2.8006ms)
+✔ servings : le besoin est correctement redimensionné (0.7668ms)
+✔ miel : cs et cc utilisent uniquement les densités explicites (1.7205ms)
+✔ presence-only : jamais de calcul quantitatif ni de densité (1.0456ms)
+✔ plusieurs lignes de stock exactes sont toutes additionnées (2.5581ms)
+✔ stock supérieur au besoin : aucun achat (0.4077ms)
+✔ stock insuffisant : achat égal au manque (0.405ms)
+✔ anti-faux-positif : courgette ne doit pas matcher poireau (0.3362ms)
+✔ anti-faux-positif : farine de blé ne doit pas consommer farine de riz (0.4429ms)
+✔ presence : stock présent = aucun achat, stock absent = présence à acheter (0.4717ms)
+✔ pipeline complet : recette → résolution → agrégation → stock → achat (1.9253ms)
+✔ agrégation : deux recettes partagent correctement le même besoin (0.272ms)
+✔ Cookiwiki sans ID officiel : résultat proposé puis sélectionné via label: reste recherchable (20.1214ms)
+✔ OU : au moins un ; ET : tous, avec pluriels et synonymes (17.9364ms)
+✔ sélection mixte stock + référentiel : aucun choix ignoré, foyer isolé par username (5.965ms)
+✔ la farine de riz et un titre contenant blé ne deviennent pas des ingrédients farine de blé (2.9021ms)
+✔ Cookiwiki : choix actif uniquement, facultatif exclu et structure périmée ignorée (4.2184ms)
+✔ produit urgent sans association officielle : recherche exacte sans Claude (22.258ms)
+✔ mode invalide refusé ; session absente refusée avant lecture DB (1.6569ms)
+✔ erreur Cookiwiki remontée plutôt que présentée comme aucune recette (1.6958ms)
+✔ Anti-gaspi : ingrédients actifs de Tian de tomates, courgettes et aubergines (4.3807ms)
+✔ Anti-gaspi : ingrédients actifs de Pommes de terre rôties à la suédoise (2.2481ms)
+✔ Anti-gaspi : ingrédients actifs de Gougères au fromage de Valí  (3.7058ms)
+✔ Anti-gaspi : ingrédients actifs de Recette œuf Bénédicte (3.3328ms)
+✔ Anti-gaspi : ingrédients actifs de Tarte aux épinards et chèvre (3.6583ms)
+✔ Anti-gaspi : ingrédients actifs de Tarte fine aux courgettes et Boursin (3.1855ms)
+✔ Anti-gaspi : ingrédients actifs de Cake d'été (4.6615ms)
+✔ Anti-gaspi : ingrédients actifs de Tendrons de veau à la gardiane (4.7526ms)
+✔ Anti-gaspi : ingrédients actifs de Le crumble aux pommes du chat qui tousse (1.7267ms)
+✔ Anti-gaspi : ingrédients actifs de Crème brûlée géante  (1.2283ms)
+✔ Anti-gaspi : ingrédients actifs de Gâteau aux pêches de Jeanine Laurent (2.2422ms)
+✔ Anti-gaspi : ingrédients actifs de Pommes de terre vigneronnes (2.0682ms)
+✔ Anti-gaspi : ingrédients actifs de Gratin de courgettes (2.2257ms)
+✔ Anti-gaspi : ingrédients actifs de Barbotton (1.2943ms)
+✔ Anti-gaspi : ingrédients actifs de Pâte brisée, salée ou sucrée façon Vali (0.8868ms)
+✔ Anti-gaspi : ingrédients actifs de Rillettes de saumon frais et fumé / recette d'Oma pour nos fiançailles !! (1.7835ms)
+✔ Anti-gaspi : ingrédients actifs de Œufs en meurette (5.9502ms)
+✔ Anti-gaspi : ingrédients actifs de La Tartiflette au Reblochon  (1.8078ms)
+✔ Anti-gaspi : ingrédients actifs de Risotto aux champignons (4.8836ms)
+✔ Anti-gaspi : ingrédients actifs de Le michon breton (3.4958ms)
+✔ Anti-gaspi : ingrédients actifs de Hachis parmentier (3.8712ms)
+✔ Anti-gaspi : ingrédients actifs de Œufs en meurette faciles (4.2266ms)
+✔ Anti-gaspi : ingrédients actifs de Filet mignon séché maison (1.9944ms)
+✔ Anti-gaspi : ingrédients actifs de Mousse au chocolat (1.0251ms)
+✔ Anti-gaspi : ingrédients actifs de Courgettes au Air Fryer (1.5033ms)
+✔ Anti-gaspi : ingrédients actifs de Poulet à la Gaston Gérard facile (2.8305ms)
+✔ Anti-gaspi : ingrédients actifs de Filet mignon rôti au Airfryer (1.601ms)
+✔ Anti-gaspi : ingrédients actifs de Tarte Rustique à la crème de noix et prunes (2.3913ms)
+✔ Anti-gaspi : ingrédients actifs de Quiche aux figues, chèvre, miel et romarin (2.294ms)
+✔ Anti-gaspi : ingrédients actifs de Tarte amandine aux figues (1.1032ms)
+✔ Anti-gaspi : ingrédients actifs de Sablé Breton de Christophe Felder (1.0702ms)
+✔ Anti-gaspi : ingrédients actifs de Croque-monsieur aux figues, chèvre et jambon (1.3633ms)
+✔ Anti-gaspi : ingrédients actifs de Tarte fine aux raisins, figues et fromage de chèvre (2.7557ms)
+✔ Anti-gaspi : ingrédients actifs de Figues grillées à la pancetta (1.3109ms)
+✔ Anti-gaspi : ingrédients actifs de Tarte aux tomates cerises à la moutarde et à l'emmental (1.9259ms)
+✔ Anti-gaspi : ingrédients actifs de Mijoté de cocos de Paimpol au porc et oignons de Roscoff (6.2374ms)
+✔ Anti-gaspi : ingrédients actifs de Sauce hollandaise (3.0659ms)
+✔ Anti-gaspi : ingrédients actifs de Popcorn de poulet au sesame (3.0061ms)
+✔ Anti-gaspi : ingrédients actifs de Crevettes au bacon  (1.6513ms)
+✔ Anti-gaspi : ingrédients actifs de Méli-mélo de fruits d'été (2.1477ms)
+✔ Anti-gaspi : ingrédients actifs de Mijoté de cocos de Paimpol au porc et oignons de Roscoff (4.3006ms)
+✔ Anti-gaspi : ingrédients actifs de Comment préparer et cuire le Coco de Paimpol AOP (2.2935ms)
+✔ Anti-gaspi : ingrédients actifs de Salade estivale de Coco de Paimpol AOP (2.9621ms)
+✔ Anti-gaspi : ingrédients actifs de Tajine de légumes (3.0413ms)
+✔ Anti-gaspi : ingrédients actifs de Soupe à l’oignon (la meilleure) (3.7819ms)
+✔ Anti-gaspi : ingrédients actifs de Tarte amandine aux poires pochées (2.1977ms)
+✔ Anti-gaspi : ingrédients actifs de Tarte aux pêches, citron vert et romarin façon Ottolenghi (1.9942ms)
+✔ Anti-gaspi : ingrédients actifs de Pot-au-feu (4.2042ms)
+✔ Anti-gaspi : ingrédients actifs de Hachis parmentier de canard (3.1781ms)
+✔ Anti-gaspi : ingrédients actifs de Cake à la compote de pommes (3.6612ms)
+✔ Anti-gaspi : ingrédients actifs de Poulet à la Gaston Gérard facile (2.1348ms)
+✔ Anti-gaspi : ingrédients actifs de Gambas aux échalotes et vin blanc (2.5255ms)
+✔ Anti-gaspi : ingrédients actifs de Gâteau au citron ultra fondant (1.7636ms)
+✔ Anti-gaspi : ingrédients actifs de Quatre-quarts traditionnel (0.9192ms)
+✔ Anti-gaspi : ingrédients actifs de Cassoulet breton de Coco de Paimpol AOP (2.8414ms)
+✔ Anti-gaspi : ingrédients actifs de Velouté de châtaigne de Cyril Lignac (2.0575ms)
+✔ Inventaire : nom officiel et synonymes exposés pour retrouver tous les lieux (2.3614ms)
+[MATCHER LAB] ERREUR : Error: Erreur résolution utilisateur Cellio : offline
+    at resolveHousehold (file:///C:/Users/Gael/AppData/Local/Temp/mealio-tests-xLZKus/app/utils/household-server.mjs:84:11)
+    at async getHouseholdStock (file:///C:/Users/Gael/AppData/Local/Temp/mealio-tests-xLZKus/app/utils/stock-fetcher.mjs:24:21)
+    at async POST (file:///C:/Users/Gael/AppData/Local/Temp/mealio-tests-xLZKus/app/api/matcher/lab/route.mjs:250:19)
+    at async TestContext.<anonymous> (file:///C:/Users/Gael/AppData/Local/Temp/mealio-tests-xLZKus/tests/lot1/api-session.test.mjs:105:18)
+    at async Test.run (node:internal/test_runner/test:1113:7)
+    at async Test.processPendingSubtests (node:internal/test_runner/test:788:7)
+✔ lab refuse une session absent avant accès aux données (7.9118ms)
+✔ lab refuse une session old avant accès aux données (0.7505ms)
+✔ lab refuse une session tampered avant accès aux données (1.3632ms)
+✔ lab refuse une session expired avant accès aux données (0.6535ms)
+✔ matcherTest refuse une session absent avant accès aux données (0.9304ms)
+✔ matcherTest refuse une session old avant accès aux données (0.4118ms)
+✔ matcherTest refuse une session tampered avant accès aux données (0.5148ms)
+✔ matcherTest refuse une session expired avant accès aux données (0.4772ms)
+✔ resolve refuse une session absent avant accès aux données (0.5781ms)
+✔ resolve refuse une session old avant accès aux données (0.5717ms)
+✔ resolve refuse une session tampered avant accès aux données (0.6185ms)
+✔ resolve refuse une session expired avant accès aux données (0.3183ms)
+✔ feedback refuse une session absent avant accès aux données (0.3911ms)
+✔ feedback refuse une session old avant accès aux données (0.1642ms)
+✔ feedback refuse une session tampered avant accès aux données (0.2923ms)
+✔ feedback refuse une session expired avant accès aux données (0.2343ms)
+✔ la session conserve le nom du foyer et son UUID Frosti distinct (0.1765ms)
+✔ resolve accepte mealio_session et résout un ingrédient exact (6.579ms)
+✔ lab inventaire utilise le foyer signé et les UUID de chaque application (6.4576ms)
+✔ feedback refuse un identifiant de stock extérieur au foyer (1.0958ms)
+✔ feedback refuse une validation entre deux ingrédients officiels différents (2.472ms)
+✔ feedback utilise la vraie ligne du foyer, pas le produit envoyé par le navigateur (5.9005ms)
+✔ lecture Frosti indisponible : aucune réponse de stock vide (1.77ms)
+✔ lookup Cellio indisponible : le laboratoire remonte une erreur (3.2065ms)
+✔ lab renvoie 400 pour un corps invalide avec une session valide (0.967ms)
+✔ matcherTest renvoie 400 pour un corps invalide avec une session valide (0.5247ms)
+✔ resolve renvoie 400 pour un corps invalide avec une session valide (0.3746ms)
+✔ feedback renvoie 400 pour un corps invalide avec une session valide (0.3244ms)
+❌ Claude HTTP 503: {"error":"Service unavailable"}
+✔ estimations : mode réel du foyer et nom original, pas catégorie globale (4.7207ms)
+✔ mayonnaise maison : un oeuf, trois présences, pas de besoin mayonnaise (5.2688ms)
+✔ poulet entier : aucune cuisse ne couvre le besoin, aucun appel Claude (3.7318ms)
+✔ pots : unité de conditionnement et moyenne par ingrédient (1.3068ms)
+✔ mémoire analyse : lot neuf et quantité changée ne changent pas le cas ; candidat différent le change (0.8753ms)
+✔ proposition en attente mémorisée : deuxième passage et nouveau lot sans Claude ; pas de déduction (24.1838ms)
+✔ réponse AUCUN : mémorisée sans fausse association ; indisponibilité non mémorisée (8.024ms)
+✔ préparation : authentification et choix limité au foyer connecté (5.7635ms)
+✔ achat présence : mayonnaise 250g, quantité indépendante du booléen présence (2.3127ms)
+✔ surveillance : aucune requête pour un autre foyer (0.4916ms)
+✔ surveillance KH : seulement les recettes jamais analysées, toutes les pages (1.1132ms)
+✔ surveillance : ne pas annoncer zéro recette en cas de SQL manquant (2.5733ms)
+✔ surveillance : enregistrement limité à KH après analyse (1.9731ms)
+✔ API surveillance : session obligatoire et isolation du foyer (10.5331ms)
+✔ péremption : dates, timestamps Paris, dates impossibles et borne J+3 (40.362ms)
+✔ anti-gaspi réel : timestamps retenus, manque de dates diagnostiqué, zéro et vins exclus (9.838ms)
+✔ présence : pipeline DB → matcher → stock → estimations, même unité recette inconnue (6.6255ms)
+✔ stocks : péremptions de la seconde page non perdues au-delà de 500 lignes (0.9271ms)
+✔ rappel : désactivation, échéance exacte, dernier inventaire complet prioritaire (0.3845ms)
+✔ rappel API : auth, lieu privé, délais invalides, écriture atomique et table manquante (14.1117ms)
+✔ aide : tous les écrans fonctionnels et liens locaux, texte court (1.5573ms)
+✔ diagnostic : authentification avant toute lecture (4.4723ms)
+✔ diagnostic : lecture seule, aucun Claude, succès des lectures différent de production validée (9.6401ms)
+✔ diagnostic : migration absente signalée en échec, pas de faux feu vert (4.6356ms)
+✔ deux foyers : stocks et présence privés, correspondance officielle commune (30.5434ms)
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : e2035bf0-c847-42e4-9f7a-adeb8059301e...
+✅ Recette Cookiwiki récupérée : "Tian de tomates, courgettes et aubergines" — 10 ingrédient(s) — 4 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 6e02c3f8-1baf-40a2-a0c8-e800686fa169...
+✅ Recette Cookiwiki récupérée : "Pommes de terre rôties à la suédoise" — 6 ingrédient(s) — 4 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 4993b615-7302-4683-b38d-6e82b3ed5ffb...
+✅ Recette Cookiwiki récupérée : "Gougères au fromage de Valí " — 6 ingrédient(s) — 6 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 9093f24a-ba08-47d6-8f96-8db0bdeec87f...
+✅ Recette Cookiwiki récupérée : "Recette œuf Bénédicte" — 9 ingrédient(s) — 2 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 377291a6-cf3c-416e-b927-46b128d650f1...
+✅ Recette Cookiwiki récupérée : "Tarte aux épinards et chèvre" — 7 ingrédient(s) — 4 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 86599d6b-428d-458d-af49-36784456c09f...
+✅ Recette Cookiwiki récupérée : "Tarte fine aux courgettes et Boursin" — 5 ingrédient(s) — 6 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 96b805d2-75fe-4f9c-ac6f-a7bd98f21756...
+✅ Recette Cookiwiki récupérée : "Cake d'été" — 10 ingrédient(s) — 4 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : e682d519-3874-4ed7-859b-f68666150282...
+✅ Recette Cookiwiki récupérée : "Tendrons de veau à la gardiane" — 12 ingrédient(s) — 6 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 09603a0f-6dbb-4bf7-a971-281d06cb7fda...
+✅ Recette Cookiwiki récupérée : "Le crumble aux pommes du chat qui tousse" — 7 ingrédient(s) — 4 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 19305dab-f838-4477-a330-89f4ad5757d8...
+✅ Recette Cookiwiki récupérée : "Crème brûlée géante " — 5 ingrédient(s) — 6 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 9428614f-76ad-4fc0-a05a-6db45ec14f84...
+✅ Recette Cookiwiki récupérée : "Gâteau aux pêches de Jeanine Laurent" — 9 ingrédient(s) — 6 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : c558eff5-c8fc-4200-ada6-3c05febc6991...
+✅ Recette Cookiwiki récupérée : "Pommes de terre vigneronnes" — 6 ingrédient(s) — 4 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 50391f36-35dd-4e4e-b6d8-a5d59b51cffa...
+✅ Recette Cookiwiki récupérée : "Gratin de courgettes" — 10 ingrédient(s) — 4 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 08788652-f0cc-4140-be73-495ee4ebb2ad...
+✅ Recette Cookiwiki récupérée : "Barbotton" — 6 ingrédient(s) — 4 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 0dd5a4e1-be8c-4d33-ad36-7480d2963aa7...
+✅ Recette Cookiwiki récupérée : "Pâte brisée, salée ou sucrée façon Vali" — 3 ingrédient(s) — 4 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : be542b36-ca36-411c-ba1c-a188a9133296...
+✅ Recette Cookiwiki récupérée : "Rillettes de saumon frais et fumé / recette d'Oma pour nos fiançailles !!" — 8 ingrédient(s) — 4 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 452a35a5-0962-4002-8075-2bf57a8ddb2e...
+✅ Recette Cookiwiki récupérée : "Œufs en meurette" — 17 ingrédient(s) — 5 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 4e93c746-3b57-4374-90d4-bfec92a8b670...
+✅ Recette Cookiwiki récupérée : "La Tartiflette au Reblochon " — 7 ingrédient(s) — 4 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 9b3f1c94-e80d-4894-8953-8e688878750f...
+✅ Recette Cookiwiki récupérée : "Risotto aux champignons" — 15 ingrédient(s) — 4 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : ea5ec85d-c789-45ba-a311-07562c901537...
+✅ Recette Cookiwiki récupérée : "Le michon breton" — 8 ingrédient(s) — 4 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : cb58fecb-27a9-4e18-9ddc-cf5f6fed96cd...
+✅ Recette Cookiwiki récupérée : "Hachis parmentier" — 7 ingrédient(s) — 4 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 23970d8e-5e26-4c51-a624-71fc1269c94b...
+✅ Recette Cookiwiki récupérée : "Œufs en meurette faciles" — 12 ingrédient(s) — 2 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : b291e0a3-15ad-4c90-8db3-6097150b4781...
+✅ Recette Cookiwiki récupérée : "Filet mignon séché maison" — 5 ingrédient(s) — 8 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 206d7cfe-5e67-40ba-8db3-5978fe520f5d...
+✅ Recette Cookiwiki récupérée : "Mousse au chocolat" — 4 ingrédient(s) — 6 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : e416b5ea-5ef1-4c76-9172-b4f6207720b8...
+✅ Recette Cookiwiki récupérée : "Courgettes au Air Fryer" — 6 ingrédient(s) — 4 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 970eed2f-8df4-4f36-85fa-9e6b65e64e8d...
+✅ Recette Cookiwiki récupérée : "Poulet à la Gaston Gérard facile" — 10 ingrédient(s) — 4 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 99728d24-9fe2-4941-919e-1a39704a22a3...
+✅ Recette Cookiwiki récupérée : "Filet mignon rôti au Airfryer" — 6 ingrédient(s) — 4 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 458083ef-40d4-41d2-9fa9-b109a07007e9...
+✅ Recette Cookiwiki récupérée : "Tarte Rustique à la crème de noix et prunes" — 7 ingrédient(s) — 6 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 818bb95d-32fd-421c-87a2-192a9582680e...
+✅ Recette Cookiwiki récupérée : "Quiche aux figues, chèvre, miel et romarin" — 9 ingrédient(s) — 4 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 41a77930-b1e8-4545-ac0e-ebfa2cd7af7b...
+✅ Recette Cookiwiki récupérée : "Tarte amandine aux figues" — 6 ingrédient(s) — 6 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 0876a07b-60b9-4be3-a74c-76183adf4540...
+✅ Recette Cookiwiki récupérée : "Sablé Breton de Christophe Felder" — 6 ingrédient(s) — 6 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 055ac3ce-22b3-4724-8772-3f40521d8b8f...
+✅ Recette Cookiwiki récupérée : "Croque-monsieur aux figues, chèvre et jambon" — 6 ingrédient(s) — 4 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 57cb92d4-a44f-41a6-9202-8436f081ccb0...
+✅ Recette Cookiwiki récupérée : "Tarte fine aux raisins, figues et fromage de chèvre" — 9 ingrédient(s) — 4 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 302c03dc-da58-48e7-8284-36f9a38cf982...
+✅ Recette Cookiwiki récupérée : "Figues grillées à la pancetta" — 5 ingrédient(s) — 4 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 30aa216f-0e58-4ac5-bc5d-3d4caa26d069...
+✅ Recette Cookiwiki récupérée : "Tarte aux tomates cerises à la moutarde et à l'emmental" — 8 ingrédient(s) — 4 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : c794f891-2240-41bf-aee2-e32e8df17c6b...
+✅ Recette Cookiwiki récupérée : "Mijoté de cocos de Paimpol au porc et oignons de Roscoff" — 13 ingrédient(s) — 7 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : f5fa2b24-be9d-477e-bdfb-a10347e21463...
+✅ Recette Cookiwiki récupérée : "Sauce hollandaise" — 6 ingrédient(s) — 4 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 2b6ecb9a-77d4-4398-9e95-f8fe8cdb6aed...
+✅ Recette Cookiwiki récupérée : "Popcorn de poulet au sesame" — 0 ingrédient(s) — 4 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : c36b54b2-4f83-488c-b3db-4b465df01e6f...
+⚠️ Cookiwiki : recette "Crevettes au bacon " sans ingrédients structurés. 8 ingrédient(s) récupéré(s) depuis les instructions ; quantités à préciser.
+✅ Recette Cookiwiki récupérée : "Crevettes au bacon " — 8 ingrédient(s) — 4 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 81e08e94-0225-47a2-99aa-58f35040fab3...
+✅ Recette Cookiwiki récupérée : "Méli-mélo de fruits d'été" — 10 ingrédient(s) — 6 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : a70ca0a7-b231-47b7-bc04-58b83ba8025c...
+✅ Recette Cookiwiki récupérée : "Mijoté de cocos de Paimpol au porc et oignons de Roscoff" — 13 ingrédient(s) — 7 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : b9497dc8-897c-4387-8ca8-41ce2e771e92...
+✅ Recette Cookiwiki récupérée : "Comment préparer et cuire le Coco de Paimpol AOP" — 7 ingrédient(s) — 4 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : e0275312-464b-4586-bf84-84258a6946f9...
+✅ Recette Cookiwiki récupérée : "Salade estivale de Coco de Paimpol AOP" — 10 ingrédient(s) — 4 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 0829e021-fd21-4ef3-8cca-95b2e5487e85...
+✅ Recette Cookiwiki récupérée : "Tajine de légumes" — 15 ingrédient(s) — 4 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 7a5ced7f-a3ea-4719-b12a-349429c6459c...
+✅ Recette Cookiwiki récupérée : "Soupe à l’oignon (la meilleure)" — 13 ingrédient(s) — 6 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 4b2a51db-0dc5-40e6-aa37-550a56a450af...
+✅ Recette Cookiwiki récupérée : "Tarte amandine aux poires pochées" — 11 ingrédient(s) — 6 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : a9340473-1f59-4d05-8599-5ff607a48a96...
+✅ Recette Cookiwiki récupérée : "Tarte aux pêches, citron vert et romarin façon Ottolenghi" — 9 ingrédient(s) — 6 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 83d7443d-30d3-4f51-ad33-a85ef231cd8d...
+✅ Recette Cookiwiki récupérée : "Pot-au-feu" — 12 ingrédient(s) — 4 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 1c7d3210-a7d2-4956-804a-2e893f70eeb5...
+✅ Recette Cookiwiki récupérée : "Hachis parmentier de canard" — 11 ingrédient(s) — 5 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : e0a837b2-6012-4f5a-867c-68c17d823c0c...
+✅ Recette Cookiwiki récupérée : "Cake à la compote de pommes" — 9 ingrédient(s) — 8 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : a1cfaf0a-c0b8-40c1-a5a5-45ded138315b...
+✅ Recette Cookiwiki récupérée : "Poulet à la Gaston Gérard facile" — 9 ingrédient(s) — 4 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 34784d16-6980-4530-96b1-1797fa0e5864...
+✅ Recette Cookiwiki récupérée : "Gambas aux échalotes et vin blanc" — 9 ingrédient(s) — 4 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 14faa023-4542-40e4-b2fb-86ce03b3ae20...
+✅ Recette Cookiwiki récupérée : "Gâteau au citron ultra fondant" — 8 ingrédient(s) — 6 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 3c2f1578-bdc5-4cba-94d4-e46fe87cb382...
+✅ Recette Cookiwiki récupérée : "Quatre-quarts traditionnel" — 4 ingrédient(s) — 6 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 70e831d1-cf92-4ca9-b566-ce3e86c65d88...
+✅ Recette Cookiwiki récupérée : "Cassoulet breton de Coco de Paimpol AOP" — 11 ingrédient(s) — 4 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 65ba7320-a9c2-4cf4-ad08-be7059168734...
+✅ Recette Cookiwiki récupérée : "Velouté de châtaigne de Cyril Lignac" — 7 ingrédient(s) — 4 portion(s) de base.
+matcher_memory lookup: write failed
+matcher_exclusions lookup: write failed
+✔ moyennes : recette Tian de tomates, courgettes et aubergines (56.2823ms)
+✔ moyennes : recette Pommes de terre rôties à la suédoise (28.7861ms)
+✔ moyennes : recette Gougères au fromage de Valí  (20.1981ms)
+✔ moyennes : recette Recette œuf Bénédicte (38.5669ms)
+✔ moyennes : recette Tarte aux épinards et chèvre (18.5007ms)
+✔ moyennes : recette Tarte fine aux courgettes et Boursin (19.4683ms)
+✔ moyennes : recette Cake d'été (97.8825ms)
+✔ moyennes : recette Tendrons de veau à la gardiane (82.7722ms)
+✔ moyennes : recette Le crumble aux pommes du chat qui tousse (28.9212ms)
+✔ moyennes : recette Crème brûlée géante  (13.6345ms)
+✔ moyennes : recette Gâteau aux pêches de Jeanine Laurent (30.8248ms)
+✔ moyennes : recette Pommes de terre vigneronnes (21.4785ms)
+✔ moyennes : recette Gratin de courgettes (33.3702ms)
+✔ moyennes : recette Barbotton (18.7981ms)
+✔ moyennes : recette Pâte brisée, salée ou sucrée façon Vali (7.431ms)
+✔ moyennes : recette Rillettes de saumon frais et fumé / recette d'Oma pour nos fiançailles !! (40.844ms)
+✔ moyennes : recette Œufs en meurette (129.4642ms)
+✔ moyennes : recette La Tartiflette au Reblochon  (40.9449ms)
+✔ moyennes : recette Risotto aux champignons (148.3488ms)
+✔ moyennes : recette Le michon breton (48.2041ms)
+✔ moyennes : recette Hachis parmentier (39.7915ms)
+✔ moyennes : recette Œufs en meurette faciles (68.9692ms)
+✔ moyennes : recette Filet mignon séché maison (14.8743ms)
+✔ moyennes : recette Mousse au chocolat (9.2002ms)
+✔ moyennes : recette Courgettes au Air Fryer (16.8152ms)
+✔ moyennes : recette Poulet à la Gaston Gérard facile (62.827ms)
+✔ moyennes : recette Filet mignon rôti au Airfryer (32.9632ms)
+✔ moyennes : recette Tarte Rustique à la crème de noix et prunes (33.222ms)
+✔ moyennes : recette Quiche aux figues, chèvre, miel et romarin (33.346ms)
+✔ moyennes : recette Tarte amandine aux figues (8.5964ms)
+✔ moyennes : recette Sablé Breton de Christophe Felder (19.4896ms)
+✔ moyennes : recette Croque-monsieur aux figues, chèvre et jambon (19.3943ms)
+✔ moyennes : recette Tarte fine aux raisins, figues et fromage de chèvre (47.4035ms)
+✔ moyennes : recette Figues grillées à la pancetta (17.9645ms)
+✔ moyennes : recette Tarte aux tomates cerises à la moutarde et à l'emmental (19.8489ms)
+✔ moyennes : recette Mijoté de cocos de Paimpol au porc et oignons de Roscoff (91.8308ms)
+✔ moyennes : recette Sauce hollandaise (23.9057ms)
+✔ moyennes : recette Popcorn de poulet au sesame (3.2118ms)
+✔ moyennes : recette Crevettes au bacon  (16.211ms)
+✔ moyennes : recette Méli-mélo de fruits d'été (44.1613ms)
+✔ moyennes : recette Mijoté de cocos de Paimpol au porc et oignons de Roscoff (98.6247ms)
+✔ moyennes : recette Comment préparer et cuire le Coco de Paimpol AOP (34.1248ms)
+✔ moyennes : recette Salade estivale de Coco de Paimpol AOP (58.1127ms)
+✔ moyennes : recette Tajine de légumes (96.9261ms)
+✔ moyennes : recette Soupe à l’oignon (la meilleure) (80.1298ms)
+✔ moyennes : recette Tarte amandine aux poires pochées (36.2105ms)
+✔ moyennes : recette Tarte aux pêches, citron vert et romarin façon Ottolenghi (23.4236ms)
+✔ moyennes : recette Pot-au-feu (75.238ms)
+✔ moyennes : recette Hachis parmentier de canard (48.0937ms)
+✔ moyennes : recette Cake à la compote de pommes (43.0226ms)
+✔ moyennes : recette Poulet à la Gaston Gérard facile (44.7275ms)
+✔ moyennes : recette Gambas aux échalotes et vin blanc (33.3818ms)
+✔ moyennes : recette Gâteau au citron ultra fondant (18.7458ms)
+✔ moyennes : recette Quatre-quarts traditionnel (11.1732ms)
+✔ moyennes : recette Cassoulet breton de Coco de Paimpol AOP (63.8983ms)
+✔ moyennes : recette Velouté de châtaigne de Cyril Lignac (35.5784ms)
+✔ moyennes initiales : masses positives et conversions réversibles (14.1146ms)
+✔ ail : 2 gousses = 10 g ; Pièce interdite même avec une densité ancienne (4.686ms)
+✔ formats : deux masses explicites permettent tête/gousse et bouteille/mL (4.7969ms)
+✔ oignon : 100 g couvrent 2/3 pièce avec moyenne de 150 g (7.5702ms)
+✔ réappro : une ancienne règle de 300 g d’oignon devient 2 Pièces (6.9177ms)
+✔ association : session obligatoire sans accès DB (1.6893ms)
+✔ association : conflit officiel refusé (2.9398ms)
+✔ association : DB en erreur ne produit aucun succès (3.478ms)
+✔ association : enregistrée puis réutilisée sans IA (10.9598ms)
+✔ mémoire : validateMatcherDecision remonte les erreurs DB (1.1157ms)
+✔ mémoire : rejectMatcherDecision remonte les erreurs DB (0.3593ms)
+✔ mémoire : forgetMatcherDecision remonte les erreurs DB (0.1657ms)
+✔ liens : proposition stock ouvre son libellé, conversion ouvre Admin (0.3843ms)
+✔ inventaire : corrige ail en Gousse dans le lieu choisi (3.6652ms)
+✔ inventaire : lot multi-lieux refusé avant toute écriture (2.7697ms)
+✔ inventaire : source extérieure, stock modifié et ail Pièce refusés (6.4851ms)
+✔ inventaire Cellio : UUID propre à Cellio pour son placard (2.6171ms)
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : e2035bf0-c847-42e4-9f7a-adeb8059301e...
+✅ Recette Cookiwiki récupérée : "Tian de tomates, courgettes et aubergines" — 10 ingrédient(s) — 4 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 6e02c3f8-1baf-40a2-a0c8-e800686fa169...
+✅ Recette Cookiwiki récupérée : "Pommes de terre rôties à la suédoise" — 6 ingrédient(s) — 4 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 4993b615-7302-4683-b38d-6e82b3ed5ffb...
+✅ Recette Cookiwiki récupérée : "Gougères au fromage de Valí " — 6 ingrédient(s) — 6 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 9093f24a-ba08-47d6-8f96-8db0bdeec87f...
+✅ Recette Cookiwiki récupérée : "Recette œuf Bénédicte" — 9 ingrédient(s) — 2 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 377291a6-cf3c-416e-b927-46b128d650f1...
+✅ Recette Cookiwiki récupérée : "Tarte aux épinards et chèvre" — 7 ingrédient(s) — 4 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 86599d6b-428d-458d-af49-36784456c09f...
+✅ Recette Cookiwiki récupérée : "Tarte fine aux courgettes et Boursin" — 5 ingrédient(s) — 6 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 96b805d2-75fe-4f9c-ac6f-a7bd98f21756...
+✅ Recette Cookiwiki récupérée : "Cake d'été" — 10 ingrédient(s) — 4 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : e682d519-3874-4ed7-859b-f68666150282...
+✅ Recette Cookiwiki récupérée : "Tendrons de veau à la gardiane" — 12 ingrédient(s) — 6 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 09603a0f-6dbb-4bf7-a971-281d06cb7fda...
+✅ Recette Cookiwiki récupérée : "Le crumble aux pommes du chat qui tousse" — 7 ingrédient(s) — 4 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 19305dab-f838-4477-a330-89f4ad5757d8...
+✅ Recette Cookiwiki récupérée : "Crème brûlée géante " — 5 ingrédient(s) — 6 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 9428614f-76ad-4fc0-a05a-6db45ec14f84...
+✅ Recette Cookiwiki récupérée : "Gâteau aux pêches de Jeanine Laurent" — 9 ingrédient(s) — 6 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : c558eff5-c8fc-4200-ada6-3c05febc6991...
+✅ Recette Cookiwiki récupérée : "Pommes de terre vigneronnes" — 6 ingrédient(s) — 4 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 50391f36-35dd-4e4e-b6d8-a5d59b51cffa...
+✅ Recette Cookiwiki récupérée : "Gratin de courgettes" — 10 ingrédient(s) — 4 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 08788652-f0cc-4140-be73-495ee4ebb2ad...
+✅ Recette Cookiwiki récupérée : "Barbotton" — 6 ingrédient(s) — 4 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 0dd5a4e1-be8c-4d33-ad36-7480d2963aa7...
+✅ Recette Cookiwiki récupérée : "Pâte brisée, salée ou sucrée façon Vali" — 3 ingrédient(s) — 4 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : be542b36-ca36-411c-ba1c-a188a9133296...
+✅ Recette Cookiwiki récupérée : "Rillettes de saumon frais et fumé / recette d'Oma pour nos fiançailles !!" — 8 ingrédient(s) — 4 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 452a35a5-0962-4002-8075-2bf57a8ddb2e...
+✅ Recette Cookiwiki récupérée : "Œufs en meurette" — 17 ingrédient(s) — 5 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 4e93c746-3b57-4374-90d4-bfec92a8b670...
+✅ Recette Cookiwiki récupérée : "La Tartiflette au Reblochon " — 7 ingrédient(s) — 4 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 9b3f1c94-e80d-4894-8953-8e688878750f...
+✅ Recette Cookiwiki récupérée : "Risotto aux champignons" — 15 ingrédient(s) — 4 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : ea5ec85d-c789-45ba-a311-07562c901537...
+✅ Recette Cookiwiki récupérée : "Le michon breton" — 8 ingrédient(s) — 4 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : cb58fecb-27a9-4e18-9ddc-cf5f6fed96cd...
+✅ Recette Cookiwiki récupérée : "Hachis parmentier" — 7 ingrédient(s) — 4 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 23970d8e-5e26-4c51-a624-71fc1269c94b...
+✅ Recette Cookiwiki récupérée : "Œufs en meurette faciles" — 12 ingrédient(s) — 2 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : b291e0a3-15ad-4c90-8db3-6097150b4781...
+✅ Recette Cookiwiki récupérée : "Filet mignon séché maison" — 5 ingrédient(s) — 8 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 206d7cfe-5e67-40ba-8db3-5978fe520f5d...
+✅ Recette Cookiwiki récupérée : "Mousse au chocolat" — 4 ingrédient(s) — 6 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : e416b5ea-5ef1-4c76-9172-b4f6207720b8...
+✅ Recette Cookiwiki récupérée : "Courgettes au Air Fryer" — 6 ingrédient(s) — 4 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 970eed2f-8df4-4f36-85fa-9e6b65e64e8d...
+✅ Recette Cookiwiki récupérée : "Poulet à la Gaston Gérard facile" — 10 ingrédient(s) — 4 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 99728d24-9fe2-4941-919e-1a39704a22a3...
+✅ Recette Cookiwiki récupérée : "Filet mignon rôti au Airfryer" — 6 ingrédient(s) — 4 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 458083ef-40d4-41d2-9fa9-b109a07007e9...
+✅ Recette Cookiwiki récupérée : "Tarte Rustique à la crème de noix et prunes" — 7 ingrédient(s) — 6 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 818bb95d-32fd-421c-87a2-192a9582680e...
+✅ Recette Cookiwiki récupérée : "Quiche aux figues, chèvre, miel et romarin" — 9 ingrédient(s) — 4 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 41a77930-b1e8-4545-ac0e-ebfa2cd7af7b...
+✅ Recette Cookiwiki récupérée : "Tarte amandine aux figues" — 6 ingrédient(s) — 6 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 0876a07b-60b9-4be3-a74c-76183adf4540...
+✅ Recette Cookiwiki récupérée : "Sablé Breton de Christophe Felder" — 6 ingrédient(s) — 6 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 055ac3ce-22b3-4724-8772-3f40521d8b8f...
+✅ Recette Cookiwiki récupérée : "Croque-monsieur aux figues, chèvre et jambon" — 6 ingrédient(s) — 4 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 57cb92d4-a44f-41a6-9202-8436f081ccb0...
+✅ Recette Cookiwiki récupérée : "Tarte fine aux raisins, figues et fromage de chèvre" — 9 ingrédient(s) — 4 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 302c03dc-da58-48e7-8284-36f9a38cf982...
+✅ Recette Cookiwiki récupérée : "Figues grillées à la pancetta" — 5 ingrédient(s) — 4 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 30aa216f-0e58-4ac5-bc5d-3d4caa26d069...
+✅ Recette Cookiwiki récupérée : "Tarte aux tomates cerises à la moutarde et à l'emmental" — 8 ingrédient(s) — 4 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : c794f891-2240-41bf-aee2-e32e8df17c6b...
+✅ Recette Cookiwiki récupérée : "Mijoté de cocos de Paimpol au porc et oignons de Roscoff" — 13 ingrédient(s) — 7 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : f5fa2b24-be9d-477e-bdfb-a10347e21463...
+✅ Recette Cookiwiki récupérée : "Sauce hollandaise" — 6 ingrédient(s) — 4 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 2b6ecb9a-77d4-4398-9e95-f8fe8cdb6aed...
+✅ Recette Cookiwiki récupérée : "Popcorn de poulet au sesame" — 0 ingrédient(s) — 4 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : c36b54b2-4f83-488c-b3db-4b465df01e6f...
+⚠️ Cookiwiki : recette "Crevettes au bacon " sans ingrédients structurés. 8 ingrédient(s) récupéré(s) depuis les instructions ; quantités à préciser.
+✅ Recette Cookiwiki récupérée : "Crevettes au bacon " — 8 ingrédient(s) — 4 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 81e08e94-0225-47a2-99aa-58f35040fab3...
+✅ Recette Cookiwiki récupérée : "Méli-mélo de fruits d'été" — 10 ingrédient(s) — 6 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : a70ca0a7-b231-47b7-bc04-58b83ba8025c...
+✅ Recette Cookiwiki récupérée : "Mijoté de cocos de Paimpol au porc et oignons de Roscoff" — 13 ingrédient(s) — 7 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : b9497dc8-897c-4387-8ca8-41ce2e771e92...
+✅ Recette Cookiwiki récupérée : "Comment préparer et cuire le Coco de Paimpol AOP" — 7 ingrédient(s) — 4 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : e0275312-464b-4586-bf84-84258a6946f9...
+✅ Recette Cookiwiki récupérée : "Salade estivale de Coco de Paimpol AOP" — 10 ingrédient(s) — 4 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 0829e021-fd21-4ef3-8cca-95b2e5487e85...
+✅ Recette Cookiwiki récupérée : "Tajine de légumes" — 15 ingrédient(s) — 4 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 7a5ced7f-a3ea-4719-b12a-349429c6459c...
+✅ Recette Cookiwiki récupérée : "Soupe à l’oignon (la meilleure)" — 13 ingrédient(s) — 6 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 4b2a51db-0dc5-40e6-aa37-550a56a450af...
+✅ Recette Cookiwiki récupérée : "Tarte amandine aux poires pochées" — 11 ingrédient(s) — 6 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : a9340473-1f59-4d05-8599-5ff607a48a96...
+✅ Recette Cookiwiki récupérée : "Tarte aux pêches, citron vert et romarin façon Ottolenghi" — 9 ingrédient(s) — 6 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 83d7443d-30d3-4f51-ad33-a85ef231cd8d...
+✅ Recette Cookiwiki récupérée : "Pot-au-feu" — 12 ingrédient(s) — 4 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 1c7d3210-a7d2-4956-804a-2e893f70eeb5...
+✅ Recette Cookiwiki récupérée : "Hachis parmentier de canard" — 11 ingrédient(s) — 5 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : e0a837b2-6012-4f5a-867c-68c17d823c0c...
+✅ Recette Cookiwiki récupérée : "Cake à la compote de pommes" — 9 ingrédient(s) — 8 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : a1cfaf0a-c0b8-40c1-a5a5-45ded138315b...
+✅ Recette Cookiwiki récupérée : "Poulet à la Gaston Gérard facile" — 9 ingrédient(s) — 4 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 34784d16-6980-4530-96b1-1797fa0e5864...
+✅ Recette Cookiwiki récupérée : "Gambas aux échalotes et vin blanc" — 9 ingrédient(s) — 4 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 14faa023-4542-40e4-b2fb-86ce03b3ae20...
+✅ Recette Cookiwiki récupérée : "Gâteau au citron ultra fondant" — 8 ingrédient(s) — 6 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 3c2f1578-bdc5-4cba-94d4-e46fe87cb382...
+✅ Recette Cookiwiki récupérée : "Quatre-quarts traditionnel" — 4 ingrédient(s) — 6 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 70e831d1-cf92-4ca9-b566-ce3e86c65d88...
+✅ Recette Cookiwiki récupérée : "Cassoulet breton de Coco de Paimpol AOP" — 11 ingrédient(s) — 4 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 65ba7320-a9c2-4cf4-ad08-be7059168734...
+✅ Recette Cookiwiki récupérée : "Velouté de châtaigne de Cyril Lignac" — 7 ingrédient(s) — 4 portion(s) de base.
+✔ synonyme enrichi : oeuf → Œuf (poule) (16.0486ms)
+✔ synonyme enrichi : œuf → Œuf (poule) (3.9107ms)
+✔ synonyme enrichi : Œufs frais → Œuf (poule) (2.9997ms)
+✔ synonyme enrichi : œufs extra-frais → Œuf (poule) (3.1804ms)
+✔ synonyme enrichi : œufs battus → Œuf (poule) (3.8564ms)
+✔ synonyme enrichi : jaunes d'œufs → Jaune d'œuf (3.0156ms)
+✔ synonyme enrichi : jaune d'oeuf → Jaune d'œuf (3.2049ms)
+✔ synonyme enrichi : blancs d'œufs → Blanc d'œuf (3.1659ms)
+✔ synonyme enrichi : blanc d'oeuf → Blanc d'œuf (2.5478ms)
+✔ synonyme enrichi : amandes en poudre → Poudre d'amande (3.6891ms)
+✔ synonyme enrichi : poudre d'amandes → Poudre d'amande (4.2459ms)
+✔ synonyme enrichi : beurre doux → Beurre (3.9491ms)
+✔ synonyme enrichi : beurre fondu → Beurre (2.7017ms)
+✔ synonyme enrichi : beurre mou → Beurre (3.5566ms)
+✔ synonyme enrichi : beurre pommade → Beurre (2.4733ms)
+✔ synonyme enrichi : beurre pour le plat → Beurre (2.6505ms)
+✔ synonyme enrichi : beurre (pour la mirepoix) → Beurre (2.8996ms)
+✔ synonyme enrichi : beurre demi-sel → Beurre demi-sel (2.6145ms)
+✔ synonyme enrichi : crème fraîche liquide → Crème liquide (2.5525ms)
+✔ synonyme enrichi : crème fraîche épaisse → Crème épaisse (2.9042ms)
+✔ synonyme enrichi : figues fraîches → Figue (3.0811ms)
+✔ synonyme enrichi : eau froide → Eau (3.0817ms)
+✔ synonyme enrichi : eau (pour le caramel) → Eau (3.1391ms)
+✔ synonyme enrichi : citrons non traités (jus et zestes) → Citron (2.7009ms)
+✔ synonyme enrichi : citrons verts (zeste et jus) → Citron vert (2.5492ms)
+✔ synonyme enrichi : jus de citron frais → Jus de citron (2.8885ms)
+✔ synonyme enrichi : emmental râpé → Emmental (2.4939ms)
+✔ synonyme enrichi : emmenthal râpé → Emmental (2.4018ms)
+✔ synonyme enrichi : gruyère râpé → Gruyère (2.9098ms)
+✔ synonyme enrichi : fromage gruyère râpé → Gruyère (2.53ms)
+✔ synonyme enrichi : comté râpé → Comté (2.3901ms)
+✔ synonyme enrichi : courgettes → Courgette (2.8701ms)
+✔ synonyme enrichi : courgettes moyennes → Courgette (7.9569ms)
+✔ synonyme enrichi : carottes → Carotte (2.732ms)
+✔ synonyme enrichi : tomates → Tomate (6.9624ms)
+✔ synonyme enrichi : tomates bien mûres → Tomate (2.2502ms)
+✔ synonyme enrichi : tomates cerises → Tomate cerise (2.5412ms)
+✔ synonyme enrichi : échalotes → Échalote (3.3509ms)
+✔ synonyme enrichi : poireaux → Poireau (2.7262ms)
+✔ synonyme enrichi : navets → Navet (2.5809ms)
+✔ synonyme enrichi : gros oignons blancs → Oignon blanc (3.2955ms)
+✔ synonyme enrichi : oignons jaunes émincés → Oignon jaune (2.3941ms)
+✔ synonyme enrichi : poivrons rouges → Poivron rouge (2.3239ms)
+✔ synonyme enrichi : pommes de terre → Pomme de terre (2.6807ms)
+✔ synonyme enrichi : cuisses de canard confites → Canard (cuisse confite) (2.8928ms)
+✔ synonyme enrichi : saumon frais → Saumon (2.4999ms)
+✔ synonyme enrichi : graines de sésame → Graine de sésame (4.6919ms)
+✔ synonyme enrichi : sucre semoule → Sucre en poudre (2.6257ms)
+✔ synonyme enrichi : sucre en poudre (pour la crème) → Sucre en poudre (2.5745ms)
+✔ synonyme enrichi : sucre en poudre (pour le sirop) → Sucre en poudre (3.1259ms)
+✔ synonyme enrichi : sucre glace (pour le glaçage) → Sucre glace (2.6099ms)
+✔ synonyme enrichi : cumin en poudre → Cumin (2.3882ms)
+✔ synonyme enrichi : branche de thym → Thym frais (3.2151ms)
+✔ synonyme enrichi : branches de thym frais → Thym frais (2.4644ms)
+✔ synonyme enrichi : branche de romarin → Romarin frais (2.6643ms)
+✔ synonyme enrichi : branche de laurier → Laurier frais (3.1719ms)
+✔ synonyme enrichi : feuille de laurier → Laurier frais (2.6376ms)
+✔ synonyme enrichi : persil plat frais haché → Persil plat (2.4898ms)
+✔ synonyme enrichi : olives noires dénoyautées → Olive noire (3.0928ms)
+✔ synonyme enrichi : vin blanc → Vin blanc (cuisine) (2.5344ms)
+✔ synonyme enrichi : vin blanc (pour le riz) → Vin blanc (cuisine) (2.5124ms)
+✔ synonyme enrichi : vin blanc (pour les champignons) → Vin blanc (cuisine) (3.1722ms)
+✔ synonyme enrichi : vin rouge (Mercurey) → Vin rouge (cuisine) (2.4585ms)
+✔ synonyme enrichi : vin rouge (type Bourgogne) → Vin rouge (cuisine) (2.7804ms)
+✔ synonyme enrichi : bouillon de légumes (cubes) → Bouillon cube (légumes) (2.9533ms)
+✔ synonyme enrichi : gousse de vanille → Vanille (gousse) (2.3583ms)
+✔ équivalences en mL : uniquement mesures existantes cohérentes (0.3897ms)
+✔ farine, lait, sel/poivre et alternatives : aucun choix caché ajouté (4.0531ms)
+✔ unités nouvelles : identité seulement, aucune conversion en masse (8.3651ms)
+✔ abréviations culinaires des recettes : c. à soupe/café (2.4465ms)
+✔ avant/après enrichissement : Tian de tomates, courgettes et aubergines (96.9787ms)
+✔ avant/après enrichissement : Pommes de terre rôties à la suédoise (44.1624ms)
+✔ avant/après enrichissement : Gougères au fromage de Valí  (28.0919ms)
+✔ avant/après enrichissement : Recette œuf Bénédicte (38.3112ms)
+✔ avant/après enrichissement : Tarte aux épinards et chèvre (61.5353ms)
+✔ avant/après enrichissement : Tarte fine aux courgettes et Boursin (48.0736ms)
+✔ avant/après enrichissement : Cake d'été (139.5202ms)
+✔ avant/après enrichissement : Tendrons de veau à la gardiane (69.656ms)
+✔ avant/après enrichissement : Le crumble aux pommes du chat qui tousse (37.7899ms)
+✔ avant/après enrichissement : Crème brûlée géante  (27.0033ms)
+✔ avant/après enrichissement : Gâteau aux pêches de Jeanine Laurent (81.82ms)
+✔ avant/après enrichissement : Pommes de terre vigneronnes (98.8458ms)
+✔ avant/après enrichissement : Gratin de courgettes (91.1314ms)
+✔ avant/après enrichissement : Barbotton (44.9891ms)
+✔ avant/après enrichissement : Pâte brisée, salée ou sucrée façon Vali (35.1901ms)
+✔ avant/après enrichissement : Rillettes de saumon frais et fumé / recette d'Oma pour nos fiançailles !! (90.9796ms)
+✔ avant/après enrichissement : Œufs en meurette (170.3745ms)
+✔ avant/après enrichissement : La Tartiflette au Reblochon  (69.1564ms)
+✔ avant/après enrichissement : Risotto aux champignons (75.1226ms)
+✔ avant/après enrichissement : Le michon breton (49.0919ms)
+✔ avant/après enrichissement : Hachis parmentier (19.5276ms)
+✔ avant/après enrichissement : Œufs en meurette faciles (67.4713ms)
+✔ avant/après enrichissement : Filet mignon séché maison (17.5409ms)
+✔ avant/après enrichissement : Mousse au chocolat (19.5604ms)
+✔ avant/après enrichissement : Courgettes au Air Fryer (22.4818ms)
+✔ avant/après enrichissement : Poulet à la Gaston Gérard facile (75.6583ms)
+✔ avant/après enrichissement : Filet mignon rôti au Airfryer (44.9842ms)
+✔ avant/après enrichissement : Tarte Rustique à la crème de noix et prunes (78.9401ms)
+✔ avant/après enrichissement : Quiche aux figues, chèvre, miel et romarin (41.5813ms)
+✔ avant/après enrichissement : Tarte amandine aux figues (39.1832ms)
+✔ avant/après enrichissement : Sablé Breton de Christophe Felder (44.2303ms)
+✔ avant/après enrichissement : Croque-monsieur aux figues, chèvre et jambon (30.8709ms)
+✔ avant/après enrichissement : Tarte fine aux raisins, figues et fromage de chèvre (37.5351ms)
+✔ avant/après enrichissement : Figues grillées à la pancetta (40.3252ms)
+✔ avant/après enrichissement : Tarte aux tomates cerises à la moutarde et à l'emmental (29.4296ms)
+✔ avant/après enrichissement : Mijoté de cocos de Paimpol au porc et oignons de Roscoff (128.5465ms)
+✔ avant/après enrichissement : Sauce hollandaise (30.161ms)
+✔ avant/après enrichissement : Popcorn de poulet au sesame (2.9706ms)
+✔ avant/après enrichissement : Crevettes au bacon  (3.4882ms)
+✔ avant/après enrichissement : Méli-mélo de fruits d'été (46.5806ms)
+✔ avant/après enrichissement : Mijoté de cocos de Paimpol au porc et oignons de Roscoff (93.0889ms)
+✔ avant/après enrichissement : Comment préparer et cuire le Coco de Paimpol AOP (60.7995ms)
+✔ avant/après enrichissement : Salade estivale de Coco de Paimpol AOP (96.0541ms)
+✔ avant/après enrichissement : Tajine de légumes (85.4514ms)
+✔ avant/après enrichissement : Soupe à l’oignon (la meilleure) (78.4451ms)
+✔ avant/après enrichissement : Tarte amandine aux poires pochées (64.4274ms)
+✔ avant/après enrichissement : Tarte aux pêches, citron vert et romarin façon Ottolenghi (38.6244ms)
+✔ avant/après enrichissement : Pot-au-feu (95.976ms)
+✔ avant/après enrichissement : Hachis parmentier de canard (69.2826ms)
+✔ avant/après enrichissement : Cake à la compote de pommes (51.7932ms)
+✔ avant/après enrichissement : Poulet à la Gaston Gérard facile (48.3018ms)
+✔ avant/après enrichissement : Gambas aux échalotes et vin blanc (27.9528ms)
+✔ avant/après enrichissement : Gâteau au citron ultra fondant (35.0493ms)
+✔ avant/après enrichissement : Quatre-quarts traditionnel (15.6895ms)
+✔ avant/après enrichissement : Cassoulet breton de Coco de Paimpol AOP (49.8197ms)
+✔ avant/après enrichissement : Velouté de châtaigne de Cyril Lignac (51.258ms)
+✔ enrichissement : Figue séchée ne couvre pas figues fraîches (1.785ms)
+✔ enrichissement : Blanc d'œuf ne couvre pas œufs frais (1.4483ms)
+✔ enrichissement : Ail en poudre ne couvre pas ail (1.8776ms)
+❌ Erreur Claude résolution ingrédient : Error: Simulated outage
+    at globalThis.fetch (file:///C:/Users/Gael/AppData/Local/Temp/mealio-tests-xLZKus/tests/lot1/matcher-safety.test.mjs:17:34)
+    at callClaude (file:///C:/Users/Gael/AppData/Local/Temp/mealio-tests-xLZKus/app/lib/anthropic-server.mjs:35:26)
+    at resolveOfficialIngredientWithClaude (file:///C:/Users/Gael/AppData/Local/Temp/mealio-tests-xLZKus/app/lib/anthropic-server.mjs:96:26)
+    at resolveOfficialIngredient (file:///C:/Users/Gael/AppData/Local/Temp/mealio-tests-xLZKus/app/utils/matcher.mjs:1429:11)
+    at resolveIngredientDecision (file:///C:/Users/Gael/AppData/Local/Temp/mealio-tests-xLZKus/app/utils/matcher.mjs:1582:24)
+    at TestContext.<anonymous> (file:///C:/Users/Gael/AppData/Local/Temp/mealio-tests-xLZKus/tests/lot1/matcher-safety.test.mjs:136:24)
+    at Test.runInAsyncScope (node:async_hooks:214:14)
+    at Test.run (node:internal/test_runner/test:1106:25)
+    at Test.processPendingSubtests (node:internal/test_runner/test:788:18)
+    at Test.postRun (node:internal/test_runner/test:1235:19)
+✔ présence : un stock 0 n'est pas disponible (5.6334ms)
+✔ présence : un stock -1 n'est pas disponible (1.565ms)
+✔ présence : un stock NaN n'est pas disponible (0.3103ms)
+✔ présence : un stock Infinity n'est pas disponible (0.2606ms)
+✔ une ancienne mémoire validée ne peut pas contourner une identité contradictoire (0.6685ms)
+✔ le libellé ne peut pas contourner un ingredient_id contradictoire (0.3968ms)
+✔ le refus reste effectif même si la farine de riz manque au référentiel (1.0293ms)
+✔ ignored_words ne peut pas effacer les qualificatifs de la garde stock (0.5008ms)
+✔ un synonyme explicite sans mots communs reste utilisable sans IA (1.6088ms)
+✔ une exclusion humaine reste prioritaire sur une correspondance exacte (1.1014ms)
+✔ un besoin non validé ne diminue jamais les achats (0.6202ms)
+✔ une proposition IA de stock attend une validation et ne déduit rien (55.0391ms)
+✔ persistMemory=false interdit aussi les écritures du chemin synonyme (1.5823ms)
+✔ conversion 2 cs vers cc : quantité et unité canonique cohérentes (0.7052ms)
+✔ conversion 42 g vers cs : quantité et unité canonique cohérentes (0.3936ms)
+✔ conversion 1 kg vers kg : quantité et unité canonique cohérentes (0.1515ms)
+✔ conversion 2 l vers l : quantité et unité canonique cohérentes (0.1472ms)
+✔ conversion 1000 mg vers kg : quantité et unité canonique cohérentes (0.1955ms)
+✔ conversion 500 mL vers l : quantité et unité canonique cohérentes (0.1662ms)
+✔ une quantité négative ne peut pas être convertie (0.1603ms)
+✔ une quantité inférée reste inconnue de la recette aux achats (2.7211ms)
+✔ une quantité recette 0 n'est jamais un besoin fiable (0.4183ms)
+✔ une quantité recette -2 n'est jamais un besoin fiable (0.3846ms)
+✔ une quantité recette NaN n'est jamais un besoin fiable (0.3744ms)
+✔ une quantité recette Infinity n'est jamais un besoin fiable (0.3136ms)
+✔ 500 g et 2 pièces restent séparés lors de l’agrégation (2.5125ms)
+✔ une quantité inconnue ne contamine pas un besoin connu du même ingrédient (0.2934ms)
+✔ une panne Claude ne produit pas de décision AUCUN persistante (4.7487ms)
+✔ un ancien AUCUN en attente ne bloque plus une nouvelle résolution (5.9709ms)
+✔ référentiel indisponible : interruption au lieu de données vides (1.6074ms)
+✔ exclusions indisponibles : interruption du rapprochement (0.7173ms)
+✔ ignored_words ne peut pas transformer farine de riz en farine de blé au stade recette (1.7707ms)
+✔ un dépassement numérique des portions reste une quantité inconnue (0.3808ms)
+✔ cache négatif expired : Claude est de nouveau consulté (1.5582ms)
+✔ cache négatif changed : Claude est de nouveau consulté (1.2091ms)
+✔ 4 jours d’achat : intervalle médian 7 jours, alerte anticipée de 2 jours (42.9787ms)
+✔ 0 achats espacés : apprentissage insuffisant (0.2977ms)
+✔ 1 achats espacés : apprentissage insuffisant (0.7253ms)
+✔ 2 achats espacés : apprentissage insuffisant (0.9777ms)
+✔ 3 achats espacés : apprentissage insuffisant (1.1843ms)
+✔ plusieurs paquets le même jour : une seule observation (3.1735ms)
+✔ achat 0 exclu (0.8657ms)
+✔ achat -1 exclu (0.1658ms)
+✔ achat NaN exclu (0.1406ms)
+✔ achat Infinity exclu (0.2404ms)
+✔ achats annulés ou futurs exclus (0.9909ms)
+✔ intervalles irréguliers : pas de suggestion prédictive (1.2187ms)
+✔ historique isolé par ingrédient, sans estimation de consommation (1.5396ms)
+✔ jour d’achat calculé en Europe/Paris (0.3129ms)
+✔ nouvel achat acquitte le signal ; ancien achat ne le masque pas (0.2008ms)
+✔ historique lu uniquement par les listes du foyer (0.8534ms)
+✔ lecture des listes en erreur : pas d’historique vide inventé (0.6295ms)
+✔ signal manuel : proposition même avec stock, format du foyer, pas de modification stock (4.6713ms)
+✔ historique : proposition même si présence ; aucune création automatique (4.3516ms)
+✔ mode quantitatif : signaux et prévisions épicerie ignorés (1.1547ms)
+✔ report 7 jours : masque uniquement la prévision, pas le signal manuel (7.264ms)
+✔ signal acquitté par achat récent : aucun ancien signal dans les propositions (3.8297ms)
+✔ signal : session obligatoire avant tout accès DB (6.4801ms)
+✔ signal : foyer injecté ignoré, aucune modification des stocks (6.6461ms)
+✔ signal invalide et produit quantitatif refusés (1.1442ms)
+✔ annulation isolée au foyer et au produit (0.3267ms)
+✔ double ajout d’alerte : ne multiplie pas une ligne déjà aux courses (1.4602ms)
+✔ API ajout : format historique recalculé côté serveur, quantité injectée ignorée (6.5609ms)
+✔ Stock : bouton exposé pour un produit présent du foyer, signal partagé entre lignes (3.4288ms)
+✔ Stock : bouton absent pour le mode quantitatif (2.315ms)
+✔ Stock : achat récent acquitte visuellement le signal (3.8074ms)
+✔ Stock : session obligatoire avant les nouveaux historiques (0.4886ms)
+✔ ajout d’une alerte périmée : refus avant toute écriture courses (1.7881ms)
+✔ historique paginé : conserve les achats au-delà de 1000 lignes (0.5711ms)
+✔ transaction d’ajout indisponible : erreur explicite, pas de repli non atomique (0.587ms)
+✔ Stock : noms précis Frosti et Cellio filtrés sur leurs utilisateurs distincts (3.1982ms)
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : recipe-oil...
+✅ Recette Cookiwiki récupérée : "Cassoulet test" — 1 ingrédient(s) — 4 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : recipe-oil...
+✅ Recette Cookiwiki récupérée : "Cassoulet test" — 1 ingrédient(s) — 4 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : r...
+✅ Recette Cookiwiki récupérée : "Pain" — 1 ingrédient(s) — 4 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : recipe...
+✅ Recette Cookiwiki récupérée : "Pain" — 1 ingrédient(s) — 4 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : recipe...
+✅ Recette Cookiwiki récupérée : "Pain" — 1 ingrédient(s) — 4 portion(s) de base.
+✔ épicerie : farine compatible en pièce, quantité 1 (7.5511ms)
+✔ épicerie : farine compatible en pièce, quantité 0 (1.4551ms)
+✔ épicerie : farine compatible en pièce, quantité -1 (0.7495ms)
+✔ épicerie : farine compatible en pièce, quantité NaN (1.09ms)
+✔ épicerie : farine compatible en pièce, quantité Infinity (1.6257ms)
+✔ épicerie : farine de riz ne couvre jamais farine de blé (2.7112ms)
+✔ épicerie : plusieurs recettes = un format, indépendamment des portions (2.8477ms)
+✔ mode épicerie désactivé : retour au calcul du manque (2.9141ms)
+✔ lecture épicerie en panne : interruption, aucun stock vide inventé (4.5473ms)
+✔ format épicerie invalide : interruption (0.8551ms)
+✔ sel et poivre : deux identités de présence, aucune déduction partagée (2.657ms)
+✔ unité achat épicerie approuvée : autorisée sans conversion de recette (0.7065ms)
+✔ une autre unité non approuvée reste refusée (0.3132ms)
+✔ administration épicerie GET : session obligatoire (7.3729ms)
+✔ administration épicerie PATCH : session obligatoire (1.3831ms)
+✔ administration : quantité zéro refusée avant écriture (2.9215ms)
+✔ Courses : lecture du format et progression fondée sur ×2 (2.0001ms)
+✔ Courses : cocher ×2 enregistre la quantité physique 2000 g (1.6588ms)
+✔ générateur réel épicerie : huile absente, sans conversion (21.6483ms)
+✔ générateur réel épicerie : huile disponible en pièce, sans conversion (3.5589ms)
+✔ épice désactivée en présence : une densité explicite redevient utilisable (0.8246ms)
+✔ régénération : conserve ×2 et le format de la ligne après changement du défaut (2.1914ms)
+✔ administration épicerie : liste enrichie avec les noms officiels (1.1933ms)
+✔ administration épicerie : modification du format sans toucher au stock (1.4851ms)
+✔ réapprovisionnement épicerie : stock en pièces 0, format par défaut sans conversion (31.7611ms)
+✔ réapprovisionnement épicerie : stock en pièces 1, format par défaut sans conversion (8.0887ms)
+✔ épicerie privée : Famille conserve son mode (0.3972ms)
+✔ épicerie privée : Autre foyer conserve son mode (0.1953ms)
+✔ nouveau foyer : formats initiaux sans écriture (0.9951ms)
+✔ épicerie privée indisponible : aucune retombée silencieuse sur les valeurs communes (0.3212ms)
+✔ Gousse classée divers : identité convertible, aucune équivalence implicite vers pièce (0.5902ms)
+✔ repas confirmé : présence ne consomme aucune quantité virtuelle du stock (2.6093ms)
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : e2035bf0-c847-42e4-9f7a-adeb8059301e...
+✅ Recette Cookiwiki récupérée : "Tian de tomates, courgettes et aubergines" — 10 ingrédient(s) — 4 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 6e02c3f8-1baf-40a2-a0c8-e800686fa169...
+✅ Recette Cookiwiki récupérée : "Pommes de terre rôties à la suédoise" — 6 ingrédient(s) — 4 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 4993b615-7302-4683-b38d-6e82b3ed5ffb...
+✅ Recette Cookiwiki récupérée : "Gougères au fromage de Valí " — 6 ingrédient(s) — 6 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 9093f24a-ba08-47d6-8f96-8db0bdeec87f...
+✅ Recette Cookiwiki récupérée : "Recette œuf Bénédicte" — 9 ingrédient(s) — 2 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 377291a6-cf3c-416e-b927-46b128d650f1...
+✅ Recette Cookiwiki récupérée : "Tarte aux épinards et chèvre" — 7 ingrédient(s) — 4 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 86599d6b-428d-458d-af49-36784456c09f...
+✅ Recette Cookiwiki récupérée : "Tarte fine aux courgettes et Boursin" — 5 ingrédient(s) — 6 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 96b805d2-75fe-4f9c-ac6f-a7bd98f21756...
+✅ Recette Cookiwiki récupérée : "Cake d'été" — 10 ingrédient(s) — 4 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : e682d519-3874-4ed7-859b-f68666150282...
+✅ Recette Cookiwiki récupérée : "Tendrons de veau à la gardiane" — 12 ingrédient(s) — 6 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 09603a0f-6dbb-4bf7-a971-281d06cb7fda...
+✅ Recette Cookiwiki récupérée : "Le crumble aux pommes du chat qui tousse" — 7 ingrédient(s) — 4 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 19305dab-f838-4477-a330-89f4ad5757d8...
+✅ Recette Cookiwiki récupérée : "Crème brûlée géante " — 5 ingrédient(s) — 6 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 9428614f-76ad-4fc0-a05a-6db45ec14f84...
+✅ Recette Cookiwiki récupérée : "Gâteau aux pêches de Jeanine Laurent" — 9 ingrédient(s) — 6 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : c558eff5-c8fc-4200-ada6-3c05febc6991...
+✅ Recette Cookiwiki récupérée : "Pommes de terre vigneronnes" — 6 ingrédient(s) — 4 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 50391f36-35dd-4e4e-b6d8-a5d59b51cffa...
+✅ Recette Cookiwiki récupérée : "Gratin de courgettes" — 10 ingrédient(s) — 4 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 08788652-f0cc-4140-be73-495ee4ebb2ad...
+✅ Recette Cookiwiki récupérée : "Barbotton" — 6 ingrédient(s) — 4 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 0dd5a4e1-be8c-4d33-ad36-7480d2963aa7...
+✅ Recette Cookiwiki récupérée : "Pâte brisée, salée ou sucrée façon Vali" — 3 ingrédient(s) — 4 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : be542b36-ca36-411c-ba1c-a188a9133296...
+✅ Recette Cookiwiki récupérée : "Rillettes de saumon frais et fumé / recette d'Oma pour nos fiançailles !!" — 8 ingrédient(s) — 4 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 452a35a5-0962-4002-8075-2bf57a8ddb2e...
+✅ Recette Cookiwiki récupérée : "Œufs en meurette" — 17 ingrédient(s) — 5 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 4e93c746-3b57-4374-90d4-bfec92a8b670...
+✅ Recette Cookiwiki récupérée : "La Tartiflette au Reblochon " — 7 ingrédient(s) — 4 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 9b3f1c94-e80d-4894-8953-8e688878750f...
+✅ Recette Cookiwiki récupérée : "Risotto aux champignons" — 15 ingrédient(s) — 4 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : ea5ec85d-c789-45ba-a311-07562c901537...
+✅ Recette Cookiwiki récupérée : "Le michon breton" — 8 ingrédient(s) — 4 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : cb58fecb-27a9-4e18-9ddc-cf5f6fed96cd...
+✅ Recette Cookiwiki récupérée : "Hachis parmentier" — 7 ingrédient(s) — 4 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 23970d8e-5e26-4c51-a624-71fc1269c94b...
+✅ Recette Cookiwiki récupérée : "Œufs en meurette faciles" — 12 ingrédient(s) — 2 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : b291e0a3-15ad-4c90-8db3-6097150b4781...
+✅ Recette Cookiwiki récupérée : "Filet mignon séché maison" — 5 ingrédient(s) — 8 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 206d7cfe-5e67-40ba-8db3-5978fe520f5d...
+✅ Recette Cookiwiki récupérée : "Mousse au chocolat" — 4 ingrédient(s) — 6 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : e416b5ea-5ef1-4c76-9172-b4f6207720b8...
+✅ Recette Cookiwiki récupérée : "Courgettes au Air Fryer" — 6 ingrédient(s) — 4 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 970eed2f-8df4-4f36-85fa-9e6b65e64e8d...
+✅ Recette Cookiwiki récupérée : "Poulet à la Gaston Gérard facile" — 10 ingrédient(s) — 4 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 99728d24-9fe2-4941-919e-1a39704a22a3...
+✅ Recette Cookiwiki récupérée : "Filet mignon rôti au Airfryer" — 6 ingrédient(s) — 4 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 458083ef-40d4-41d2-9fa9-b109a07007e9...
+✅ Recette Cookiwiki récupérée : "Tarte Rustique à la crème de noix et prunes" — 7 ingrédient(s) — 6 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 818bb95d-32fd-421c-87a2-192a9582680e...
+✅ Recette Cookiwiki récupérée : "Quiche aux figues, chèvre, miel et romarin" — 9 ingrédient(s) — 4 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 41a77930-b1e8-4545-ac0e-ebfa2cd7af7b...
+✅ Recette Cookiwiki récupérée : "Tarte amandine aux figues" — 6 ingrédient(s) — 6 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 0876a07b-60b9-4be3-a74c-76183adf4540...
+✅ Recette Cookiwiki récupérée : "Sablé Breton de Christophe Felder" — 6 ingrédient(s) — 6 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 055ac3ce-22b3-4724-8772-3f40521d8b8f...
+✅ Recette Cookiwiki récupérée : "Croque-monsieur aux figues, chèvre et jambon" — 6 ingrédient(s) — 4 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 57cb92d4-a44f-41a6-9202-8436f081ccb0...
+✅ Recette Cookiwiki récupérée : "Tarte fine aux raisins, figues et fromage de chèvre" — 9 ingrédient(s) — 4 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 302c03dc-da58-48e7-8284-36f9a38cf982...
+✅ Recette Cookiwiki récupérée : "Figues grillées à la pancetta" — 5 ingrédient(s) — 4 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 30aa216f-0e58-4ac5-bc5d-3d4caa26d069...
+✅ Recette Cookiwiki récupérée : "Tarte aux tomates cerises à la moutarde et à l'emmental" — 8 ingrédient(s) — 4 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : c794f891-2240-41bf-aee2-e32e8df17c6b...
+✅ Recette Cookiwiki récupérée : "Mijoté de cocos de Paimpol au porc et oignons de Roscoff" — 13 ingrédient(s) — 7 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : f5fa2b24-be9d-477e-bdfb-a10347e21463...
+✅ Recette Cookiwiki récupérée : "Sauce hollandaise" — 6 ingrédient(s) — 4 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 2b6ecb9a-77d4-4398-9e95-f8fe8cdb6aed...
+✅ Recette Cookiwiki récupérée : "Popcorn de poulet au sesame" — 0 ingrédient(s) — 4 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : c36b54b2-4f83-488c-b3db-4b465df01e6f...
+⚠️ Cookiwiki : recette "Crevettes au bacon " sans ingrédients structurés. 8 ingrédient(s) récupéré(s) depuis les instructions ; quantités à préciser.
+✅ Recette Cookiwiki récupérée : "Crevettes au bacon " — 8 ingrédient(s) — 4 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 81e08e94-0225-47a2-99aa-58f35040fab3...
+✅ Recette Cookiwiki récupérée : "Méli-mélo de fruits d'été" — 10 ingrédient(s) — 6 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : a70ca0a7-b231-47b7-bc04-58b83ba8025c...
+✅ Recette Cookiwiki récupérée : "Mijoté de cocos de Paimpol au porc et oignons de Roscoff" — 13 ingrédient(s) — 7 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : b9497dc8-897c-4387-8ca8-41ce2e771e92...
+✅ Recette Cookiwiki récupérée : "Comment préparer et cuire le Coco de Paimpol AOP" — 7 ingrédient(s) — 4 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : e0275312-464b-4586-bf84-84258a6946f9...
+✅ Recette Cookiwiki récupérée : "Salade estivale de Coco de Paimpol AOP" — 10 ingrédient(s) — 4 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 0829e021-fd21-4ef3-8cca-95b2e5487e85...
+✅ Recette Cookiwiki récupérée : "Tajine de légumes" — 15 ingrédient(s) — 4 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 7a5ced7f-a3ea-4719-b12a-349429c6459c...
+✅ Recette Cookiwiki récupérée : "Soupe à l’oignon (la meilleure)" — 13 ingrédient(s) — 6 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 4b2a51db-0dc5-40e6-aa37-550a56a450af...
+✅ Recette Cookiwiki récupérée : "Tarte amandine aux poires pochées" — 11 ingrédient(s) — 6 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : a9340473-1f59-4d05-8599-5ff607a48a96...
+✅ Recette Cookiwiki récupérée : "Tarte aux pêches, citron vert et romarin façon Ottolenghi" — 9 ingrédient(s) — 6 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 83d7443d-30d3-4f51-ad33-a85ef231cd8d...
+✅ Recette Cookiwiki récupérée : "Pot-au-feu" — 12 ingrédient(s) — 4 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 1c7d3210-a7d2-4956-804a-2e893f70eeb5...
+✅ Recette Cookiwiki récupérée : "Hachis parmentier de canard" — 11 ingrédient(s) — 5 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : e0a837b2-6012-4f5a-867c-68c17d823c0c...
+✅ Recette Cookiwiki récupérée : "Cake à la compote de pommes" — 9 ingrédient(s) — 8 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : a1cfaf0a-c0b8-40c1-a5a5-45ded138315b...
+✅ Recette Cookiwiki récupérée : "Poulet à la Gaston Gérard facile" — 9 ingrédient(s) — 4 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 34784d16-6980-4530-96b1-1797fa0e5864...
+✅ Recette Cookiwiki récupérée : "Gambas aux échalotes et vin blanc" — 9 ingrédient(s) — 4 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 14faa023-4542-40e4-b2fb-86ce03b3ae20...
+✅ Recette Cookiwiki récupérée : "Gâteau au citron ultra fondant" — 8 ingrédient(s) — 6 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 3c2f1578-bdc5-4cba-94d4-e46fe87cb382...
+✅ Recette Cookiwiki récupérée : "Quatre-quarts traditionnel" — 4 ingrédient(s) — 6 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 70e831d1-cf92-4ca9-b566-ce3e86c65d88...
+✅ Recette Cookiwiki récupérée : "Cassoulet breton de Coco de Paimpol AOP" — 11 ingrédient(s) — 4 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 65ba7320-a9c2-4cf4-ad08-be7059168734...
+✅ Recette Cookiwiki récupérée : "Velouté de châtaigne de Cyril Lignac" — 7 ingrédient(s) — 4 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 2b6ecb9a-77d4-4398-9e95-f8fe8cdb6aed...
+✅ Recette Cookiwiki récupérée : "Popcorn de poulet au sesame" — 0 ingrédient(s) — 4 portion(s) de base.
+✔ Cookiwiki réel : Tian de tomates, courgettes et aubergines — 8 scénarios (167.888ms)
+✔ Cookiwiki réel : Pommes de terre rôties à la suédoise — 8 scénarios (67.9894ms)
+✔ Cookiwiki réel : Gougères au fromage de Valí  — 8 scénarios (53.1101ms)
+✔ Cookiwiki réel : Recette œuf Bénédicte — 8 scénarios (62.217ms)
+✔ Cookiwiki réel : Tarte aux épinards et chèvre — 8 scénarios (74.1659ms)
+✔ Cookiwiki réel : Tarte fine aux courgettes et Boursin — 8 scénarios (44.6913ms)
+✔ Cookiwiki réel : Cake d'été — 8 scénarios (105.6231ms)
+✔ Cookiwiki réel : Tendrons de veau à la gardiane — 8 scénarios (102.4576ms)
+✔ Cookiwiki réel : Le crumble aux pommes du chat qui tousse — 8 scénarios (56.9975ms)
+✔ Cookiwiki réel : Crème brûlée géante  — 8 scénarios (34.5656ms)
+✔ Cookiwiki réel : Gâteau aux pêches de Jeanine Laurent — 8 scénarios (82.3577ms)
+✔ Cookiwiki réel : Pommes de terre vigneronnes — 8 scénarios (72.1095ms)
+✔ Cookiwiki réel : Gratin de courgettes — 8 scénarios (80.0564ms)
+✔ Cookiwiki réel : Barbotton — 8 scénarios (44.7705ms)
+✔ Cookiwiki réel : Pâte brisée, salée ou sucrée façon Vali — 8 scénarios (31.3283ms)
+✔ Cookiwiki réel : Rillettes de saumon frais et fumé / recette d'Oma pour nos fiançailles !! — 8 scénarios (73.3491ms)
+✔ Cookiwiki réel : Œufs en meurette — 8 scénarios (205.076ms)
+✔ Cookiwiki réel : La Tartiflette au Reblochon  — 8 scénarios (96.43ms)
+✔ Cookiwiki réel : Risotto aux champignons — 8 scénarios (105.4847ms)
+✔ Cookiwiki réel : Le michon breton — 8 scénarios (55.8025ms)
+✔ Cookiwiki réel : Hachis parmentier — 8 scénarios (21.77ms)
+✔ Cookiwiki réel : Œufs en meurette faciles — 8 scénarios (74.8207ms)
+✔ Cookiwiki réel : Filet mignon séché maison — 8 scénarios (22.529ms)
+✔ Cookiwiki réel : Mousse au chocolat — 8 scénarios (28.1943ms)
+✔ Cookiwiki réel : Courgettes au Air Fryer — 8 scénarios (31.3241ms)
+✔ Cookiwiki réel : Poulet à la Gaston Gérard facile — 8 scénarios (91.8338ms)
+✔ Cookiwiki réel : Filet mignon rôti au Airfryer — 8 scénarios (43.0337ms)
+✔ Cookiwiki réel : Tarte Rustique à la crème de noix et prunes — 8 scénarios (82.2361ms)
+✔ Cookiwiki réel : Quiche aux figues, chèvre, miel et romarin — 8 scénarios (61.9814ms)
+✔ Cookiwiki réel : Tarte amandine aux figues — 8 scénarios (46.2673ms)
+✔ Cookiwiki réel : Sablé Breton de Christophe Felder — 8 scénarios (58.7006ms)
+✔ Cookiwiki réel : Croque-monsieur aux figues, chèvre et jambon — 8 scénarios (49.9577ms)
+✔ Cookiwiki réel : Tarte fine aux raisins, figues et fromage de chèvre — 8 scénarios (47.3875ms)
+✔ Cookiwiki réel : Figues grillées à la pancetta — 8 scénarios (46.7631ms)
+✔ Cookiwiki réel : Tarte aux tomates cerises à la moutarde et à l'emmental — 8 scénarios (34.0232ms)
+✔ Cookiwiki réel : Mijoté de cocos de Paimpol au porc et oignons de Roscoff — 8 scénarios (120.9962ms)
+✔ Cookiwiki réel : Sauce hollandaise — 8 scénarios (36.112ms)
+✔ Cookiwiki réel : Popcorn de poulet au sesame — 8 scénarios (2.077ms)
+✔ Cookiwiki réel : Crevettes au bacon  — 8 scénarios (16.3954ms)
+✔ Cookiwiki réel : Méli-mélo de fruits d'été — 8 scénarios (62.5704ms)
+✔ Cookiwiki réel : Mijoté de cocos de Paimpol au porc et oignons de Roscoff — 8 scénarios (114.2597ms)
+✔ Cookiwiki réel : Comment préparer et cuire le Coco de Paimpol AOP — 8 scénarios (56.4825ms)
+✔ Cookiwiki réel : Salade estivale de Coco de Paimpol AOP — 8 scénarios (86.7311ms)
+✔ Cookiwiki réel : Tajine de légumes — 8 scénarios (68.7406ms)
+✔ Cookiwiki réel : Soupe à l’oignon (la meilleure) — 8 scénarios (89.3354ms)
+✔ Cookiwiki réel : Tarte amandine aux poires pochées — 8 scénarios (74.8454ms)
+✔ Cookiwiki réel : Tarte aux pêches, citron vert et romarin façon Ottolenghi — 8 scénarios (49.0297ms)
+✔ Cookiwiki réel : Pot-au-feu — 8 scénarios (85.4402ms)
+✔ Cookiwiki réel : Hachis parmentier de canard — 8 scénarios (78.7021ms)
+✔ Cookiwiki réel : Cake à la compote de pommes — 8 scénarios (59.5064ms)
+✔ Cookiwiki réel : Poulet à la Gaston Gérard facile — 8 scénarios (59.0197ms)
+✔ Cookiwiki réel : Gambas aux échalotes et vin blanc — 8 scénarios (52.8572ms)
+✔ Cookiwiki réel : Gâteau au citron ultra fondant — 8 scénarios (48.381ms)
+✔ Cookiwiki réel : Quatre-quarts traditionnel — 8 scénarios (17.8991ms)
+✔ Cookiwiki réel : Cassoulet breton de Coco de Paimpol AOP — 8 scénarios (52.3381ms)
+✔ Cookiwiki réel : Velouté de châtaigne de Cyril Lignac — 8 scénarios (42.3095ms)
+✔ recette réelle sans ingrédients : alerte visible, aucun achat inventé (3.503ms)
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : e2035bf0-c847-42e4-9f7a-adeb8059301e...
+✅ Recette Cookiwiki récupérée : "Tian de tomates, courgettes et aubergines" — 10 ingrédient(s) — 4 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 6e02c3f8-1baf-40a2-a0c8-e800686fa169...
+✅ Recette Cookiwiki récupérée : "Pommes de terre rôties à la suédoise" — 6 ingrédient(s) — 4 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 4993b615-7302-4683-b38d-6e82b3ed5ffb...
+✅ Recette Cookiwiki récupérée : "Gougères au fromage de Valí " — 5 ingrédient(s) — 6 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 9093f24a-ba08-47d6-8f96-8db0bdeec87f...
+✅ Recette Cookiwiki récupérée : "Recette œuf Bénédicte" — 9 ingrédient(s) — 2 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 377291a6-cf3c-416e-b927-46b128d650f1...
+✅ Recette Cookiwiki récupérée : "Tarte aux épinards et chèvre" — 7 ingrédient(s) — 4 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 86599d6b-428d-458d-af49-36784456c09f...
+✅ Recette Cookiwiki récupérée : "Tarte fine aux courgettes et Boursin" — 5 ingrédient(s) — 6 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 96b805d2-75fe-4f9c-ac6f-a7bd98f21756...
+✅ Recette Cookiwiki récupérée : "Cake d'été" — 11 ingrédient(s) — 4 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : e682d519-3874-4ed7-859b-f68666150282...
+✅ Recette Cookiwiki récupérée : "Tendrons de veau à la gardiane" — 13 ingrédient(s) — 6 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 09603a0f-6dbb-4bf7-a971-281d06cb7fda...
+✅ Recette Cookiwiki récupérée : "Le crumble aux pommes du chat qui tousse" — 7 ingrédient(s) — 4 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 19305dab-f838-4477-a330-89f4ad5757d8...
+✅ Recette Cookiwiki récupérée : "Crème brûlée géante " — 5 ingrédient(s) — 6 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 9428614f-76ad-4fc0-a05a-6db45ec14f84...
+✅ Recette Cookiwiki récupérée : "Gâteau aux pêches de Jeanine Laurent" — 8 ingrédient(s) — 6 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : c558eff5-c8fc-4200-ada6-3c05febc6991...
+✅ Recette Cookiwiki récupérée : "Pommes de terre vigneronnes" — 6 ingrédient(s) — 4 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 50391f36-35dd-4e4e-b6d8-a5d59b51cffa...
+✅ Recette Cookiwiki récupérée : "Gratin de courgettes" — 10 ingrédient(s) — 4 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 08788652-f0cc-4140-be73-495ee4ebb2ad...
+✅ Recette Cookiwiki récupérée : "Barbotton" — 6 ingrédient(s) — 4 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 0dd5a4e1-be8c-4d33-ad36-7480d2963aa7...
+✅ Recette Cookiwiki récupérée : "Pâte brisée, salée ou sucrée façon Vali" — 3 ingrédient(s) — 4 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : be542b36-ca36-411c-ba1c-a188a9133296...
+✅ Recette Cookiwiki récupérée : "Rillettes de saumon frais et fumé / recette d'Oma pour nos fiançailles !!" — 8 ingrédient(s) — 4 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 452a35a5-0962-4002-8075-2bf57a8ddb2e...
+✅ Recette Cookiwiki récupérée : "Œufs en meurette" — 17 ingrédient(s) — 5 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 4e93c746-3b57-4374-90d4-bfec92a8b670...
+✅ Recette Cookiwiki récupérée : "La Tartiflette au Reblochon " — 7 ingrédient(s) — 4 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 9b3f1c94-e80d-4894-8953-8e688878750f...
+✅ Recette Cookiwiki récupérée : "Risotto aux champignons" — 14 ingrédient(s) — 4 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : ea5ec85d-c789-45ba-a311-07562c901537...
+✅ Recette Cookiwiki récupérée : "Le michon breton" — 8 ingrédient(s) — 4 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : cb58fecb-27a9-4e18-9ddc-cf5f6fed96cd...
+✅ Recette Cookiwiki récupérée : "Hachis parmentier" — 7 ingrédient(s) — 4 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 23970d8e-5e26-4c51-a624-71fc1269c94b...
+✅ Recette Cookiwiki récupérée : "Œufs en meurette faciles" — 12 ingrédient(s) — 2 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : b291e0a3-15ad-4c90-8db3-6097150b4781...
+✅ Recette Cookiwiki récupérée : "Filet mignon séché maison" — 5 ingrédient(s) — 8 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 206d7cfe-5e67-40ba-8db3-5978fe520f5d...
+✅ Recette Cookiwiki récupérée : "Mousse au chocolat" — 4 ingrédient(s) — 6 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : e416b5ea-5ef1-4c76-9172-b4f6207720b8...
+✅ Recette Cookiwiki récupérée : "Courgettes au Air Fryer" — 6 ingrédient(s) — 4 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 970eed2f-8df4-4f36-85fa-9e6b65e64e8d...
+✅ Recette Cookiwiki récupérée : "Poulet à la Gaston Gérard facile" — 10 ingrédient(s) — 4 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 99728d24-9fe2-4941-919e-1a39704a22a3...
+✅ Recette Cookiwiki récupérée : "Filet mignon rôti au Airfryer" — 6 ingrédient(s) — 4 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 458083ef-40d4-41d2-9fa9-b109a07007e9...
+✅ Recette Cookiwiki récupérée : "Tarte Rustique à la crème de noix et prunes" — 8 ingrédient(s) — 6 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 818bb95d-32fd-421c-87a2-192a9582680e...
+✅ Recette Cookiwiki récupérée : "Quiche aux figues, chèvre, miel et romarin" — 9 ingrédient(s) — 4 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 41a77930-b1e8-4545-ac0e-ebfa2cd7af7b...
+✅ Recette Cookiwiki récupérée : "Tarte amandine aux figues" — 6 ingrédient(s) — 6 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 0876a07b-60b9-4be3-a74c-76183adf4540...
+✅ Recette Cookiwiki récupérée : "Sablé Breton de Christophe Felder" — 6 ingrédient(s) — 6 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 055ac3ce-22b3-4724-8772-3f40521d8b8f...
+✅ Recette Cookiwiki récupérée : "Croque-monsieur aux figues, chèvre et jambon" — 6 ingrédient(s) — 4 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 57cb92d4-a44f-41a6-9202-8436f081ccb0...
+✅ Recette Cookiwiki récupérée : "Tarte fine aux raisins, figues et fromage de chèvre" — 9 ingrédient(s) — 4 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 302c03dc-da58-48e7-8284-36f9a38cf982...
+✅ Recette Cookiwiki récupérée : "Figues grillées à la pancetta" — 5 ingrédient(s) — 4 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 30aa216f-0e58-4ac5-bc5d-3d4caa26d069...
+✅ Recette Cookiwiki récupérée : "Tarte aux tomates cerises à la moutarde et à l'emmental" — 8 ingrédient(s) — 4 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : c794f891-2240-41bf-aee2-e32e8df17c6b...
+✅ Recette Cookiwiki récupérée : "Mijoté de cocos de Paimpol au porc et oignons de Roscoff" — 13 ingrédient(s) — 7 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : f5fa2b24-be9d-477e-bdfb-a10347e21463...
+✅ Recette Cookiwiki récupérée : "Sauce hollandaise" — 6 ingrédient(s) — 4 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 2b6ecb9a-77d4-4398-9e95-f8fe8cdb6aed...
+✅ Recette Cookiwiki récupérée : "Popcorn de poulet au sesame" — 13 ingrédient(s) — 4 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : c36b54b2-4f83-488c-b3db-4b465df01e6f...
+✅ Recette Cookiwiki récupérée : "Crevettes au bacon " — 8 ingrédient(s) — 4 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 81e08e94-0225-47a2-99aa-58f35040fab3...
+✅ Recette Cookiwiki récupérée : "Méli-mélo de fruits d'été" — 10 ingrédient(s) — 6 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : a70ca0a7-b231-47b7-bc04-58b83ba8025c...
+✅ Recette Cookiwiki récupérée : "Mijoté de cocos de Paimpol au porc et oignons de Roscoff" — 13 ingrédient(s) — 7 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : b9497dc8-897c-4387-8ca8-41ce2e771e92...
+✅ Recette Cookiwiki récupérée : "Comment préparer et cuire le Coco de Paimpol AOP" — 7 ingrédient(s) — 4 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : e0275312-464b-4586-bf84-84258a6946f9...
+✅ Recette Cookiwiki récupérée : "Salade estivale de Coco de Paimpol AOP" — 11 ingrédient(s) — 4 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 0829e021-fd21-4ef3-8cca-95b2e5487e85...
+✅ Recette Cookiwiki récupérée : "Tajine de légumes" — 15 ingrédient(s) — 4 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 7a5ced7f-a3ea-4719-b12a-349429c6459c...
+✅ Recette Cookiwiki récupérée : "Soupe à l’oignon (la meilleure)" — 13 ingrédient(s) — 6 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 4b2a51db-0dc5-40e6-aa37-550a56a450af...
+✅ Recette Cookiwiki récupérée : "Tarte amandine aux poires pochées" — 9 ingrédient(s) — 6 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : a9340473-1f59-4d05-8599-5ff607a48a96...
+✅ Recette Cookiwiki récupérée : "Tarte aux pêches, citron vert et romarin façon Ottolenghi" — 9 ingrédient(s) — 6 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 83d7443d-30d3-4f51-ad33-a85ef231cd8d...
+✅ Recette Cookiwiki récupérée : "Pot-au-feu" — 12 ingrédient(s) — 4 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 1c7d3210-a7d2-4956-804a-2e893f70eeb5...
+✅ Recette Cookiwiki récupérée : "Hachis parmentier de canard" — 11 ingrédient(s) — 5 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : e0a837b2-6012-4f5a-867c-68c17d823c0c...
+✅ Recette Cookiwiki récupérée : "Cake à la compote de pommes" — 8 ingrédient(s) — 8 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : a1cfaf0a-c0b8-40c1-a5a5-45ded138315b...
+✅ Recette Cookiwiki récupérée : "Poulet à la Gaston Gérard facile" — 9 ingrédient(s) — 4 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 34784d16-6980-4530-96b1-1797fa0e5864...
+✅ Recette Cookiwiki récupérée : "Gambas aux échalotes et vin blanc" — 9 ingrédient(s) — 4 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 14faa023-4542-40e4-b2fb-86ce03b3ae20...
+✅ Recette Cookiwiki récupérée : "Gâteau au citron ultra fondant" — 8 ingrédient(s) — 6 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 3c2f1578-bdc5-4cba-94d4-e46fe87cb382...
+✅ Recette Cookiwiki récupérée : "Quatre-quarts traditionnel" — 4 ingrédient(s) — 6 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 70e831d1-cf92-4ca9-b566-ce3e86c65d88...
+✅ Recette Cookiwiki récupérée : "Cassoulet breton de Coco de Paimpol AOP" — 11 ingrédient(s) — 4 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 65ba7320-a9c2-4cf4-ad08-be7059168734...
+✅ Recette Cookiwiki récupérée : "Velouté de châtaigne de Cyril Lignac" — 7 ingrédient(s) — 4 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : r...
+✅ Recette Cookiwiki récupérée : "r" — 0 ingrédient(s) — 4 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 4993b615-7302-4683-b38d-6e82b3ed5ffb...
+✅ Recette Cookiwiki récupérée : "Gougères au fromage de Valí " — 5 ingrédient(s) — 6 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 4993b615-7302-4683-b38d-6e82b3ed5ffb...
+✅ Recette Cookiwiki récupérée : "Gougères au fromage de Valí " — 5 ingrédient(s) — 6 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 4993b615-7302-4683-b38d-6e82b3ed5ffb...
+✅ Recette Cookiwiki récupérée : "Gougères au fromage de Valí " — 5 ingrédient(s) — 6 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 4993b615-7302-4683-b38d-6e82b3ed5ffb...
+✅ Recette Cookiwiki récupérée : "Gougères au fromage de Valí " — 5 ingrédient(s) — 6 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : 4993b615-7302-4683-b38d-6e82b3ed5ffb...
+✅ Recette Cookiwiki récupérée : "Gougères au fromage de Valí " — 5 ingrédient(s) — 6 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : r...
+✅ Recette Cookiwiki récupérée : "r" — 2 ingrédient(s) — 4 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : r...
+✅ Recette Cookiwiki récupérée : "r" — 2 ingrédient(s) — 4 portion(s) de base.
+✔ recettes corrigées : Tian de tomates, courgettes et aubergines (49.0282ms)
+✔ recettes corrigées : Pommes de terre rôties à la suédoise (24.4925ms)
+✔ recettes corrigées : Gougères au fromage de Valí  (14.6088ms)
+✔ recettes corrigées : Recette œuf Bénédicte (28.754ms)
+✔ recettes corrigées : Tarte aux épinards et chèvre (26.0966ms)
+✔ recettes corrigées : Tarte fine aux courgettes et Boursin (16.8292ms)
+✔ recettes corrigées : Cake d'été (36.1512ms)
+✔ recettes corrigées : Tendrons de veau à la gardiane (56.3032ms)
+✔ recettes corrigées : Le crumble aux pommes du chat qui tousse (36.8067ms)
+✔ recettes corrigées : Crème brûlée géante  (14.5308ms)
+✔ recettes corrigées : Gâteau aux pêches de Jeanine Laurent (31.5647ms)
+✔ recettes corrigées : Pommes de terre vigneronnes (27.8053ms)
+✔ recettes corrigées : Gratin de courgettes (33.4764ms)
+✔ recettes corrigées : Barbotton (26.6792ms)
+✔ recettes corrigées : Pâte brisée, salée ou sucrée façon Vali (18.66ms)
+✔ recettes corrigées : Rillettes de saumon frais et fumé / recette d'Oma pour nos fiançailles !! (55.1774ms)
+✔ recettes corrigées : Œufs en meurette (82.151ms)
+✔ recettes corrigées : La Tartiflette au Reblochon  (39.859ms)
+✔ recettes corrigées : Risotto aux champignons (66.2652ms)
+✔ recettes corrigées : Le michon breton (25.603ms)
+✔ recettes corrigées : Hachis parmentier (20.1692ms)
+✔ recettes corrigées : Œufs en meurette faciles (32.8683ms)
+✔ recettes corrigées : Filet mignon séché maison (19.4156ms)
+✔ recettes corrigées : Mousse au chocolat (13.7492ms)
+✔ recettes corrigées : Courgettes au Air Fryer (17.998ms)
+✔ recettes corrigées : Poulet à la Gaston Gérard facile (31.3637ms)
+✔ recettes corrigées : Filet mignon rôti au Airfryer (29.6653ms)
+✔ recettes corrigées : Tarte Rustique à la crème de noix et prunes (23.9207ms)
+✔ recettes corrigées : Quiche aux figues, chèvre, miel et romarin (34.6364ms)
+✔ recettes corrigées : Tarte amandine aux figues (17.5431ms)
+✔ recettes corrigées : Sablé Breton de Christophe Felder (17.3186ms)
+✔ recettes corrigées : Croque-monsieur aux figues, chèvre et jambon (20.6708ms)
+✔ recettes corrigées : Tarte fine aux raisins, figues et fromage de chèvre (24.6668ms)
+✔ recettes corrigées : Figues grillées à la pancetta (35.7023ms)
+✔ recettes corrigées : Tarte aux tomates cerises à la moutarde et à l'emmental (25.6569ms)
+✔ recettes corrigées : Mijoté de cocos de Paimpol au porc et oignons de Roscoff (47.093ms)
+✔ recettes corrigées : Sauce hollandaise (22.0369ms)
+✔ recettes corrigées : Popcorn de poulet au sesame (43.7811ms)
+✔ recettes corrigées : Crevettes au bacon  (33.1142ms)
+✔ recettes corrigées : Méli-mélo de fruits d'été (39.216ms)
+✔ recettes corrigées : Mijoté de cocos de Paimpol au porc et oignons de Roscoff (56.3381ms)
+✔ recettes corrigées : Comment préparer et cuire le Coco de Paimpol AOP (24.8748ms)
+✔ recettes corrigées : Salade estivale de Coco de Paimpol AOP (38.8286ms)
+✔ recettes corrigées : Tajine de légumes (51.6013ms)
+✔ recettes corrigées : Soupe à l’oignon (la meilleure) (48.5245ms)
+✔ recettes corrigées : Tarte amandine aux poires pochées (28.7422ms)
+✔ recettes corrigées : Tarte aux pêches, citron vert et romarin façon Ottolenghi (28.9613ms)
+✔ recettes corrigées : Pot-au-feu (39.3015ms)
+✔ recettes corrigées : Hachis parmentier de canard (32.1337ms)
+✔ recettes corrigées : Cake à la compote de pommes (28.205ms)
+✔ recettes corrigées : Poulet à la Gaston Gérard facile (34.2451ms)
+✔ recettes corrigées : Gambas aux échalotes et vin blanc (34.7904ms)
+✔ recettes corrigées : Gâteau au citron ultra fondant (27.3662ms)
+✔ recettes corrigées : Quatre-quarts traditionnel (15.5667ms)
+✔ recettes corrigées : Cassoulet breton de Coco de Paimpol AOP (31.4249ms)
+✔ recettes corrigées : Velouté de châtaigne de Cyril Lignac (21.2928ms)
+✔ propositions structurées valides (1.0969ms)
+✔ mélange : olives vertes ne couvrent pas la part noire (4.184ms)
+✔ alternative : une branche, choix absent sans IA ni stock déduit (4.8581ms)
+✔ facultatif, eau et quantité inconnue conservés sans invention (0.2029ms)
+✔ pas de secours instructions sur liste volontairement exclue (0.3682ms)
+✔ validation : quantités invalides, profondeur, choix et ail Pièce refusés (0.7669ms)
+✔ correction recette : authentification et validation avant DB (8.4218ms)
+✔ correction recette : RPC atomique, conflit et erreur DB (2.3497ms)
+✔ alerte recette : lien direct vers la recette (0.2658ms)
+✔ cycle : foyer courant ou foyer de test occupé refusés avant mutation (1.3194ms)
+✔ toutes les variantes corrigées : audit en quantités précises (79.113ms)
+✔ intégration : vrais handlers planning → courses → achats → rangement → consommation → signal (122.7066ms)
+✔ compatibilité Cookiwiki : structure active uniquement sur sa version plate, clé jsonb stable (0.5405ms)
+✔ lecteur : récupère le mélange sauvegardé à part des ingrédients plats Cookiwiki (0.5363ms)
+✔ association Saucisse/Saucisses : priorité sur ancienne proposition IA, conversion 120 g et exclusions (12.1643ms)
+✔ liens sources : adresses par défaut, identifiants encodés et même origine (0.4803ms)
+✔ Courses : une entrée par produit, doublons masqués et recettes distinctes conservées (2.5676ms)
+✔ Courses : proposition stock et recette gardent les deux libellés dans le bon sens (7.6858ms)
+✔ Courses : quantité et rangement ouvrent leurs écrans, unité inconnue ne devient pas un poids moyen (0.6783ms)
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : recipe-oil...
+✅ Recette Cookiwiki récupérée : "Cassoulet test" — 1 ingrédient(s) — 4 portion(s) de base.
+
+🔍 Interrogation de Cookiwiki (table 'recipes') pour l'ID : recipe-oil...
+✅ Recette Cookiwiki récupérée : "Cassoulet test" — 1 ingrédient(s) — 4 portion(s) de base.
+✔ saucisse sans masse explicite : le besoin en pièces reste visible sans identité officielle (2.9861ms)
+✔ ail : pièce ne devient pas gousse sans équivalence explicite (1.1331ms)
+✔ saucisse : une masse explicite par pièce permet une conversion vérifiable (0.5353ms)
+✔ des gousses déjà exprimées en gousses gardent leur identité (0.7037ms)
+✔ conversion vers une référence kilogramme : quantité stockée en kilogrammes (2.6473ms)
+✔ la conversion canonique et la conversion vers une unité demandée restent distinctes (1.5473ms)
+✔ un ingrédient sans référence conserve le besoin et explique le blocage (0.3417ms)
+✔ un ingrédient inconnu possède une explication active dès le pipeline (4.813ms)
+✔ huile référencée en volume : une cuillère reste 15 mL, sans détour par 14 g (1.4884ms)
+✔ huile : le stock mesuré en mL couvre le besoin de cuillère sans densité mL inventée (1.5269ms)
+✔ huile : une pièce de stock ne devient pas arbitrairement un litre (1.2482ms)
+✔ ancienne ligne automatique non achetée : la même huile peut changer d’unité (0.4191ms)
+✔ réconciliation protège ligne manuelle/achetée/rangée ou autre produit : {"produit":"Huile d'olive","is_manual":true,"qte_achetee":0,"stock_stored_quantity":0} (0.936ms)
+✔ réconciliation protège ligne manuelle/achetée/rangée ou autre produit : {"produit":"Huile d'olive","is_manual":false,"qte_achetee":1,"stock_stored_quantity":0} (0.2472ms)
+✔ réconciliation protège ligne manuelle/achetée/rangée ou autre produit : {"produit":"Huile d'olive","is_manual":false,"qte_achetee":0,"stock_stored_quantity":1} (0.1454ms)
+✔ réconciliation protège ligne manuelle/achetée/rangée ou autre produit : {"produit":"Huile de coco","is_manual":false,"qte_achetee":0,"stock_stored_quantity":0} (0.1265ms)
+✔ une ancienne ligne cochée sans quantité renseignée n’est pas réutilisée pour changer d’unité (0.1754ms)
+✔ générateur réel : régénération huile g -> mL avec 0 déjà acheté(s) (17.5152ms)
+✔ générateur réel : régénération huile g -> mL avec 2 déjà acheté(s) (2.8129ms)
+✔ Cookiwiki : gousses d’ail sans unité deviennent Ail en gousses, sans modifier la vanille (0.5246ms)
+✔ proposition en attente : libellé original et aucune identité officielle retenue (0.9002ms)
+✔ AUCUN récent et référentiel inchangé : aucun appel Claude (19.6231ms)
+✔ signature identité : ordre stable et invalidation après enrichissement (0.4232ms)
+✔ pipeline ail Cookiwiki : 2 gousses explicites résolues sans Claude, stock en pièces non déduit (0.6145ms)
+✔ lieux : même nom et même ID dans deux bases ne fusionnent pas (20.6108ms)
+✔ lieux : sélection mixte Frosti/Cellio et intersection avec la source (0.3011ms)
+✔ lieux : stocks sans emplacement restent consultables par application (0.548ms)
+✔ lieux : liste serveur conserve les lieux vides et le renommage (0.5175ms)
+ℹ tests 605
+ℹ suites 0
+ℹ pass 605
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 4280.1637
+MEALIO — MATCHER TEST LAB
+V33.1 — exécution clé en main
+Date : 08/10/2026 17:33:43
+
+Les tests sont exécutés avec des données de référence locales.
+Aucune écriture Supabase ni appel Claude n’est nécessaire pour cette batterie.
+
+PASS | 1 ms | Résolution exacte / synonyme / inconnu
+PASS | 2 ms | Normalisation ligne recette
+PASS | 1 ms | Redimensionnement portions
+PASS | 0 ms | Miel : densités explicites uniquement
+PASS | 1 ms | Presence-only : aucune densité utilisable
+PASS | 1 ms | Plusieurs lignes de stock sont additionnées
+PASS | 0 ms | Stock supérieur : aucun achat
+PASS | 0 ms | Stock insuffisant : achat = manque
+PASS | 0 ms | Anti-faux-positif : courgette ≠ poireau
+PASS | 0 ms | Anti-faux-positif CRITIQUE : farine de blé ≠ farine de riz
+PASS | 0 ms | Presence : stock présent = aucun achat
+PASS | 0 ms | Presence : stock absent = achat présence
+PASS | 0 ms | Pipeline complet recette → besoin → stock → achat
+PASS | 1 ms | Agrégation de deux recettes
+
+==============================
+RÉSULTAT
+==============================
+Tests exécutés : 14
+PASS : 14
+FAIL : 0
+Échecs critiques : 0
+
+STATUT : PASS — batterie Matcher verte.
+
+Rapport TXT : C:\Users\Gael\AppData\Local\Temp\mealio-tests-xLZKus\test-reports\matcher-lab-2026-10-08T15-33-43-308Z.txt
+(node:22872) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)

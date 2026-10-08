@@ -1,0 +1,4084 @@
+[
+  {
+    "id": "4993b615-7302-4683-b38d-6e82b3ed5ffb",
+    "title": "Gougères au fromage de Valí ",
+    "servings": 6,
+    "expected": [
+      {
+        "qty": 150,
+        "name": "farine",
+        "unit": "g"
+      },
+      {
+        "qty": 60,
+        "name": "beurre",
+        "unit": "g"
+      },
+      {
+        "qty": 4,
+        "name": "œufs",
+        "unit": "unités"
+      },
+      {
+        "qty": 90,
+        "name": "gruyère",
+        "unit": "g"
+      },
+      {
+        "qty": 1,
+        "name": "sel",
+        "unit": "pincée"
+      },
+      {
+        "qty": 2,
+        "name": "eau",
+        "unit": "verres"
+      }
+    ],
+    "ingredients": [
+      {
+        "qty": 150,
+        "name": "farine",
+        "unit": "g"
+      },
+      {
+        "qty": 60,
+        "name": "beurre",
+        "unit": "g"
+      },
+      {
+        "qty": 4,
+        "name": "œufs",
+        "unit": "unités"
+      },
+      {
+        "qty": 90,
+        "name": "gruyère",
+        "unit": "g"
+      },
+      {
+        "qty": 1,
+        "name": "sel",
+        "unit": "pincée"
+      },
+      {
+        "qty": 2,
+        "name": "Eau",
+        "unit": "verres",
+        "exclude_from_shopping": true,
+        "note": "Eau du robinet : hors courses ; quantité selon la préparation."
+      }
+    ]
+  },
+  {
+    "id": "9093f24a-ba08-47d6-8f96-8db0bdeec87f",
+    "title": "Recette œuf Bénédicte",
+    "servings": 2,
+    "expected": [
+      {
+        "qty": 2,
+        "name": "Muffins anglais",
+        "unit": "pièces"
+      },
+      {
+        "qty": 4,
+        "name": "Œufs frais",
+        "unit": "pièces"
+      },
+      {
+        "qty": 4,
+        "name": "Bacon ou jambon",
+        "unit": "tranches"
+      },
+      {
+        "qty": 2,
+        "name": "Jaunes d'œufs",
+        "unit": "pièces"
+      },
+      {
+        "qty": 100,
+        "name": "Beurre",
+        "unit": "g"
+      },
+      {
+        "qty": 0.5,
+        "name": "Jus de citron",
+        "unit": "pièce"
+      },
+      {
+        "qty": 1,
+        "name": "Vinaigre blanc",
+        "unit": "c.à.s"
+      },
+      {
+        "qty": 1,
+        "name": "Sel et poivre",
+        "unit": "pincée"
+      }
+    ],
+    "ingredients": [
+      {
+        "qty": 2,
+        "name": "Muffins anglais",
+        "unit": "pièces"
+      },
+      {
+        "qty": 4,
+        "name": "Œufs frais",
+        "unit": "pièces"
+      },
+      {
+        "name": "Bacon ou jambon",
+        "alternatives": [
+          {
+            "name": "Bacon",
+            "qty": 4,
+            "unit": "Tranche"
+          },
+          {
+            "name": "Jambon blanc",
+            "qty": 4,
+            "unit": "Tranche"
+          }
+        ],
+        "selected": 0,
+        "note": "Premier choix initial ; modifiable dans Admin → Correction des recettes."
+      },
+      {
+        "qty": 2,
+        "name": "Jaunes d'œufs",
+        "unit": "pièces"
+      },
+      {
+        "qty": 100,
+        "name": "Beurre",
+        "unit": "g"
+      },
+      {
+        "qty": 0.5,
+        "name": "Jus de citron",
+        "unit": "pièce"
+      },
+      {
+        "qty": 1,
+        "name": "Vinaigre blanc",
+        "unit": "c.à.s"
+      },
+      {
+        "name": "Sel et poivre",
+        "components": [
+          {
+            "name": "Sel fin",
+            "qty": 1,
+            "unit": "g",
+            "quantity_source": "estimated",
+            "note": "Estimation initiale Mealio, à ajuster selon la recette et les goûts."
+          },
+          {
+            "name": "Poivre noir",
+            "qty": 0.5,
+            "unit": "g",
+            "quantity_source": "estimated",
+            "note": "Estimation initiale Mealio, à ajuster selon la recette et les goûts."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "86599d6b-428d-458d-af49-36784456c09f",
+    "title": "Tarte fine aux courgettes et Boursin",
+    "servings": 6,
+    "expected": [
+      {
+        "qty": 1,
+        "name": "pâte sablée au parmesan",
+        "unit": ""
+      },
+      {
+        "qty": 1,
+        "name": "courgette",
+        "unit": ""
+      },
+      {
+        "qty": 200,
+        "name": "Boursin ail et fines herbes",
+        "unit": "g"
+      },
+      {
+        "qty": 3.5,
+        "name": "crème fraîche",
+        "unit": "c.à.s"
+      },
+      {
+        "qty": 0,
+        "name": "Gruyère",
+        "unit": "pour parsemer"
+      }
+    ],
+    "ingredients": [
+      {
+        "qty": 1,
+        "name": "pâte sablée au parmesan",
+        "unit": ""
+      },
+      {
+        "qty": 1,
+        "name": "courgette",
+        "unit": ""
+      },
+      {
+        "qty": 200,
+        "name": "Boursin ail et fines herbes",
+        "unit": "g"
+      },
+      {
+        "qty": 3.5,
+        "name": "crème fraîche",
+        "unit": "c.à.s"
+      },
+      {
+        "name": "Gruyère",
+        "qty": 45.0,
+        "unit": "g",
+        "quantity_source": "estimated",
+        "note": "Estimation initiale Mealio, à ajuster selon la recette et les goûts."
+      }
+    ]
+  },
+  {
+    "id": "96b805d2-75fe-4f9c-ac6f-a7bd98f21756",
+    "title": "Cake d'été",
+    "servings": 4,
+    "expected": [
+      {
+        "qty": 150,
+        "name": "vin blanc sec",
+        "unit": "ml"
+      },
+      {
+        "qty": 150,
+        "name": "huile",
+        "unit": "ml"
+      },
+      {
+        "qty": 4,
+        "name": "oeufs",
+        "unit": ""
+      },
+      {
+        "qty": 100,
+        "name": "Comté ",
+        "unit": "g"
+      },
+      {
+        "qty": 250,
+        "name": "farine",
+        "unit": "g"
+      },
+      {
+        "qty": 1,
+        "name": "levure",
+        "unit": "paquet"
+      },
+      {
+        "qty": 1,
+        "name": "sel",
+        "unit": "c.à.c"
+      },
+      {
+        "qty": 150,
+        "name": "jambon haché gros ou lardons ",
+        "unit": "g"
+      },
+      {
+        "qty": 100,
+        "name": "olives dénoyautées (noires et/ou vertes) et/ou tomates séchées ",
+        "unit": "g"
+      },
+      {
+        "qty": 0,
+        "name": "Thym",
+        "unit": "selon"
+      }
+    ],
+    "ingredients": [
+      {
+        "qty": 150,
+        "name": "vin blanc sec",
+        "unit": "ml"
+      },
+      {
+        "qty": 150,
+        "name": "huile",
+        "unit": "ml"
+      },
+      {
+        "qty": 4,
+        "name": "oeufs",
+        "unit": ""
+      },
+      {
+        "qty": 100,
+        "name": "Comté ",
+        "unit": "g"
+      },
+      {
+        "qty": 250,
+        "name": "farine",
+        "unit": "g"
+      },
+      {
+        "qty": 1,
+        "name": "levure",
+        "unit": "paquet"
+      },
+      {
+        "qty": 1,
+        "name": "sel",
+        "unit": "c.à.c"
+      },
+      {
+        "name": "jambon haché gros ou lardons",
+        "alternatives": [
+          {
+            "name": "Jambon blanc",
+            "qty": 150,
+            "unit": "g"
+          },
+          {
+            "name": "Lardons",
+            "qty": 150,
+            "unit": "g"
+          }
+        ],
+        "selected": 0,
+        "note": "Premier choix initial ; modifiable dans Admin → Correction des recettes."
+      },
+      {
+        "name": "olives dénoyautées (noires et/ou vertes) et/ou tomates séchées",
+        "alternatives": [
+          {
+            "name": "Olives noires et vertes",
+            "components": [
+              {
+                "name": "Olive noire",
+                "qty": 50,
+                "unit": "g",
+                "quantity_source": "estimated",
+                "note": "Répartition initiale 50/50."
+              },
+              {
+                "name": "Olive verte",
+                "qty": 50,
+                "unit": "g",
+                "quantity_source": "estimated",
+                "note": "Répartition initiale 50/50."
+              }
+            ]
+          },
+          {
+            "name": "Olive noire",
+            "qty": 100,
+            "unit": "g"
+          },
+          {
+            "name": "Olive verte",
+            "qty": 100,
+            "unit": "g"
+          },
+          {
+            "name": "Tomate séchée",
+            "qty": 100,
+            "unit": "g"
+          },
+          {
+            "name": "Olives et tomates séchées",
+            "components": [
+              {
+                "name": "Olive noire",
+                "qty": 50,
+                "unit": "g",
+                "quantity_source": "estimated",
+                "note": "Estimation initiale Mealio, à ajuster selon la recette et les goûts."
+              },
+              {
+                "name": "Tomate séchée",
+                "qty": 50,
+                "unit": "g",
+                "quantity_source": "estimated",
+                "note": "Estimation initiale Mealio, à ajuster selon la recette et les goûts."
+              }
+            ]
+          }
+        ],
+        "selected": 0,
+        "note": "Premier choix initial ; modifiable dans Admin → Correction des recettes."
+      },
+      {
+        "name": "Thym séché",
+        "qty": 1.0,
+        "unit": "g",
+        "quantity_source": "estimated",
+        "note": "Estimation initiale Mealio, à ajuster selon la recette et les goûts."
+      }
+    ]
+  },
+  {
+    "id": "e682d519-3874-4ed7-859b-f68666150282",
+    "title": "Tendrons de veau à la gardiane",
+    "servings": 6,
+    "expected": [
+      {
+        "qty": 1.5,
+        "name": "poitrine de veau en morceaux",
+        "unit": "kg"
+      },
+      {
+        "qty": 90,
+        "name": "beurre",
+        "unit": "g"
+      },
+      {
+        "qty": 150,
+        "name": "petits oignons",
+        "unit": "g"
+      },
+      {
+        "qty": 150,
+        "name": "champignons de Paris",
+        "unit": "g"
+      },
+      {
+        "qty": 4,
+        "name": "huile d'olive",
+        "unit": "c.à.s"
+      },
+      {
+        "qty": 2,
+        "name": "ail",
+        "unit": "gousses"
+      },
+      {
+        "qty": 2,
+        "name": "vin blanc sec",
+        "unit": "verres"
+      },
+      {
+        "qty": 2,
+        "name": "bouillon",
+        "unit": "verres"
+      },
+      {
+        "qty": 1,
+        "name": "concentré de tomate",
+        "unit": "c.à.s"
+      },
+      {
+        "qty": 250,
+        "name": "olives noires et vertes",
+        "unit": "g"
+      },
+      {
+        "qty": 0,
+        "name": "sel",
+        "unit": "selon les goûts"
+      },
+      {
+        "qty": 0,
+        "name": "poivre",
+        "unit": "selon les goûts"
+      }
+    ],
+    "ingredients": [
+      {
+        "qty": 1.5,
+        "name": "poitrine de veau en morceaux",
+        "unit": "kg"
+      },
+      {
+        "qty": 90,
+        "name": "beurre",
+        "unit": "g"
+      },
+      {
+        "qty": 150,
+        "name": "petits oignons",
+        "unit": "g"
+      },
+      {
+        "qty": 150,
+        "name": "champignons de Paris",
+        "unit": "g"
+      },
+      {
+        "qty": 4,
+        "name": "huile d'olive",
+        "unit": "c.à.s"
+      },
+      {
+        "qty": 2,
+        "name": "ail",
+        "unit": "gousses"
+      },
+      {
+        "qty": 2,
+        "name": "vin blanc sec",
+        "unit": "verres"
+      },
+      {
+        "qty": 2,
+        "name": "bouillon",
+        "unit": "verres"
+      },
+      {
+        "qty": 1,
+        "name": "concentré de tomate",
+        "unit": "c.à.s"
+      },
+      {
+        "name": "olives noires et vertes",
+        "components": [
+          {
+            "name": "Olive noire",
+            "qty": 125.0,
+            "unit": "g",
+            "quantity_source": "estimated",
+            "note": "Répartition initiale 50/50 du mélange."
+          },
+          {
+            "name": "Olive verte",
+            "qty": 125.0,
+            "unit": "g",
+            "quantity_source": "estimated",
+            "note": "Répartition initiale 50/50 du mélange."
+          }
+        ]
+      },
+      {
+        "name": "Sel fin",
+        "qty": 1.5,
+        "unit": "g",
+        "quantity_source": "estimated",
+        "note": "Estimation initiale Mealio, à ajuster selon la recette et les goûts."
+      },
+      {
+        "name": "Poivre noir",
+        "qty": 0.75,
+        "unit": "g",
+        "quantity_source": "estimated",
+        "note": "Estimation initiale Mealio, à ajuster selon la recette et les goûts."
+      }
+    ]
+  },
+  {
+    "id": "9428614f-76ad-4fc0-a05a-6db45ec14f84",
+    "title": "Gâteau aux pêches de Jeanine Laurent",
+    "servings": 6,
+    "expected": [
+      {
+        "qty": 15,
+        "name": "sucre en morceaux (pour le caramel)",
+        "unit": "unités"
+      },
+      {
+        "qty": 0,
+        "name": "eau (pour le caramel)",
+        "unit": "selon besoin"
+      },
+      {
+        "qty": 1,
+        "name": "fleur de sel",
+        "unit": "pincée"
+      },
+      {
+        "qty": 150,
+        "name": "farine",
+        "unit": "g"
+      },
+      {
+        "qty": 150,
+        "name": "sucre de canne",
+        "unit": "g"
+      },
+      {
+        "qty": 150,
+        "name": "beurre salé",
+        "unit": "g"
+      },
+      {
+        "qty": 3,
+        "name": "œufs",
+        "unit": "unités"
+      },
+      {
+        "qty": 1,
+        "name": "levure chimique",
+        "unit": "sachet"
+      },
+      {
+        "qty": 1,
+        "name": "pêches au sirop",
+        "unit": "boîte"
+      }
+    ],
+    "ingredients": [
+      {
+        "qty": 15,
+        "name": "sucre en morceaux (pour le caramel)",
+        "unit": "unités"
+      },
+      {
+        "qty": 0,
+        "name": "Eau",
+        "unit": "selon besoin",
+        "exclude_from_shopping": true,
+        "note": "Eau du robinet : hors courses ; quantité selon la préparation."
+      },
+      {
+        "qty": 1,
+        "name": "fleur de sel",
+        "unit": "pincée"
+      },
+      {
+        "qty": 150,
+        "name": "farine",
+        "unit": "g"
+      },
+      {
+        "qty": 150,
+        "name": "sucre de canne",
+        "unit": "g"
+      },
+      {
+        "qty": 150,
+        "name": "beurre salé",
+        "unit": "g"
+      },
+      {
+        "qty": 3,
+        "name": "œufs",
+        "unit": "unités"
+      },
+      {
+        "qty": 1,
+        "name": "levure chimique",
+        "unit": "sachet"
+      },
+      {
+        "qty": 1,
+        "name": "pêches au sirop",
+        "unit": "boîte"
+      }
+    ]
+  },
+  {
+    "id": "c558eff5-c8fc-4200-ada6-3c05febc6991",
+    "title": "Pommes de terre vigneronnes",
+    "servings": 4,
+    "expected": [
+      {
+        "qty": 1.5,
+        "name": "pommes de terre BF15",
+        "unit": "kg"
+      },
+      {
+        "qty": 300,
+        "name": "poitrine fumée en tranches très minces",
+        "unit": "g"
+      },
+      {
+        "qty": 300,
+        "name": "poitrine salée en tranches très minces",
+        "unit": "g"
+      },
+      {
+        "qty": 300,
+        "name": "gruyère râpé",
+        "unit": "g"
+      },
+      {
+        "qty": 60,
+        "name": "beurre",
+        "unit": "g"
+      },
+      {
+        "qty": 0,
+        "name": "poivre",
+        "unit": "au goût"
+      }
+    ],
+    "ingredients": [
+      {
+        "qty": 1.5,
+        "name": "pommes de terre BF15",
+        "unit": "kg"
+      },
+      {
+        "qty": 300,
+        "name": "poitrine fumée en tranches très minces",
+        "unit": "g"
+      },
+      {
+        "qty": 300,
+        "name": "poitrine salée en tranches très minces",
+        "unit": "g"
+      },
+      {
+        "qty": 300,
+        "name": "gruyère râpé",
+        "unit": "g"
+      },
+      {
+        "qty": 60,
+        "name": "beurre",
+        "unit": "g"
+      },
+      {
+        "name": "Poivre noir",
+        "qty": 0.5,
+        "unit": "g",
+        "quantity_source": "estimated",
+        "note": "Estimation initiale Mealio, à ajuster selon la recette et les goûts."
+      }
+    ]
+  },
+  {
+    "id": "50391f36-35dd-4e4e-b6d8-a5d59b51cffa",
+    "title": "Gratin de courgettes",
+    "servings": 4,
+    "expected": [
+      {
+        "qty": 500,
+        "name": "courgettes",
+        "unit": "g"
+      },
+      {
+        "qty": 500,
+        "name": "pommes de terre (BF15 ou Charlotte)",
+        "unit": "g"
+      },
+      {
+        "qty": 50,
+        "name": "emmenthal râpé",
+        "unit": "g"
+      },
+      {
+        "qty": 1,
+        "name": "bouillon de volaille",
+        "unit": "dl"
+      },
+      {
+        "qty": 1,
+        "name": "gousse d'ail",
+        "unit": ""
+      },
+      {
+        "qty": 0,
+        "name": "thym émietté",
+        "unit": "selon les goûts"
+      },
+      {
+        "qty": 0,
+        "name": "poivre",
+        "unit": "selon les goûts"
+      },
+      {
+        "qty": 0,
+        "name": "muscade",
+        "unit": "selon les goûts"
+      },
+      {
+        "qty": 0,
+        "name": "sel",
+        "unit": "selon les goûts"
+      },
+      {
+        "qty": 0,
+        "name": "beurre pour le plat",
+        "unit": ""
+      }
+    ],
+    "ingredients": [
+      {
+        "qty": 500,
+        "name": "courgettes",
+        "unit": "g"
+      },
+      {
+        "qty": 500,
+        "name": "pommes de terre (BF15 ou Charlotte)",
+        "unit": "g"
+      },
+      {
+        "qty": 50,
+        "name": "emmenthal râpé",
+        "unit": "g"
+      },
+      {
+        "qty": 1,
+        "name": "bouillon de volaille",
+        "unit": "dl"
+      },
+      {
+        "qty": 1,
+        "name": "gousse d'ail",
+        "unit": ""
+      },
+      {
+        "name": "Thym séché",
+        "qty": 1.0,
+        "unit": "g",
+        "quantity_source": "estimated",
+        "note": "Estimation initiale Mealio, à ajuster selon la recette et les goûts."
+      },
+      {
+        "name": "Poivre noir",
+        "qty": 0.5,
+        "unit": "g",
+        "quantity_source": "estimated",
+        "note": "Estimation initiale Mealio, à ajuster selon la recette et les goûts."
+      },
+      {
+        "name": "Muscade",
+        "qty": 0.5,
+        "unit": "g",
+        "quantity_source": "estimated",
+        "note": "Estimation initiale Mealio, à ajuster selon la recette et les goûts."
+      },
+      {
+        "name": "Sel fin",
+        "qty": 1.0,
+        "unit": "g",
+        "quantity_source": "estimated",
+        "note": "Estimation initiale Mealio, à ajuster selon la recette et les goûts."
+      },
+      {
+        "name": "Beurre",
+        "qty": 10.0,
+        "unit": "g",
+        "quantity_source": "estimated",
+        "note": "Estimation initiale Mealio, à ajuster selon la recette et les goûts."
+      }
+    ]
+  },
+  {
+    "id": "08788652-f0cc-4140-be73-495ee4ebb2ad",
+    "title": "Barbotton",
+    "servings": 4,
+    "expected": [
+      {
+        "qty": 1,
+        "name": "pommes de terre",
+        "unit": "kg"
+      },
+      {
+        "qty": 0.66,
+        "name": "vin blanc",
+        "unit": "l"
+      },
+      {
+        "qty": 0.33,
+        "name": "bouillon",
+        "unit": "l"
+      },
+      {
+        "qty": 4,
+        "name": "olives noires dénoyautées",
+        "unit": "c.à.s."
+      },
+      {
+        "qty": 0,
+        "name": "huile",
+        "unit": "pour la cuisson"
+      },
+      {
+        "qty": 0,
+        "name": "beurre",
+        "unit": "pour la cuisson"
+      }
+    ],
+    "ingredients": [
+      {
+        "qty": 1,
+        "name": "pommes de terre",
+        "unit": "kg"
+      },
+      {
+        "qty": 0.66,
+        "name": "vin blanc",
+        "unit": "l"
+      },
+      {
+        "qty": 0.33,
+        "name": "bouillon",
+        "unit": "l"
+      },
+      {
+        "qty": 4,
+        "name": "olives noires dénoyautées",
+        "unit": "c.à.s."
+      },
+      {
+        "name": "Huile d'olive",
+        "qty": 15.0,
+        "unit": "Millilitre",
+        "quantity_source": "estimated",
+        "note": "Estimation initiale Mealio, à ajuster selon la recette et les goûts."
+      },
+      {
+        "name": "Beurre",
+        "qty": 15.0,
+        "unit": "g",
+        "quantity_source": "estimated",
+        "note": "Estimation initiale Mealio, à ajuster selon la recette et les goûts."
+      }
+    ]
+  },
+  {
+    "id": "be542b36-ca36-411c-ba1c-a188a9133296",
+    "title": "Rillettes de saumon frais et fumé / recette d'Oma pour nos fiançailles !!",
+    "servings": 4,
+    "expected": [
+      {
+        "qty": 250,
+        "name": "saumon frais",
+        "unit": "g"
+      },
+      {
+        "qty": 250,
+        "name": "saumon fumé",
+        "unit": "g"
+      },
+      {
+        "qty": 200,
+        "name": "beurre",
+        "unit": "g"
+      },
+      {
+        "qty": 0,
+        "name": "vin blanc sec",
+        "unit": "selon convenance"
+      },
+      {
+        "qty": 50,
+        "name": "huile d'olive",
+        "unit": "ml"
+      },
+      {
+        "qty": 2,
+        "name": "Cognac",
+        "unit": "c.à.s"
+      },
+      {
+        "qty": 0,
+        "name": "sel",
+        "unit": "pincée"
+      },
+      {
+        "qty": 0,
+        "name": "poivre",
+        "unit": "pincée"
+      }
+    ],
+    "ingredients": [
+      {
+        "qty": 250,
+        "name": "saumon frais",
+        "unit": "g"
+      },
+      {
+        "qty": 250,
+        "name": "saumon fumé",
+        "unit": "g"
+      },
+      {
+        "qty": 200,
+        "name": "beurre",
+        "unit": "g"
+      },
+      {
+        "name": "Vin blanc (cuisine)",
+        "qty": 30.0,
+        "unit": "Millilitre",
+        "quantity_source": "estimated",
+        "note": "Estimation initiale Mealio, à ajuster selon la recette et les goûts."
+      },
+      {
+        "qty": 50,
+        "name": "huile d'olive",
+        "unit": "ml"
+      },
+      {
+        "qty": 2,
+        "name": "Cognac",
+        "unit": "c.à.s"
+      },
+      {
+        "name": "Sel fin",
+        "qty": 1.0,
+        "unit": "g",
+        "quantity_source": "estimated",
+        "note": "Estimation initiale Mealio, à ajuster selon la recette et les goûts."
+      },
+      {
+        "name": "Poivre noir",
+        "qty": 0.5,
+        "unit": "g",
+        "quantity_source": "estimated",
+        "note": "Estimation initiale Mealio, à ajuster selon la recette et les goûts."
+      }
+    ]
+  },
+  {
+    "id": "452a35a5-0962-4002-8075-2bf57a8ddb2e",
+    "title": "Œufs en meurette",
+    "servings": 5,
+    "expected": [
+      {
+        "qty": 10,
+        "name": "œufs frais",
+        "unit": "unités"
+      },
+      {
+        "qty": 1,
+        "name": "carotte",
+        "unit": "unité"
+      },
+      {
+        "qty": 1,
+        "name": "oignon",
+        "unit": "unité"
+      },
+      {
+        "qty": 1,
+        "name": "bouquet garni",
+        "unit": "unité"
+      },
+      {
+        "qty": 1,
+        "name": "beurre (pour la mirepoix)",
+        "unit": "c.à.s."
+      },
+      {
+        "qty": 4,
+        "name": "gousses d'ail",
+        "unit": "unités"
+      },
+      {
+        "qty": 1,
+        "name": "vin rouge (Mercurey)",
+        "unit": "bouteille"
+      },
+      {
+        "qty": 1,
+        "name": "bouillon de volaille ou de viande",
+        "unit": "tasse"
+      },
+      {
+        "qty": 1,
+        "name": "farine",
+        "unit": "c.à.s."
+      },
+      {
+        "qty": 100,
+        "name": "petits champignons",
+        "unit": "g"
+      },
+      {
+        "qty": 100,
+        "name": "lard gras",
+        "unit": "g"
+      },
+      {
+        "qty": 100,
+        "name": "petits oignons",
+        "unit": "g"
+      },
+      {
+        "qty": 50,
+        "name": "beurre",
+        "unit": "g"
+      },
+      {
+        "qty": 5,
+        "name": "croûtons de pain",
+        "unit": "unités"
+      },
+      {
+        "qty": 0,
+        "name": "persil haché",
+        "unit": "selon les goûts"
+      },
+      {
+        "qty": 0,
+        "name": "sel",
+        "unit": "pincée"
+      },
+      {
+        "qty": 0,
+        "name": "poivre du moulin",
+        "unit": "tours"
+      }
+    ],
+    "ingredients": [
+      {
+        "qty": 10,
+        "name": "œufs frais",
+        "unit": "unités"
+      },
+      {
+        "qty": 1,
+        "name": "carotte",
+        "unit": "unité"
+      },
+      {
+        "qty": 1,
+        "name": "oignon",
+        "unit": "unité"
+      },
+      {
+        "qty": 1,
+        "name": "bouquet garni",
+        "unit": "unité"
+      },
+      {
+        "qty": 1,
+        "name": "beurre (pour la mirepoix)",
+        "unit": "c.à.s."
+      },
+      {
+        "qty": 4,
+        "name": "gousses d'ail",
+        "unit": "unités"
+      },
+      {
+        "qty": 1,
+        "name": "vin rouge (Mercurey)",
+        "unit": "bouteille"
+      },
+      {
+        "name": "bouillon de volaille ou de viande",
+        "alternatives": [
+          {
+            "name": "Bouillon de volaille liquide",
+            "qty": 1,
+            "unit": "Tasse"
+          },
+          {
+            "name": "Bouillon de bœuf liquide",
+            "qty": 1,
+            "unit": "Tasse"
+          }
+        ],
+        "selected": 0,
+        "note": "Premier choix initial ; modifiable dans Admin → Correction des recettes."
+      },
+      {
+        "qty": 1,
+        "name": "farine",
+        "unit": "c.à.s."
+      },
+      {
+        "qty": 100,
+        "name": "petits champignons",
+        "unit": "g"
+      },
+      {
+        "qty": 100,
+        "name": "lard gras",
+        "unit": "g"
+      },
+      {
+        "qty": 100,
+        "name": "petits oignons",
+        "unit": "g"
+      },
+      {
+        "qty": 50,
+        "name": "beurre",
+        "unit": "g"
+      },
+      {
+        "qty": 5,
+        "name": "croûtons de pain",
+        "unit": "unités"
+      },
+      {
+        "name": "Persil plat",
+        "qty": 6.25,
+        "unit": "g",
+        "quantity_source": "estimated",
+        "note": "Estimation initiale Mealio, à ajuster selon la recette et les goûts."
+      },
+      {
+        "name": "Sel fin",
+        "qty": 1.25,
+        "unit": "g",
+        "quantity_source": "estimated",
+        "note": "Estimation initiale Mealio, à ajuster selon la recette et les goûts."
+      },
+      {
+        "name": "Poivre noir",
+        "qty": 0.62,
+        "unit": "g",
+        "quantity_source": "estimated",
+        "note": "Estimation initiale Mealio, à ajuster selon la recette et les goûts."
+      }
+    ]
+  },
+  {
+    "id": "4e93c746-3b57-4374-90d4-bfec92a8b670",
+    "title": "La Tartiflette au Reblochon ",
+    "servings": 4,
+    "expected": [
+      {
+        "qty": 1,
+        "name": "reblochon ",
+        "unit": "pièce"
+      },
+      {
+        "qty": 800,
+        "name": "pommes de terre (chair jaune BF ou charlotte)",
+        "unit": "g"
+      },
+      {
+        "qty": 200,
+        "name": "lardons fumés ou nature",
+        "unit": "g"
+      },
+      {
+        "qty": 2,
+        "name": "gros oignons blancs",
+        "unit": "pièces"
+      },
+      {
+        "qty": 0,
+        "name": "huile ou beurre",
+        "unit": "selon convenance"
+      },
+      {
+        "qty": 0,
+        "name": "sel",
+        "unit": "pincée"
+      },
+      {
+        "qty": 0,
+        "name": "poivre",
+        "unit": "pincée"
+      }
+    ],
+    "ingredients": [
+      {
+        "qty": 1,
+        "name": "reblochon ",
+        "unit": "pièce"
+      },
+      {
+        "qty": 800,
+        "name": "pommes de terre (chair jaune BF ou charlotte)",
+        "unit": "g"
+      },
+      {
+        "name": "lardons fumés ou nature",
+        "alternatives": [
+          {
+            "name": "Lardons fumés",
+            "qty": 200,
+            "unit": "g"
+          },
+          {
+            "name": "Lardons",
+            "qty": 200,
+            "unit": "g"
+          }
+        ],
+        "selected": 0,
+        "note": "Premier choix initial ; modifiable dans Admin → Correction des recettes."
+      },
+      {
+        "qty": 2,
+        "name": "gros oignons blancs",
+        "unit": "pièces"
+      },
+      {
+        "name": "huile ou beurre",
+        "alternatives": [
+          {
+            "name": "Huile d'olive",
+            "qty": 15,
+            "unit": "Millilitre",
+            "quantity_source": "estimated",
+            "note": "Estimation initiale Mealio, à ajuster selon la recette et les goûts."
+          },
+          {
+            "name": "Beurre",
+            "qty": 15,
+            "unit": "g",
+            "quantity_source": "estimated",
+            "note": "Estimation initiale Mealio, à ajuster selon la recette et les goûts."
+          }
+        ],
+        "selected": 0,
+        "note": "Premier choix initial ; modifiable dans Admin → Correction des recettes."
+      },
+      {
+        "name": "Sel fin",
+        "qty": 1.0,
+        "unit": "g",
+        "quantity_source": "estimated",
+        "note": "Estimation initiale Mealio, à ajuster selon la recette et les goûts."
+      },
+      {
+        "name": "Poivre noir",
+        "qty": 0.5,
+        "unit": "g",
+        "quantity_source": "estimated",
+        "note": "Estimation initiale Mealio, à ajuster selon la recette et les goûts."
+      }
+    ]
+  },
+  {
+    "id": "9b3f1c94-e80d-4894-8953-8e688878750f",
+    "title": "Risotto aux champignons",
+    "servings": 4,
+    "expected": [
+      {
+        "qty": 250,
+        "name": "riz arborio spécial risotto",
+        "unit": "g"
+      },
+      {
+        "qty": 300,
+        "name": "champignons",
+        "unit": "g"
+      },
+      {
+        "qty": 2,
+        "name": "bouillon de légumes (cubes)",
+        "unit": ""
+      },
+      {
+        "qty": 1,
+        "name": "eau",
+        "unit": "l"
+      },
+      {
+        "qty": 1,
+        "name": "oignon",
+        "unit": ""
+      },
+      {
+        "qty": 10,
+        "name": "vin blanc (pour le riz)",
+        "unit": "cl"
+      },
+      {
+        "qty": 3,
+        "name": "vin blanc (pour les champignons)",
+        "unit": "c.à.s"
+      },
+      {
+        "qty": 15,
+        "name": "crème fraîche",
+        "unit": "cl"
+      },
+      {
+        "qty": 100,
+        "name": "parmesan",
+        "unit": "g"
+      },
+      {
+        "qty": 1,
+        "name": "gousse d'ail",
+        "unit": ""
+      },
+      {
+        "qty": 1,
+        "name": "beurre",
+        "unit": "noix"
+      },
+      {
+        "qty": 1,
+        "name": "huile d'olive",
+        "unit": "c.à.s"
+      },
+      {
+        "qty": 3,
+        "name": "persil",
+        "unit": "branches"
+      },
+      {
+        "qty": 0,
+        "name": "sel",
+        "unit": ""
+      },
+      {
+        "qty": 0,
+        "name": "poivre",
+        "unit": ""
+      }
+    ],
+    "ingredients": [
+      {
+        "qty": 250,
+        "name": "riz arborio spécial risotto",
+        "unit": "g"
+      },
+      {
+        "qty": 300,
+        "name": "champignons",
+        "unit": "g"
+      },
+      {
+        "qty": 2,
+        "name": "bouillon de légumes (cubes)",
+        "unit": ""
+      },
+      {
+        "qty": 1,
+        "name": "Eau",
+        "unit": "l",
+        "exclude_from_shopping": true,
+        "note": "Eau du robinet : hors courses ; quantité selon la préparation."
+      },
+      {
+        "qty": 1,
+        "name": "oignon",
+        "unit": ""
+      },
+      {
+        "qty": 10,
+        "name": "vin blanc (pour le riz)",
+        "unit": "cl"
+      },
+      {
+        "qty": 3,
+        "name": "vin blanc (pour les champignons)",
+        "unit": "c.à.s"
+      },
+      {
+        "qty": 15,
+        "name": "crème fraîche",
+        "unit": "cl"
+      },
+      {
+        "qty": 100,
+        "name": "parmesan",
+        "unit": "g"
+      },
+      {
+        "qty": 1,
+        "name": "gousse d'ail",
+        "unit": ""
+      },
+      {
+        "qty": 1,
+        "name": "beurre",
+        "unit": "noix"
+      },
+      {
+        "qty": 1,
+        "name": "huile d'olive",
+        "unit": "c.à.s"
+      },
+      {
+        "qty": 3,
+        "name": "persil",
+        "unit": "branches"
+      },
+      {
+        "name": "Sel fin",
+        "qty": 1.0,
+        "unit": "g",
+        "quantity_source": "estimated",
+        "note": "Estimation initiale Mealio, à ajuster selon la recette et les goûts."
+      },
+      {
+        "name": "Poivre noir",
+        "qty": 0.5,
+        "unit": "g",
+        "quantity_source": "estimated",
+        "note": "Estimation initiale Mealio, à ajuster selon la recette et les goûts."
+      }
+    ]
+  },
+  {
+    "id": "ea5ec85d-c789-45ba-a311-07562c901537",
+    "title": "Le michon breton",
+    "servings": 4,
+    "expected": [
+      {
+        "qty": 600,
+        "name": "pommes",
+        "unit": "g"
+      },
+      {
+        "qty": 0,
+        "name": "confiture d'abricot",
+        "unit": ""
+      },
+      {
+        "qty": 3,
+        "name": "oeufs",
+        "unit": ""
+      },
+      {
+        "qty": 100,
+        "name": "beurre",
+        "unit": "g"
+      },
+      {
+        "qty": 130,
+        "name": "farine",
+        "unit": "g"
+      },
+      {
+        "qty": 60,
+        "name": "sucre en poudre",
+        "unit": "g"
+      },
+      {
+        "qty": 30,
+        "name": "lait entier",
+        "unit": "cl"
+      },
+      {
+        "qty": 1,
+        "name": "lambig (ou calvados)",
+        "unit": "c.à.s"
+      }
+    ],
+    "ingredients": [
+      {
+        "qty": 600,
+        "name": "pommes",
+        "unit": "g"
+      },
+      {
+        "name": "Confiture d'abricot",
+        "qty": 30.0,
+        "unit": "g",
+        "quantity_source": "estimated",
+        "note": "Estimation initiale Mealio, à ajuster selon la recette et les goûts."
+      },
+      {
+        "qty": 3,
+        "name": "oeufs",
+        "unit": ""
+      },
+      {
+        "qty": 100,
+        "name": "beurre",
+        "unit": "g"
+      },
+      {
+        "qty": 130,
+        "name": "farine",
+        "unit": "g"
+      },
+      {
+        "qty": 60,
+        "name": "sucre en poudre",
+        "unit": "g"
+      },
+      {
+        "qty": 30,
+        "name": "lait entier",
+        "unit": "cl"
+      },
+      {
+        "qty": 1,
+        "name": "lambig (ou calvados)",
+        "unit": "c.à.s"
+      }
+    ]
+  },
+  {
+    "id": "23970d8e-5e26-4c51-a624-71fc1269c94b",
+    "title": "Œufs en meurette faciles",
+    "servings": 2,
+    "expected": [
+      {
+        "qty": 4,
+        "name": "œufs extra-frais",
+        "unit": ""
+      },
+      {
+        "qty": 250,
+        "name": "vin rouge (type Bourgogne)",
+        "unit": "ml"
+      },
+      {
+        "qty": 100,
+        "name": "lardons fumés",
+        "unit": "g"
+      },
+      {
+        "qty": 4,
+        "name": "Échalotes ",
+        "unit": ""
+      },
+      {
+        "qty": 150,
+        "name": "champignons de Paris",
+        "unit": "g"
+      },
+      {
+        "qty": 20,
+        "name": "beurre",
+        "unit": "g"
+      },
+      {
+        "qty": 1,
+        "name": "farine",
+        "unit": "c.à.s"
+      },
+      {
+        "qty": 1,
+        "name": "sucre",
+        "unit": "c.à.c"
+      },
+      {
+        "qty": 2,
+        "name": "tranches de pain (mie ou campagne)",
+        "unit": ""
+      },
+      {
+        "qty": 2,
+        "name": "vinaigre blanc",
+        "unit": "c.à.s"
+      },
+      {
+        "qty": 0,
+        "name": "sel",
+        "unit": "pincée"
+      },
+      {
+        "qty": 0,
+        "name": "poivre",
+        "unit": "pincée"
+      }
+    ],
+    "ingredients": [
+      {
+        "qty": 4,
+        "name": "œufs extra-frais",
+        "unit": ""
+      },
+      {
+        "qty": 250,
+        "name": "vin rouge (type Bourgogne)",
+        "unit": "ml"
+      },
+      {
+        "qty": 100,
+        "name": "lardons fumés",
+        "unit": "g"
+      },
+      {
+        "qty": 4,
+        "name": "Échalotes ",
+        "unit": ""
+      },
+      {
+        "qty": 150,
+        "name": "champignons de Paris",
+        "unit": "g"
+      },
+      {
+        "qty": 20,
+        "name": "beurre",
+        "unit": "g"
+      },
+      {
+        "qty": 1,
+        "name": "farine",
+        "unit": "c.à.s"
+      },
+      {
+        "qty": 1,
+        "name": "sucre",
+        "unit": "c.à.c"
+      },
+      {
+        "name": "tranches de pain (mie ou campagne)",
+        "alternatives": [
+          {
+            "name": "Pain de mie",
+            "qty": 2,
+            "unit": "Tranche"
+          },
+          {
+            "name": "Pain de campagne",
+            "qty": 2,
+            "unit": "Tranche"
+          }
+        ],
+        "selected": 0,
+        "note": "Premier choix initial ; modifiable dans Admin → Correction des recettes."
+      },
+      {
+        "qty": 2,
+        "name": "vinaigre blanc",
+        "unit": "c.à.s"
+      },
+      {
+        "name": "Sel fin",
+        "qty": 0.5,
+        "unit": "g",
+        "quantity_source": "estimated",
+        "note": "Estimation initiale Mealio, à ajuster selon la recette et les goûts."
+      },
+      {
+        "name": "Poivre noir",
+        "qty": 0.25,
+        "unit": "g",
+        "quantity_source": "estimated",
+        "note": "Estimation initiale Mealio, à ajuster selon la recette et les goûts."
+      }
+    ]
+  },
+  {
+    "id": "99728d24-9fe2-4941-919e-1a39704a22a3",
+    "title": "Filet mignon rôti au Airfryer",
+    "servings": 4,
+    "expected": [
+      {
+        "qty": 500,
+        "name": "filet mignon de porc",
+        "unit": "g"
+      },
+      {
+        "qty": 2,
+        "name": "huile d'olive",
+        "unit": "c.à.s"
+      },
+      {
+        "qty": 1,
+        "name": "moutarde à l'ancienne",
+        "unit": "c.à.s"
+      },
+      {
+        "qty": 1,
+        "name": "thym séché ou herbes de Provence",
+        "unit": "c.à.c"
+      },
+      {
+        "qty": 1,
+        "name": "sel",
+        "unit": "pincée"
+      },
+      {
+        "qty": 1,
+        "name": "poivre",
+        "unit": "pincée"
+      }
+    ],
+    "ingredients": [
+      {
+        "qty": 500,
+        "name": "filet mignon de porc",
+        "unit": "g"
+      },
+      {
+        "qty": 2,
+        "name": "huile d'olive",
+        "unit": "c.à.s"
+      },
+      {
+        "qty": 1,
+        "name": "moutarde à l'ancienne",
+        "unit": "c.à.s"
+      },
+      {
+        "name": "thym séché ou herbes de Provence",
+        "alternatives": [
+          {
+            "name": "Thym séché",
+            "qty": 1,
+            "unit": "Cuillère à café"
+          },
+          {
+            "name": "Herbes de Provence",
+            "qty": 1,
+            "unit": "Cuillère à café"
+          }
+        ],
+        "selected": 0,
+        "note": "Premier choix initial ; modifiable dans Admin → Correction des recettes."
+      },
+      {
+        "qty": 1,
+        "name": "sel",
+        "unit": "pincée"
+      },
+      {
+        "qty": 1,
+        "name": "poivre",
+        "unit": "pincée"
+      }
+    ]
+  },
+  {
+    "id": "458083ef-40d4-41d2-9fa9-b109a07007e9",
+    "title": "Tarte Rustique à la crème de noix et prunes",
+    "servings": 6,
+    "expected": [
+      {
+        "qty": 100,
+        "name": "cerneaux de noix",
+        "unit": "g"
+      },
+      {
+        "qty": 80,
+        "name": "beurre mou",
+        "unit": "g"
+      },
+      {
+        "qty": 80,
+        "name": "sucre",
+        "unit": "g"
+      },
+      {
+        "qty": 2,
+        "name": "œufs",
+        "unit": ""
+      },
+      {
+        "qty": 1,
+        "name": "pâte brisée ou sablée",
+        "unit": ""
+      },
+      {
+        "qty": 1,
+        "name": "semoule fine ou biscuits écrasés",
+        "unit": "c.à.s"
+      },
+      {
+        "qty": 500,
+        "name": "demi-quetsches et demi-reines-claudes congelées",
+        "unit": "g"
+      }
+    ],
+    "ingredients": [
+      {
+        "qty": 100,
+        "name": "cerneaux de noix",
+        "unit": "g"
+      },
+      {
+        "qty": 80,
+        "name": "beurre mou",
+        "unit": "g"
+      },
+      {
+        "qty": 80,
+        "name": "sucre",
+        "unit": "g"
+      },
+      {
+        "qty": 2,
+        "name": "œufs",
+        "unit": ""
+      },
+      {
+        "name": "pâte brisée ou sablée",
+        "alternatives": [
+          {
+            "name": "Pâte brisée",
+            "qty": 1,
+            "unit": "Pièce"
+          },
+          {
+            "name": "Pâte sablée",
+            "qty": 1,
+            "unit": "Pièce"
+          }
+        ],
+        "selected": 0,
+        "note": "Premier choix initial ; modifiable dans Admin → Correction des recettes."
+      },
+      {
+        "name": "semoule fine ou biscuits écrasés",
+        "alternatives": [
+          {
+            "name": "Semoule fine",
+            "qty": 1,
+            "unit": "Cuillère à soupe"
+          },
+          {
+            "name": "Biscuit sec",
+            "qty": 10,
+            "unit": "g",
+            "quantity_source": "estimated",
+            "note": "Estimation initiale Mealio, à ajuster selon la recette et les goûts."
+          }
+        ],
+        "selected": 0,
+        "note": "Premier choix initial ; modifiable dans Admin → Correction des recettes."
+      },
+      {
+        "name": "demi-quetsches et demi-reines-claudes congelées",
+        "components": [
+          {
+            "name": "Quetsche",
+            "qty": 250.0,
+            "unit": "g",
+            "quantity_source": "estimated",
+            "note": "Poids de demi-fruits, répartition initiale 50/50."
+          },
+          {
+            "name": "Reine-Claude",
+            "qty": 250.0,
+            "unit": "g",
+            "quantity_source": "estimated",
+            "note": "Poids de demi-fruits, répartition initiale 50/50."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "0876a07b-60b9-4be3-a74c-76183adf4540",
+    "title": "Sablé Breton de Christophe Felder",
+    "servings": 6,
+    "expected": [
+      {
+        "qty": 3,
+        "name": "jaunes d'œufs",
+        "unit": ""
+      },
+      {
+        "qty": 130,
+        "name": "sucre semoule",
+        "unit": "g"
+      },
+      {
+        "qty": 150,
+        "name": "beurre mou",
+        "unit": "g"
+      },
+      {
+        "qty": 200,
+        "name": "farine (ou 150g farine + 50g poudre d'amandes, noisette ou pistache)",
+        "unit": "g"
+      },
+      {
+        "qty": 3,
+        "name": "sel",
+        "unit": "g"
+      },
+      {
+        "qty": 1,
+        "name": "levure chimique",
+        "unit": "sachet"
+      }
+    ],
+    "ingredients": [
+      {
+        "qty": 3,
+        "name": "jaunes d'œufs",
+        "unit": ""
+      },
+      {
+        "qty": 130,
+        "name": "sucre semoule",
+        "unit": "g"
+      },
+      {
+        "qty": 150,
+        "name": "beurre mou",
+        "unit": "g"
+      },
+      {
+        "name": "farine (ou 150g farine + 50g poudre d'amandes, noisette ou pistache)",
+        "alternatives": [
+          {
+            "name": "Farine de blé",
+            "qty": 200,
+            "unit": "g"
+          },
+          {
+            "name": "Farine et amande",
+            "components": [
+              {
+                "name": "Farine de blé",
+                "qty": 150,
+                "unit": "g"
+              },
+              {
+                "name": "Poudre d'amande",
+                "qty": 50,
+                "unit": "g"
+              }
+            ]
+          },
+          {
+            "name": "Farine et noisette",
+            "components": [
+              {
+                "name": "Farine de blé",
+                "qty": 150,
+                "unit": "g"
+              },
+              {
+                "name": "Poudre de noisette",
+                "qty": 50,
+                "unit": "g"
+              }
+            ]
+          },
+          {
+            "name": "Farine et pistache",
+            "components": [
+              {
+                "name": "Farine de blé",
+                "qty": 150,
+                "unit": "g"
+              },
+              {
+                "name": "Poudre de pistache",
+                "qty": 50,
+                "unit": "g"
+              }
+            ]
+          }
+        ],
+        "selected": 0,
+        "note": "Premier choix initial ; modifiable dans Admin → Correction des recettes."
+      },
+      {
+        "qty": 3,
+        "name": "sel",
+        "unit": "g"
+      },
+      {
+        "qty": 1,
+        "name": "levure chimique",
+        "unit": "sachet"
+      }
+    ]
+  },
+  {
+    "id": "055ac3ce-22b3-4724-8772-3f40521d8b8f",
+    "title": "Croque-monsieur aux figues, chèvre et jambon",
+    "servings": 4,
+    "expected": [
+      {
+        "qty": 8,
+        "name": "pain de mie",
+        "unit": "tranches"
+      },
+      {
+        "qty": 4,
+        "name": "jambon cru ou blanc",
+        "unit": "tranches"
+      },
+      {
+        "qty": 1,
+        "name": "bûche de fromage de chèvre",
+        "unit": "pièce"
+      },
+      {
+        "qty": 4,
+        "name": "figues fraîches",
+        "unit": "pièces"
+      },
+      {
+        "qty": 30,
+        "name": "beurre",
+        "unit": "g"
+      },
+      {
+        "qty": 2,
+        "name": "miel",
+        "unit": "c.à.s"
+      }
+    ],
+    "ingredients": [
+      {
+        "qty": 8,
+        "name": "pain de mie",
+        "unit": "tranches"
+      },
+      {
+        "name": "jambon cru ou blanc",
+        "alternatives": [
+          {
+            "name": "Jambon cru",
+            "qty": 4,
+            "unit": "Tranche"
+          },
+          {
+            "name": "Jambon blanc",
+            "qty": 4,
+            "unit": "Tranche"
+          }
+        ],
+        "selected": 0,
+        "note": "Premier choix initial ; modifiable dans Admin → Correction des recettes."
+      },
+      {
+        "qty": 1,
+        "name": "bûche de fromage de chèvre",
+        "unit": "pièce"
+      },
+      {
+        "qty": 4,
+        "name": "figues fraîches",
+        "unit": "pièces"
+      },
+      {
+        "qty": 30,
+        "name": "beurre",
+        "unit": "g"
+      },
+      {
+        "qty": 2,
+        "name": "miel",
+        "unit": "c.à.s"
+      }
+    ]
+  },
+  {
+    "id": "57cb92d4-a44f-41a6-9202-8436f081ccb0",
+    "title": "Tarte fine aux raisins, figues et fromage de chèvre",
+    "servings": 4,
+    "expected": [
+      {
+        "qty": 1,
+        "name": "Pâte feuilletée",
+        "unit": "rouleau"
+      },
+      {
+        "qty": 6,
+        "name": "Figues fraîches",
+        "unit": "pièces"
+      },
+      {
+        "qty": 150,
+        "name": "Grappe de raisin (blanc ou noir)",
+        "unit": "g"
+      },
+      {
+        "qty": 200,
+        "name": "Fromage de chèvre frais (ou bûche)",
+        "unit": "g"
+      },
+      {
+        "qty": 2,
+        "name": "Miel",
+        "unit": "c.à.s"
+      },
+      {
+        "qty": 1,
+        "name": "Huile d'olive",
+        "unit": "c.à.s"
+      },
+      {
+        "qty": 2,
+        "name": "Thym frais",
+        "unit": "brins"
+      },
+      {
+        "qty": 1,
+        "name": "Sel et poivre",
+        "unit": "pincée"
+      }
+    ],
+    "ingredients": [
+      {
+        "qty": 1,
+        "name": "Pâte feuilletée",
+        "unit": "rouleau"
+      },
+      {
+        "qty": 6,
+        "name": "Figues fraîches",
+        "unit": "pièces"
+      },
+      {
+        "qty": 150,
+        "name": "Grappe de raisin (blanc ou noir)",
+        "unit": "g"
+      },
+      {
+        "qty": 200,
+        "name": "Fromage de chèvre frais (ou bûche)",
+        "unit": "g"
+      },
+      {
+        "qty": 2,
+        "name": "Miel",
+        "unit": "c.à.s"
+      },
+      {
+        "qty": 1,
+        "name": "Huile d'olive",
+        "unit": "c.à.s"
+      },
+      {
+        "qty": 2,
+        "name": "Thym frais",
+        "unit": "brins"
+      },
+      {
+        "name": "Sel et poivre",
+        "components": [
+          {
+            "name": "Sel fin",
+            "qty": 1,
+            "unit": "g",
+            "quantity_source": "estimated",
+            "note": "Estimation initiale Mealio, à ajuster selon la recette et les goûts."
+          },
+          {
+            "name": "Poivre noir",
+            "qty": 0.5,
+            "unit": "g",
+            "quantity_source": "estimated",
+            "note": "Estimation initiale Mealio, à ajuster selon la recette et les goûts."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "302c03dc-da58-48e7-8284-36f9a38cf982",
+    "title": "Figues grillées à la pancetta",
+    "servings": 4,
+    "expected": [
+      {
+        "qty": 8,
+        "name": "figues fraîches",
+        "unit": "pièces"
+      },
+      {
+        "qty": 8,
+        "name": "tranches de pancetta",
+        "unit": "tranches"
+      },
+      {
+        "qty": 100,
+        "name": "fromage de chèvre ou fromage bleu",
+        "unit": "g"
+      },
+      {
+        "qty": 2,
+        "name": "miel",
+        "unit": "c.à.s"
+      },
+      {
+        "qty": 1,
+        "name": "poivre du moulin",
+        "unit": "pincée"
+      }
+    ],
+    "ingredients": [
+      {
+        "qty": 8,
+        "name": "figues fraîches",
+        "unit": "pièces"
+      },
+      {
+        "qty": 8,
+        "name": "tranches de pancetta",
+        "unit": "tranches"
+      },
+      {
+        "name": "fromage de chèvre ou fromage bleu",
+        "alternatives": [
+          {
+            "name": "Chèvre (fromage)",
+            "qty": 100,
+            "unit": "g"
+          },
+          {
+            "name": "Fromage bleu",
+            "qty": 100,
+            "unit": "g"
+          }
+        ],
+        "selected": 0,
+        "note": "Premier choix initial ; modifiable dans Admin → Correction des recettes."
+      },
+      {
+        "qty": 2,
+        "name": "miel",
+        "unit": "c.à.s"
+      },
+      {
+        "qty": 1,
+        "name": "poivre du moulin",
+        "unit": "pincée"
+      }
+    ]
+  },
+  {
+    "id": "c794f891-2240-41bf-aee2-e32e8df17c6b",
+    "title": "Mijoté de cocos de Paimpol au porc et oignons de Roscoff",
+    "servings": 7,
+    "expected": [
+      {
+        "qty": 1000,
+        "name": "oignons rosés de Roscoff AOP",
+        "unit": "g"
+      },
+      {
+        "qty": 1000,
+        "name": "haricots cocos de Paimpol AOP écossés",
+        "unit": "g"
+      },
+      {
+        "qty": 600,
+        "name": "échine de porc",
+        "unit": "g"
+      },
+      {
+        "qty": 300,
+        "name": "ventrèche ou lard demi-sel séché",
+        "unit": "g"
+      },
+      {
+        "qty": 500,
+        "name": "tomates bien mûres",
+        "unit": "g"
+      },
+      {
+        "qty": 2,
+        "name": "poivrons rouges",
+        "unit": "pièce"
+      },
+      {
+        "qty": 1,
+        "name": "tête d'ail rose de Lautrec",
+        "unit": "pièce"
+      },
+      {
+        "qty": 4,
+        "name": "carottes",
+        "unit": "pièce"
+      },
+      {
+        "qty": 1,
+        "name": "branche de laurier",
+        "unit": "branche"
+      },
+      {
+        "qty": 1,
+        "name": "branche de thym",
+        "unit": "branche"
+      },
+      {
+        "qty": 1,
+        "name": "branche de romarin",
+        "unit": "branche"
+      },
+      {
+        "qty": 1,
+        "name": "bouquet de basilic petit vert",
+        "unit": "bouquet"
+      },
+      {
+        "qty": 0,
+        "name": "poivre du moulin",
+        "unit": "selon le goût"
+      }
+    ],
+    "ingredients": [
+      {
+        "qty": 1000,
+        "name": "oignons rosés de Roscoff AOP",
+        "unit": "g"
+      },
+      {
+        "qty": 1000,
+        "name": "haricots cocos de Paimpol AOP écossés",
+        "unit": "g"
+      },
+      {
+        "qty": 600,
+        "name": "échine de porc",
+        "unit": "g"
+      },
+      {
+        "name": "ventrèche ou lard demi-sel séché",
+        "alternatives": [
+          {
+            "name": "Ventrèche",
+            "qty": 300,
+            "unit": "g"
+          },
+          {
+            "name": "Lard demi-sel",
+            "qty": 300,
+            "unit": "g"
+          }
+        ],
+        "selected": 0,
+        "note": "Premier choix initial ; modifiable dans Admin → Correction des recettes."
+      },
+      {
+        "qty": 500,
+        "name": "tomates bien mûres",
+        "unit": "g"
+      },
+      {
+        "qty": 2,
+        "name": "poivrons rouges",
+        "unit": "pièce"
+      },
+      {
+        "qty": 1,
+        "name": "tête d'ail rose de Lautrec",
+        "unit": "pièce"
+      },
+      {
+        "qty": 4,
+        "name": "carottes",
+        "unit": "pièce"
+      },
+      {
+        "qty": 1,
+        "name": "branche de laurier",
+        "unit": "branche"
+      },
+      {
+        "qty": 1,
+        "name": "branche de thym",
+        "unit": "branche"
+      },
+      {
+        "qty": 1,
+        "name": "branche de romarin",
+        "unit": "branche"
+      },
+      {
+        "qty": 1,
+        "name": "bouquet de basilic petit vert",
+        "unit": "bouquet"
+      },
+      {
+        "name": "Poivre noir",
+        "qty": 0.88,
+        "unit": "g",
+        "quantity_source": "estimated",
+        "note": "Estimation initiale Mealio, à ajuster selon la recette et les goûts."
+      }
+    ]
+  },
+  {
+    "id": "2b6ecb9a-77d4-4398-9e95-f8fe8cdb6aed",
+    "title": "Popcorn de poulet au sesame",
+    "servings": 4,
+    "expected": [],
+    "ingredients": [
+      {
+        "name": "Blanc de poulet",
+        "qty": 600,
+        "unit": "g",
+        "quantity_source": "estimated",
+        "note": "Estimation initiale Mealio, à ajuster selon la recette et les goûts."
+      },
+      {
+        "name": "Farine de blé",
+        "qty": 100,
+        "unit": "g",
+        "quantity_source": "estimated",
+        "note": "Estimation initiale Mealio, à ajuster selon la recette et les goûts."
+      },
+      {
+        "name": "Maïzena",
+        "qty": 50,
+        "unit": "g",
+        "quantity_source": "estimated",
+        "note": "Estimation initiale Mealio, à ajuster selon la recette et les goûts."
+      },
+      {
+        "name": "Eau",
+        "qty": 150,
+        "unit": "Millilitre",
+        "quantity_source": "estimated",
+        "note": "Estimation initiale Mealio, à ajuster selon la recette et les goûts.",
+        "exclude_from_shopping": true
+      },
+      {
+        "name": "Ail en poudre",
+        "qty": 3,
+        "unit": "g",
+        "quantity_source": "estimated",
+        "note": "Estimation initiale Mealio, à ajuster selon la recette et les goûts."
+      },
+      {
+        "name": "Paprika",
+        "qty": 3,
+        "unit": "g",
+        "quantity_source": "estimated",
+        "note": "Estimation initiale Mealio, à ajuster selon la recette et les goûts."
+      },
+      {
+        "name": "Poivre noir",
+        "qty": 1,
+        "unit": "g",
+        "quantity_source": "estimated",
+        "note": "Estimation initiale Mealio, à ajuster selon la recette et les goûts."
+      },
+      {
+        "name": "Sel fin",
+        "qty": 1,
+        "unit": "Cuillère à café"
+      },
+      {
+        "name": "Graine de sésame",
+        "qty": 30,
+        "unit": "g",
+        "quantity_source": "estimated",
+        "note": "Estimation initiale Mealio, à ajuster selon la recette et les goûts."
+      },
+      {
+        "name": "Huile de tournesol",
+        "qty": 500,
+        "unit": "Millilitre",
+        "quantity_source": "estimated",
+        "note": "Volume de bain proposé ; huile réutilisable si suivie en présence."
+      },
+      {
+        "name": "Fromage frais",
+        "qty": 100,
+        "unit": "g",
+        "quantity_source": "estimated",
+        "note": "Estimation initiale Mealio, à ajuster selon la recette et les goûts."
+      },
+      {
+        "name": "Yaourt nature",
+        "qty": 100,
+        "unit": "g",
+        "quantity_source": "estimated",
+        "note": "Estimation initiale Mealio, à ajuster selon la recette et les goûts."
+      },
+      {
+        "name": "Huile d'olive",
+        "qty": 10,
+        "unit": "Millilitre",
+        "quantity_source": "estimated",
+        "note": "Estimation initiale Mealio, à ajuster selon la recette et les goûts."
+      },
+      {
+        "name": "Ciboulette",
+        "qty": 5,
+        "unit": "g",
+        "quantity_source": "estimated",
+        "note": "Estimation initiale Mealio, à ajuster selon la recette et les goûts."
+      }
+    ]
+  },
+  {
+    "id": "c36b54b2-4f83-488c-b3db-4b465df01e6f",
+    "title": "Crevettes au bacon ",
+    "servings": 4,
+    "expected": [],
+    "ingredients": [
+      {
+        "name": "Crevette",
+        "qty": 400,
+        "unit": "g",
+        "quantity_source": "estimated",
+        "note": "Estimation initiale Mealio, à ajuster selon la recette et les goûts."
+      },
+      {
+        "name": "Bacon",
+        "qty": 200,
+        "unit": "g",
+        "quantity_source": "estimated",
+        "note": "Estimation initiale Mealio, à ajuster selon la recette et les goûts."
+      },
+      {
+        "name": "Huile d'olive",
+        "qty": 15,
+        "unit": "Millilitre",
+        "quantity_source": "estimated",
+        "note": "Estimation initiale Mealio, à ajuster selon la recette et les goûts."
+      },
+      {
+        "name": "Paprika",
+        "qty": 2,
+        "unit": "g",
+        "quantity_source": "estimated",
+        "note": "Estimation initiale Mealio, à ajuster selon la recette et les goûts."
+      },
+      {
+        "name": "Ail en poudre",
+        "qty": 2,
+        "unit": "g",
+        "quantity_source": "estimated",
+        "note": "Estimation initiale Mealio, à ajuster selon la recette et les goûts."
+      },
+      {
+        "name": "Mayonnaise",
+        "qty": 60,
+        "unit": "g",
+        "quantity_source": "estimated",
+        "note": "Estimation initiale Mealio, à ajuster selon la recette et les goûts."
+      },
+      {
+        "name": "Sauce sriracha",
+        "qty": 10,
+        "unit": "Millilitre",
+        "quantity_source": "estimated",
+        "note": "Estimation initiale Mealio, à ajuster selon la recette et les goûts."
+      },
+      {
+        "name": "Miel",
+        "qty": 10,
+        "unit": "g",
+        "quantity_source": "estimated",
+        "note": "Estimation initiale Mealio, à ajuster selon la recette et les goûts."
+      }
+    ]
+  },
+  {
+    "id": "81e08e94-0225-47a2-99aa-58f35040fab3",
+    "title": "Méli-mélo de fruits d'été",
+    "servings": 6,
+    "expected": [
+      {
+        "qty": 100,
+        "name": "farine",
+        "unit": "g"
+      },
+      {
+        "qty": 1,
+        "name": "sel",
+        "unit": "pincée"
+      },
+      {
+        "qty": 4,
+        "name": "sucre en poudre",
+        "unit": "c.à.s"
+      },
+      {
+        "qty": 3,
+        "name": "œufs battus",
+        "unit": ""
+      },
+      {
+        "qty": 1,
+        "name": "huile neutre",
+        "unit": "c.à.s"
+      },
+      {
+        "qty": 1,
+        "name": "extrait de vanille",
+        "unit": "c.à.s"
+      },
+      {
+        "qty": 20,
+        "name": "lait entier",
+        "unit": "cl"
+      },
+      {
+        "qty": 6,
+        "name": "pêches jaunes ou nectarines",
+        "unit": ""
+      },
+      {
+        "qty": 8,
+        "name": "prunes",
+        "unit": ""
+      },
+      {
+        "qty": 1,
+        "name": "cassonade",
+        "unit": "c.à.s"
+      }
+    ],
+    "ingredients": [
+      {
+        "qty": 100,
+        "name": "farine",
+        "unit": "g"
+      },
+      {
+        "qty": 1,
+        "name": "sel",
+        "unit": "pincée"
+      },
+      {
+        "qty": 4,
+        "name": "sucre en poudre",
+        "unit": "c.à.s"
+      },
+      {
+        "qty": 3,
+        "name": "œufs battus",
+        "unit": ""
+      },
+      {
+        "qty": 1,
+        "name": "huile neutre",
+        "unit": "c.à.s"
+      },
+      {
+        "qty": 1,
+        "name": "extrait de vanille",
+        "unit": "c.à.s"
+      },
+      {
+        "qty": 20,
+        "name": "lait entier",
+        "unit": "cl"
+      },
+      {
+        "name": "pêches jaunes ou nectarines",
+        "alternatives": [
+          {
+            "name": "Pêche",
+            "qty": 6,
+            "unit": "Pièce"
+          },
+          {
+            "name": "Nectarine",
+            "qty": 6,
+            "unit": "Pièce"
+          }
+        ],
+        "selected": 0,
+        "note": "Premier choix initial ; modifiable dans Admin → Correction des recettes."
+      },
+      {
+        "qty": 8,
+        "name": "prunes",
+        "unit": ""
+      },
+      {
+        "qty": 1,
+        "name": "cassonade",
+        "unit": "c.à.s"
+      }
+    ]
+  },
+  {
+    "id": "a70ca0a7-b231-47b7-bc04-58b83ba8025c",
+    "title": "Mijoté de cocos de Paimpol au porc et oignons de Roscoff",
+    "servings": 7,
+    "expected": [
+      {
+        "qty": 1000,
+        "name": "oignons rosés de Roscoff AOP",
+        "unit": "g"
+      },
+      {
+        "qty": 1000,
+        "name": "haricots cocos de Paimpol AOP écossés",
+        "unit": "g"
+      },
+      {
+        "qty": 600,
+        "name": "échine de porc",
+        "unit": "g"
+      },
+      {
+        "qty": 300,
+        "name": "ventrèche ou lard demi-sel séché",
+        "unit": "g"
+      },
+      {
+        "qty": 500,
+        "name": "tomates bien mûres",
+        "unit": "g"
+      },
+      {
+        "qty": 2,
+        "name": "poivrons rouges",
+        "unit": "pièce"
+      },
+      {
+        "qty": 1,
+        "name": "tête d'ail rose de Lautrec",
+        "unit": "pièce"
+      },
+      {
+        "qty": 4,
+        "name": "carottes",
+        "unit": "pièce"
+      },
+      {
+        "qty": 1,
+        "name": "branche de laurier",
+        "unit": "branche"
+      },
+      {
+        "qty": 1,
+        "name": "branche de thym",
+        "unit": "branche"
+      },
+      {
+        "qty": 1,
+        "name": "branche de romarin",
+        "unit": "branche"
+      },
+      {
+        "qty": 1,
+        "name": "bouquet de basilic petit vert",
+        "unit": "bouquet"
+      },
+      {
+        "qty": 0,
+        "name": "poivre du moulin",
+        "unit": "selon le goût"
+      }
+    ],
+    "ingredients": [
+      {
+        "qty": 1000,
+        "name": "oignons rosés de Roscoff AOP",
+        "unit": "g"
+      },
+      {
+        "qty": 1000,
+        "name": "haricots cocos de Paimpol AOP écossés",
+        "unit": "g"
+      },
+      {
+        "qty": 600,
+        "name": "échine de porc",
+        "unit": "g"
+      },
+      {
+        "name": "ventrèche ou lard demi-sel séché",
+        "alternatives": [
+          {
+            "name": "Ventrèche",
+            "qty": 300,
+            "unit": "g"
+          },
+          {
+            "name": "Lard demi-sel",
+            "qty": 300,
+            "unit": "g"
+          }
+        ],
+        "selected": 0,
+        "note": "Premier choix initial ; modifiable dans Admin → Correction des recettes."
+      },
+      {
+        "qty": 500,
+        "name": "tomates bien mûres",
+        "unit": "g"
+      },
+      {
+        "qty": 2,
+        "name": "poivrons rouges",
+        "unit": "pièce"
+      },
+      {
+        "qty": 1,
+        "name": "tête d'ail rose de Lautrec",
+        "unit": "pièce"
+      },
+      {
+        "qty": 4,
+        "name": "carottes",
+        "unit": "pièce"
+      },
+      {
+        "qty": 1,
+        "name": "branche de laurier",
+        "unit": "branche"
+      },
+      {
+        "qty": 1,
+        "name": "branche de thym",
+        "unit": "branche"
+      },
+      {
+        "qty": 1,
+        "name": "branche de romarin",
+        "unit": "branche"
+      },
+      {
+        "qty": 1,
+        "name": "bouquet de basilic petit vert",
+        "unit": "bouquet"
+      },
+      {
+        "name": "Poivre noir",
+        "qty": 0.88,
+        "unit": "g",
+        "quantity_source": "estimated",
+        "note": "Estimation initiale Mealio, à ajuster selon la recette et les goûts."
+      }
+    ]
+  },
+  {
+    "id": "e0275312-464b-4586-bf84-84258a6946f9",
+    "title": "Salade estivale de Coco de Paimpol AOP",
+    "servings": 4,
+    "expected": [
+      {
+        "qty": 1000,
+        "name": "Coco de Paimpol AOP frais à écosser",
+        "unit": "g"
+      },
+      {
+        "qty": 250,
+        "name": "Tomates cerises",
+        "unit": "g"
+      },
+      {
+        "qty": 1,
+        "name": "Poivron jaune ou rouge",
+        "unit": ""
+      },
+      {
+        "qty": 1,
+        "name": "Oignon rouge",
+        "unit": ""
+      },
+      {
+        "qty": 1,
+        "name": "Bouquet garni",
+        "unit": ""
+      },
+      {
+        "qty": 4,
+        "name": "Huile d'olive",
+        "unit": "c.à.s"
+      },
+      {
+        "qty": 2,
+        "name": "Vinaigre de cidre ou de Xérès",
+        "unit": "c.à.s"
+      },
+      {
+        "qty": 1,
+        "name": "Ciboulette et persil frais",
+        "unit": "botte"
+      },
+      {
+        "qty": 1,
+        "name": "Sel",
+        "unit": "pincée"
+      },
+      {
+        "qty": 1,
+        "name": "Poivre du moulin",
+        "unit": "pincée"
+      }
+    ],
+    "ingredients": [
+      {
+        "qty": 1000,
+        "name": "Coco de Paimpol AOP frais à écosser",
+        "unit": "g"
+      },
+      {
+        "qty": 250,
+        "name": "Tomates cerises",
+        "unit": "g"
+      },
+      {
+        "name": "Poivron jaune ou rouge",
+        "alternatives": [
+          {
+            "name": "Poivron jaune",
+            "qty": 1,
+            "unit": "Pièce"
+          },
+          {
+            "name": "Poivron rouge",
+            "qty": 1,
+            "unit": "Pièce"
+          }
+        ],
+        "selected": 0,
+        "note": "Premier choix initial ; modifiable dans Admin → Correction des recettes."
+      },
+      {
+        "qty": 1,
+        "name": "Oignon rouge",
+        "unit": ""
+      },
+      {
+        "qty": 1,
+        "name": "Bouquet garni",
+        "unit": ""
+      },
+      {
+        "qty": 4,
+        "name": "Huile d'olive",
+        "unit": "c.à.s"
+      },
+      {
+        "name": "Vinaigre de cidre ou de Xérès",
+        "alternatives": [
+          {
+            "name": "Vinaigre de cidre",
+            "qty": 2,
+            "unit": "Cuillère à soupe"
+          },
+          {
+            "name": "Vinaigre de Xérès",
+            "qty": 2,
+            "unit": "Cuillère à soupe"
+          }
+        ],
+        "selected": 0,
+        "note": "Premier choix initial ; modifiable dans Admin → Correction des recettes."
+      },
+      {
+        "name": "Ciboulette et persil frais",
+        "components": [
+          {
+            "name": "Ciboulette",
+            "qty": 25,
+            "unit": "g",
+            "quantity_source": "estimated",
+            "note": "Botte mélangée estimée à 50 g, moitié ciboulette."
+          },
+          {
+            "name": "Persil plat",
+            "qty": 25,
+            "unit": "g",
+            "quantity_source": "estimated",
+            "note": "Botte mélangée estimée à 50 g, moitié persil."
+          }
+        ]
+      },
+      {
+        "qty": 1,
+        "name": "Sel",
+        "unit": "pincée"
+      },
+      {
+        "qty": 1,
+        "name": "Poivre du moulin",
+        "unit": "pincée"
+      }
+    ]
+  },
+  {
+    "id": "7a5ced7f-a3ea-4719-b12a-349429c6459c",
+    "title": "Soupe à l’oignon (la meilleure)",
+    "servings": 6,
+    "expected": [
+      {
+        "qty": 1000,
+        "name": "oignons jaunes émincés",
+        "unit": "g"
+      },
+      {
+        "qty": 45,
+        "name": "beurre",
+        "unit": "g"
+      },
+      {
+        "qty": 15,
+        "name": "huile d'olive",
+        "unit": "ml"
+      },
+      {
+        "qty": 5,
+        "name": "sucre",
+        "unit": "ml"
+      },
+      {
+        "qty": 30,
+        "name": "farine tout usage",
+        "unit": "ml"
+      },
+      {
+        "qty": 125,
+        "name": "vin blanc sec",
+        "unit": "ml"
+      },
+      {
+        "qty": 1500,
+        "name": "bouillon de bœuf",
+        "unit": "ml"
+      },
+      {
+        "qty": 3,
+        "name": "branches de thym frais",
+        "unit": ""
+      },
+      {
+        "qty": 1,
+        "name": "feuille de laurier",
+        "unit": ""
+      },
+      {
+        "qty": 12,
+        "name": "tranches de baguette grillées",
+        "unit": ""
+      },
+      {
+        "qty": 250,
+        "name": "fromage gruyère râpé",
+        "unit": "g"
+      },
+      {
+        "qty": 0,
+        "name": "sel et poivre",
+        "unit": "au goût"
+      }
+    ],
+    "ingredients": [
+      {
+        "qty": 1000,
+        "name": "oignons jaunes émincés",
+        "unit": "g"
+      },
+      {
+        "qty": 45,
+        "name": "beurre",
+        "unit": "g"
+      },
+      {
+        "qty": 15,
+        "name": "huile d'olive",
+        "unit": "ml"
+      },
+      {
+        "qty": 5,
+        "name": "sucre",
+        "unit": "ml"
+      },
+      {
+        "qty": 30,
+        "name": "farine tout usage",
+        "unit": "ml"
+      },
+      {
+        "qty": 125,
+        "name": "vin blanc sec",
+        "unit": "ml"
+      },
+      {
+        "qty": 1500,
+        "name": "bouillon de bœuf",
+        "unit": "ml"
+      },
+      {
+        "qty": 3,
+        "name": "branches de thym frais",
+        "unit": ""
+      },
+      {
+        "qty": 1,
+        "name": "feuille de laurier",
+        "unit": ""
+      },
+      {
+        "qty": 12,
+        "name": "tranches de baguette grillées",
+        "unit": ""
+      },
+      {
+        "qty": 250,
+        "name": "fromage gruyère râpé",
+        "unit": "g"
+      },
+      {
+        "name": "sel et poivre",
+        "components": [
+          {
+            "name": "Sel fin",
+            "qty": 1,
+            "unit": "g",
+            "quantity_source": "estimated",
+            "note": "Estimation initiale Mealio, à ajuster selon la recette et les goûts."
+          },
+          {
+            "name": "Poivre noir",
+            "qty": 0.5,
+            "unit": "g",
+            "quantity_source": "estimated",
+            "note": "Estimation initiale Mealio, à ajuster selon la recette et les goûts."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "4b2a51db-0dc5-40e6-aa37-550a56a450af",
+    "title": "Tarte amandine aux poires pochées",
+    "servings": 6,
+    "expected": [
+      {
+        "qty": 4,
+        "name": "poires fraîches (Conférence ou Comice)",
+        "unit": ""
+      },
+      {
+        "qty": 1.6,
+        "name": "eau",
+        "unit": "l"
+      },
+      {
+        "qty": 350,
+        "name": "sucre en poudre (pour le sirop)",
+        "unit": "g"
+      },
+      {
+        "qty": 1,
+        "name": "gousse de vanille ou bâton de cannelle (facultatif)",
+        "unit": "pièce"
+      },
+      {
+        "qty": 1,
+        "name": "pâte sablée",
+        "unit": "rouleau"
+      },
+      {
+        "qty": 100,
+        "name": "beurre pommade",
+        "unit": "g"
+      },
+      {
+        "qty": 100,
+        "name": "sucre en poudre (pour la crème)",
+        "unit": "g"
+      },
+      {
+        "qty": 100,
+        "name": "poudre d'amandes",
+        "unit": "g"
+      },
+      {
+        "qty": 2,
+        "name": "œufs",
+        "unit": "pièces"
+      },
+      {
+        "qty": 1,
+        "name": "farine",
+        "unit": "c.à.s"
+      },
+      {
+        "qty": 1,
+        "name": "amandes effilées",
+        "unit": "poignée"
+      }
+    ],
+    "ingredients": [
+      {
+        "qty": 4,
+        "name": "poires fraîches (Conférence ou Comice)",
+        "unit": ""
+      },
+      {
+        "qty": 1.6,
+        "name": "Eau",
+        "unit": "l",
+        "exclude_from_shopping": true,
+        "note": "Eau du robinet : hors courses ; quantité selon la préparation."
+      },
+      {
+        "qty": 350,
+        "name": "sucre en poudre (pour le sirop)",
+        "unit": "g"
+      },
+      {
+        "name": "gousse de vanille ou bâton de cannelle (facultatif)",
+        "alternatives": [
+          {
+            "name": "Vanille (gousse)",
+            "qty": 1,
+            "unit": "Pièce"
+          },
+          {
+            "name": "Cannelle (bâton)",
+            "qty": 1,
+            "unit": "Pièce"
+          }
+        ],
+        "selected": 0,
+        "note": "Premier choix initial ; modifiable dans Admin → Correction des recettes.",
+        "optional": true,
+        "included": false
+      },
+      {
+        "qty": 1,
+        "name": "pâte sablée",
+        "unit": "rouleau"
+      },
+      {
+        "qty": 100,
+        "name": "beurre pommade",
+        "unit": "g"
+      },
+      {
+        "qty": 100,
+        "name": "sucre en poudre (pour la crème)",
+        "unit": "g"
+      },
+      {
+        "qty": 100,
+        "name": "poudre d'amandes",
+        "unit": "g"
+      },
+      {
+        "qty": 2,
+        "name": "œufs",
+        "unit": "pièces"
+      },
+      {
+        "qty": 1,
+        "name": "farine",
+        "unit": "c.à.s"
+      },
+      {
+        "qty": 1,
+        "name": "amandes effilées",
+        "unit": "poignée"
+      }
+    ]
+  },
+  {
+    "id": "a9340473-1f59-4d05-8599-5ff607a48a96",
+    "title": "Tarte aux pêches, citron vert et romarin façon Ottolenghi",
+    "servings": 6,
+    "expected": [
+      {
+        "qty": 1,
+        "name": "pâte feuilletée",
+        "unit": "rouleau"
+      },
+      {
+        "qty": 6,
+        "name": "pêches ou nectarines",
+        "unit": ""
+      },
+      {
+        "qty": 1,
+        "name": "branche de romarin",
+        "unit": ""
+      },
+      {
+        "qty": 2,
+        "name": "citrons verts (zeste et jus)",
+        "unit": ""
+      },
+      {
+        "qty": 80,
+        "name": "sucre (ou miel)",
+        "unit": "g"
+      },
+      {
+        "qty": 1,
+        "name": "Maïzena",
+        "unit": "pointe de couteau"
+      },
+      {
+        "qty": 1,
+        "name": "jaune d'œuf",
+        "unit": ""
+      },
+      {
+        "qty": 10,
+        "name": "beurre",
+        "unit": "g"
+      },
+      {
+        "qty": 150,
+        "name": "crème fraîche",
+        "unit": "g"
+      }
+    ],
+    "ingredients": [
+      {
+        "qty": 1,
+        "name": "pâte feuilletée",
+        "unit": "rouleau"
+      },
+      {
+        "name": "pêches ou nectarines",
+        "alternatives": [
+          {
+            "name": "Pêche",
+            "qty": 6,
+            "unit": "Pièce"
+          },
+          {
+            "name": "Nectarine",
+            "qty": 6,
+            "unit": "Pièce"
+          }
+        ],
+        "selected": 0,
+        "note": "Premier choix initial ; modifiable dans Admin → Correction des recettes."
+      },
+      {
+        "qty": 1,
+        "name": "branche de romarin",
+        "unit": ""
+      },
+      {
+        "qty": 2,
+        "name": "citrons verts (zeste et jus)",
+        "unit": ""
+      },
+      {
+        "qty": 80,
+        "name": "sucre (ou miel)",
+        "unit": "g"
+      },
+      {
+        "qty": 1,
+        "name": "Maïzena",
+        "unit": "pointe de couteau"
+      },
+      {
+        "qty": 1,
+        "name": "jaune d'œuf",
+        "unit": ""
+      },
+      {
+        "qty": 10,
+        "name": "beurre",
+        "unit": "g"
+      },
+      {
+        "qty": 150,
+        "name": "crème fraîche",
+        "unit": "g"
+      }
+    ]
+  },
+  {
+    "id": "83d7443d-30d3-4f51-ad33-a85ef231cd8d",
+    "title": "Pot-au-feu",
+    "servings": 4,
+    "expected": [
+      {
+        "qty": 400,
+        "name": "macreuse",
+        "unit": "g"
+      },
+      {
+        "qty": 600,
+        "name": "plat de côte",
+        "unit": "g"
+      },
+      {
+        "qty": 400,
+        "name": "gîte à la noix",
+        "unit": "g"
+      },
+      {
+        "qty": 4,
+        "name": "os à moelle",
+        "unit": ""
+      },
+      {
+        "qty": 0,
+        "name": "gros sel",
+        "unit": ""
+      },
+      {
+        "qty": 0,
+        "name": "poivre",
+        "unit": ""
+      },
+      {
+        "qty": 4,
+        "name": "carottes",
+        "unit": ""
+      },
+      {
+        "qty": 4,
+        "name": "poireaux",
+        "unit": ""
+      },
+      {
+        "qty": 4,
+        "name": "petits morceaux de céleri",
+        "unit": ""
+      },
+      {
+        "qty": 2,
+        "name": "oignons piqués d'un clou de girofle",
+        "unit": ""
+      },
+      {
+        "qty": 1,
+        "name": "gousse d'ail",
+        "unit": ""
+      },
+      {
+        "qty": 1,
+        "name": "bouquet garni",
+        "unit": ""
+      }
+    ],
+    "ingredients": [
+      {
+        "qty": 400,
+        "name": "macreuse",
+        "unit": "g"
+      },
+      {
+        "qty": 600,
+        "name": "plat de côte",
+        "unit": "g"
+      },
+      {
+        "qty": 400,
+        "name": "gîte à la noix",
+        "unit": "g"
+      },
+      {
+        "qty": 4,
+        "name": "os à moelle",
+        "unit": ""
+      },
+      {
+        "name": "Sel gros / Fleur de sel",
+        "qty": 1.0,
+        "unit": "g",
+        "quantity_source": "estimated",
+        "note": "Estimation initiale Mealio, à ajuster selon la recette et les goûts."
+      },
+      {
+        "name": "Poivre noir",
+        "qty": 0.5,
+        "unit": "g",
+        "quantity_source": "estimated",
+        "note": "Estimation initiale Mealio, à ajuster selon la recette et les goûts."
+      },
+      {
+        "qty": 4,
+        "name": "carottes",
+        "unit": ""
+      },
+      {
+        "qty": 4,
+        "name": "poireaux",
+        "unit": ""
+      },
+      {
+        "qty": 4,
+        "name": "petits morceaux de céleri",
+        "unit": ""
+      },
+      {
+        "qty": 2,
+        "name": "oignons piqués d'un clou de girofle",
+        "unit": ""
+      },
+      {
+        "qty": 1,
+        "name": "gousse d'ail",
+        "unit": ""
+      },
+      {
+        "qty": 1,
+        "name": "bouquet garni",
+        "unit": ""
+      }
+    ]
+  },
+  {
+    "id": "1c7d3210-a7d2-4956-804a-2e893f70eeb5",
+    "title": "Hachis parmentier de canard",
+    "servings": 5,
+    "expected": [
+      {
+        "qty": 4,
+        "name": "cuisses de canard confites",
+        "unit": "pièces"
+      },
+      {
+        "qty": 1300,
+        "name": "pommes de terre épluchées (type Bintje ou Manon)",
+        "unit": "g"
+      },
+      {
+        "qty": 2,
+        "name": "Gros oignon",
+        "unit": "pièce"
+      },
+      {
+        "qty": 2,
+        "name": "échalotes",
+        "unit": "pièces"
+      },
+      {
+        "qty": 10,
+        "name": "vin blanc sec ou bouillon de volaille",
+        "unit": "cl"
+      },
+      {
+        "qty": 130,
+        "name": "crème fraîche entière",
+        "unit": "ml"
+      },
+      {
+        "qty": 80,
+        "name": "beurre",
+        "unit": "g"
+      },
+      {
+        "qty": 50,
+        "name": "chapelure ou fromage râpé",
+        "unit": "g"
+      },
+      {
+        "qty": 1,
+        "name": "sel",
+        "unit": "pincée"
+      },
+      {
+        "qty": 1,
+        "name": "poivre",
+        "unit": "pincée"
+      },
+      {
+        "qty": 1,
+        "name": "muscade",
+        "unit": "pincée"
+      }
+    ],
+    "ingredients": [
+      {
+        "qty": 4,
+        "name": "cuisses de canard confites",
+        "unit": "pièces"
+      },
+      {
+        "qty": 1300,
+        "name": "pommes de terre épluchées (type Bintje ou Manon)",
+        "unit": "g"
+      },
+      {
+        "qty": 2,
+        "name": "Gros oignon",
+        "unit": "pièce"
+      },
+      {
+        "qty": 2,
+        "name": "échalotes",
+        "unit": "pièces"
+      },
+      {
+        "name": "vin blanc sec ou bouillon de volaille",
+        "alternatives": [
+          {
+            "name": "Vin blanc (cuisine)",
+            "qty": 10,
+            "unit": "Centilitre"
+          },
+          {
+            "name": "Bouillon de volaille liquide",
+            "qty": 10,
+            "unit": "Centilitre"
+          }
+        ],
+        "selected": 0,
+        "note": "Premier choix initial ; modifiable dans Admin → Correction des recettes."
+      },
+      {
+        "qty": 130,
+        "name": "crème fraîche entière",
+        "unit": "ml"
+      },
+      {
+        "qty": 80,
+        "name": "beurre",
+        "unit": "g"
+      },
+      {
+        "name": "chapelure ou fromage râpé",
+        "alternatives": [
+          {
+            "name": "Chapelure",
+            "qty": 50,
+            "unit": "g"
+          },
+          {
+            "name": "Fromage râpé",
+            "qty": 50,
+            "unit": "g"
+          }
+        ],
+        "selected": 0,
+        "note": "Premier choix initial ; modifiable dans Admin → Correction des recettes."
+      },
+      {
+        "qty": 1,
+        "name": "sel",
+        "unit": "pincée"
+      },
+      {
+        "qty": 1,
+        "name": "poivre",
+        "unit": "pincée"
+      },
+      {
+        "qty": 1,
+        "name": "muscade",
+        "unit": "pincée"
+      }
+    ]
+  },
+  {
+    "id": "e0a837b2-6012-4f5a-867c-68c17d823c0c",
+    "title": "Cake à la compote de pommes",
+    "servings": 8,
+    "expected": [
+      {
+        "qty": 200,
+        "name": "compote de pommes (idéalement sans sucres ajoutés)",
+        "unit": "g"
+      },
+      {
+        "qty": 200,
+        "name": "farine",
+        "unit": "g"
+      },
+      {
+        "qty": 2,
+        "name": "œufs",
+        "unit": ""
+      },
+      {
+        "qty": 60,
+        "name": "sucre",
+        "unit": "g"
+      },
+      {
+        "qty": 60,
+        "name": "beurre fondu",
+        "unit": "g"
+      },
+      {
+        "qty": 1,
+        "name": "levure chimique",
+        "unit": "sachet"
+      },
+      {
+        "qty": 1,
+        "name": "cannelle",
+        "unit": "c.à.c"
+      },
+      {
+        "qty": 1,
+        "name": "sel",
+        "unit": "pincée"
+      },
+      {
+        "qty": 0,
+        "name": "morceaux de pommes, noix ou noisettes (facultatif)",
+        "unit": ""
+      }
+    ],
+    "ingredients": [
+      {
+        "qty": 200,
+        "name": "compote de pommes (idéalement sans sucres ajoutés)",
+        "unit": "g"
+      },
+      {
+        "qty": 200,
+        "name": "farine",
+        "unit": "g"
+      },
+      {
+        "qty": 2,
+        "name": "œufs",
+        "unit": ""
+      },
+      {
+        "qty": 60,
+        "name": "sucre",
+        "unit": "g"
+      },
+      {
+        "qty": 60,
+        "name": "beurre fondu",
+        "unit": "g"
+      },
+      {
+        "qty": 1,
+        "name": "levure chimique",
+        "unit": "sachet"
+      },
+      {
+        "qty": 1,
+        "name": "cannelle",
+        "unit": "c.à.c"
+      },
+      {
+        "qty": 1,
+        "name": "sel",
+        "unit": "pincée"
+      },
+      {
+        "name": "morceaux de pommes, noix ou noisettes (facultatif)",
+        "alternatives": [
+          {
+            "name": "Pomme",
+            "qty": 50,
+            "unit": "g",
+            "quantity_source": "estimated",
+            "note": "Estimation initiale Mealio, à ajuster selon la recette et les goûts."
+          },
+          {
+            "name": "Noix",
+            "qty": 30,
+            "unit": "g",
+            "quantity_source": "estimated",
+            "note": "Estimation initiale Mealio, à ajuster selon la recette et les goûts."
+          },
+          {
+            "name": "Noisette",
+            "qty": 30,
+            "unit": "g",
+            "quantity_source": "estimated",
+            "note": "Estimation initiale Mealio, à ajuster selon la recette et les goûts."
+          }
+        ],
+        "selected": 0,
+        "note": "Premier choix initial ; modifiable dans Admin → Correction des recettes.",
+        "optional": true,
+        "included": false
+      }
+    ]
+  },
+  {
+    "id": "a1cfaf0a-c0b8-40c1-a5a5-45ded138315b",
+    "title": "Poulet à la Gaston Gérard facile",
+    "servings": 4,
+    "expected": [
+      {
+        "qty": 4,
+        "name": "morceaux de poulet (cuisses ou filets)",
+        "unit": "pièces"
+      },
+      {
+        "qty": 30,
+        "name": "beurre",
+        "unit": "g"
+      },
+      {
+        "qty": 150,
+        "name": "vin blanc sec",
+        "unit": "ml"
+      },
+      {
+        "qty": 200,
+        "name": "crème fraîche épaisse",
+        "unit": "g"
+      },
+      {
+        "qty": 2,
+        "name": "moutarde forte de Dijon",
+        "unit": "c.à.s"
+      },
+      {
+        "qty": 100,
+        "name": "comté râpé",
+        "unit": "g"
+      },
+      {
+        "qty": 1,
+        "name": "paprika",
+        "unit": "c.à.c"
+      },
+      {
+        "qty": 1,
+        "name": "sel",
+        "unit": "pincée"
+      },
+      {
+        "qty": 1,
+        "name": "poivre",
+        "unit": "pincée"
+      }
+    ],
+    "ingredients": [
+      {
+        "name": "morceaux de poulet (cuisses ou filets)",
+        "alternatives": [
+          {
+            "name": "Cuisse de poulet",
+            "qty": 4,
+            "unit": "Pièce"
+          },
+          {
+            "name": "Blanc de poulet",
+            "qty": 4,
+            "unit": "Pièce"
+          }
+        ],
+        "selected": 0,
+        "note": "Premier choix initial ; modifiable dans Admin → Correction des recettes."
+      },
+      {
+        "qty": 30,
+        "name": "beurre",
+        "unit": "g"
+      },
+      {
+        "qty": 150,
+        "name": "vin blanc sec",
+        "unit": "ml"
+      },
+      {
+        "qty": 200,
+        "name": "crème fraîche épaisse",
+        "unit": "g"
+      },
+      {
+        "qty": 2,
+        "name": "moutarde forte de Dijon",
+        "unit": "c.à.s"
+      },
+      {
+        "qty": 100,
+        "name": "comté râpé",
+        "unit": "g"
+      },
+      {
+        "qty": 1,
+        "name": "paprika",
+        "unit": "c.à.c"
+      },
+      {
+        "qty": 1,
+        "name": "sel",
+        "unit": "pincée"
+      },
+      {
+        "qty": 1,
+        "name": "poivre",
+        "unit": "pincée"
+      }
+    ]
+  },
+  {
+    "id": "70e831d1-cf92-4ca9-b566-ce3e86c65d88",
+    "title": "Cassoulet breton de Coco de Paimpol AOP",
+    "servings": 4,
+    "expected": [
+      {
+        "qty": 800,
+        "name": "Cocos de Paimpol AOP écossés",
+        "unit": "g"
+      },
+      {
+        "qty": 4,
+        "name": "Saucisses bretonnes (ou saucisses fraîches)",
+        "unit": ""
+      },
+      {
+        "qty": 200,
+        "name": "Poitrine de porc fumée",
+        "unit": "g"
+      },
+      {
+        "qty": 2,
+        "name": "Carottes",
+        "unit": ""
+      },
+      {
+        "qty": 1,
+        "name": "Oignon",
+        "unit": ""
+      },
+      {
+        "qty": 2,
+        "name": "Gousses d'ail",
+        "unit": ""
+      },
+      {
+        "qty": 1,
+        "name": "Concentré de tomate",
+        "unit": "c.à.s"
+      },
+      {
+        "qty": 1,
+        "name": "Bouquet garni (thym, laurier)",
+        "unit": ""
+      },
+      {
+        "qty": 1,
+        "name": "Huile d'olive",
+        "unit": "c.à.s"
+      },
+      {
+        "qty": 0,
+        "name": "Sel et poivre",
+        "unit": ""
+      }
+    ],
+    "ingredients": [
+      {
+        "qty": 800,
+        "name": "Cocos de Paimpol AOP écossés",
+        "unit": "g"
+      },
+      {
+        "qty": 4,
+        "name": "Saucisses bretonnes (ou saucisses fraîches)",
+        "unit": ""
+      },
+      {
+        "qty": 200,
+        "name": "Poitrine de porc fumée",
+        "unit": "g"
+      },
+      {
+        "qty": 2,
+        "name": "Carottes",
+        "unit": ""
+      },
+      {
+        "qty": 1,
+        "name": "Oignon",
+        "unit": ""
+      },
+      {
+        "qty": 2,
+        "name": "Gousses d'ail",
+        "unit": ""
+      },
+      {
+        "qty": 1,
+        "name": "Concentré de tomate",
+        "unit": "c.à.s"
+      },
+      {
+        "qty": 1,
+        "name": "Bouquet garni (thym, laurier)",
+        "unit": ""
+      },
+      {
+        "qty": 1,
+        "name": "Huile d'olive",
+        "unit": "c.à.s"
+      },
+      {
+        "name": "Sel et poivre",
+        "components": [
+          {
+            "name": "Sel fin",
+            "qty": 1,
+            "unit": "g",
+            "quantity_source": "estimated",
+            "note": "Estimation initiale Mealio, à ajuster selon la recette et les goûts."
+          },
+          {
+            "name": "Poivre noir",
+            "qty": 0.5,
+            "unit": "g",
+            "quantity_source": "estimated",
+            "note": "Estimation initiale Mealio, à ajuster selon la recette et les goûts."
+          }
+        ]
+      }
+    ]
+  }
+]

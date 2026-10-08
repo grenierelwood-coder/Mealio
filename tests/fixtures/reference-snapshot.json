@@ -1,0 +1,3806 @@
+{
+  "ignored_words": [
+    {
+      "id": "4b737d17-fb16-4abb-be02-bcff35b61d76",
+      "mot": "de",
+      "type_ignore": "parasite"
+    },
+    {
+      "id": "926bbec7-6b33-4908-9034-6873233d0341",
+      "mot": "du",
+      "type_ignore": "parasite"
+    },
+    {
+      "id": "b62cd054-2bf7-4bc5-8be1-91731f0c00c2",
+      "mot": "des",
+      "type_ignore": "parasite"
+    },
+    {
+      "id": "9f89bd06-1633-4314-809c-e2374a8c4d77",
+      "mot": "d",
+      "type_ignore": "parasite"
+    },
+    {
+      "id": "6d44b97b-1122-4021-83a4-07612ff7bb2a",
+      "mot": "à",
+      "type_ignore": "parasite"
+    },
+    {
+      "id": "5729f9c4-3e40-4251-afa6-bdbe2dacdf3c",
+      "mot": "a",
+      "type_ignore": "parasite"
+    },
+    {
+      "id": "f8b16be2-68c2-4128-a040-26eb5eb3635e",
+      "mot": "au",
+      "type_ignore": "parasite"
+    },
+    {
+      "id": "19cbebc5-7a59-44a5-a906-b2fee7434e6e",
+      "mot": "aux",
+      "type_ignore": "parasite"
+    },
+    {
+      "id": "9e246852-50e5-4350-969d-6015d8e86cc7",
+      "mot": "et",
+      "type_ignore": "parasite"
+    },
+    {
+      "id": "f00bcfa2-fd57-4a01-8f4e-07d4a6b9fb26",
+      "mot": "ou",
+      "type_ignore": "parasite"
+    },
+    {
+      "id": "89cf5266-a037-46f0-802e-bc9f496ce35f",
+      "mot": "en",
+      "type_ignore": "parasite"
+    },
+    {
+      "id": "210acc8e-9654-4ace-a072-b4b746c7ee32",
+      "mot": "avec",
+      "type_ignore": "parasite"
+    },
+    {
+      "id": "ef9dbc30-f1c6-49dc-b4a4-c07f485fc824",
+      "mot": "sans",
+      "type_ignore": "parasite"
+    },
+    {
+      "id": "4d037d74-8832-4f9b-bec1-1d8e1d1ab5b3",
+      "mot": "pour",
+      "type_ignore": "parasite"
+    },
+    {
+      "id": "821dcd9a-cc5d-4638-b9e7-119781f6e716",
+      "mot": "sur",
+      "type_ignore": "parasite"
+    },
+    {
+      "id": "908452d7-b8cb-474c-9fd4-c9cfab451cd2",
+      "mot": "dans",
+      "type_ignore": "parasite"
+    },
+    {
+      "id": "5dd774a0-5653-4b99-b9b5-66a77759d96d",
+      "mot": "les",
+      "type_ignore": "parasite"
+    },
+    {
+      "id": "8a17aea5-2bee-4cb7-b6d8-00f0b5f4904d",
+      "mot": "le",
+      "type_ignore": "parasite"
+    },
+    {
+      "id": "2854ab6a-0aa9-41b7-80b2-74f0337632bb",
+      "mot": "la",
+      "type_ignore": "parasite"
+    },
+    {
+      "id": "fee0eb83-7a36-4786-8911-fc9f21ecde6c",
+      "mot": "un",
+      "type_ignore": "parasite"
+    },
+    {
+      "id": "ee4b9418-2b11-4317-9ac4-60685b45a694",
+      "mot": "une",
+      "type_ignore": "parasite"
+    }
+  ],
+  "unit_mappings": [
+    {
+      "id": "3818c3df-3b60-4350-bc9f-b63ec83a2e51",
+      "notes": "Verre standard type pot de moutarde",
+      "unite": "Verre (à moutarde/eau)",
+      "type_unite": "volume",
+      "abreviation": null,
+      "multiplicateur": 1,
+      "equivalence_reference": "200 mL"
+    },
+    {
+      "id": "4bc407eb-cc60-4a52-ab51-c2b61bf12322",
+      "notes": "Pour épices très puissantes (piment",
+      "unite": "Pointe (de couteau)",
+      "type_unite": "volume",
+      "abreviation": null,
+      "multiplicateur": 1,
+      "equivalence_reference": "~1 mL"
+    },
+    {
+      "id": "fd1271f0-af3e-479e-b11c-b37648904b10",
+      "notes": "1 mg = 0,001 g",
+      "unite": "Milligramme",
+      "type_unite": "poids",
+      "abreviation": "mg",
+      "multiplicateur": 1,
+      "equivalence_reference": "0.001 g"
+    },
+    {
+      "id": "f5436291-f950-4a6c-9c27-cbf1161e9226",
+      "notes": "Unité de référence des poids",
+      "unite": "Gramme",
+      "type_unite": "poids",
+      "abreviation": "g",
+      "multiplicateur": 1,
+      "equivalence_reference": "1 g"
+    },
+    {
+      "id": "2b90a04b-2d03-4667-b609-edab561edde3",
+      "notes": "1 kg = 1000 g",
+      "unite": "Kilogramme",
+      "type_unite": "poids",
+      "abreviation": "kg",
+      "multiplicateur": 1,
+      "equivalence_reference": "1000 g"
+    },
+    {
+      "id": "c2d43640-99ad-4ea1-8bf3-8968773e1c65",
+      "notes": "Approximation cuisine",
+      "unite": "Once",
+      "type_unite": "poids",
+      "abreviation": "oz",
+      "multiplicateur": 1,
+      "equivalence_reference": "28.35 g"
+    },
+    {
+      "id": "0fa3b2c5-fcc4-4395-8269-a24b8903577f",
+      "notes": "Approximation cuisine",
+      "unite": "Livre",
+      "type_unite": "poids",
+      "abreviation": "lb",
+      "multiplicateur": 1,
+      "equivalence_reference": "453.6 g"
+    },
+    {
+      "id": "0d6d962e-93a6-4972-8b7c-ba2afecbe3a1",
+      "notes": "Unité de référence des volumes",
+      "unite": "Millilitre",
+      "type_unite": "volume",
+      "abreviation": "mL",
+      "multiplicateur": 1,
+      "equivalence_reference": "1 mL"
+    },
+    {
+      "id": "6764aa87-3568-4bca-a9a7-f3f09c68d503",
+      "notes": "1 cL = 10 mL",
+      "unite": "Centilitre",
+      "type_unite": "volume",
+      "abreviation": "cL",
+      "multiplicateur": 1,
+      "equivalence_reference": "10 mL"
+    },
+    {
+      "id": "b412a142-75f7-449c-8d07-8eafcc63c838",
+      "notes": "1 dL = 100 mL",
+      "unite": "Décilitre",
+      "type_unite": "volume",
+      "abreviation": "dL",
+      "multiplicateur": 1,
+      "equivalence_reference": "100 mL"
+    },
+    {
+      "id": "85bf8f49-f729-4476-bd8c-1681e7d2d140",
+      "notes": "1 L = 1000 mL",
+      "unite": "Litre",
+      "type_unite": "volume",
+      "abreviation": "L",
+      "multiplicateur": 1,
+      "equivalence_reference": "1000 mL"
+    },
+    {
+      "id": "975a8c29-a68d-43b6-8c48-6f0828593c2d",
+      "notes": "1 cc = 5 mL",
+      "unite": "Cuillère à café",
+      "type_unite": "volume",
+      "abreviation": "cc",
+      "multiplicateur": 1,
+      "equivalence_reference": "5 mL"
+    },
+    {
+      "id": "f29bd2e5-2e27-4d7b-92e0-df7937adc86f",
+      "notes": "1 cs = 15 mL",
+      "unite": "Cuillère à soupe",
+      "type_unite": "volume",
+      "abreviation": "cs",
+      "multiplicateur": 1,
+      "equivalence_reference": "15 mL"
+    },
+    {
+      "id": "530be8cf-f1dc-4ab3-bb52-df391dbbc79c",
+      "notes": "Approximation cuisine",
+      "unite": "Cuillère à dessert",
+      "type_unite": "volume",
+      "abreviation": "cd",
+      "multiplicateur": 1,
+      "equivalence_reference": "10 mL"
+    },
+    {
+      "id": "77e43236-01e9-4d53-8ec3-09a4687e65fd",
+      "notes": "Approximation ; peut aussi représenter une petite masse",
+      "unite": "Pincée",
+      "type_unite": "volume",
+      "abreviation": null,
+      "multiplicateur": 1,
+      "equivalence_reference": "0.5 mL"
+    },
+    {
+      "id": "2870a209-35b5-426a-9d7b-9c8bbb8b1acd",
+      "notes": "Verre de cuisine standard",
+      "unite": "Verre",
+      "type_unite": "volume",
+      "abreviation": null,
+      "multiplicateur": 1,
+      "equivalence_reference": "200 mL"
+    },
+    {
+      "id": "eefe6ec7-bf9f-4d25-a2ee-a3868a40adda",
+      "notes": "Approximation cuisine",
+      "unite": "Verre à liqueur",
+      "type_unite": "volume",
+      "abreviation": null,
+      "multiplicateur": 1,
+      "equivalence_reference": "30 mL"
+    },
+    {
+      "id": "b6eca43d-2a2f-4088-a832-d7eb40a77ae7",
+      "notes": "Tasse standard",
+      "unite": "Tasse",
+      "type_unite": "volume",
+      "abreviation": null,
+      "multiplicateur": 1,
+      "equivalence_reference": "250 mL"
+    },
+    {
+      "id": "61ea89a1-4fd4-43b1-9c2f-aaa5840581a3",
+      "notes": "Valeur moyenne entre 300 et 350 mL",
+      "unite": "Bol",
+      "type_unite": "volume",
+      "abreviation": null,
+      "multiplicateur": 1,
+      "equivalence_reference": "325 mL"
+    },
+    {
+      "id": "e7536427-2390-426c-8993-8ce656e578d1",
+      "notes": "Mug standard",
+      "unite": "Mug",
+      "type_unite": "volume",
+      "abreviation": null,
+      "multiplicateur": 1,
+      "equivalence_reference": "250 mL"
+    },
+    {
+      "id": "065ca7ed-ee49-430e-a899-b7c61675f875",
+      "notes": "Valeur moyenne entre 100 et 150 mL",
+      "unite": "Ramequin",
+      "type_unite": "volume",
+      "abreviation": null,
+      "multiplicateur": 1,
+      "equivalence_reference": "125 mL"
+    },
+    {
+      "id": "19159e10-6451-46a1-8906-9826948249d4",
+      "notes": "Unité de référence des produits à la pièce",
+      "unite": "Pièce",
+      "type_unite": "divers",
+      "abreviation": "pièce",
+      "multiplicateur": 1,
+      "equivalence_reference": "1 pièce"
+    },
+    {
+      "id": "071d6550-a1ce-42e6-88f7-0830069e4cca",
+      "notes": "Ex. gousse d'ail",
+      "unite": "Gousse",
+      "type_unite": "divers",
+      "abreviation": null,
+      "multiplicateur": 1,
+      "equivalence_reference": "1 pièce"
+    },
+    {
+      "id": "3f2c8769-c70b-4297-a11e-959fcdf3dc15",
+      "notes": "Ex. brin de thym",
+      "unite": "Brin",
+      "type_unite": "divers",
+      "abreviation": null,
+      "multiplicateur": 1,
+      "equivalence_reference": "1 pièce"
+    },
+    {
+      "id": "be1ed0be-d32d-49bb-b62a-c1eb938d27c5",
+      "notes": "Ex. feuille de laurier",
+      "unite": "Feuille",
+      "type_unite": "divers",
+      "abreviation": null,
+      "multiplicateur": 1,
+      "equivalence_reference": "1 pièce"
+    },
+    {
+      "id": "2e56ca3d-5673-45d4-8502-211bbfce7b2a",
+      "notes": "Ex. botte de radis",
+      "unite": "Botte",
+      "type_unite": "divers",
+      "abreviation": null,
+      "multiplicateur": 1,
+      "equivalence_reference": "1 pièce"
+    },
+    {
+      "id": "48f0822d-9a84-4de8-b85f-9736ac8e9d56",
+      "notes": "Conditionnement",
+      "unite": "Sachet",
+      "type_unite": "divers",
+      "abreviation": null,
+      "multiplicateur": 1,
+      "equivalence_reference": "1 pièce"
+    },
+    {
+      "id": "fd891d85-f404-42ef-8ab0-0d32cef81028",
+      "notes": "Conditionnement",
+      "unite": "Boîte",
+      "type_unite": "divers",
+      "abreviation": null,
+      "multiplicateur": 1,
+      "equivalence_reference": "1 pièce"
+    },
+    {
+      "id": "4103dfb0-7396-4008-95a0-38b20c1c4c06",
+      "notes": "Conditionnement",
+      "unite": "Pot",
+      "type_unite": "divers",
+      "abreviation": null,
+      "multiplicateur": 1,
+      "equivalence_reference": "1 pièce"
+    },
+    {
+      "id": "cdd2d7f4-e9b5-4ce3-bd8a-d323d711e4f7",
+      "notes": "Conditionnement",
+      "unite": "Brique",
+      "type_unite": "divers",
+      "abreviation": null,
+      "multiplicateur": 1,
+      "equivalence_reference": "1 pièce"
+    },
+    {
+      "id": "1c106024-b7d9-4d51-90ad-d95879431537",
+      "notes": "Conditionnement",
+      "unite": "Barquette",
+      "type_unite": "divers",
+      "abreviation": null,
+      "multiplicateur": 1,
+      "equivalence_reference": "1 pièce"
+    },
+    {
+      "id": "f10c28ef-0db8-4847-ad8e-33db567cb768",
+      "notes": "Conditionnement",
+      "unite": "Paquet",
+      "type_unite": "divers",
+      "abreviation": null,
+      "multiplicateur": 1,
+      "equivalence_reference": "1 pièce"
+    },
+    {
+      "id": "914c99e5-0f5b-4797-b31a-21d740b8743e",
+      "notes": "Ex. cube de bouillon",
+      "unite": "Cube",
+      "type_unite": "divers",
+      "abreviation": null,
+      "multiplicateur": 1,
+      "equivalence_reference": "1 pièce"
+    },
+    {
+      "id": "93e5c93b-d718-4849-8d46-74fbfc4ffc77",
+      "notes": "Portion à la pièce",
+      "unite": "Tranche",
+      "type_unite": "divers",
+      "abreviation": null,
+      "multiplicateur": 1,
+      "equivalence_reference": "1 pièce"
+    },
+    {
+      "id": "b58c9a32-3613-4c64-af22-7a8247726b9b",
+      "notes": "Portion à la pièce",
+      "unite": "Pavé",
+      "type_unite": "divers",
+      "abreviation": null,
+      "multiplicateur": 1,
+      "equivalence_reference": "1 pièce"
+    },
+    {
+      "id": "f4f87084-3f43-40ba-b228-1d200f0d97bb",
+      "notes": "Portion à la pièce",
+      "unite": "Filet",
+      "type_unite": "divers",
+      "abreviation": null,
+      "multiplicateur": 1,
+      "equivalence_reference": "1 pièce"
+    },
+    {
+      "id": "3fc47a34-5233-4990-b157-0a6b63e01194",
+      "notes": "Portion à la pièce",
+      "unite": "Morceau",
+      "type_unite": "divers",
+      "abreviation": null,
+      "multiplicateur": 1,
+      "equivalence_reference": "1 pièce"
+    },
+    {
+      "id": "78c35b84-c2db-4f3c-86ca-551d51ae1e66",
+      "notes": "Portion culinaire de beurre",
+      "unite": "Noix (de beurre)",
+      "type_unite": "divers",
+      "abreviation": null,
+      "multiplicateur": 1,
+      "equivalence_reference": "1 pièce"
+    },
+    {
+      "id": "69f0b40c-8b10-4120-8274-d8e1a9ff99c9",
+      "notes": "Portion de zeste",
+      "unite": "Zeste",
+      "type_unite": "divers",
+      "abreviation": null,
+      "multiplicateur": 1,
+      "equivalence_reference": "1 pièce"
+    },
+    {
+      "id": "7119d483-25fd-4985-b19f-5b633e11088a",
+      "notes": "Conditionnement / unité",
+      "unite": "Rouleau",
+      "type_unite": "divers",
+      "abreviation": null,
+      "multiplicateur": 1,
+      "equivalence_reference": "1 pièce"
+    },
+    {
+      "id": "aabcaaf0-a896-4c35-b511-33c9c0e98595",
+      "notes": "Approximation cuisine",
+      "unite": "Pointe de couteau",
+      "type_unite": "volume",
+      "abreviation": null,
+      "multiplicateur": 1,
+      "equivalence_reference": "0.2 mL"
+    }
+  ],
+  "ingredient_synonyms": [
+    {
+      "id": "2311b025-f1b4-4bf7-ba41-096521a65576",
+      "mot_recette": "petits oignons",
+      "ingredient_id": "363fdfd4-2653-479f-b46a-3854fbecaeed"
+    },
+    {
+      "id": "8189d8be-0715-4367-8af7-568d3edb8018",
+      "mot_recette": "crevettes ou gambas crues",
+      "ingredient_id": "fde27493-abd3-45d6-9cca-872c83441fe9"
+    },
+    {
+      "id": "5ea26bb0-681f-467d-b5c2-adb2416eae07",
+      "mot_recette": "huile d'olive",
+      "ingredient_id": "913542ae-abed-45d6-b8ae-51b8f2118571"
+    },
+    {
+      "id": "d603d0ac-3357-48ea-aaf5-705ebfc11a40",
+      "mot_recette": "paprika",
+      "ingredient_id": "ddf27af8-6a7a-453c-be37-05d3b014033c"
+    },
+    {
+      "id": "61adca7f-af82-4f92-b45e-6c917efcbec8",
+      "mot_recette": "ail en poudre",
+      "ingredient_id": "93728171-5b72-42eb-97e6-5d8a083892ce"
+    },
+    {
+      "id": "e0cb23be-33bc-42e8-942f-f7915d518839",
+      "mot_recette": "bacon ge",
+      "ingredient_id": "86716eff-86f4-474a-9475-72cd07d2e4de"
+    },
+    {
+      "id": "963de07e-3a60-4ef8-b85e-6b93ae4f01e9",
+      "mot_recette": "bacon",
+      "ingredient_id": "86716eff-86f4-474a-9475-72cd07d2e4de"
+    },
+    {
+      "id": "cfa2a621-cf71-4f16-9e7e-64ab49d490fc",
+      "mot_recette": "mayonnaise",
+      "ingredient_id": "6663907b-ba7a-4c3e-bdee-46a43ad84c40"
+    },
+    {
+      "id": "4f8e01e2-aa8c-4d41-894b-2814ee0b8a91",
+      "mot_recette": "miel",
+      "ingredient_id": "0c64f463-fbce-4da3-ab71-8cd09dbf08c7"
+    },
+    {
+      "id": "8b96e7ea-3705-4e59-a2d2-8099249d68d5",
+      "mot_recette": "sauce sriracha",
+      "ingredient_id": "8690b64f-e065-47eb-b081-364a67710dbe"
+    }
+  ],
+  "ingredient_densities": [
+    {
+      "id": "c47ec067-3656-4cd8-ac72-a55fbf2a1cc2",
+      "unite": "Cuillère à soupe",
+      "ingredient_id": "988905da-104f-4c15-875f-1dacc479cac3",
+      "poids_g_approx": 10
+    },
+    {
+      "id": "912037bc-851a-4f4d-be72-b320709413b7",
+      "unite": "Cuillère à café",
+      "ingredient_id": "988905da-104f-4c15-875f-1dacc479cac3",
+      "poids_g_approx": 3
+    },
+    {
+      "id": "58af1842-1b03-4a9b-80e2-6d86def4905e",
+      "unite": "Cuillère à soupe",
+      "ingredient_id": "061a0f7d-9026-4b28-b8b9-c70483026d98",
+      "poids_g_approx": 15
+    },
+    {
+      "id": "e53ec9c8-8c5d-4f91-9498-c4b6edd53821",
+      "unite": "Cuillère à café",
+      "ingredient_id": "061a0f7d-9026-4b28-b8b9-c70483026d98",
+      "poids_g_approx": 5
+    },
+    {
+      "id": "aaa2eff2-a7b6-4214-8cdd-999d934c2362",
+      "unite": "Cuillère à soupe",
+      "ingredient_id": "2512e595-efc5-49f3-9c57-66d88ec7a872",
+      "poids_g_approx": 8
+    },
+    {
+      "id": "9a61f57d-6211-466a-bed9-9a81e4322343",
+      "unite": "Cuillère à soupe",
+      "ingredient_id": "998d6c48-440f-4688-aa64-98e179c7edad",
+      "poids_g_approx": 12
+    },
+    {
+      "id": "af318e8e-3e89-4067-a051-3b9dca1a3976",
+      "unite": "Cuillère à café",
+      "ingredient_id": "30f26710-8fc8-47f7-97de-c8e2a0e8f066",
+      "poids_g_approx": 6
+    },
+    {
+      "id": "ebe5af9b-004f-4770-902d-27d2c6c9923f",
+      "unite": "Cuillère à soupe",
+      "ingredient_id": "30f26710-8fc8-47f7-97de-c8e2a0e8f066",
+      "poids_g_approx": 18
+    },
+    {
+      "id": "209ea77b-ac0f-43a3-956a-36b8d896a3fb",
+      "unite": "Cuillère à café",
+      "ingredient_id": "d1f651ac-2af8-4dba-9799-9fe9e884148e",
+      "poids_g_approx": 4
+    },
+    {
+      "id": "10eb51e4-3ac2-49b1-b782-fca83ea37568",
+      "unite": "Cuillère à soupe",
+      "ingredient_id": "51081a27-4be0-49a7-a147-4af4d4c16df3",
+      "poids_g_approx": 8
+    },
+    {
+      "id": "234d5fbb-dcf0-46ae-a37b-6248383ea661",
+      "unite": "Cuillère à soupe",
+      "ingredient_id": "b9f01650-8a34-4950-be48-440563900a69",
+      "poids_g_approx": 12
+    },
+    {
+      "id": "708025f2-62ce-4d17-9b60-e4ad4fe4967b",
+      "unite": "Cuillère à soupe",
+      "ingredient_id": "2c15e96b-fd57-4eac-9e53-7a8e5e6ebc4e",
+      "poids_g_approx": 15
+    },
+    {
+      "id": "a48a99d2-3118-40d7-b99b-a87c4c17da63",
+      "unite": "Noix (de beurre)",
+      "ingredient_id": "2c15e96b-fd57-4eac-9e53-7a8e5e6ebc4e",
+      "poids_g_approx": 15
+    },
+    {
+      "id": "c63b39e5-d0a3-4564-bf69-77f2a3c8d8a2",
+      "unite": "Cuillère à soupe",
+      "ingredient_id": "913542ae-abed-45d6-b8ae-51b8f2118571",
+      "poids_g_approx": 14
+    },
+    {
+      "id": "4daaa248-d213-43a7-9561-e491a6754cff",
+      "unite": "Cuillère à soupe",
+      "ingredient_id": "9c94afec-5990-4a24-9451-4c2cdc1da596",
+      "poids_g_approx": 14
+    },
+    {
+      "id": "9089aa7c-f103-461c-9026-07a80cab579b",
+      "unite": "Cuillère à café",
+      "ingredient_id": "913542ae-abed-45d6-b8ae-51b8f2118571",
+      "poids_g_approx": 5
+    },
+    {
+      "id": "43256baf-5c18-494b-b2ca-440ab9d7d269",
+      "unite": "Cuillère à café",
+      "ingredient_id": "9c94afec-5990-4a24-9451-4c2cdc1da596",
+      "poids_g_approx": 5
+    },
+    {
+      "id": "088135e1-fb97-4b76-be48-ae64a2f24b38",
+      "unite": "Cuillère à soupe",
+      "ingredient_id": "89f31868-ac00-4a0e-ba8c-2793e29e13a3",
+      "poids_g_approx": 15
+    },
+    {
+      "id": "19f5648b-2c5d-4cd3-bab9-1278d4168da7",
+      "unite": "Cuillère à soupe",
+      "ingredient_id": "f85bdc84-f0fa-4585-8530-2438a875eb24",
+      "poids_g_approx": 15
+    },
+    {
+      "id": "500e1c87-3f74-4e3a-b368-65b68fa00fca",
+      "unite": "Cuillère à soupe",
+      "ingredient_id": "0c64f463-fbce-4da3-ab71-8cd09dbf08c7",
+      "poids_g_approx": 21
+    },
+    {
+      "id": "85235b2b-da82-4ba4-b6e3-d0e3fc2d3c43",
+      "unite": "Cuillère à soupe",
+      "ingredient_id": "a1d41d79-fdb2-44c3-bc2c-863228f71756",
+      "poids_g_approx": 15
+    },
+    {
+      "id": "059ee45a-c190-4614-aa22-3a3361fc30c8",
+      "unite": "Cuillère à soupe",
+      "ingredient_id": "61873ae1-7ad3-4218-a4e3-a23e6338ba78",
+      "poids_g_approx": 18
+    },
+    {
+      "id": "8b0b86c7-014a-4e08-a08d-055193c7ea83",
+      "unite": "Cuillère à soupe",
+      "ingredient_id": "933000fb-77cd-4a73-9f24-1d2d6552692c",
+      "poids_g_approx": 8
+    },
+    {
+      "id": "a5e1f485-22a0-4fee-bd8a-359e7a1044c2",
+      "unite": "Cuillère à soupe",
+      "ingredient_id": "a64d4dad-783e-4f17-95a9-f560f3b52b02",
+      "poids_g_approx": 8
+    },
+    {
+      "id": "21380198-1c45-4814-9c77-58868e86d110",
+      "unite": "Cuillère à soupe",
+      "ingredient_id": "e956b112-0b15-4268-b204-0641445f9176",
+      "poids_g_approx": 8
+    },
+    {
+      "id": "a9de1b52-2cd7-4e86-a275-69abaa1c8ee5",
+      "unite": "Cuillère à soupe",
+      "ingredient_id": "b173456e-a766-4e91-a518-163bf1920102",
+      "poids_g_approx": 8
+    },
+    {
+      "id": "cf66b75c-6a03-4a02-8af8-5c2b72a122fe",
+      "unite": "Cuillère à soupe",
+      "ingredient_id": "7bc3fe81-11d8-478d-9afc-2d60eb00d36f",
+      "poids_g_approx": 4
+    },
+    {
+      "id": "a360f617-26a4-4742-9fbb-c669353b8596",
+      "unite": "Cuillère à soupe",
+      "ingredient_id": "8f5d5fe1-10cc-4e90-91ea-ca34047ad37e",
+      "poids_g_approx": 15
+    },
+    {
+      "id": "a96af4b0-f131-4bb8-9089-b9e4ad69ea65",
+      "unite": "Pièce",
+      "ingredient_id": "6a40ece2-276c-41fc-bb4c-c7f379f9b52d",
+      "poids_g_approx": 100
+    }
+  ],
+  "official_ingredients": [
+    {
+      "id": "234b4d83-1c6a-4af7-9f59-992ac9f6f262",
+      "nom": "Homard",
+      "rayon": "Poissonnerie",
+      "categorie": "Poissons & Fruits de mer",
+      "default_storage": "frosti",
+      "unite_reference": "Gramme",
+      "default_is_fridge": true
+    },
+    {
+      "id": "60c87da7-2b9e-4a58-af91-c135ed25d8c9",
+      "nom": "Huître",
+      "rayon": "Poissonnerie",
+      "categorie": "Poissons & Fruits de mer",
+      "default_storage": "frosti",
+      "unite_reference": "Gramme",
+      "default_is_fridge": true
+    },
+    {
+      "id": "d18a7dc2-5028-4845-858d-f248835d428d",
+      "nom": "Langoustine",
+      "rayon": "Poissonnerie",
+      "categorie": "Poissons & Fruits de mer",
+      "default_storage": "frosti",
+      "unite_reference": "Gramme",
+      "default_is_fridge": true
+    },
+    {
+      "id": "44a56d7a-945f-4f7e-bb5b-69570c4dd5d6",
+      "nom": "Lieu noir",
+      "rayon": "Poissonnerie",
+      "categorie": "Poissons & Fruits de mer",
+      "default_storage": "frosti",
+      "unite_reference": "Gramme",
+      "default_is_fridge": true
+    },
+    {
+      "id": "473b7983-a48b-48ec-aa81-4ac2d7c9bb97",
+      "nom": "Lotte",
+      "rayon": "Poissonnerie",
+      "categorie": "Poissons & Fruits de mer",
+      "default_storage": "frosti",
+      "unite_reference": "Gramme",
+      "default_is_fridge": true
+    },
+    {
+      "id": "5369161f-0e1d-477d-8b88-ecc9d9e85ce0",
+      "nom": "Maquereau",
+      "rayon": "Poissonnerie",
+      "categorie": "Poissons & Fruits de mer",
+      "default_storage": "frosti",
+      "unite_reference": "Gramme",
+      "default_is_fridge": true
+    },
+    {
+      "id": "e835b59b-425f-4bf1-8cbf-413936694bdd",
+      "nom": "Merlan",
+      "rayon": "Poissonnerie",
+      "categorie": "Poissons & Fruits de mer",
+      "default_storage": "frosti",
+      "unite_reference": "Gramme",
+      "default_is_fridge": true
+    },
+    {
+      "id": "b9e819c0-ab24-4264-881f-e5c0b25bee06",
+      "nom": "Moule",
+      "rayon": "Poissonnerie",
+      "categorie": "Poissons & Fruits de mer",
+      "default_storage": "frosti",
+      "unite_reference": "Gramme",
+      "default_is_fridge": true
+    },
+    {
+      "id": "1cdd701e-5fdc-4148-8469-477dd7cb92af",
+      "nom": "Poulpe",
+      "rayon": "Poissonnerie",
+      "categorie": "Poissons & Fruits de mer",
+      "default_storage": "frosti",
+      "unite_reference": "Gramme",
+      "default_is_fridge": true
+    },
+    {
+      "id": "186ca828-3812-4b05-85e8-5cfe73e389d6",
+      "nom": "Saint-Jacques",
+      "rayon": "Poissonnerie",
+      "categorie": "Poissons & Fruits de mer",
+      "default_storage": "frosti",
+      "unite_reference": "Gramme",
+      "default_is_fridge": true
+    },
+    {
+      "id": "dda64b39-a82e-4321-b225-65f949bc5a2a",
+      "nom": "Sardine",
+      "rayon": "Poissonnerie",
+      "categorie": "Poissons & Fruits de mer",
+      "default_storage": "frosti",
+      "unite_reference": "Gramme",
+      "default_is_fridge": true
+    },
+    {
+      "id": "43a0a713-d867-4ae1-8e1c-813440a93d57",
+      "nom": "Saumon",
+      "rayon": "Poissonnerie",
+      "categorie": "Poissons & Fruits de mer",
+      "default_storage": "frosti",
+      "unite_reference": "Gramme",
+      "default_is_fridge": true
+    },
+    {
+      "id": "ecb10e66-f2b0-4cc4-8dac-86d930d9cecc",
+      "nom": "Sole",
+      "rayon": "Poissonnerie",
+      "categorie": "Poissons & Fruits de mer",
+      "default_storage": "frosti",
+      "unite_reference": "Gramme",
+      "default_is_fridge": true
+    },
+    {
+      "id": "0c2d0f8a-a59f-449c-bccc-0ac815e3c2db",
+      "nom": "Thon",
+      "rayon": "Poissonnerie",
+      "categorie": "Poissons & Fruits de mer",
+      "default_storage": "frosti",
+      "unite_reference": "Gramme",
+      "default_is_fridge": true
+    },
+    {
+      "id": "7c639585-df48-46c8-b13c-442c3d9a3206",
+      "nom": "Truite",
+      "rayon": "Poissonnerie",
+      "categorie": "Poissons & Fruits de mer",
+      "default_storage": "frosti",
+      "unite_reference": "Gramme",
+      "default_is_fridge": true
+    },
+    {
+      "id": "837a3427-d981-427c-b635-619de44b34bc",
+      "nom": "Coppa",
+      "rayon": "Charcuterie",
+      "categorie": "Charcuterie",
+      "default_storage": "frosti",
+      "unite_reference": "Gramme",
+      "default_is_fridge": true
+    },
+    {
+      "id": "b8bf530b-75a6-4afe-ba24-2560161f59c1",
+      "nom": "Mortadelle",
+      "rayon": "Charcuterie",
+      "categorie": "Charcuterie",
+      "default_storage": "frosti",
+      "unite_reference": "Gramme",
+      "default_is_fridge": true
+    },
+    {
+      "id": "8c2f5d65-e806-4adc-90bf-b8711e16ebe7",
+      "nom": "Pancetta",
+      "rayon": "Charcuterie",
+      "categorie": "Charcuterie",
+      "default_storage": "frosti",
+      "unite_reference": "Gramme",
+      "default_is_fridge": true
+    },
+    {
+      "id": "47ff5a52-7257-41a3-8556-52da52503544",
+      "nom": "Pâté",
+      "rayon": "Charcuterie",
+      "categorie": "Charcuterie",
+      "default_storage": "frosti",
+      "unite_reference": "Gramme",
+      "default_is_fridge": true
+    },
+    {
+      "id": "bb4be8bd-9d2d-423a-b909-8367167d2798",
+      "nom": "Rillettes",
+      "rayon": "Charcuterie",
+      "categorie": "Charcuterie",
+      "default_storage": "frosti",
+      "unite_reference": "Gramme",
+      "default_is_fridge": true
+    },
+    {
+      "id": "8a120b95-ccd8-45e8-8ac0-45c6a989ed67",
+      "nom": "Rosette",
+      "rayon": "Charcuterie",
+      "categorie": "Charcuterie",
+      "default_storage": "frosti",
+      "unite_reference": "Gramme",
+      "default_is_fridge": true
+    },
+    {
+      "id": "cd181645-1667-4b96-918e-1bedbc4a5c5f",
+      "nom": "Saucisson",
+      "rayon": "Charcuterie",
+      "categorie": "Charcuterie",
+      "default_storage": "frosti",
+      "unite_reference": "Gramme",
+      "default_is_fridge": true
+    },
+    {
+      "id": "e6d5b69f-45f7-4a1c-8075-b91ebec16b1f",
+      "nom": "Cantal",
+      "rayon": "Produits frais",
+      "categorie": "Produits laitiers & Fromages",
+      "default_storage": "frosti",
+      "unite_reference": "Gramme",
+      "default_is_fridge": true
+    },
+    {
+      "id": "e9b15019-5b50-4da6-ac26-9001b1ff2d16",
+      "nom": "Chèvre (fromage)",
+      "rayon": "Produits frais",
+      "categorie": "Produits laitiers & Fromages",
+      "default_storage": "frosti",
+      "unite_reference": "Gramme",
+      "default_is_fridge": true
+    },
+    {
+      "id": "6e2b2bf8-5d23-43f2-8006-54fdc54b133d",
+      "nom": "Comté",
+      "rayon": "Produits frais",
+      "categorie": "Produits laitiers & Fromages",
+      "default_storage": "frosti",
+      "unite_reference": "Gramme",
+      "default_is_fridge": true
+    },
+    {
+      "id": "dc92e0c1-7571-43ef-9bca-021c64c50406",
+      "nom": "Crème épaisse",
+      "rayon": "Produits frais",
+      "categorie": "Produits laitiers & Fromages",
+      "default_storage": "frosti",
+      "unite_reference": "Gramme",
+      "default_is_fridge": true
+    },
+    {
+      "id": "03e5c62d-9115-4975-b88b-2255cedef39d",
+      "nom": "Emmental",
+      "rayon": "Produits frais",
+      "categorie": "Produits laitiers & Fromages",
+      "default_storage": "frosti",
+      "unite_reference": "Gramme",
+      "default_is_fridge": true
+    },
+    {
+      "id": "4ed07723-76d6-4bd2-a1bd-03cb0d063daf",
+      "nom": "Feta",
+      "rayon": "Produits frais",
+      "categorie": "Produits laitiers & Fromages",
+      "default_storage": "frosti",
+      "unite_reference": "Gramme",
+      "default_is_fridge": true
+    },
+    {
+      "id": "a3d9604e-396e-4e5e-a8a0-85065a6ec9be",
+      "nom": "Fromage blanc",
+      "rayon": "Produits frais",
+      "categorie": "Produits laitiers & Fromages",
+      "default_storage": "frosti",
+      "unite_reference": "Gramme",
+      "default_is_fridge": true
+    },
+    {
+      "id": "933000fb-77cd-4a73-9f24-1d2d6552692c",
+      "nom": "Fromage râpé",
+      "rayon": "Produits frais",
+      "categorie": "Produits laitiers & Fromages",
+      "default_storage": "frosti",
+      "unite_reference": "Gramme",
+      "default_is_fridge": true
+    },
+    {
+      "id": "8ba18636-c9ab-4386-9608-b05b3e505b4e",
+      "nom": "Gruyère",
+      "rayon": "Produits frais",
+      "categorie": "Produits laitiers & Fromages",
+      "default_storage": "frosti",
+      "unite_reference": "Gramme",
+      "default_is_fridge": true
+    },
+    {
+      "id": "23bf9511-3ea5-44dc-8f89-685af9c7a131",
+      "nom": "Lait concentré",
+      "rayon": "Produits frais",
+      "categorie": "Produits laitiers & Fromages",
+      "default_storage": "frosti",
+      "unite_reference": "Millilitre",
+      "default_is_fridge": true
+    },
+    {
+      "id": "b05b6092-6d9e-4b63-92f2-402804903d84",
+      "nom": "Mascarpone",
+      "rayon": "Produits frais",
+      "categorie": "Produits laitiers & Fromages",
+      "default_storage": "frosti",
+      "unite_reference": "Gramme",
+      "default_is_fridge": true
+    },
+    {
+      "id": "2d10a02f-1a11-4f26-bf63-7a8a459f4943",
+      "nom": "Mozzarella",
+      "rayon": "Produits frais",
+      "categorie": "Produits laitiers & Fromages",
+      "default_storage": "frosti",
+      "unite_reference": "Gramme",
+      "default_is_fridge": true
+    },
+    {
+      "id": "84c962f7-0cc5-4dbd-ac17-42bb805c41ea",
+      "nom": "Parmesan",
+      "rayon": "Produits frais",
+      "categorie": "Produits laitiers & Fromages",
+      "default_storage": "frosti",
+      "unite_reference": "Gramme",
+      "default_is_fridge": true
+    },
+    {
+      "id": "646cfafa-e4da-4c76-be82-496179e4f987",
+      "nom": "Ricotta",
+      "rayon": "Produits frais",
+      "categorie": "Produits laitiers & Fromages",
+      "default_storage": "frosti",
+      "unite_reference": "Gramme",
+      "default_is_fridge": true
+    },
+    {
+      "id": "3f11d941-8dfc-4bc1-beca-352a1bbdba4b",
+      "nom": "Roquefort",
+      "rayon": "Produits frais",
+      "categorie": "Produits laitiers & Fromages",
+      "default_storage": "frosti",
+      "unite_reference": "Gramme",
+      "default_is_fridge": true
+    },
+    {
+      "id": "e6591ab7-dd11-4f44-a056-0f5832769acc",
+      "nom": "Yaourt nature",
+      "rayon": "Produits frais",
+      "categorie": "Produits laitiers & Fromages",
+      "default_storage": "frosti",
+      "unite_reference": "Gramme",
+      "default_is_fridge": true
+    },
+    {
+      "id": "be04e3cf-910a-4889-9114-842aba8f18ab",
+      "nom": "Yaourt grec",
+      "rayon": "Produits frais",
+      "categorie": "Produits laitiers & Fromages",
+      "default_storage": "frosti",
+      "unite_reference": "Gramme",
+      "default_is_fridge": true
+    },
+    {
+      "id": "c8bcf9f2-b8b1-4ebe-b3ab-28bc4c9e44bc",
+      "nom": "Œuf (poule)",
+      "rayon": "Produits frais",
+      "categorie": "Œufs",
+      "default_storage": "frosti",
+      "unite_reference": "Pièce",
+      "default_is_fridge": true
+    },
+    {
+      "id": "b4d4c871-1cd0-4705-bb5f-ae40d9daab7e",
+      "nom": "Blanc d'œuf",
+      "rayon": "Produits frais",
+      "categorie": "Œufs",
+      "default_storage": "frosti",
+      "unite_reference": "Pièce",
+      "default_is_fridge": true
+    },
+    {
+      "id": "e05968fb-ae4e-4c41-ba8f-18bcf895737f",
+      "nom": "Jaune d'œuf",
+      "rayon": "Produits frais",
+      "categorie": "Œufs",
+      "default_storage": "frosti",
+      "unite_reference": "Pièce",
+      "default_is_fridge": true
+    },
+    {
+      "id": "d721dcee-adb4-4cfe-8042-3214ad3f0c64",
+      "nom": "Ananas",
+      "rayon": "Fruits & légumes",
+      "categorie": "Fruits frais",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "9bb62923-00c0-414e-821e-71ceb25cd167",
+      "nom": "Banane",
+      "rayon": "Fruits & légumes",
+      "categorie": "Fruits frais",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "735263ba-020d-4128-aa6a-cb4948cede32",
+      "nom": "Cassis",
+      "rayon": "Fruits & légumes",
+      "categorie": "Fruits frais",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "45a79526-915b-4944-a9dd-39821ccc4b1e",
+      "nom": "Citron",
+      "rayon": "Fruits & légumes",
+      "categorie": "Fruits frais",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "8c933a72-6416-45f7-8603-e553fe277c65",
+      "nom": "Citron vert",
+      "rayon": "Fruits & légumes",
+      "categorie": "Fruits frais",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "e45b993e-03c2-400e-a8ee-229ba7cb6fbe",
+      "nom": "Clémentine",
+      "rayon": "Fruits & légumes",
+      "categorie": "Fruits frais",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "f65c094e-d185-4dd2-ac8c-8c2b877218d3",
+      "nom": "Coing",
+      "rayon": "Fruits & légumes",
+      "categorie": "Fruits frais",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "7248c968-c935-49a1-87df-c8da631be3ca",
+      "nom": "Datte fraîche",
+      "rayon": "Fruits & légumes",
+      "categorie": "Fruits frais",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "087f981e-dedc-4d6f-b633-8d2d88f9597e",
+      "nom": "Figue",
+      "rayon": "Fruits & légumes",
+      "categorie": "Fruits frais",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "52e2ecfe-55d5-4300-848d-278b2298cfdc",
+      "nom": "Fruit de la passion",
+      "rayon": "Fruits & légumes",
+      "categorie": "Fruits frais",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "f399d8c3-a1ee-498b-9672-43e751d29e33",
+      "nom": "Goyave",
+      "rayon": "Fruits & légumes",
+      "categorie": "Fruits frais",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "a6048697-4533-45db-9c88-bd523d5cfb4d",
+      "nom": "Grenade",
+      "rayon": "Fruits & légumes",
+      "categorie": "Fruits frais",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "be395af7-4360-4aa6-b6c5-a724b35edf32",
+      "nom": "Kaki",
+      "rayon": "Fruits & légumes",
+      "categorie": "Fruits frais",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "960e952b-4ea1-40c4-acdd-d92158d712ec",
+      "nom": "Kiwi",
+      "rayon": "Fruits & légumes",
+      "categorie": "Fruits frais",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "d28adb92-331b-4d01-81cf-2a40803cdbbd",
+      "nom": "Litchi",
+      "rayon": "Fruits & légumes",
+      "categorie": "Fruits frais",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "9614f879-2475-400e-bc3d-036c8f432d81",
+      "nom": "Fenouil",
+      "rayon": "Fruits & légumes",
+      "categorie": "Légumes frais",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "36a38231-519f-45c2-81aa-cc1d3c11a0a1",
+      "nom": "Maïs (épi)",
+      "rayon": "Fruits & légumes",
+      "categorie": "Légumes frais",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "24141f88-1881-436b-af63-d7d26dfe7f9f",
+      "nom": "Oignon blanc",
+      "rayon": "Fruits & légumes",
+      "categorie": "Légumes frais",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "ebe4d74f-613c-4db1-872d-8d63672e871f",
+      "nom": "Panais",
+      "rayon": "Fruits & légumes",
+      "categorie": "Légumes frais",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "df048fef-0baa-4c09-b17b-b2672fbd2d27",
+      "nom": "Petit pois (frais)",
+      "rayon": "Fruits & légumes",
+      "categorie": "Légumes frais",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "0c563f9e-4514-43c6-b71e-4f07d389f0ac",
+      "nom": "Poivron jaune",
+      "rayon": "Fruits & légumes",
+      "categorie": "Légumes frais",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "3049b75e-9e29-4d1b-b81b-20f1ee11fafe",
+      "nom": "Poivron rouge",
+      "rayon": "Fruits & légumes",
+      "categorie": "Légumes frais",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "2bc1bf00-da87-4a44-ae3d-eb672ab8c9ab",
+      "nom": "Poivron vert",
+      "rayon": "Fruits & légumes",
+      "categorie": "Légumes frais",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "1d5f480d-7dd0-4b13-b291-a7e0a0adcce4",
+      "nom": "Potiron / Citrouille",
+      "rayon": "Fruits & légumes",
+      "categorie": "Légumes frais",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "eedbf9aa-0098-480e-9f46-5317d0050117",
+      "nom": "Rutabaga",
+      "rayon": "Fruits & légumes",
+      "categorie": "Légumes frais",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "d8043f4a-84ca-4f68-846f-e07e5333043c",
+      "nom": "Salade batavia",
+      "rayon": "Fruits & légumes",
+      "categorie": "Légumes frais",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "4a3392bd-f4a0-4543-9741-c148170f39bd",
+      "nom": "Salade iceberg",
+      "rayon": "Fruits & légumes",
+      "categorie": "Légumes frais",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "71474bf7-91c1-41c8-9489-c0ef38581d6d",
+      "nom": "Salsifis",
+      "rayon": "Fruits & légumes",
+      "categorie": "Légumes frais",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "66db4376-f069-45c7-bd66-4d8234675e54",
+      "nom": "Tomate cerise",
+      "rayon": "Fruits & légumes",
+      "categorie": "Légumes frais",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "593c4fd2-b328-4877-baf3-7347b3b6f89d",
+      "nom": "Topinambour",
+      "rayon": "Fruits & légumes",
+      "categorie": "Légumes frais",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "a5515c6a-f53a-451d-9f6a-4f5245df30c4",
+      "nom": "Aneth",
+      "rayon": "Fruits & légumes",
+      "categorie": "Herbes fraîches & Aromates",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "4d9b4193-1a10-469d-9e61-b5b32725bd01",
+      "nom": "Basilic",
+      "rayon": "Fruits & légumes",
+      "categorie": "Herbes fraîches & Aromates",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "1eba652b-1edc-4c53-a24e-23f34a956c33",
+      "nom": "Cerfeuil",
+      "rayon": "Fruits & légumes",
+      "categorie": "Herbes fraîches & Aromates",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "b7e2750e-2984-4a74-ad3c-3198605be83a",
+      "nom": "Ciboulette",
+      "rayon": "Fruits & légumes",
+      "categorie": "Herbes fraîches & Aromates",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "14945950-2089-4efd-baa8-b99379d0d2f7",
+      "nom": "Coriandre fraîche",
+      "rayon": "Fruits & légumes",
+      "categorie": "Herbes fraîches & Aromates",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "c7c44898-47f9-4181-8e16-6e95bef1063f",
+      "nom": "Estragon",
+      "rayon": "Fruits & légumes",
+      "categorie": "Herbes fraîches & Aromates",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "3fd92879-ffe6-467b-9712-efec25e4d3f4",
+      "nom": "Gingembre frais",
+      "rayon": "Fruits & légumes",
+      "categorie": "Herbes fraîches & Aromates",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "de2fa665-544e-40ae-a447-518a85ad0548",
+      "nom": "Laurier frais",
+      "rayon": "Fruits & légumes",
+      "categorie": "Herbes fraîches & Aromates",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "d076be07-dddd-492f-b227-4f70b675f28a",
+      "nom": "Menthe",
+      "rayon": "Fruits & légumes",
+      "categorie": "Herbes fraîches & Aromates",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "4d1987d3-7d84-4ead-b238-c5db84b540cc",
+      "nom": "Origan frais",
+      "rayon": "Fruits & légumes",
+      "categorie": "Herbes fraîches & Aromates",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "7bc3fe81-11d8-478d-9afc-2d60eb00d36f",
+      "nom": "Persil plat",
+      "rayon": "Fruits & légumes",
+      "categorie": "Herbes fraîches & Aromates",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "437b63ee-39d1-4e40-b24b-b12496df6648",
+      "nom": "Persil frisé",
+      "rayon": "Fruits & légumes",
+      "categorie": "Herbes fraîches & Aromates",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "c30bd338-a6a0-4c39-bc14-374b47723933",
+      "nom": "Aubergine",
+      "rayon": "Fruits & légumes",
+      "categorie": "Légumes frais",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": true
+    },
+    {
+      "id": "b1277e2d-969d-4de7-948c-b2bcf6e16209",
+      "nom": "Brocoli",
+      "rayon": "Fruits & légumes",
+      "categorie": "Légumes frais",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": true
+    },
+    {
+      "id": "2be9d048-ccee-48a8-8e14-b7f271796820",
+      "nom": "Carotte",
+      "rayon": "Fruits & légumes",
+      "categorie": "Légumes frais",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": true
+    },
+    {
+      "id": "7263e8eb-cf61-4920-bd0a-aeb85a061be3",
+      "nom": "Céleri branche",
+      "rayon": "Fruits & légumes",
+      "categorie": "Légumes frais",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": true
+    },
+    {
+      "id": "601399ce-e39a-427a-8eaf-22493581fc08",
+      "nom": "Céleri-rave",
+      "rayon": "Fruits & légumes",
+      "categorie": "Légumes frais",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": true
+    },
+    {
+      "id": "057cecbc-cfda-4917-bc68-569cec4317eb",
+      "nom": "Chou-fleur",
+      "rayon": "Fruits & légumes",
+      "categorie": "Légumes frais",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": true
+    },
+    {
+      "id": "25449b30-82a5-46e6-901f-2e57d0988585",
+      "nom": "Concombre",
+      "rayon": "Fruits & légumes",
+      "categorie": "Légumes frais",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": true
+    },
+    {
+      "id": "b488feae-21c1-44e3-98bd-fcb319ec5158",
+      "nom": "Courgette",
+      "rayon": "Fruits & légumes",
+      "categorie": "Légumes frais",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": true
+    },
+    {
+      "id": "439fdf32-4e37-4a34-80ea-e0830b970d92",
+      "nom": "Épinard",
+      "rayon": "Fruits & légumes",
+      "categorie": "Légumes frais",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": true
+    },
+    {
+      "id": "2f1671db-c9a3-4bc2-b9c8-c529db4a1b12",
+      "nom": "Haricot vert",
+      "rayon": "Fruits & légumes",
+      "categorie": "Légumes frais",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": true
+    },
+    {
+      "id": "87fcf2a7-0ce2-4fbc-b3f7-322b008b33e2",
+      "nom": "Laitue",
+      "rayon": "Fruits & légumes",
+      "categorie": "Légumes frais",
+      "default_storage": "cellio",
+      "unite_reference": "Millilitre",
+      "default_is_fridge": true
+    },
+    {
+      "id": "02ee98b4-efdf-4afb-8ca6-e5a945c18e44",
+      "nom": "Mâche",
+      "rayon": "Fruits & légumes",
+      "categorie": "Légumes frais",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": true
+    },
+    {
+      "id": "3eb75eeb-b848-4b18-ac78-359f14065a5c",
+      "nom": "Navet",
+      "rayon": "Fruits & légumes",
+      "categorie": "Légumes frais",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": true
+    },
+    {
+      "id": "b69a3f4f-03fb-4b63-8cb1-d39f97a415b8",
+      "nom": "Poireau",
+      "rayon": "Fruits & légumes",
+      "categorie": "Légumes frais",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": true
+    },
+    {
+      "id": "04ce1df1-898c-433c-b2d4-ee99fa4c2112",
+      "nom": "Radis",
+      "rayon": "Fruits & légumes",
+      "categorie": "Légumes frais",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": true
+    },
+    {
+      "id": "91ce76b3-4659-412b-ab19-f0884e2316b8",
+      "nom": "Roquette",
+      "rayon": "Fruits & légumes",
+      "categorie": "Légumes frais",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": true
+    },
+    {
+      "id": "6a40ece2-276c-41fc-bb4c-c7f379f9b52d",
+      "nom": "Tomate",
+      "rayon": "Fruits & légumes",
+      "categorie": "Légumes frais",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": true
+    },
+    {
+      "id": "e4349129-6001-4a54-baed-4a071815009e",
+      "nom": "Abricot",
+      "rayon": "Fruits & légumes",
+      "categorie": "Fruits frais",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": true
+    },
+    {
+      "id": "636ea049-afd8-4ae1-a386-e84655f5875a",
+      "nom": "Cerise",
+      "rayon": "Fruits & légumes",
+      "categorie": "Fruits frais",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": true
+    },
+    {
+      "id": "7850b643-d52b-4ab9-8fb6-9858d7607e46",
+      "nom": "Fraise",
+      "rayon": "Fruits & légumes",
+      "categorie": "Fruits frais",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": true
+    },
+    {
+      "id": "23d92197-e0f9-4804-b326-bc179ba2486d",
+      "nom": "Framboise",
+      "rayon": "Fruits & légumes",
+      "categorie": "Fruits frais",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": true
+    },
+    {
+      "id": "d8d007cd-c24f-44c2-9a42-0a05b9939964",
+      "nom": "Groseille",
+      "rayon": "Fruits & légumes",
+      "categorie": "Fruits frais",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": true
+    },
+    {
+      "id": "8d96eee2-b2cc-4b9b-b206-2b071b799955",
+      "nom": "Myrtille",
+      "rayon": "Fruits & légumes",
+      "categorie": "Fruits frais",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": true
+    },
+    {
+      "id": "7f3fd00d-541c-44e3-8fed-f0ac650230ed",
+      "nom": "Pêche",
+      "rayon": "Fruits & légumes",
+      "categorie": "Fruits frais",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": true
+    },
+    {
+      "id": "58e43480-bdd0-4460-b8c8-73dfc5bb9ff4",
+      "nom": "Prune",
+      "rayon": "Fruits & légumes",
+      "categorie": "Fruits frais",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": true
+    },
+    {
+      "id": "161899e9-1680-4f14-a745-bdd45ec9c97e",
+      "nom": "Raisin",
+      "rayon": "Fruits & légumes",
+      "categorie": "Fruits frais",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": true
+    },
+    {
+      "id": "43bc9316-da8e-4e6d-a32c-e78ebd13e963",
+      "nom": "Échalote",
+      "rayon": "Fruits & légumes",
+      "categorie": "Légumes frais",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "363fdfd4-2653-479f-b46a-3854fbecaeed",
+      "nom": "Oignon jaune",
+      "rayon": "Fruits & légumes",
+      "categorie": "Légumes frais",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "3081f2cd-d781-467d-8dd9-3139f65974f1",
+      "nom": "Oignon rouge",
+      "rayon": "Fruits & légumes",
+      "categorie": "Légumes frais",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "4a0a9927-9f85-4cdb-9b9b-df44e11a8eee",
+      "nom": "Pomme de terre",
+      "rayon": "Fruits & légumes",
+      "categorie": "Légumes frais",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "ee981225-b30d-48d3-bc83-74501867bd55",
+      "nom": "Potimarron",
+      "rayon": "Fruits & légumes",
+      "categorie": "Légumes frais",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "86716eff-86f4-474a-9475-72cd07d2e4de",
+      "nom": "Bacon",
+      "rayon": "Charcuterie",
+      "categorie": "Charcuterie",
+      "default_storage": "frosti",
+      "unite_reference": "Gramme",
+      "default_is_fridge": true
+    },
+    {
+      "id": "fde27493-abd3-45d6-9cca-872c83441fe9",
+      "nom": "Crevette",
+      "rayon": "Poissonnerie",
+      "categorie": "Poissons & Fruits de mer",
+      "default_storage": "frosti",
+      "unite_reference": "Gramme",
+      "default_is_fridge": true
+    },
+    {
+      "id": "da8d6d14-9444-4938-a2aa-c3771e0d3936",
+      "nom": "Baguette",
+      "rayon": "Boulangerie",
+      "categorie": "Pain & Boulangerie",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "9930b353-fa58-4c61-b0e9-c74a7b38f777",
+      "nom": "Biscotte",
+      "rayon": "Boulangerie",
+      "categorie": "Pain & Boulangerie",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "a696a0da-0a18-4e8d-b710-1bfa51f2dbf0",
+      "nom": "Brioche",
+      "rayon": "Boulangerie",
+      "categorie": "Pain & Boulangerie",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "b173456e-a766-4e91-a518-163bf1920102",
+      "nom": "Chapelure",
+      "rayon": "Boulangerie",
+      "categorie": "Pain & Boulangerie",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "e4341628-41f3-46bf-8b81-6001ea9a3479",
+      "nom": "Croissant",
+      "rayon": "Boulangerie",
+      "categorie": "Pain & Boulangerie",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "4de7956f-63e5-4eaa-b4a8-dc94e2fc5624",
+      "nom": "Pain burger",
+      "rayon": "Boulangerie",
+      "categorie": "Pain & Boulangerie",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "8f2f1d18-76ef-4881-b350-9f62ccea4b50",
+      "nom": "Pain complet",
+      "rayon": "Boulangerie",
+      "categorie": "Pain & Boulangerie",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "4ff9b74e-1e43-4541-a8a6-d6359b55d7ff",
+      "nom": "Pain de mie",
+      "rayon": "Boulangerie",
+      "categorie": "Pain & Boulangerie",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "3538b835-28a2-4364-889b-f8e801a82ae4",
+      "nom": "Pain aux céréales",
+      "rayon": "Boulangerie",
+      "categorie": "Pain & Boulangerie",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "f92a9ce0-2982-40d1-b19f-558a6998120b",
+      "nom": "Pâte brisée",
+      "rayon": "Boulangerie",
+      "categorie": "Pain & Boulangerie",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "6ce7d17c-8892-401a-b2aa-0cfc25153bd3",
+      "nom": "Pâte feuilletée",
+      "rayon": "Boulangerie",
+      "categorie": "Pain & Boulangerie",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "f846eaaa-5c55-44ad-8e4e-f73fd1b9fe55",
+      "nom": "Pâte à pizza",
+      "rayon": "Boulangerie",
+      "categorie": "Pain & Boulangerie",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "f37200ee-1e51-45ae-814e-9aa17e9ca474",
+      "nom": "Pâte sablée",
+      "rayon": "Boulangerie",
+      "categorie": "Pain & Boulangerie",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "3498f2e4-491c-4370-ab46-fe3ad75b4006",
+      "nom": "Tortilla / Wrap",
+      "rayon": "Boulangerie",
+      "categorie": "Pain & Boulangerie",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "a5a8e399-d00f-4ca1-892d-bbd029704227",
+      "nom": "Pâtes (tagliatelle)",
+      "rayon": "Épicerie",
+      "categorie": "Féculents & Céréales",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "16294229-e32a-4a19-8305-664f2fd004c6",
+      "nom": "Pâtes (penne)",
+      "rayon": "Épicerie",
+      "categorie": "Féculents & Céréales",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "e6c8d7c9-976c-4c3a-8b9a-8a4d0296f656",
+      "nom": "Polenta",
+      "rayon": "Épicerie",
+      "categorie": "Féculents & Céréales",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "04637480-6fec-4210-b34a-0fa284116054",
+      "nom": "Blé (grain)",
+      "rayon": "Épicerie",
+      "categorie": "Féculents & Céréales",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "ebc99b32-24db-4075-b1f0-67b5246739af",
+      "nom": "Boulgour",
+      "rayon": "Épicerie",
+      "categorie": "Féculents & Céréales",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "ba45f79a-5d97-4371-ab2c-ea7c3fdc25e2",
+      "nom": "Couscous / Semoule",
+      "rayon": "Épicerie",
+      "categorie": "Féculents & Céréales",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "988905da-104f-4c15-875f-1dacc479cac3",
+      "nom": "Farine de blé",
+      "rayon": "Épicerie",
+      "categorie": "Féculents & Céréales",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "0c3ac111-4503-45da-8963-e8d60dd5ec13",
+      "nom": "Farine de sarrasin",
+      "rayon": "Épicerie",
+      "categorie": "Féculents & Céréales",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "fcbadd29-f293-4b5b-8696-e6c9a4ce0091",
+      "nom": "Flocons d'avoine",
+      "rayon": "Épicerie",
+      "categorie": "Féculents & Céréales",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "a64d4dad-783e-4f17-95a9-f560f3b52b02",
+      "nom": "Maïzena",
+      "rayon": "Épicerie",
+      "categorie": "Féculents & Céréales",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "bdb1fabb-116d-44fb-be00-3d4112acbfb1",
+      "nom": "Pâtes (coquillettes)",
+      "rayon": "Épicerie",
+      "categorie": "Féculents & Céréales",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "81faabe4-6124-4ee4-b11e-d059b093d8be",
+      "nom": "Pâtes (spaghetti)",
+      "rayon": "Épicerie",
+      "categorie": "Féculents & Céréales",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "21d303fe-b285-4159-911f-d7ad95670533",
+      "nom": "Quinoa",
+      "rayon": "Épicerie",
+      "categorie": "Féculents & Céréales",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "b9f01650-8a34-4950-be48-440563900a69",
+      "nom": "Riz basmati",
+      "rayon": "Épicerie",
+      "categorie": "Féculents & Céréales",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "e104db1b-dab5-4c47-8950-e77e9c617b75",
+      "nom": "Riz complet",
+      "rayon": "Épicerie",
+      "categorie": "Féculents & Céréales",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "2a6a3502-61a0-4d9d-bb21-e9f612b3ddf0",
+      "nom": "Riz rond",
+      "rayon": "Épicerie",
+      "categorie": "Féculents & Céréales",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "b4c04a62-12a4-4db8-be53-cb14f0a72655",
+      "nom": "Sarrasin (galette)",
+      "rayon": "Épicerie",
+      "categorie": "Féculents & Céréales",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "a07d93e2-17a5-49bc-9e95-271515ac746c",
+      "nom": "Semoule fine",
+      "rayon": "Épicerie",
+      "categorie": "Féculents & Céréales",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "73c92fb8-7514-498e-8dc5-b2321b100e75",
+      "nom": "Fève",
+      "rayon": "Épicerie",
+      "categorie": "Légumineuses",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "ca4bc05e-b03c-4c8c-9417-6fbb8b87e409",
+      "nom": "Haricot blanc (sec)",
+      "rayon": "Épicerie",
+      "categorie": "Légumineuses",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "00565f51-c2ff-4bc2-a341-cf57b9a9d271",
+      "nom": "Haricot rouge (sec)",
+      "rayon": "Épicerie",
+      "categorie": "Légumineuses",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "c778ac07-80b3-4344-9293-2e8c5256a917",
+      "nom": "Lentille corail",
+      "rayon": "Épicerie",
+      "categorie": "Légumineuses",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "6aa4c4e4-29be-407d-8f15-05a2b63204e0",
+      "nom": "Lentille verte",
+      "rayon": "Épicerie",
+      "categorie": "Légumineuses",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "9220f57e-c66c-4bd7-af89-f9bc24a44a3e",
+      "nom": "Pois cassé",
+      "rayon": "Épicerie",
+      "categorie": "Légumineuses",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "e8ae3bef-1731-49d5-bc0f-0341d4da9594",
+      "nom": "Pois chiche",
+      "rayon": "Épicerie",
+      "categorie": "Légumineuses",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "51081a27-4be0-49a7-a147-4af4d4c16df3",
+      "nom": "Cacao en poudre",
+      "rayon": "Épicerie",
+      "categorie": "Épicerie sucrée",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "998d6c48-440f-4688-aa64-98e179c7edad",
+      "nom": "Cassonade",
+      "rayon": "Épicerie",
+      "categorie": "Épicerie sucrée",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "b877c024-a45e-4c27-a710-fe0df7524ffe",
+      "nom": "Chocolat blanc",
+      "rayon": "Épicerie",
+      "categorie": "Épicerie sucrée",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "50121d92-8b9a-4bfc-8d98-c4d901f424b4",
+      "nom": "Chocolat au lait",
+      "rayon": "Épicerie",
+      "categorie": "Épicerie sucrée",
+      "default_storage": "cellio",
+      "unite_reference": "Millilitre",
+      "default_is_fridge": false
+    },
+    {
+      "id": "414d03d7-60e8-4e50-bcfc-e81632b52b02",
+      "nom": "Chocolat noir",
+      "rayon": "Épicerie",
+      "categorie": "Épicerie sucrée",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "e2c2b554-5a08-4b33-9f6a-b9e0ca9510f1",
+      "nom": "Confiture",
+      "rayon": "Épicerie",
+      "categorie": "Épicerie sucrée",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "2d9c2490-61eb-46cb-9ceb-0c30cc03bd32",
+      "nom": "Gélatine (feuille)",
+      "rayon": "Épicerie",
+      "categorie": "Épicerie sucrée",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "d1f651ac-2af8-4dba-9799-9fe9e884148e",
+      "nom": "Levure chimique",
+      "rayon": "Épicerie",
+      "categorie": "Épicerie sucrée",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "7f1fb626-ee2e-46f7-bd16-89e7061bc434",
+      "nom": "Levure boulangère",
+      "rayon": "Épicerie",
+      "categorie": "Épicerie sucrée",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "65139df8-6580-422f-8c52-06f5b6eb79f0",
+      "nom": "Pépites de chocolat",
+      "rayon": "Épicerie",
+      "categorie": "Épicerie sucrée",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "e956b112-0b15-4268-b204-0641445f9176",
+      "nom": "Poudre d'amande",
+      "rayon": "Épicerie",
+      "categorie": "Épicerie sucrée",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "13cdb406-387a-4f34-943a-5cde5a1294c8",
+      "nom": "Sirop d'érable",
+      "rayon": "Épicerie",
+      "categorie": "Épicerie sucrée",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "061a0f7d-9026-4b28-b8b9-c70483026d98",
+      "nom": "Sucre en poudre",
+      "rayon": "Épicerie",
+      "categorie": "Épicerie sucrée",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "2512e595-efc5-49f3-9c57-66d88ec7a872",
+      "nom": "Sucre glace",
+      "rayon": "Épicerie",
+      "categorie": "Épicerie sucrée",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "5b925699-63b9-498f-b110-d4c2bd51e77c",
+      "nom": "Sucre roux",
+      "rayon": "Épicerie",
+      "categorie": "Épicerie sucrée",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "67291c17-cfb5-4408-ad37-3459c0a5e295",
+      "nom": "Vanille (gousse)",
+      "rayon": "Épicerie",
+      "categorie": "Épicerie sucrée",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "273facce-800f-42d1-8702-ff623f2ff211",
+      "nom": "Extrait de vanille",
+      "rayon": "Épicerie",
+      "categorie": "Épicerie sucrée",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "c8e284fa-c762-439f-80bd-bebfdd7aa36a",
+      "nom": "Bouillon cube (bœuf)",
+      "rayon": "Épicerie",
+      "categorie": "Épicerie salée & Condiments",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "c4790a43-5945-4af7-a2f3-1d6815b0de61",
+      "nom": "Bouillon cube (légumes)",
+      "rayon": "Épicerie",
+      "categorie": "Épicerie salée & Condiments",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "4f1f124a-9d2b-4462-a670-9bbc09f2d5ce",
+      "nom": "Bouillon cube (volaille)",
+      "rayon": "Épicerie",
+      "categorie": "Épicerie salée & Condiments",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "fc099c01-24ee-454d-9748-690e36cff5aa",
+      "nom": "Câpre",
+      "rayon": "Épicerie",
+      "categorie": "Épicerie salée & Condiments",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "68084975-f4e5-4569-8bbc-8bbde72b244b",
+      "nom": "Coulis de tomate",
+      "rayon": "Épicerie",
+      "categorie": "Épicerie salée & Condiments",
+      "default_storage": "cellio",
+      "unite_reference": "Millilitre",
+      "default_is_fridge": false
+    },
+    {
+      "id": "61873ae1-7ad3-4218-a4e3-a23e6338ba78",
+      "nom": "Concentré de tomate",
+      "rayon": "Épicerie",
+      "categorie": "Épicerie salée & Condiments",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "c24a3154-cd36-4b6a-bbc6-78aae3968426",
+      "nom": "Cornichon (condiment)",
+      "rayon": "Épicerie",
+      "categorie": "Épicerie salée & Condiments",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "693d5961-c3bc-49cc-90d4-ebe7c9b16b91",
+      "nom": "Ketchup",
+      "rayon": "Épicerie",
+      "categorie": "Épicerie salée & Condiments",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "a1d41d79-fdb2-44c3-bc2c-863228f71756",
+      "nom": "Moutarde",
+      "rayon": "Épicerie",
+      "categorie": "Épicerie salée & Condiments",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "b37594b5-97e4-435e-bcc5-5de01183a768",
+      "nom": "Olive noire",
+      "rayon": "Épicerie",
+      "categorie": "Épicerie salée & Condiments",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "e13a5081-aec9-459a-baa6-cee23490dcc1",
+      "nom": "Olive verte",
+      "rayon": "Épicerie",
+      "categorie": "Épicerie salée & Condiments",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "3f77221b-0127-4ffe-b62b-50466d333d54",
+      "nom": "Pesto",
+      "rayon": "Épicerie",
+      "categorie": "Épicerie salée & Condiments",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "85d1bffc-7795-46f7-8716-0a4686d51651",
+      "nom": "Sauce soja",
+      "rayon": "Épicerie",
+      "categorie": "Épicerie salée & Condiments",
+      "default_storage": "cellio",
+      "unite_reference": "Millilitre",
+      "default_is_fridge": false
+    },
+    {
+      "id": "5ea3dfb8-a512-4053-af24-99588798d983",
+      "nom": "Sauce nuoc-mâm",
+      "rayon": "Épicerie",
+      "categorie": "Épicerie salée & Condiments",
+      "default_storage": "cellio",
+      "unite_reference": "Millilitre",
+      "default_is_fridge": false
+    },
+    {
+      "id": "e61b06ba-147c-4be3-b9aa-de69cef88490",
+      "nom": "Sauce worcestershire",
+      "rayon": "Épicerie",
+      "categorie": "Épicerie salée & Condiments",
+      "default_storage": "cellio",
+      "unite_reference": "Millilitre",
+      "default_is_fridge": false
+    },
+    {
+      "id": "e378c45d-d950-4bc7-965c-7ca7eb8d6530",
+      "nom": "Tabasco",
+      "rayon": "Épicerie",
+      "categorie": "Épicerie salée & Condiments",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "a76f8bbc-ff41-4e5e-90c5-22636841b9da",
+      "nom": "Tomate pelée (boîte)",
+      "rayon": "Épicerie",
+      "categorie": "Épicerie salée & Condiments",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "67d8d633-9923-44fe-bc3e-ace9610ab94a",
+      "nom": "Vinaigre balsamique",
+      "rayon": "Épicerie",
+      "categorie": "Épicerie salée & Condiments",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "8f5d5fe1-10cc-4e90-91ea-ca34047ad37e",
+      "nom": "Vinaigre blanc",
+      "rayon": "Épicerie",
+      "categorie": "Épicerie salée & Condiments",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "d5c332c0-1ef4-4723-b6f0-cd95380d279a",
+      "nom": "Vinaigre de cidre",
+      "rayon": "Épicerie",
+      "categorie": "Épicerie salée & Condiments",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "b13ba446-716d-4eb6-8770-17e3156fc625",
+      "nom": "Baies roses",
+      "rayon": "Épicerie",
+      "categorie": "Épices & Herbes séchées",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "94357ffe-87c5-4144-b416-77e0b5de5d51",
+      "nom": "Basilic séché",
+      "rayon": "Épicerie",
+      "categorie": "Épices & Herbes séchées",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "814d7a10-1008-48e9-b255-c5630feee22f",
+      "nom": "Cannelle",
+      "rayon": "Épicerie",
+      "categorie": "Épices & Herbes séchées",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "579e6440-bd72-47da-82a6-b12877475ff6",
+      "nom": "Cardamome",
+      "rayon": "Épicerie",
+      "categorie": "Épices & Herbes séchées",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "234c8cbc-3a4f-4103-a955-30d5fc60a41a",
+      "nom": "Cinq-épices",
+      "rayon": "Épicerie",
+      "categorie": "Épices & Herbes séchées",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "46f6707a-506b-4687-9b0f-ddafa3c14395",
+      "nom": "Cumin",
+      "rayon": "Épicerie",
+      "categorie": "Épices & Herbes séchées",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "8c0bdfed-d774-415c-8bb3-31204e535323",
+      "nom": "Curcuma",
+      "rayon": "Épicerie",
+      "categorie": "Épices & Herbes séchées",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "daa63d22-f1b2-4359-a8cb-af73f2ee468d",
+      "nom": "Curry (poudre)",
+      "rayon": "Épicerie",
+      "categorie": "Épices & Herbes séchées",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "68fca284-863a-4a99-ae2e-7b5f098ac01c",
+      "nom": "Gingembre en poudre",
+      "rayon": "Épicerie",
+      "categorie": "Épices & Herbes séchées",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "6c45d349-decf-47f1-a713-2da002911581",
+      "nom": "Herbes de Provence",
+      "rayon": "Épicerie",
+      "categorie": "Épices & Herbes séchées",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "ee041cff-eccf-4231-a471-392b1c053e5a",
+      "nom": "Muscade",
+      "rayon": "Épicerie",
+      "categorie": "Épices & Herbes séchées",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "4dc051af-0baa-4043-b2e8-54969576df03",
+      "nom": "Origan séché",
+      "rayon": "Épicerie",
+      "categorie": "Épices & Herbes séchées",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "5337a304-abd5-4061-a9b4-ebcecd2c4661",
+      "nom": "Piment d'Espelette",
+      "rayon": "Épicerie",
+      "categorie": "Épices & Herbes séchées",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "9208662e-ca49-46c4-a1ff-3a1ebe0377b9",
+      "nom": "Piment de Cayenne",
+      "rayon": "Épicerie",
+      "categorie": "Épices & Herbes séchées",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "bc99b450-028f-420b-b9f7-aaabade92050",
+      "nom": "Poivre blanc",
+      "rayon": "Épicerie",
+      "categorie": "Épices & Herbes séchées",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "a5ff8192-e39e-4a62-ad46-de73e4f1f0b5",
+      "nom": "Poivre noir",
+      "rayon": "Épicerie",
+      "categorie": "Épices & Herbes séchées",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "30f26710-8fc8-47f7-97de-c8e2a0e8f066",
+      "nom": "Sel fin",
+      "rayon": "Épicerie",
+      "categorie": "Épices & Herbes séchées",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "81c9bc32-f487-4ab2-aaff-2cd3acfbacaf",
+      "nom": "Sel gros / Fleur de sel",
+      "rayon": "Épicerie",
+      "categorie": "Épices & Herbes séchées",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "11550cce-de0f-4e38-b1f2-1004bde912a4",
+      "nom": "Safran",
+      "rayon": "Épicerie",
+      "categorie": "Épices & Herbes séchées",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "b34663f6-0748-4fcc-a150-b8fd4dc661ce",
+      "nom": "Thym séché",
+      "rayon": "Épicerie",
+      "categorie": "Épices & Herbes séchées",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "5b0e4222-4e34-426b-b825-18f409de0a61",
+      "nom": "Beurre clarifié",
+      "rayon": "Épicerie",
+      "categorie": "Matières grasses",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "c27050a2-eff8-4206-b63a-a6dd548eba95",
+      "nom": "Graisse de canard",
+      "rayon": "Épicerie",
+      "categorie": "Matières grasses",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "7d552deb-639f-4791-99bb-994f4675b865",
+      "nom": "Huile de colza",
+      "rayon": "Épicerie",
+      "categorie": "Matières grasses",
+      "default_storage": "cellio",
+      "unite_reference": "Millilitre",
+      "default_is_fridge": false
+    },
+    {
+      "id": "d49db00c-574e-4b97-b9c4-831d92601520",
+      "nom": "Huile de sésame",
+      "rayon": "Épicerie",
+      "categorie": "Matières grasses",
+      "default_storage": "cellio",
+      "unite_reference": "Millilitre",
+      "default_is_fridge": false
+    },
+    {
+      "id": "d9b05ea9-dd42-4986-a3ce-ae65222d08c7",
+      "nom": "Margarine",
+      "rayon": "Épicerie",
+      "categorie": "Matières grasses",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "93aec379-4eba-4afc-a011-a031ce0755d0",
+      "nom": "Amande",
+      "rayon": "Épicerie",
+      "categorie": "Fruits secs & Oléagineux",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "f0a109d2-03bc-4676-98f8-b83f285fde19",
+      "nom": "Cacahuète",
+      "rayon": "Épicerie",
+      "categorie": "Fruits secs & Oléagineux",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "32f1e428-62eb-4d52-82e3-2ac348d58bbb",
+      "nom": "Graine de courge",
+      "rayon": "Épicerie",
+      "categorie": "Fruits secs & Oléagineux",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "0ffd7f3d-28c9-4bd3-89aa-cfe37d0ef8ce",
+      "nom": "Graine de lin",
+      "rayon": "Épicerie",
+      "categorie": "Fruits secs & Oléagineux",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "7ff2c86a-1956-4fee-b89a-68b44c73cbe9",
+      "nom": "Graine de sésame",
+      "rayon": "Épicerie",
+      "categorie": "Fruits secs & Oléagineux",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "32e3673c-1e88-4f8e-ab65-94a9babfb4b2",
+      "nom": "Graine de tournesol",
+      "rayon": "Épicerie",
+      "categorie": "Fruits secs & Oléagineux",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "d4f58fb2-1286-4b63-8051-af14033e9f4e",
+      "nom": "Noisette",
+      "rayon": "Épicerie",
+      "categorie": "Fruits secs & Oléagineux",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "636cf3c9-b4ad-44b3-a566-0b16df3e000a",
+      "nom": "Noix",
+      "rayon": "Épicerie",
+      "categorie": "Fruits secs & Oléagineux",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "a29c3aad-7ab9-4231-a3ab-4071cb44cc14",
+      "nom": "Noix de cajou",
+      "rayon": "Épicerie",
+      "categorie": "Fruits secs & Oléagineux",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "9014af2a-0c39-40d9-9f66-999d38f040f7",
+      "nom": "Noix de pécan",
+      "rayon": "Épicerie",
+      "categorie": "Fruits secs & Oléagineux",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "93728171-5b72-42eb-97e6-5d8a083892ce",
+      "nom": "Ail",
+      "rayon": "Fruits & légumes",
+      "categorie": "Légumes frais",
+      "default_storage": "cellio",
+      "unite_reference": "Pièce",
+      "default_is_fridge": false
+    },
+    {
+      "id": "9ec252d0-eaa0-40b0-8964-a55c809f6db3",
+      "nom": "Bœuf (rôti)",
+      "rayon": "Boucherie",
+      "categorie": "Viandes",
+      "default_storage": "frosti",
+      "unite_reference": "Gramme",
+      "default_is_fridge": true
+    },
+    {
+      "id": "2c0d7fd8-1ac6-4197-af2d-55c46bcb6b6b",
+      "nom": "Bœuf haché",
+      "rayon": "Boucherie",
+      "categorie": "Viandes",
+      "default_storage": "frosti",
+      "unite_reference": "Gramme",
+      "default_is_fridge": true
+    },
+    {
+      "id": "98414493-afe5-4f2f-ba98-f22d95f4276d",
+      "nom": "Agneau (côtelette)",
+      "rayon": "Boucherie",
+      "categorie": "Viandes",
+      "default_storage": "frosti",
+      "unite_reference": "Gramme",
+      "default_is_fridge": true
+    },
+    {
+      "id": "d92471a5-dd2c-4d65-a588-26ecc117b8a8",
+      "nom": "Agneau (gigot)",
+      "rayon": "Boucherie",
+      "categorie": "Viandes",
+      "default_storage": "frosti",
+      "unite_reference": "Gramme",
+      "default_is_fridge": true
+    },
+    {
+      "id": "999078f6-dbc1-46a1-96b3-0403c89b0918",
+      "nom": "Bavette",
+      "rayon": "Boucherie",
+      "categorie": "Viandes",
+      "default_storage": "frosti",
+      "unite_reference": "Gramme",
+      "default_is_fridge": true
+    },
+    {
+      "id": "0435e563-41c1-4bcc-9cd9-161d7ddc3904",
+      "nom": "Bœuf à bourguignon",
+      "rayon": "Boucherie",
+      "categorie": "Viandes",
+      "default_storage": "frosti",
+      "unite_reference": "Gramme",
+      "default_is_fridge": true
+    },
+    {
+      "id": "715145a1-6ced-4d19-9051-510eff65f130",
+      "nom": "Côte de bœuf",
+      "rayon": "Boucherie",
+      "categorie": "Viandes",
+      "default_storage": "frosti",
+      "unite_reference": "Gramme",
+      "default_is_fridge": true
+    },
+    {
+      "id": "4408a7eb-d93b-4e1b-88ea-ed13f170ef63",
+      "nom": "Entrecôte",
+      "rayon": "Boucherie",
+      "categorie": "Viandes",
+      "default_storage": "frosti",
+      "unite_reference": "Gramme",
+      "default_is_fridge": true
+    },
+    {
+      "id": "52f5be66-7786-4907-9178-d963f6fc2fe2",
+      "nom": "Faux-filet",
+      "rayon": "Boucherie",
+      "categorie": "Viandes",
+      "default_storage": "frosti",
+      "unite_reference": "Gramme",
+      "default_is_fridge": true
+    },
+    {
+      "id": "74610e7a-18e6-4019-b5ab-7e1f7ec31003",
+      "nom": "Filet mignon de porc",
+      "rayon": "Boucherie",
+      "categorie": "Viandes",
+      "default_storage": "frosti",
+      "unite_reference": "Gramme",
+      "default_is_fridge": true
+    },
+    {
+      "id": "53c4e595-9fff-47be-b565-53fe94cb1c4c",
+      "nom": "Jarret de porc",
+      "rayon": "Boucherie",
+      "categorie": "Viandes",
+      "default_storage": "frosti",
+      "unite_reference": "Gramme",
+      "default_is_fridge": true
+    },
+    {
+      "id": "c9eb690b-2ded-46d3-aed6-05ef0ca18aba",
+      "nom": "Jambon blanc",
+      "rayon": "Boucherie",
+      "categorie": "Viandes",
+      "default_storage": "frosti",
+      "unite_reference": "Gramme",
+      "default_is_fridge": true
+    },
+    {
+      "id": "71f4d017-5797-4b49-bbfe-dd7bc8050862",
+      "nom": "Jambon cru",
+      "rayon": "Boucherie",
+      "categorie": "Viandes",
+      "default_storage": "frosti",
+      "unite_reference": "Gramme",
+      "default_is_fridge": true
+    },
+    {
+      "id": "b8a3b8b2-0578-4f5a-ba75-4d81e8e1a9be",
+      "nom": "Lardons",
+      "rayon": "Boucherie",
+      "categorie": "Viandes",
+      "default_storage": "frosti",
+      "unite_reference": "Gramme",
+      "default_is_fridge": true
+    },
+    {
+      "id": "37c0752b-4913-469f-85da-4a0773f3edd0",
+      "nom": "Merguez",
+      "rayon": "Boucherie",
+      "categorie": "Viandes",
+      "default_storage": "frosti",
+      "unite_reference": "Gramme",
+      "default_is_fridge": true
+    },
+    {
+      "id": "0f03a7df-f19f-4a59-ba23-a57ae3366015",
+      "nom": "Onglet",
+      "rayon": "Boucherie",
+      "categorie": "Viandes",
+      "default_storage": "frosti",
+      "unite_reference": "Gramme",
+      "default_is_fridge": true
+    },
+    {
+      "id": "1d959fe5-2263-43df-b04f-1ebe081f4bd8",
+      "nom": "Porc (côte)",
+      "rayon": "Boucherie",
+      "categorie": "Viandes",
+      "default_storage": "frosti",
+      "unite_reference": "Gramme",
+      "default_is_fridge": true
+    },
+    {
+      "id": "16458f64-7f8f-4edd-85e6-07a78087b8fb",
+      "nom": "Porc (rôti)",
+      "rayon": "Boucherie",
+      "categorie": "Viandes",
+      "default_storage": "frosti",
+      "unite_reference": "Gramme",
+      "default_is_fridge": true
+    },
+    {
+      "id": "8d852393-3683-4430-8a50-8364ee7ee93a",
+      "nom": "Rumsteck",
+      "rayon": "Boucherie",
+      "categorie": "Viandes",
+      "default_storage": "frosti",
+      "unite_reference": "Gramme",
+      "default_is_fridge": true
+    },
+    {
+      "id": "dbe202ff-ed87-4112-80fb-a51d607f1a7d",
+      "nom": "Saucisse de Toulouse",
+      "rayon": "Boucherie",
+      "categorie": "Viandes",
+      "default_storage": "frosti",
+      "unite_reference": "Gramme",
+      "default_is_fridge": true
+    },
+    {
+      "id": "77bc6e8d-9920-496d-b5c9-a1ed027a8198",
+      "nom": "Saucisson sec",
+      "rayon": "Boucherie",
+      "categorie": "Viandes",
+      "default_storage": "frosti",
+      "unite_reference": "Gramme",
+      "default_is_fridge": true
+    },
+    {
+      "id": "a841c657-1e95-45a5-9266-ed808035df40",
+      "nom": "Steak haché",
+      "rayon": "Boucherie",
+      "categorie": "Viandes",
+      "default_storage": "frosti",
+      "unite_reference": "Gramme",
+      "default_is_fridge": true
+    },
+    {
+      "id": "602f7e5b-aac3-4a53-b8ad-48e2a9779b15",
+      "nom": "Veau (côte)",
+      "rayon": "Boucherie",
+      "categorie": "Viandes",
+      "default_storage": "frosti",
+      "unite_reference": "Gramme",
+      "default_is_fridge": true
+    },
+    {
+      "id": "4fb7cd4d-a43f-4d9f-8448-2ec60f370061",
+      "nom": "Veau (escalope)",
+      "rayon": "Boucherie",
+      "categorie": "Viandes",
+      "default_storage": "frosti",
+      "unite_reference": "Gramme",
+      "default_is_fridge": true
+    },
+    {
+      "id": "c1108a75-fd32-4ab1-9e4f-43c13eb9cb92",
+      "nom": "Veau (rôti)",
+      "rayon": "Boucherie",
+      "categorie": "Viandes",
+      "default_storage": "frosti",
+      "unite_reference": "Gramme",
+      "default_is_fridge": true
+    },
+    {
+      "id": "dcd095c0-0a9b-4be8-9317-ef03c052dac2",
+      "nom": "Aiguillette de poulet",
+      "rayon": "Boucherie",
+      "categorie": "Volailles",
+      "default_storage": "frosti",
+      "unite_reference": "Gramme",
+      "default_is_fridge": true
+    },
+    {
+      "id": "a83fe02b-c69a-4904-afe6-384094062fc4",
+      "nom": "Blanc de poulet",
+      "rayon": "Boucherie",
+      "categorie": "Volailles",
+      "default_storage": "frosti",
+      "unite_reference": "Gramme",
+      "default_is_fridge": true
+    },
+    {
+      "id": "b4e4f166-ff94-4f0e-bd9e-05d58398503e",
+      "nom": "Canard (magret)",
+      "rayon": "Boucherie",
+      "categorie": "Volailles",
+      "default_storage": "frosti",
+      "unite_reference": "Gramme",
+      "default_is_fridge": true
+    },
+    {
+      "id": "1c75e26d-a884-4643-be25-5d83e120b792",
+      "nom": "Canard (cuisse confite)",
+      "rayon": "Boucherie",
+      "categorie": "Volailles",
+      "default_storage": "frosti",
+      "unite_reference": "Gramme",
+      "default_is_fridge": true
+    },
+    {
+      "id": "da3d9c08-7792-4ac0-a67d-58d9139c55fd",
+      "nom": "Cuisse de poulet",
+      "rayon": "Boucherie",
+      "categorie": "Volailles",
+      "default_storage": "frosti",
+      "unite_reference": "Gramme",
+      "default_is_fridge": true
+    },
+    {
+      "id": "1e9d359b-7e46-4205-8269-2f7b97e601c7",
+      "nom": "Dinde (escalope)",
+      "rayon": "Boucherie",
+      "categorie": "Volailles",
+      "default_storage": "frosti",
+      "unite_reference": "Gramme",
+      "default_is_fridge": true
+    },
+    {
+      "id": "07f1198f-e0ee-4bce-856e-9c3fac162603",
+      "nom": "Dinde (blanc)",
+      "rayon": "Boucherie",
+      "categorie": "Volailles",
+      "default_storage": "frosti",
+      "unite_reference": "Gramme",
+      "default_is_fridge": true
+    },
+    {
+      "id": "7d150d96-09fa-408d-ad86-f64d7c16a29f",
+      "nom": "Foie gras",
+      "rayon": "Boucherie",
+      "categorie": "Volailles",
+      "default_storage": "frosti",
+      "unite_reference": "Gramme",
+      "default_is_fridge": true
+    },
+    {
+      "id": "79d88aae-5a5c-42ea-b285-444cdea31725",
+      "nom": "Foie de volaille",
+      "rayon": "Boucherie",
+      "categorie": "Volailles",
+      "default_storage": "frosti",
+      "unite_reference": "Gramme",
+      "default_is_fridge": true
+    },
+    {
+      "id": "d7a458cb-22ba-429d-b8c3-1751a0057f92",
+      "nom": "Pintade",
+      "rayon": "Boucherie",
+      "categorie": "Volailles",
+      "default_storage": "frosti",
+      "unite_reference": "Gramme",
+      "default_is_fridge": true
+    },
+    {
+      "id": "a561f622-b480-436f-a16b-95a4ca51f7ae",
+      "nom": "Poulet entier",
+      "rayon": "Boucherie",
+      "categorie": "Volailles",
+      "default_storage": "frosti",
+      "unite_reference": "Gramme",
+      "default_is_fridge": true
+    },
+    {
+      "id": "3475f6ac-4c55-4eff-a2b0-60b718bcebca",
+      "nom": "Lapin",
+      "rayon": "Boucherie",
+      "categorie": "Volailles",
+      "default_storage": "frosti",
+      "unite_reference": "Gramme",
+      "default_is_fridge": true
+    },
+    {
+      "id": "dcee097c-6891-4b37-a858-7b8b41ed2abf",
+      "nom": "Anchois",
+      "rayon": "Poissonnerie",
+      "categorie": "Poissons & Fruits de mer",
+      "default_storage": "frosti",
+      "unite_reference": "Gramme",
+      "default_is_fridge": true
+    },
+    {
+      "id": "21ced005-7269-46d0-aa7d-ad0c8d43ae2b",
+      "nom": "Bar",
+      "rayon": "Poissonnerie",
+      "categorie": "Poissons & Fruits de mer",
+      "default_storage": "frosti",
+      "unite_reference": "Gramme",
+      "default_is_fridge": true
+    },
+    {
+      "id": "ff113c9c-9ade-4128-9167-13f4fbcf3e7e",
+      "nom": "Cabillaud",
+      "rayon": "Poissonnerie",
+      "categorie": "Poissons & Fruits de mer",
+      "default_storage": "frosti",
+      "unite_reference": "Gramme",
+      "default_is_fridge": true
+    },
+    {
+      "id": "62d02712-f516-41a9-8ec3-188410be1862",
+      "nom": "Calamar / Encornet",
+      "rayon": "Poissonnerie",
+      "categorie": "Poissons & Fruits de mer",
+      "default_storage": "frosti",
+      "unite_reference": "Gramme",
+      "default_is_fridge": true
+    },
+    {
+      "id": "24593e3f-087a-44a7-b1e4-5bcad90cef4f",
+      "nom": "Colin",
+      "rayon": "Poissonnerie",
+      "categorie": "Poissons & Fruits de mer",
+      "default_storage": "frosti",
+      "unite_reference": "Gramme",
+      "default_is_fridge": true
+    },
+    {
+      "id": "69954aba-ac73-4a56-8210-b5b30011fcb4",
+      "nom": "Crabe",
+      "rayon": "Poissonnerie",
+      "categorie": "Poissons & Fruits de mer",
+      "default_storage": "frosti",
+      "unite_reference": "Gramme",
+      "default_is_fridge": true
+    },
+    {
+      "id": "aa168453-f30e-4ecb-b377-93a03397eefa",
+      "nom": "Dorade",
+      "rayon": "Poissonnerie",
+      "categorie": "Poissons & Fruits de mer",
+      "default_storage": "frosti",
+      "unite_reference": "Gramme",
+      "default_is_fridge": true
+    },
+    {
+      "id": "270e9c9f-1759-45ba-b1d0-1581a6fedf59",
+      "nom": "Gambas",
+      "rayon": "Poissonnerie",
+      "categorie": "Poissons & Fruits de mer",
+      "default_storage": "frosti",
+      "unite_reference": "Gramme",
+      "default_is_fridge": true
+    },
+    {
+      "id": "92d3915d-f1bb-4450-850e-e097e6a0b474",
+      "nom": "Hareng",
+      "rayon": "Poissonnerie",
+      "categorie": "Poissons & Fruits de mer",
+      "default_storage": "frosti",
+      "unite_reference": "Gramme",
+      "default_is_fridge": true
+    },
+    {
+      "id": "8a48693b-bbd9-4ccf-b56a-9c730004b984",
+      "nom": "Chorizo",
+      "rayon": "Charcuterie",
+      "categorie": "Charcuterie",
+      "default_storage": "frosti",
+      "unite_reference": "Gramme",
+      "default_is_fridge": true
+    },
+    {
+      "id": "73747a0b-ac4e-48f7-b195-29176fea07d0",
+      "nom": "Mandarine",
+      "rayon": "Fruits & légumes",
+      "categorie": "Fruits frais",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "a869f3a6-f6c6-4082-abd2-637c2529443c",
+      "nom": "Mangue",
+      "rayon": "Fruits & légumes",
+      "categorie": "Fruits frais",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "93559788-a7e5-4478-acc5-1e0eb41e8745",
+      "nom": "Melon",
+      "rayon": "Fruits & légumes",
+      "categorie": "Fruits frais",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "1261c550-9902-4f30-8584-8696efeeaf6a",
+      "nom": "Mirabelle",
+      "rayon": "Fruits & légumes",
+      "categorie": "Fruits frais",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "4ed2bfde-68b2-497a-870c-3aeae8069094",
+      "nom": "Nectarine",
+      "rayon": "Fruits & légumes",
+      "categorie": "Fruits frais",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "4a13a186-f285-4c04-8ff0-5b29e3948d8b",
+      "nom": "Orange",
+      "rayon": "Fruits & légumes",
+      "categorie": "Fruits frais",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "e861f08f-ee14-4157-b943-1a160924e1fb",
+      "nom": "Pamplemousse",
+      "rayon": "Fruits & légumes",
+      "categorie": "Fruits frais",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "668a01f4-b3be-46f0-bf38-9a5d5d0e8f2b",
+      "nom": "Papaye",
+      "rayon": "Fruits & légumes",
+      "categorie": "Fruits frais",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "530793b7-f259-45cf-9766-bc674abe5474",
+      "nom": "Pastèque",
+      "rayon": "Fruits & légumes",
+      "categorie": "Fruits frais",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "f1ea4569-8be9-49e6-8935-a9a00907b274",
+      "nom": "Poire",
+      "rayon": "Fruits & légumes",
+      "categorie": "Fruits frais",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "3d12d7ed-f603-48b5-9663-056d815fe751",
+      "nom": "Pomme",
+      "rayon": "Fruits & légumes",
+      "categorie": "Fruits frais",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "9a7dfcd8-21a6-457f-bc53-1eb70fdb3881",
+      "nom": "Pruneau frais",
+      "rayon": "Fruits & légumes",
+      "categorie": "Fruits frais",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "4e6c7355-af8e-4c75-be9d-fb44d8ed8fad",
+      "nom": "Rhubarbe",
+      "rayon": "Fruits & légumes",
+      "categorie": "Fruits frais",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "63bd3382-e2f1-40a5-94db-7946fb2f5295",
+      "nom": "Avocat",
+      "rayon": "Fruits & légumes",
+      "categorie": "Légumes frais",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "9fd026dc-02c3-4b12-bc1e-c652f3fa8079",
+      "nom": "Betterave",
+      "rayon": "Fruits & légumes",
+      "categorie": "Légumes frais",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "f4eb812e-bbbd-4317-bd5f-3309d4e9eb4c",
+      "nom": "Blette",
+      "rayon": "Fruits & légumes",
+      "categorie": "Légumes frais",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "de067617-5d23-4a42-8f76-973fbc6171a3",
+      "nom": "Champignon de Paris",
+      "rayon": "Fruits & légumes",
+      "categorie": "Légumes frais",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "401ef636-e588-4509-955e-43a5db6e4b1f",
+      "nom": "Champignon (autre)",
+      "rayon": "Fruits & légumes",
+      "categorie": "Légumes frais",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "85d0a2e7-1dab-45b7-a94e-463318861c43",
+      "nom": "Chou blanc",
+      "rayon": "Fruits & légumes",
+      "categorie": "Légumes frais",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "f86fb9e4-4d23-41b1-84a9-f4a66160c659",
+      "nom": "Chou rouge",
+      "rayon": "Fruits & légumes",
+      "categorie": "Légumes frais",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "3371a654-9955-41dd-b697-04b96a63de8f",
+      "nom": "Chou de Bruxelles",
+      "rayon": "Fruits & légumes",
+      "categorie": "Légumes frais",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "92f9bd08-b2b2-4406-b7f0-ce12dcddf95e",
+      "nom": "Chou-rave",
+      "rayon": "Fruits & légumes",
+      "categorie": "Légumes frais",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "341a794f-c5ca-4572-add9-95e22ece371c",
+      "nom": "Ciboule",
+      "rayon": "Fruits & légumes",
+      "categorie": "Légumes frais",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "945d5a58-c408-4583-90e6-4eaa3dc7a048",
+      "nom": "Cornichon frais",
+      "rayon": "Fruits & légumes",
+      "categorie": "Légumes frais",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "07a5b600-c169-48f4-8568-937d3b91ed27",
+      "nom": "Cresson",
+      "rayon": "Fruits & légumes",
+      "categorie": "Légumes frais",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "4f440134-46fd-4814-97aa-2099ccc63f6c",
+      "nom": "Endive",
+      "rayon": "Fruits & légumes",
+      "categorie": "Légumes frais",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "3f1c43ea-e8bd-4891-9855-b4e11252fd78",
+      "nom": "Piment frais",
+      "rayon": "Fruits & légumes",
+      "categorie": "Herbes fraîches & Aromates",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "2aa203f4-0576-4d64-ba05-1f24fa6cf03a",
+      "nom": "Romarin frais",
+      "rayon": "Fruits & légumes",
+      "categorie": "Herbes fraîches & Aromates",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "98ae37e1-c8b5-473d-a272-0febcefc5df0",
+      "nom": "Sauge fraîche",
+      "rayon": "Fruits & légumes",
+      "categorie": "Herbes fraîches & Aromates",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "c9656017-0705-4c77-bb53-481f888f4a81",
+      "nom": "Thym frais",
+      "rayon": "Fruits & légumes",
+      "categorie": "Herbes fraîches & Aromates",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "44e12f8a-80f8-4165-98bc-619ce64c1c33",
+      "nom": "Artichaut",
+      "rayon": "Fruits & légumes",
+      "categorie": "Légumes frais",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": true
+    },
+    {
+      "id": "112031d8-4882-493b-80d8-c35138c9d54a",
+      "nom": "Asperge",
+      "rayon": "Fruits & légumes",
+      "categorie": "Légumes frais",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": true
+    },
+    {
+      "id": "603c2e71-9700-4c48-9ada-b9be7e78b1bf",
+      "nom": "Pignon de pin",
+      "rayon": "Épicerie",
+      "categorie": "Fruits secs & Oléagineux",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "17857353-55d8-4710-b079-2ea4a2aea238",
+      "nom": "Pistache",
+      "rayon": "Épicerie",
+      "categorie": "Fruits secs & Oléagineux",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "c5876c40-8ce9-4864-8908-f021732bbd81",
+      "nom": "Abricot sec",
+      "rayon": "Épicerie",
+      "categorie": "Fruits secs & Oléagineux",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "a10c0168-571e-486c-bb7e-c971cfc7cf3d",
+      "nom": "Datte séchée",
+      "rayon": "Épicerie",
+      "categorie": "Fruits secs & Oléagineux",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "5a702942-f35b-4da3-9844-97773dc23995",
+      "nom": "Figue séchée",
+      "rayon": "Épicerie",
+      "categorie": "Fruits secs & Oléagineux",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "0c803453-b04b-4f4d-8c74-63f2ec6c1cce",
+      "nom": "Pruneau sec",
+      "rayon": "Épicerie",
+      "categorie": "Fruits secs & Oléagineux",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "74b495e5-b3e6-419b-832d-5777cada25d1",
+      "nom": "Raisin sec",
+      "rayon": "Épicerie",
+      "categorie": "Fruits secs & Oléagineux",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "a2f82883-27ab-4790-80d6-c956366a4efe",
+      "nom": "Bière (cuisine)",
+      "rayon": "Boissons",
+      "categorie": "Boissons & Liquides culinaires",
+      "default_storage": "cellio",
+      "unite_reference": "Millilitre",
+      "default_is_fridge": false
+    },
+    {
+      "id": "975bc744-2287-4e6f-91de-832862535fff",
+      "nom": "Bouillon liquide",
+      "rayon": "Boissons",
+      "categorie": "Boissons & Liquides culinaires",
+      "default_storage": "cellio",
+      "unite_reference": "Millilitre",
+      "default_is_fridge": false
+    },
+    {
+      "id": "b0ae23f7-5c44-4a79-b338-b45ad4a84023",
+      "nom": "Cidre",
+      "rayon": "Boissons",
+      "categorie": "Boissons & Liquides culinaires",
+      "default_storage": "cellio",
+      "unite_reference": "Millilitre",
+      "default_is_fridge": false
+    },
+    {
+      "id": "afa0346d-fa9d-4fa9-a694-b9c918c462e0",
+      "nom": "Eau",
+      "rayon": "Boissons",
+      "categorie": "Boissons & Liquides culinaires",
+      "default_storage": "cellio",
+      "unite_reference": "Millilitre",
+      "default_is_fridge": false
+    },
+    {
+      "id": "c95dd998-f55f-43db-8310-17fc17cb1825",
+      "nom": "Jus de citron",
+      "rayon": "Boissons",
+      "categorie": "Boissons & Liquides culinaires",
+      "default_storage": "cellio",
+      "unite_reference": "Millilitre",
+      "default_is_fridge": false
+    },
+    {
+      "id": "5824a45e-0f77-4ac5-b942-e6e69ddc48b8",
+      "nom": "Jus d'orange",
+      "rayon": "Boissons",
+      "categorie": "Boissons & Liquides culinaires",
+      "default_storage": "cellio",
+      "unite_reference": "Millilitre",
+      "default_is_fridge": false
+    },
+    {
+      "id": "ae7e58f5-6c77-431a-900f-cc7ebe215fdf",
+      "nom": "Lait de coco",
+      "rayon": "Boissons",
+      "categorie": "Boissons & Liquides culinaires",
+      "default_storage": "cellio",
+      "unite_reference": "Millilitre",
+      "default_is_fridge": false
+    },
+    {
+      "id": "cc43be01-170f-491c-b7c8-f14721ec6b9d",
+      "nom": "Vin blanc (cuisine)",
+      "rayon": "Boissons",
+      "categorie": "Boissons & Liquides culinaires",
+      "default_storage": "cellio",
+      "unite_reference": "Millilitre",
+      "default_is_fridge": false
+    },
+    {
+      "id": "c744ecb4-1099-4337-96ba-907c17a5ef90",
+      "nom": "Vin rouge (cuisine)",
+      "rayon": "Boissons",
+      "categorie": "Boissons & Liquides culinaires",
+      "default_storage": "cellio",
+      "unite_reference": "Millilitre",
+      "default_is_fridge": false
+    },
+    {
+      "id": "c6dc8f70-1a3e-440d-8bd7-31ce96e34acf",
+      "nom": "Algue nori",
+      "rayon": "Divers",
+      "categorie": "Autres / Divers",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "8a8431d7-a767-43be-845f-1601db4b3006",
+      "nom": "Anchois à l'huile",
+      "rayon": "Divers",
+      "categorie": "Autres / Divers",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "4be3c9fc-041f-4c69-94c6-69449d51ab79",
+      "nom": "Champignon séché",
+      "rayon": "Divers",
+      "categorie": "Autres / Divers",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "e03c6c47-6bed-4bc5-a045-7ecfcaff697c",
+      "nom": "Levure de bière",
+      "rayon": "Divers",
+      "categorie": "Autres / Divers",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "3061158d-6d99-4e19-b288-40f226030570",
+      "nom": "Pâte de curry",
+      "rayon": "Divers",
+      "categorie": "Autres / Divers",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "5d488262-081e-4651-b037-922fb964e698",
+      "nom": "Pâte miso",
+      "rayon": "Divers",
+      "categorie": "Autres / Divers",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "99c5a899-f73f-4332-bf32-5b8837f9ef5a",
+      "nom": "Sauce tomate cuisinée",
+      "rayon": "Divers",
+      "categorie": "Autres / Divers",
+      "default_storage": "cellio",
+      "unite_reference": "Millilitre",
+      "default_is_fridge": false
+    },
+    {
+      "id": "9c94afec-5990-4a24-9451-4c2cdc1da596",
+      "nom": "Huile de tournesol",
+      "rayon": "Épicerie",
+      "categorie": "Matières grasses",
+      "default_storage": "cellio",
+      "unite_reference": "Millilitre",
+      "default_is_fridge": false
+    },
+    {
+      "id": "913542ae-abed-45d6-b8ae-51b8f2118571",
+      "nom": "Huile d'olive",
+      "rayon": "Épicerie",
+      "categorie": "Matières grasses",
+      "default_storage": "cellio",
+      "unite_reference": "Millilitre",
+      "default_is_fridge": false
+    },
+    {
+      "id": "ddf27af8-6a7a-453c-be37-05d3b014033c",
+      "nom": "Paprika",
+      "rayon": "Épicerie",
+      "categorie": "Épices & Herbes séchées",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "0c64f463-fbce-4da3-ab71-8cd09dbf08c7",
+      "nom": "Miel",
+      "rayon": "Épicerie",
+      "categorie": "Épicerie sucrée",
+      "default_storage": "cellio",
+      "unite_reference": "Gramme",
+      "default_is_fridge": false
+    },
+    {
+      "id": "6663907b-ba7a-4c3e-bdee-46a43ad84c40",
+      "nom": "Mayonnaise",
+      "rayon": "Épicerie",
+      "categorie": "Épicerie salée & Condiments",
+      "default_storage": "frosti",
+      "unite_reference": "Gramme",
+      "default_is_fridge": true
+    },
+    {
+      "id": "8690b64f-e065-47eb-b081-364a67710dbe",
+      "nom": "Sauce sriracha",
+      "rayon": "Condiments",
+      "categorie": "Épicerie salée & Condiments",
+      "default_storage": "cellio",
+      "unite_reference": "Millilitre",
+      "default_is_fridge": false
+    },
+    {
+      "id": "f85bdc84-f0fa-4585-8530-2438a875eb24",
+      "nom": "Crème liquide",
+      "rayon": "Produits frais",
+      "categorie": "Produits laitiers & Fromages",
+      "default_storage": "frosti",
+      "unite_reference": "Millilitre",
+      "default_is_fridge": true
+    },
+    {
+      "id": "89f31868-ac00-4a0e-ba8c-2793e29e13a3",
+      "nom": "Lait demi-écrémé",
+      "rayon": "Produits frais",
+      "categorie": "Produits laitiers & Fromages",
+      "default_storage": "frosti",
+      "unite_reference": "Millilitre",
+      "default_is_fridge": true
+    },
+    {
+      "id": "32da32c9-c289-4c35-b8b8-abea30862038",
+      "nom": "Lait entier",
+      "rayon": "Produits frais",
+      "categorie": "Produits laitiers & Fromages",
+      "default_storage": "frosti",
+      "unite_reference": "Millilitre",
+      "default_is_fridge": true
+    },
+    {
+      "id": "dc5e6791-ccb2-4c62-8aa7-f342ff3e286f",
+      "nom": "Lait écrémé",
+      "rayon": "Produits frais",
+      "categorie": "Produits laitiers & Fromages",
+      "default_storage": "frosti",
+      "unite_reference": "Millilitre",
+      "default_is_fridge": true
+    },
+    {
+      "id": "853ccf45-0f87-4141-af46-485fce02ee07",
+      "nom": "Tofu",
+      "rayon": "Divers",
+      "categorie": "Autres / Divers",
+      "default_storage": "frosti",
+      "unite_reference": "Gramme",
+      "default_is_fridge": true
+    },
+    {
+      "id": "2c15e96b-fd57-4eac-9e53-7a8e5e6ebc4e",
+      "nom": "Beurre",
+      "rayon": "Produits frais",
+      "categorie": "Produits laitiers & Fromages",
+      "default_storage": "frosti",
+      "unite_reference": "Gramme",
+      "default_is_fridge": true
+    },
+    {
+      "id": "9af0569f-5a8f-4be4-9edb-38529d531571",
+      "nom": "Beurre demi-sel",
+      "rayon": "Produits frais",
+      "categorie": "Produits laitiers & Fromages",
+      "default_storage": "frosti",
+      "unite_reference": "Gramme",
+      "default_is_fridge": true
+    }
+  ]
+}

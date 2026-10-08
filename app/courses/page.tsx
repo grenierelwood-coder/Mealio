@@ -2,6 +2,8 @@
 
 import { useEffect, useMemo, useState } from 'react'
 import Link from 'next/link'
+import ShoppingCorrectionDialog from '../components/ShoppingCorrectionDialog'
+import { groupShoppingIssues, shoppingProductKey, type IssueGroup } from '../utils/shopping-issue-policy'
 
 type RecipeLink = {
   recipe_id: string
@@ -27,6 +29,7 @@ type ShoppingItem = {
   stock_stored_quantity: number | null
 
   unite: string | null
+  pantry_pack_quantity?: number | null
   quantity_mode?: 'quantity' | 'presence'
   rayon: string | null
 
@@ -54,6 +57,7 @@ type ShoppingList = {
 }
 
 type ShoppingIssue = {
+  recipe_id?: string | null
   id?: string
   list_id: string
   shopping_item_id?: string | null
@@ -95,7 +99,7 @@ type StatusFilter =
 
 type ReplenishmentSuggestion = {
   key: string
-  source: 'threshold' | 'recurring'
+  source: 'threshold' | 'recurring' | 'almost_finished' | 'history'
   rule_id: string
   ingredient_id: string | null
   produit: string
@@ -111,6 +115,7 @@ type ReplenishmentSuggestion = {
 }
 
 type FavoriteIngredient = {
+  default_purchase_quantity?: number
   ingredient_id: string
   nom: string
   categorie: string | null
@@ -455,7 +460,7 @@ function getBoughtQuantity(
  * achetée à elle seule.
  */
 function isItemBought(item: ShoppingItem): boolean {
-  const required = safeQuantity(item.qte)
+  const required = getInitialPurchaseQuantity(item)
   const bought = getBoughtQuantity(item)
 
   // La quantité réellement saisie est la seule source de vérité.
@@ -465,7 +470,7 @@ function isItemBought(item: ShoppingItem): boolean {
 }
 
 function getItemPurchaseProgress(item: ShoppingItem): string {
-  const required = safeQuantity(item.qte)
+  const required = getInitialPurchaseQuantity(item)
   const bought = getBoughtQuantity(item)
 
   if (isItemBought(item)) {
@@ -483,7 +488,7 @@ function getRemainingQuantity(
   item: ShoppingItem
 ): number {
   const required =
-    safeQuantity(item.qte)
+    getInitialPurchaseQuantity(item)
 
   const bought =
     getBoughtQuantity(item)
@@ -506,7 +511,7 @@ function getEffectiveRemainingQuantity(
   item: ShoppingItem
 ): number {
   const required =
-    safeQuantity(item.qte)
+    getInitialPurchaseQuantity(item)
 
   const bought =
     getEffectiveBoughtQuantity(item)
@@ -665,6 +670,13 @@ export default function CoursesPage() {
       null
     )
 
+  const [correction, setCorrection] = useState<IssueGroup | null>(null)
+  const issueGroups = useMemo(() => groupShoppingIssues(data?.issues || []), [data?.issues])
+  function openCorrection(product: string, item?: ShoppingItem) {
+    const group = issueGroups.find(g => g.key === shoppingProductKey(product))
+    if (group) setCorrection(group)
+    else setCorrection({key:shoppingProductKey(product),produit:product,issues:[{produit:product,issue_type:'STOCK_MATCH_REVIEW',message:'Vérifier la correspondance de cet article.',shopping_item_id:item?.id}]})
+  }
   const [loading, setLoading] =
     useState(true)
 
@@ -800,7 +812,7 @@ export default function CoursesPage() {
         body: JSON.stringify({
           produit: favorite.nom,
           ingredient_id: favorite.ingredient_id,
-          quantity: 1,
+          quantity: favorite.default_purchase_quantity ?? 1,
           unite: favorite.unite || 'Pièce',
           source: 'favorite',
         }),
@@ -831,6 +843,18 @@ export default function CoursesPage() {
     } finally {
       setLoadingReplenishment(false)
     }
+  }
+
+  async function postponePantry(suggestion: ReplenishmentSuggestion) {
+    if(addingReplenishment || !suggestion.ingredient_id) return
+    setAddingReplenishment(suggestion.key)
+    try {
+      const response=await fetch('/api/pantry/signals',{method:'PATCH',headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({ingredient_id:suggestion.ingredient_id,action:suggestion.source==='history'?'snooze':'cancel'})})
+      const result=await response.json();if(!response.ok) throw new Error(result.error || 'Impossible de reporter.')
+      await loadReplenishmentCockpit()
+    } catch(err){setError(err instanceof Error?err.message:'Impossible de reporter.')}
+    finally{setAddingReplenishment(null)}
   }
 
   async function addReplenishmentSuggestion(suggestion: ReplenishmentSuggestion) {
@@ -886,6 +910,7 @@ export default function CoursesPage() {
       }
 
       setData(result)
+      return true
     } catch (err) {
       console.error(
         '❌ Erreur chargement courses :',
@@ -897,6 +922,7 @@ export default function CoursesPage() {
           ? err.message
           : 'Impossible de charger la liste de courses.'
       )
+      return false
     } finally {
       if (showLoading) setLoading(false)
     }
@@ -1013,16 +1039,19 @@ export default function CoursesPage() {
    * --------------------------------------------------------------------------
    */
 
-  async function generateShoppingList() {
+  async function generateShoppingList(afterCorrection: unknown = false) {
     if (generating) {
-      return
+      return false
     }
 
     let dateStart = generationPeriod.start
     let dateEnd = generationPeriod.end
     let includeFuture = false
 
-    if (futurePlanningCount > 0) {
+    if (afterCorrection === true) {
+      includeFuture = Boolean(data?.list?.period_end && data.list.period_end > generationPeriod.end)
+    }
+    if (futurePlanningCount > 0 && afterCorrection !== true) {
       const activeEndDate = new Date(`${generationPeriod.end}T12:00:00`)
       const nextEndDate = new Date(activeEndDate)
       nextEndDate.setDate(nextEndDate.getDate() + 7)
@@ -1078,9 +1107,10 @@ export default function CoursesPage() {
           'Liste de courses mise à jour.'
       )
 
-      await loadShoppingList()
+      if (!await loadShoppingList()) throw new Error('Liste recalculée, mais impossible de relire les courses. Actualiser ou réessayer.')
       await loadReplenishmentCockpit()
       await loadPlanningPeriod()
+      return true
     } catch (err) {
       console.error(
         '❌ Erreur génération courses :',
@@ -1092,6 +1122,7 @@ export default function CoursesPage() {
           ? err.message
           : 'Impossible de générer la liste de courses.'
       )
+      return false
     } finally {
       setGenerating(false)
     }
@@ -1103,119 +1134,8 @@ export default function CoursesPage() {
    * --------------------------------------------------------------------------
    */
 
-  async function toggleItem(
-    item: ShoppingItem
-  ) {
-    if (
-      updatingItems.has(item.id)
-    ) {
-      return
-    }
-
-    setUpdatingItems(
-      current => {
-        const next =
-          new Set(current)
-
-        next.add(item.id)
-
-        return next
-      }
-    )
-
-    setError(null)
-
-    try {
-      const response =
-        await fetch(
-          '/api/shopping-list/items',
-          {
-            method: 'PATCH',
-            headers: {
-              'Content-Type':
-                'application/json',
-            },
-            body: JSON.stringify({
-              id: item.id,
-              expected_updated_at: item.updated_at,
-              is_checked:
-                !item.is_checked,
-            }),
-          }
-        )
-
-      const result =
-        await response.json()
-
-      if (!response.ok) {
-        if (response.status === 409) {
-          await loadShoppingList(false)
-        }
-        throw new Error(
-          result?.error ??
-            'Impossible de mettre à jour l’article.'
-        )
-      }
-
-      setData(
-        current => {
-          if (!current) {
-            return current
-          }
-
-          const nextItems =
-            current.items.map(
-              currentItem =>
-                currentItem.id ===
-                item.id
-                  ? {
-                      ...currentItem,
-                      is_checked:
-                        !currentItem.is_checked,
-                    }
-                  : currentItem
-            )
-
-          const checked =
-            nextItems.filter(
-              currentItem => isItemBought(currentItem)
-            ).length
-
-          return {
-            ...current,
-            items: nextItems,
-            total:
-              nextItems.length,
-            checked,
-            unchecked:
-              nextItems.length -
-              checked,
-          }
-        }
-      )
-    } catch (err) {
-      console.error(
-        '❌ Erreur coche article :',
-        err
-      )
-
-      setError(
-        err instanceof Error
-          ? err.message
-          : 'Impossible de mettre à jour l’article.'
-      )
-    } finally {
-      setUpdatingItems(
-        current => {
-          const next =
-            new Set(current)
-
-          next.delete(item.id)
-
-          return next
-        }
-      )
-    }
+  async function toggleItem(item: ShoppingItem) {
+    await patchItem(item, { is_checked: !item.is_checked })
   }
 
   /*
@@ -1232,7 +1152,7 @@ export default function CoursesPage() {
     item: ShoppingItem,
     delta: number
   ) {
-    if (item.quantity_mode === 'presence') return
+    if (item.quantity_mode === 'presence' && !item.pantry_pack_quantity) return
     if (
       updatingItems.has(item.id)
     ) {
@@ -1243,14 +1163,16 @@ export default function CoursesPage() {
       getInitialPurchaseQuantity(item)
 
     const step =
-      getQuantityStep(item.unite)
+      item.pantry_pack_quantity || getQuantityStep(item.unite)
 
-    const next =
+    const adjusted =
       adjustQuantity(
         current,
         delta,
         step
       )
+
+    const next = item.pantry_pack_quantity ? Math.max(item.pantry_pack_quantity, adjusted) : adjusted
 
     await patchItem(
       item,
@@ -1280,7 +1202,7 @@ export default function CoursesPage() {
     item: ShoppingItem,
     delta: number
   ) {
-    if (item.quantity_mode === 'presence') return
+    if (item.quantity_mode === 'presence' && !item.pantry_pack_quantity) return
     if (
       updatingItems.has(item.id)
     ) {
@@ -1291,7 +1213,7 @@ export default function CoursesPage() {
       getBoughtQuantity(item)
 
     const step =
-      getQuantityStep(item.unite)
+      item.pantry_pack_quantity || getQuantityStep(item.unite)
 
     const next =
       adjustQuantity(
@@ -1956,6 +1878,7 @@ export default function CoursesPage() {
 
   return (
     <main className="min-h-screen bg-stone-50 text-slate-900">
+      {correction && <ShoppingCorrectionDialog key={correction.key} group={correction} ingredientId={data?.items.find(i=>shoppingProductKey(i.produit)===correction.key)?.ingredient_id} onClose={()=>setCorrection(null)} onRegenerate={()=>generateShoppingList(true)} />}
       {/* =====================================================================
           NAVIGATION
           ===================================================================== */}
@@ -2019,21 +1942,13 @@ export default function CoursesPage() {
           </div>
         )}
 
-        {data?.issues && data.issues.length > 0 && (
-          <section className="mb-5 rounded-2xl border border-amber-200 bg-amber-50 p-4 shadow-sm sm:p-5">
-            <div className="font-black text-amber-950">⚠️ Points à vérifier — sans bloquer les courses</div>
-            <p className="mt-1 text-sm text-amber-900">Mealio a généré la liste. Certains articles ont toutefois une correspondance ou une conversion qui mérite une vérification.</p>
-            <div className="mt-3 space-y-3">
-              {data.issues.map(issue => (
-                <div key={issue.id ?? `${issue.issue_type}-${issue.produit}-${issue.message}`} className="rounded-xl border border-amber-200 bg-white p-3">
-                  <div className="font-bold text-slate-900">{issue.produit}{issue.unit ? ` · unité : ${issue.unit}` : ''}</div>
-                  <div className="mt-1 text-xs text-amber-900">{issue.message}</div>
-                  <div className="mt-2 rounded-lg bg-amber-50 px-3 py-2 text-xs font-semibold text-amber-950">💡 {issue.resolution_hint}</div>
-                </div>
-              ))}
-            </div>
-          </section>
-        )}
+        {!loading && data?.list && issueGroups.length === 0 && <p className="mb-4 text-sm text-slate-500">Aucune correction signalée par le dernier calcul. Le bouton « Enregistrer et recalculer » apparaît lorsqu’un produit à vérifier est ouvert.</p>}
+        {issueGroups.length > 0 && <section className="mb-5 rounded-2xl border border-amber-200 bg-amber-50 p-4">
+          <details><summary className="cursor-pointer font-black text-amber-950">⚠️ {issueGroups.length} produit(s) à vérifier · les courses restent disponibles</summary>
+            <p className="mt-2 text-sm text-amber-900">Ouvre « Corriger » sur un produit. Pour une association ou un poids moyen, la fenêtre propose « Enregistrer et recalculer les courses ». Pour une recette ou un stock à modifier, elle ouvre l’écran concerné.</p>
+            <div className="mt-3 space-y-2">{issueGroups.map(group => <button key={group.key} type="button" disabled={generating} onClick={()=>setCorrection(group)} className="flex min-h-12 w-full items-center justify-between gap-3 rounded-xl border border-amber-200 bg-white p-3 text-left"><span className="font-bold">{group.produit}</span><span className="text-xs font-bold text-amber-900">{group.issues.length} point(s) · Corriger →</span></button>)}</div>
+          </details>
+        </section>}
 
         {/* ===================================================================
             LISTE TERMINÉE
@@ -2146,23 +2061,24 @@ export default function CoursesPage() {
               <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-white text-2xl shadow-sm">🔔</div>
               <div className="min-w-0 flex-1">
                 <div className="font-black text-purple-950">Réapprovisionnement détecté</div>
-                <p className="mt-1 text-xs leading-5 text-purple-900/80">Mealio surveille automatiquement les règles du foyer. Les propositions restent à ta décision.</p>
+                <p className="mt-1 text-xs leading-5 text-purple-900/80">Mealio vérifie les règles, les produits presque terminés et le rythme des achats du foyer. Les propositions restent à ta décision.</p>
               </div>
             </div>
 
             {loadingReplenishment ? (
-              <div className="mt-3 rounded-xl bg-white p-3 text-sm text-slate-500">Vérification des seuils et récurrents…</div>
+              <div className="mt-3 rounded-xl bg-white p-3 text-sm text-slate-500">Vérification des réapprovisionnements…</div>
             ) : (
               <div className="mt-3 space-y-2">
                 {replenishmentSuggestions.map(suggestion => (
                   <div key={suggestion.key} className="flex flex-col gap-3 rounded-xl bg-white p-3 sm:flex-row sm:items-center sm:justify-between">
                     <div className="min-w-0">
                       <div className="font-black">{suggestion.produit} · {formatQuantity(suggestion.quantity, suggestion.unite)}</div>
-                      <div className="mt-1 text-xs text-slate-600">{suggestion.source === 'threshold' ? '⚖️ Seuil' : '🔁 Récurrent'} · {suggestion.reason}</div>
+                      <div className="mt-1 text-xs text-slate-600">{suggestion.source === 'threshold' ? '⚖️ Seuil' : suggestion.source === 'recurring' ? '🔁 Récurrent' : suggestion.source === 'almost_finished' ? '🟠 Presque terminé' : '📅 Historique'} · {suggestion.reason}</div>
                     </div>
                     <button type="button" onClick={() => void addReplenishmentSuggestion(suggestion)} disabled={addingReplenishment !== null} className="shrink-0 rounded-xl bg-purple-700 px-4 py-2.5 text-sm font-black text-white hover:bg-purple-800 disabled:opacity-50">
                       {addingReplenishment === suggestion.key ? '…' : 'Ajouter aux courses'}
                     </button>
+                    {(suggestion.source==='history' || suggestion.source==='almost_finished') && <button disabled={addingReplenishment!==null} onClick={()=>void postponePantry(suggestion)} className="min-h-11 rounded-xl border px-3 text-xs font-bold">{suggestion.source==='history'?'Me le rappeler dans 7 jours':'Annuler le signal'}</button>}
                   </div>
                 ))}
               </div>
@@ -2271,7 +2187,7 @@ export default function CoursesPage() {
                       <div key={favorite.ingredient_id} className="flex items-center justify-between gap-3 rounded-xl bg-white p-3 shadow-sm">
                         <div className="min-w-0">
                           <div className="truncate font-bold">{favorite.nom}</div>
-                          <div className="text-xs text-slate-500">{favorite.purchase_count} achat{favorite.purchase_count > 1 ? 's' : ''} · +1 {favorite.unite}</div>
+                          <div className="text-xs text-slate-500">{favorite.purchase_count} achat{favorite.purchase_count > 1 ? 's' : ''} · +{formatQuantity(favorite.default_purchase_quantity ?? 1, favorite.unite)}</div>
                         </div>
                         <button
                           type="button"
@@ -2673,9 +2589,7 @@ export default function CoursesPage() {
                                   )
 
                                 const step =
-                                  getQuantityStep(
-                                    item.unite
-                                  )
+                                  item.pantry_pack_quantity || getQuantityStep(item.unite)
 
                                 /*
                                  * ------------------------------------------------
@@ -2804,7 +2718,7 @@ export default function CoursesPage() {
                                                 À acheter
                                               </div>
 
-                                              {item.quantity_mode === 'presence' ? (
+                                              {item.quantity_mode === 'presence' && !item.pantry_pack_quantity ? (
                                                 <div className="mt-2 rounded-xl bg-amber-50 px-3 py-3 text-center text-sm font-black text-amber-900">Présence uniquement</div>
                                               ) : (
                                               <div className="mt-2 flex items-center gap-2">
@@ -2819,7 +2733,7 @@ export default function CoursesPage() {
                                                   disabled={
                                                     updating ||
                                                     purchaseQuantity <=
-                                                      0
+                                                      (item.pantry_pack_quantity || 0)
                                                   }
                                                   className="flex h-9 w-9 items-center justify-center rounded-xl border border-slate-200 bg-white text-lg font-black shadow-sm disabled:opacity-40"
                                                 >
@@ -2830,7 +2744,7 @@ export default function CoursesPage() {
                                                   {formatQuantity(
                                                     purchaseQuantity,
                                                     item.unite,
-                                                    item.quantity_mode
+                                                    item.pantry_pack_quantity ? 'quantity' : item.quantity_mode
                                                   )}
                                                 </div>
 
@@ -2853,7 +2767,8 @@ export default function CoursesPage() {
 
                                               )}
 
-                                              {item.quantity_mode !== 'presence' && (
+                                              {item.pantry_pack_quantity ? <p className="mt-1 text-center text-xs font-bold text-emerald-700">×{formatNumber(purchaseQuantity / item.pantry_pack_quantity)} format(s)</p> : null}
+                                              {(item.quantity_mode !== 'presence' || item.pantry_pack_quantity) && (
                                                 <div className="mt-1 text-center text-[10px] text-slate-400">
                                                   Pas :{' '}
                                                   {formatNumber(
@@ -2868,7 +2783,7 @@ export default function CoursesPage() {
                                                 Acheté
                                               </div>
 
-                                              {item.quantity_mode === 'presence' ? (
+                                              {item.quantity_mode === 'presence' && !item.pantry_pack_quantity ? (
                                                 <div className="mt-2 rounded-xl bg-amber-50 px-3 py-3 text-center text-sm font-black text-amber-900">{getBoughtQuantity(item) > 0 ? 'Présent / acheté' : 'À acheter'}</div>
                                               ) : (
                                               <div className="mt-2 flex items-center gap-2">
@@ -2894,7 +2809,7 @@ export default function CoursesPage() {
                                                   {formatQuantity(
                                                     boughtQuantity,
                                                     item.unite,
-                                                    item.quantity_mode
+                                                    item.pantry_pack_quantity ? 'quantity' : item.quantity_mode
                                                   )}
                                                 </div>
 
@@ -2917,13 +2832,13 @@ export default function CoursesPage() {
 
                                               )}
 
-                                              {item.quantity_mode !== 'presence' && (
+                                              {(item.quantity_mode !== 'presence' || item.pantry_pack_quantity) && (
                                                 <div className="mt-1 text-center text-[10px] font-bold text-slate-400">
                                                   Reste :{' '}
                                                   {formatQuantity(
                                                     remainingQuantity,
                                                     item.unite,
-                                                    item.quantity_mode
+                                                    item.pantry_pack_quantity ? 'quantity' : item.quantity_mode
                                                   )}
                                                 </div>
                                               )}
@@ -3030,9 +2945,9 @@ export default function CoursesPage() {
                                             <span className={`h-2 w-2 rounded-full ${getStatusDot(item)}`} />
                                             Besoin {formatQuantity(item.qte, item.unite, item.quantity_mode)}
                                           </span>
-                                          <span className="rounded-full bg-white/70 px-2 py-1 text-[10px] font-bold text-slate-500">{getStatusLabel(item)}</span>
+                                          {getStatusLabel(item) === 'À vérifier' ? <button type="button" disabled={generating} onClick={()=>openCorrection(item.produit,item)} className="rounded-full bg-amber-100 px-3 py-2 text-xs font-bold text-amber-900 underline">À vérifier →</button> : <span className="rounded-full bg-white/70 px-2 py-1 text-[10px] font-bold text-slate-500">{getStatusLabel(item)}</span>}
                                         </div>
-                                        {item.quantity_mode === 'presence' ? (
+                                        {item.quantity_mode === 'presence' && !item.pantry_pack_quantity ? (
                                           <div className="mt-3 flex items-center justify-between rounded-xl bg-amber-50 px-3 py-2">
                                             <span className="text-[10px] font-black uppercase tracking-wide text-amber-700">Besoin</span>
                                             <span className="text-sm font-black text-amber-900">Présence uniquement</span>
@@ -3041,20 +2956,19 @@ export default function CoursesPage() {
                                           <div className="mt-3 flex items-center justify-between rounded-xl bg-white/70 px-3 py-2">
                                             <span className="text-[10px] font-black uppercase tracking-wide text-slate-400">À acheter</span>
                                             <div className="flex items-center gap-2">
-                                              <button type="button" onClick={() => void changePurchaseQuantity(item, -1)} disabled={updating || purchaseQuantity <= 0} className="flex h-8 w-8 items-center justify-center rounded-lg border border-slate-200 bg-white text-lg font-black disabled:opacity-40">−</button>
+                                              <button type="button" onClick={() => void changePurchaseQuantity(item, -1)} disabled={updating || purchaseQuantity <= (item.pantry_pack_quantity || 0)} className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg border border-slate-200 bg-white text-lg font-black disabled:opacity-40">−</button>
                                               <span className="min-w-[90px] text-center text-sm font-black">{formatQuantity(purchaseQuantity, item.unite)}</span>
-                                              <button type="button" onClick={() => void changePurchaseQuantity(item, 1)} disabled={updating} className="flex h-8 w-8 items-center justify-center rounded-lg border border-slate-200 bg-white text-lg font-black disabled:opacity-40">+</button>
+                                              <button type="button" onClick={() => void changePurchaseQuantity(item, 1)} disabled={updating} className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg border border-slate-200 bg-white text-lg font-black disabled:opacity-40">+</button>
                                             </div>
                                           </div>
                                         )}
 
-                                        {data?.issues?.filter(issue => issue.shopping_item_id === item.id).map(issue => (
-                                          <div key={issue.id ?? `${issue.issue_type}-${item.id}`} className="mt-3 rounded-xl border border-amber-200 bg-amber-50 px-3 py-2">
-                                            <div className="text-xs font-black text-amber-950">⚠️ Pourquoi ?</div>
-                                            <div className="mt-1 text-xs leading-5 text-amber-900">{issue.message}</div>
-                                            <div className="mt-2 text-[11px] font-semibold leading-5 text-amber-800">💡 {issue.resolution_hint}</div>
-                                          </div>
-                                        ))}
+                                        {item.pantry_pack_quantity ? (
+                                          <p className="mt-1 text-xs font-semibold text-emerald-700">
+                                            ×{formatNumber(purchaseQuantity / item.pantry_pack_quantity)} · Format habituel : {formatQuantity(item.pantry_pack_quantity, item.unite)}
+                                          </p>
+                                        ) : null}
+                                        {getStatusLabel(item) !== 'À vérifier' && issueGroups.some(g=>g.key===shoppingProductKey(item.produit)) && <button type="button" disabled={generating} onClick={()=>openCorrection(item.produit,item)} className="mt-3 min-h-11 rounded-xl border border-amber-200 bg-amber-50 px-3 py-2 text-xs font-bold text-amber-900">⚠️ Voir le point à corriger →</button>}
 
                                         <div className="mt-2 flex justify-end">
                                           <button

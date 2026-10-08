@@ -1,0 +1,1411 @@
+{
+  "recipes": 56,
+  "raw_lines": 455,
+  "completed_recipes": 56,
+  "scenarios": 448,
+  "resolved_lines": 181,
+  "unknown_quantity_lines": 35,
+  "conversion_review_lines": 60,
+  "empty_recipes": [
+    "Popcorn de poulet au sesame"
+  ],
+  "scope": "Production Cookiwiki fetcher, parser, resolver, aggregation, stock comparison and shopping preparation. Supabase local doubles; AI conservative abstention. Reference: supplied 344-ingredient snapshot. Not a live DB or AI quality test.",
+  "reports": [
+    {
+      "id": "e2035bf0-c847-42e4-9f7a-adeb8059301e",
+      "title": "Tian de tomates, courgettes et aubergines",
+      "raw_lines": 10,
+      "parsed_lines": 10,
+      "resolved": 8,
+      "unresolved": [
+        "Sel",
+        "Poivre"
+      ],
+      "empty_ingredients": false,
+      "inferred_lines": 0,
+      "unknown_quantities": [],
+      "conversion_reviews": [
+        {
+          "ingredient": "Courgette",
+          "reason": "Besoin conservé : 2 piece de « Courgette ». Aucune équivalence explicite ne permet de convertir en Gramme. L'association officielle et le rangement automatique restent en attente."
+        },
+        {
+          "ingredient": "Aubergine",
+          "reason": "Besoin conservé : 1 piece de « Aubergine ». Aucune équivalence explicite ne permet de convertir en Gramme. L'association officielle et le rangement automatique restent en attente."
+        },
+        {
+          "ingredient": "Oignon jaune",
+          "reason": "Besoin conservé : 1 piece de « Oignon jaune ». Aucune équivalence explicite ne permet de convertir en Gramme. L'association officielle et le rangement automatique restent en attente."
+        },
+        {
+          "ingredient": "Ail",
+          "reason": "Besoin conservé : 2 gousse de « Ail ». Aucune équivalence explicite ne permet de convertir en Pièce. L'association officielle et le rangement automatique restent en attente."
+        },
+        {
+          "ingredient": "Feta",
+          "reason": "Besoin conservé : 1 morceau de « Feta ». Aucune équivalence explicite ne permet de convertir en Gramme. L'association officielle et le rangement automatique restent en attente."
+        }
+      ],
+      "scenarios": 8
+    },
+    {
+      "id": "6e02c3f8-1baf-40a2-a0c8-e800686fa169",
+      "title": "Pommes de terre rôties à la suédoise",
+      "raw_lines": 6,
+      "parsed_lines": 6,
+      "resolved": 3,
+      "unresolved": [
+        "pommes de terre à chair ferme",
+        "sel",
+        "poivre"
+      ],
+      "empty_ingredients": false,
+      "inferred_lines": 0,
+      "unknown_quantities": [],
+      "conversion_reviews": [
+        {
+          "ingredient": "Thym frais",
+          "reason": "Besoin conservé : 2 brin de « Thym frais ». Aucune équivalence explicite ne permet de convertir en Gramme. L'association officielle et le rangement automatique restent en attente."
+        }
+      ],
+      "scenarios": 8
+    },
+    {
+      "id": "4993b615-7302-4683-b38d-6e82b3ed5ffb",
+      "title": "Gougères au fromage de Valí ",
+      "raw_lines": 6,
+      "parsed_lines": 6,
+      "resolved": 3,
+      "unresolved": [
+        "farine",
+        "œufs",
+        "sel"
+      ],
+      "empty_ingredients": false,
+      "inferred_lines": 0,
+      "unknown_quantities": [],
+      "conversion_reviews": [],
+      "scenarios": 8
+    },
+    {
+      "id": "9093f24a-ba08-47d6-8f96-8db0bdeec87f",
+      "title": "Recette œuf Bénédicte",
+      "raw_lines": 8,
+      "parsed_lines": 9,
+      "resolved": 6,
+      "unresolved": [
+        "Muffins anglais",
+        "Œufs frais",
+        "Bacon ou jambon"
+      ],
+      "empty_ingredients": false,
+      "inferred_lines": 0,
+      "unknown_quantities": [],
+      "conversion_reviews": [
+        {
+          "ingredient": "Jus de citron",
+          "reason": "Besoin conservé : 0.5 piece de « Jus de citron ». Aucune équivalence explicite ne permet de convertir en Millilitre. L'association officielle et le rangement automatique restent en attente."
+        }
+      ],
+      "scenarios": 8
+    },
+    {
+      "id": "377291a6-cf3c-416e-b927-46b128d650f1",
+      "title": "Tarte aux épinards et chèvre",
+      "raw_lines": 7,
+      "parsed_lines": 7,
+      "resolved": 1,
+      "unresolved": [
+        "épinards hachés surgelés",
+        "oeufs",
+        "crème fraîche",
+        "bûche de fromage de chèvre",
+        "sel",
+        "poivre"
+      ],
+      "empty_ingredients": false,
+      "inferred_lines": 0,
+      "unknown_quantities": [],
+      "conversion_reviews": [
+        {
+          "ingredient": "Pâte feuilletée",
+          "reason": "Besoin conservé : 1 piece de « Pâte feuilletée ». Aucune équivalence explicite ne permet de convertir en Gramme. L'association officielle et le rangement automatique restent en attente."
+        }
+      ],
+      "scenarios": 8
+    },
+    {
+      "id": "86599d6b-428d-458d-af49-36784456c09f",
+      "title": "Tarte fine aux courgettes et Boursin",
+      "raw_lines": 5,
+      "parsed_lines": 5,
+      "resolved": 1,
+      "unresolved": [
+        "pâte sablée au parmesan",
+        "Boursin ail et fines herbes",
+        "crème fraîche",
+        "Gruyère"
+      ],
+      "empty_ingredients": false,
+      "inferred_lines": 0,
+      "unknown_quantities": [
+        "Gruyère"
+      ],
+      "conversion_reviews": [
+        {
+          "ingredient": "Courgette",
+          "reason": "Besoin conservé : 1 piece de « Courgette ». Aucune équivalence explicite ne permet de convertir en Gramme. L'association officielle et le rangement automatique restent en attente."
+        },
+        {
+          "ingredient": "Gruyère",
+          "reason": "Besoin conservé : 0 parsemer de « Gruyère ». Aucune équivalence explicite ne permet de convertir en Gramme. L'association officielle et le rangement automatique restent en attente."
+        }
+      ],
+      "scenarios": 8
+    },
+    {
+      "id": "96b805d2-75fe-4f9c-ac6f-a7bd98f21756",
+      "title": "Cake d'été",
+      "raw_lines": 10,
+      "parsed_lines": 10,
+      "resolved": 1,
+      "unresolved": [
+        "vin blanc sec",
+        "huile",
+        "oeufs",
+        "farine",
+        "levure",
+        "sel",
+        "jambon haché gros ou lardons",
+        "olives dénoyautées (noires et/ou vertes) et/ou tomates séchées",
+        "Thym"
+      ],
+      "empty_ingredients": false,
+      "inferred_lines": 0,
+      "unknown_quantities": [
+        "Thym"
+      ],
+      "conversion_reviews": [],
+      "scenarios": 8
+    },
+    {
+      "id": "e682d519-3874-4ed7-859b-f68666150282",
+      "title": "Tendrons de veau à la gardiane",
+      "raw_lines": 12,
+      "parsed_lines": 12,
+      "resolved": 6,
+      "unresolved": [
+        "poitrine de veau en morceaux",
+        "vin blanc sec",
+        "bouillon",
+        "olives noires et vertes",
+        "sel",
+        "poivre"
+      ],
+      "empty_ingredients": false,
+      "inferred_lines": 0,
+      "unknown_quantities": [
+        "sel",
+        "poivre"
+      ],
+      "conversion_reviews": [
+        {
+          "ingredient": "Ail",
+          "reason": "Besoin conservé : 2 gousse de « Ail ». Aucune équivalence explicite ne permet de convertir en Pièce. L'association officielle et le rangement automatique restent en attente."
+        }
+      ],
+      "scenarios": 8
+    },
+    {
+      "id": "09603a0f-6dbb-4bf7-a971-281d06cb7fda",
+      "title": "Le crumble aux pommes du chat qui tousse",
+      "raw_lines": 7,
+      "parsed_lines": 7,
+      "resolved": 4,
+      "unresolved": [
+        "farine",
+        "sucre",
+        "sucre vanillé"
+      ],
+      "empty_ingredients": false,
+      "inferred_lines": 0,
+      "unknown_quantities": [],
+      "conversion_reviews": [
+        {
+          "ingredient": "Pomme",
+          "reason": "Besoin conservé : 6 piece de « Pomme ». Aucune équivalence explicite ne permet de convertir en Gramme. L'association officielle et le rangement automatique restent en attente."
+        },
+        {
+          "ingredient": "Jus de citron",
+          "reason": "Besoin conservé : 1 filet de « Jus de citron ». Aucune équivalence explicite ne permet de convertir en Millilitre. L'association officielle et le rangement automatique restent en attente."
+        }
+      ],
+      "scenarios": 8
+    },
+    {
+      "id": "19305dab-f838-4477-a330-89f4ad5757d8",
+      "title": "Crème brûlée géante ",
+      "raw_lines": 5,
+      "parsed_lines": 5,
+      "resolved": 3,
+      "unresolved": [
+        "lait",
+        "sucre"
+      ],
+      "empty_ingredients": false,
+      "inferred_lines": 0,
+      "unknown_quantities": [],
+      "conversion_reviews": [],
+      "scenarios": 8
+    },
+    {
+      "id": "9428614f-76ad-4fc0-a05a-6db45ec14f84",
+      "title": "Gâteau aux pêches de Jeanine Laurent",
+      "raw_lines": 9,
+      "parsed_lines": 9,
+      "resolved": 1,
+      "unresolved": [
+        "sucre en morceaux (pour le caramel)",
+        "eau (pour le caramel)",
+        "fleur de sel",
+        "farine",
+        "sucre de canne",
+        "beurre salé",
+        "œufs",
+        "pêches au sirop"
+      ],
+      "empty_ingredients": false,
+      "inferred_lines": 0,
+      "unknown_quantities": [
+        "eau (pour le caramel)"
+      ],
+      "conversion_reviews": [],
+      "scenarios": 8
+    },
+    {
+      "id": "c558eff5-c8fc-4200-ada6-3c05febc6991",
+      "title": "Pommes de terre vigneronnes",
+      "raw_lines": 6,
+      "parsed_lines": 6,
+      "resolved": 2,
+      "unresolved": [
+        "pommes de terre BF15",
+        "poitrine fumée en tranches très minces",
+        "poitrine salée en tranches très minces",
+        "poivre"
+      ],
+      "empty_ingredients": false,
+      "inferred_lines": 0,
+      "unknown_quantities": [
+        "poivre"
+      ],
+      "conversion_reviews": [],
+      "scenarios": 8
+    },
+    {
+      "id": "50391f36-35dd-4e4e-b6d8-a5d59b51cffa",
+      "title": "Gratin de courgettes",
+      "raw_lines": 10,
+      "parsed_lines": 10,
+      "resolved": 3,
+      "unresolved": [
+        "pommes de terre (BF15 ou Charlotte)",
+        "emmenthal râpé",
+        "bouillon de volaille",
+        "thym émietté",
+        "poivre",
+        "sel",
+        "beurre pour le plat"
+      ],
+      "empty_ingredients": false,
+      "inferred_lines": 0,
+      "unknown_quantities": [
+        "thym émietté",
+        "poivre",
+        "sel",
+        "beurre pour le plat"
+      ],
+      "conversion_reviews": [
+        {
+          "ingredient": "Ail",
+          "reason": "Besoin conservé : 1 gousse de « Ail ». Aucune équivalence explicite ne permet de convertir en Pièce. L'association officielle et le rangement automatique restent en attente."
+        }
+      ],
+      "scenarios": 8
+    },
+    {
+      "id": "08788652-f0cc-4140-be73-495ee4ebb2ad",
+      "title": "Barbotton",
+      "raw_lines": 6,
+      "parsed_lines": 6,
+      "resolved": 1,
+      "unresolved": [
+        "vin blanc",
+        "bouillon",
+        "olives noires dénoyautées",
+        "huile",
+        "Beurre"
+      ],
+      "empty_ingredients": false,
+      "inferred_lines": 0,
+      "unknown_quantities": [
+        "huile",
+        "Beurre"
+      ],
+      "conversion_reviews": [
+        {
+          "ingredient": "Beurre",
+          "reason": "Besoin conservé : 0 cuisson de « Beurre ». Aucune équivalence explicite ne permet de convertir en Gramme. L'association officielle et le rangement automatique restent en attente."
+        }
+      ],
+      "scenarios": 8
+    },
+    {
+      "id": "0dd5a4e1-be8c-4d33-ad36-7480d2963aa7",
+      "title": "Pâte brisée, salée ou sucrée façon Vali",
+      "raw_lines": 3,
+      "parsed_lines": 3,
+      "resolved": 1,
+      "unresolved": [
+        "Farine",
+        "Oeuf"
+      ],
+      "empty_ingredients": false,
+      "inferred_lines": 0,
+      "unknown_quantities": [],
+      "conversion_reviews": [],
+      "scenarios": 8
+    },
+    {
+      "id": "be542b36-ca36-411c-ba1c-a188a9133296",
+      "title": "Rillettes de saumon frais et fumé / recette d'Oma pour nos fiançailles !!",
+      "raw_lines": 8,
+      "parsed_lines": 8,
+      "resolved": 3,
+      "unresolved": [
+        "saumon fumé",
+        "vin blanc sec",
+        "Cognac",
+        "sel",
+        "poivre"
+      ],
+      "empty_ingredients": false,
+      "inferred_lines": 0,
+      "unknown_quantities": [
+        "vin blanc sec",
+        "sel",
+        "poivre"
+      ],
+      "conversion_reviews": [],
+      "scenarios": 8
+    },
+    {
+      "id": "452a35a5-0962-4002-8075-2bf57a8ddb2e",
+      "title": "Œufs en meurette",
+      "raw_lines": 17,
+      "parsed_lines": 17,
+      "resolved": 4,
+      "unresolved": [
+        "œufs frais",
+        "oignon",
+        "bouquet garni",
+        "beurre (pour la mirepoix)",
+        "vin rouge (Mercurey)",
+        "bouillon de volaille ou de viande",
+        "farine",
+        "petits champignons",
+        "lard gras",
+        "croûtons de pain",
+        "persil haché",
+        "sel",
+        "poivre du moulin"
+      ],
+      "empty_ingredients": false,
+      "inferred_lines": 0,
+      "unknown_quantities": [
+        "persil haché",
+        "sel",
+        "poivre du moulin"
+      ],
+      "conversion_reviews": [
+        {
+          "ingredient": "Carotte",
+          "reason": "Besoin conservé : 1 piece de « Carotte ». Aucune équivalence explicite ne permet de convertir en Gramme. L'association officielle et le rangement automatique restent en attente."
+        },
+        {
+          "ingredient": "Ail",
+          "reason": "Besoin conservé : 4 gousse de « Ail ». Aucune équivalence explicite ne permet de convertir en Pièce. L'association officielle et le rangement automatique restent en attente."
+        }
+      ],
+      "scenarios": 8
+    },
+    {
+      "id": "4e93c746-3b57-4374-90d4-bfec92a8b670",
+      "title": "La Tartiflette au Reblochon ",
+      "raw_lines": 7,
+      "parsed_lines": 7,
+      "resolved": 0,
+      "unresolved": [
+        "reblochon",
+        "pommes de terre (chair jaune BF ou charlotte)",
+        "lardons fumés ou nature",
+        "gros oignons blancs",
+        "huile ou beurre",
+        "sel",
+        "poivre"
+      ],
+      "empty_ingredients": false,
+      "inferred_lines": 0,
+      "unknown_quantities": [
+        "huile ou beurre",
+        "sel",
+        "poivre"
+      ],
+      "conversion_reviews": [],
+      "scenarios": 8
+    },
+    {
+      "id": "9b3f1c94-e80d-4894-8953-8e688878750f",
+      "title": "Risotto aux champignons",
+      "raw_lines": 15,
+      "parsed_lines": 15,
+      "resolved": 6,
+      "unresolved": [
+        "riz arborio spécial risotto",
+        "champignons",
+        "oignon",
+        "vin blanc (pour le riz)",
+        "vin blanc (pour les champignons)",
+        "crème fraîche",
+        "persil",
+        "sel",
+        "poivre"
+      ],
+      "empty_ingredients": false,
+      "inferred_lines": 0,
+      "unknown_quantities": [
+        "sel",
+        "poivre"
+      ],
+      "conversion_reviews": [
+        {
+          "ingredient": "Ail",
+          "reason": "Besoin conservé : 1 gousse de « Ail ». Aucune équivalence explicite ne permet de convertir en Pièce. L'association officielle et le rangement automatique restent en attente."
+        }
+      ],
+      "scenarios": 8
+    },
+    {
+      "id": "ea5ec85d-c789-45ba-a311-07562c901537",
+      "title": "Le michon breton",
+      "raw_lines": 8,
+      "parsed_lines": 8,
+      "resolved": 4,
+      "unresolved": [
+        "confiture d'abricot",
+        "oeufs",
+        "farine",
+        "lambig (ou calvados)"
+      ],
+      "empty_ingredients": false,
+      "inferred_lines": 0,
+      "unknown_quantities": [
+        "confiture d'abricot"
+      ],
+      "conversion_reviews": [],
+      "scenarios": 8
+    },
+    {
+      "id": "cb58fecb-27a9-4e18-9ddc-cf5f6fed96cd",
+      "title": "Hachis parmentier",
+      "raw_lines": 7,
+      "parsed_lines": 7,
+      "resolved": 5,
+      "unresolved": [
+        "Lait",
+        "Œuf"
+      ],
+      "empty_ingredients": false,
+      "inferred_lines": 0,
+      "unknown_quantities": [],
+      "conversion_reviews": [
+        {
+          "ingredient": "Oignon jaune",
+          "reason": "Besoin conservé : 1 piece de « Oignon jaune ». Aucune équivalence explicite ne permet de convertir en Gramme. L'association officielle et le rangement automatique restent en attente."
+        }
+      ],
+      "scenarios": 8
+    },
+    {
+      "id": "23970d8e-5e26-4c51-a624-71fc1269c94b",
+      "title": "Œufs en meurette faciles",
+      "raw_lines": 12,
+      "parsed_lines": 12,
+      "resolved": 4,
+      "unresolved": [
+        "œufs extra-frais",
+        "vin rouge (type Bourgogne)",
+        "lardons fumés",
+        "farine",
+        "sucre",
+        "tranches de pain (mie ou campagne)",
+        "sel",
+        "poivre"
+      ],
+      "empty_ingredients": false,
+      "inferred_lines": 0,
+      "unknown_quantities": [
+        "sel",
+        "poivre"
+      ],
+      "conversion_reviews": [
+        {
+          "ingredient": "Échalote",
+          "reason": "Besoin conservé : 4 piece de « Échalote ». Aucune équivalence explicite ne permet de convertir en Gramme. L'association officielle et le rangement automatique restent en attente."
+        }
+      ],
+      "scenarios": 8
+    },
+    {
+      "id": "b291e0a3-15ad-4c90-8db3-6097150b4781",
+      "title": "Filet mignon séché maison",
+      "raw_lines": 5,
+      "parsed_lines": 5,
+      "resolved": 4,
+      "unresolved": [
+        "gros sel de mer"
+      ],
+      "empty_ingredients": false,
+      "inferred_lines": 0,
+      "unknown_quantities": [],
+      "conversion_reviews": [
+        {
+          "ingredient": "Filet mignon de porc",
+          "reason": "Besoin conservé : 1 piece de « Filet mignon de porc ». Aucune équivalence explicite ne permet de convertir en Gramme. L'association officielle et le rangement automatique restent en attente."
+        }
+      ],
+      "scenarios": 8
+    },
+    {
+      "id": "206d7cfe-5e67-40ba-8db3-5978fe520f5d",
+      "title": "Mousse au chocolat",
+      "raw_lines": 4,
+      "parsed_lines": 4,
+      "resolved": 1,
+      "unresolved": [
+        "chocolat",
+        "œufs",
+        "sucre semoule"
+      ],
+      "empty_ingredients": false,
+      "inferred_lines": 0,
+      "unknown_quantities": [],
+      "conversion_reviews": [],
+      "scenarios": 8
+    },
+    {
+      "id": "e416b5ea-5ef1-4c76-9172-b4f6207720b8",
+      "title": "Courgettes au Air Fryer",
+      "raw_lines": 6,
+      "parsed_lines": 6,
+      "resolved": 3,
+      "unresolved": [
+        "Courgettes moyennes",
+        "Sel",
+        "Poivre"
+      ],
+      "empty_ingredients": false,
+      "inferred_lines": 0,
+      "unknown_quantities": [],
+      "conversion_reviews": [
+        {
+          "ingredient": "Ail",
+          "reason": "Besoin conservé : 5 mL de « Ail ». Aucune équivalence explicite ne permet de convertir en Pièce. L'association officielle et le rangement automatique restent en attente."
+        }
+      ],
+      "scenarios": 8
+    },
+    {
+      "id": "970eed2f-8df4-4f36-85fa-9e6b65e64e8d",
+      "title": "Poulet à la Gaston Gérard facile",
+      "raw_lines": 10,
+      "parsed_lines": 10,
+      "resolved": 4,
+      "unresolved": [
+        "poulet découpé",
+        "huile",
+        "vin blanc sec (type Aligoté)",
+        "moutarde de Dijon",
+        "sel",
+        "poivre"
+      ],
+      "empty_ingredients": false,
+      "inferred_lines": 0,
+      "unknown_quantities": [],
+      "conversion_reviews": [],
+      "scenarios": 8
+    },
+    {
+      "id": "99728d24-9fe2-4941-919e-1a39704a22a3",
+      "title": "Filet mignon rôti au Airfryer",
+      "raw_lines": 6,
+      "parsed_lines": 6,
+      "resolved": 2,
+      "unresolved": [
+        "moutarde à l'ancienne",
+        "thym séché ou herbes de Provence",
+        "sel",
+        "poivre"
+      ],
+      "empty_ingredients": false,
+      "inferred_lines": 0,
+      "unknown_quantities": [],
+      "conversion_reviews": [],
+      "scenarios": 8
+    },
+    {
+      "id": "458083ef-40d4-41d2-9fa9-b109a07007e9",
+      "title": "Tarte Rustique à la crème de noix et prunes",
+      "raw_lines": 7,
+      "parsed_lines": 7,
+      "resolved": 0,
+      "unresolved": [
+        "cerneaux de noix",
+        "beurre mou",
+        "sucre",
+        "œufs",
+        "pâte brisée ou sablée",
+        "semoule fine ou biscuits écrasés",
+        "demi-quetsches et demi-reines-claudes congelées"
+      ],
+      "empty_ingredients": false,
+      "inferred_lines": 0,
+      "unknown_quantities": [],
+      "conversion_reviews": [],
+      "scenarios": 8
+    },
+    {
+      "id": "818bb95d-32fd-421c-87a2-192a9582680e",
+      "title": "Quiche aux figues, chèvre, miel et romarin",
+      "raw_lines": 9,
+      "parsed_lines": 9,
+      "resolved": 4,
+      "unresolved": [
+        "figues fraîches",
+        "bûche de chèvre",
+        "œufs",
+        "sel",
+        "poivre"
+      ],
+      "empty_ingredients": false,
+      "inferred_lines": 0,
+      "unknown_quantities": [],
+      "conversion_reviews": [
+        {
+          "ingredient": "Pâte brisée",
+          "reason": "Besoin conservé : 1 piece de « Pâte brisée ». Aucune équivalence explicite ne permet de convertir en Gramme. L'association officielle et le rangement automatique restent en attente."
+        },
+        {
+          "ingredient": "Romarin frais",
+          "reason": "Besoin conservé : 2 brin de « Romarin frais ». Aucune équivalence explicite ne permet de convertir en Gramme. L'association officielle et le rangement automatique restent en attente."
+        }
+      ],
+      "scenarios": 8
+    },
+    {
+      "id": "41a77930-b1e8-4545-ac0e-ebfa2cd7af7b",
+      "title": "Tarte amandine aux figues",
+      "raw_lines": 6,
+      "parsed_lines": 6,
+      "resolved": 2,
+      "unresolved": [
+        "figues fraîches",
+        "Amandes en poudre",
+        "œufs",
+        "Crème fraîche"
+      ],
+      "empty_ingredients": false,
+      "inferred_lines": 0,
+      "unknown_quantities": [],
+      "conversion_reviews": [
+        {
+          "ingredient": "Pâte sablée",
+          "reason": "Besoin conservé : 1 rouleau de « Pâte sablée ». Aucune équivalence explicite ne permet de convertir en Gramme. L'association officielle et le rangement automatique restent en attente."
+        }
+      ],
+      "scenarios": 8
+    },
+    {
+      "id": "0876a07b-60b9-4be3-a74c-76183adf4540",
+      "title": "Sablé Breton de Christophe Felder",
+      "raw_lines": 6,
+      "parsed_lines": 6,
+      "resolved": 2,
+      "unresolved": [
+        "sucre semoule",
+        "beurre mou",
+        "farine (ou 150g farine + 50g poudre d'amandes, noisette ou pistache)",
+        "sel"
+      ],
+      "empty_ingredients": false,
+      "inferred_lines": 0,
+      "unknown_quantities": [],
+      "conversion_reviews": [],
+      "scenarios": 8
+    },
+    {
+      "id": "055ac3ce-22b3-4724-8772-3f40521d8b8f",
+      "title": "Croque-monsieur aux figues, chèvre et jambon",
+      "raw_lines": 6,
+      "parsed_lines": 6,
+      "resolved": 3,
+      "unresolved": [
+        "jambon cru ou blanc",
+        "bûche de fromage de chèvre",
+        "figues fraîches"
+      ],
+      "empty_ingredients": false,
+      "inferred_lines": 0,
+      "unknown_quantities": [],
+      "conversion_reviews": [
+        {
+          "ingredient": "Pain de mie",
+          "reason": "Besoin conservé : 8 tranche de « Pain de mie ». Aucune équivalence explicite ne permet de convertir en Gramme. L'association officielle et le rangement automatique restent en attente."
+        }
+      ],
+      "scenarios": 8
+    },
+    {
+      "id": "57cb92d4-a44f-41a6-9202-8436f081ccb0",
+      "title": "Tarte fine aux raisins, figues et fromage de chèvre",
+      "raw_lines": 8,
+      "parsed_lines": 9,
+      "resolved": 6,
+      "unresolved": [
+        "Figues fraîches",
+        "Grappe de raisin (blanc ou noir)",
+        "Fromage de chèvre frais (ou bûche)"
+      ],
+      "empty_ingredients": false,
+      "inferred_lines": 0,
+      "unknown_quantities": [],
+      "conversion_reviews": [
+        {
+          "ingredient": "Pâte feuilletée",
+          "reason": "Besoin conservé : 1 rouleau de « Pâte feuilletée ». Aucune équivalence explicite ne permet de convertir en Gramme. L'association officielle et le rangement automatique restent en attente."
+        },
+        {
+          "ingredient": "Thym frais",
+          "reason": "Besoin conservé : 2 brin de « Thym frais ». Aucune équivalence explicite ne permet de convertir en Gramme. L'association officielle et le rangement automatique restent en attente."
+        }
+      ],
+      "scenarios": 8
+    },
+    {
+      "id": "302c03dc-da58-48e7-8284-36f9a38cf982",
+      "title": "Figues grillées à la pancetta",
+      "raw_lines": 5,
+      "parsed_lines": 5,
+      "resolved": 2,
+      "unresolved": [
+        "figues fraîches",
+        "fromage de chèvre ou fromage bleu",
+        "poivre du moulin"
+      ],
+      "empty_ingredients": false,
+      "inferred_lines": 0,
+      "unknown_quantities": [],
+      "conversion_reviews": [
+        {
+          "ingredient": "Pancetta",
+          "reason": "Besoin conservé : 8 tranche de « Pancetta ». Aucune équivalence explicite ne permet de convertir en Gramme. L'association officielle et le rangement automatique restent en attente."
+        }
+      ],
+      "scenarios": 8
+    },
+    {
+      "id": "30aa216f-0e58-4ac5-bc5d-3d4caa26d069",
+      "title": "Tarte aux tomates cerises à la moutarde et à l'emmental",
+      "raw_lines": 8,
+      "parsed_lines": 8,
+      "resolved": 6,
+      "unresolved": [
+        "sel",
+        "poivre"
+      ],
+      "empty_ingredients": false,
+      "inferred_lines": 0,
+      "unknown_quantities": [],
+      "conversion_reviews": [
+        {
+          "ingredient": "Pâte brisée",
+          "reason": "Besoin conservé : 1 rouleau de « Pâte brisée ». Aucune équivalence explicite ne permet de convertir en Gramme. L'association officielle et le rangement automatique restent en attente."
+        }
+      ],
+      "scenarios": 8
+    },
+    {
+      "id": "c794f891-2240-41bf-aee2-e32e8df17c6b",
+      "title": "Mijoté de cocos de Paimpol au porc et oignons de Roscoff",
+      "raw_lines": 13,
+      "parsed_lines": 13,
+      "resolved": 2,
+      "unresolved": [
+        "oignons rosés de Roscoff AOP",
+        "haricots cocos de Paimpol AOP écossés",
+        "échine de porc",
+        "ventrèche ou lard demi-sel séché",
+        "tomates bien mûres",
+        "Ail",
+        "branche de laurier",
+        "branche de thym",
+        "branche de romarin",
+        "bouquet de basilic petit vert",
+        "poivre du moulin"
+      ],
+      "empty_ingredients": false,
+      "inferred_lines": 0,
+      "unknown_quantities": [
+        "poivre du moulin"
+      ],
+      "conversion_reviews": [
+        {
+          "ingredient": "Poivron rouge",
+          "reason": "Besoin conservé : 2 piece de « Poivron rouge ». Aucune équivalence explicite ne permet de convertir en Gramme. L'association officielle et le rangement automatique restent en attente."
+        },
+        {
+          "ingredient": "Ail",
+          "reason": "Besoin conservé : 1 tete de « Ail ». Aucune équivalence explicite ne permet de convertir en Pièce. L'association officielle et le rangement automatique restent en attente."
+        },
+        {
+          "ingredient": "Carotte",
+          "reason": "Besoin conservé : 4 piece de « Carotte ». Aucune équivalence explicite ne permet de convertir en Gramme. L'association officielle et le rangement automatique restent en attente."
+        }
+      ],
+      "scenarios": 8
+    },
+    {
+      "id": "f5fa2b24-be9d-477e-bdfb-a10347e21463",
+      "title": "Sauce hollandaise",
+      "raw_lines": 6,
+      "parsed_lines": 6,
+      "resolved": 3,
+      "unresolved": [
+        "Beurre doux",
+        "Eau froide",
+        "Sel"
+      ],
+      "empty_ingredients": false,
+      "inferred_lines": 0,
+      "unknown_quantities": [],
+      "conversion_reviews": [],
+      "scenarios": 8
+    },
+    {
+      "id": "2b6ecb9a-77d4-4398-9e95-f8fe8cdb6aed",
+      "title": "Popcorn de poulet au sesame",
+      "raw_lines": 0,
+      "parsed_lines": 0,
+      "resolved": 0,
+      "unresolved": [],
+      "empty_ingredients": true,
+      "inferred_lines": 0,
+      "unknown_quantities": [],
+      "conversion_reviews": [],
+      "scenarios": 8
+    },
+    {
+      "id": "c36b54b2-4f83-488c-b3db-4b465df01e6f",
+      "title": "Crevettes au bacon ",
+      "raw_lines": 0,
+      "parsed_lines": 8,
+      "resolved": 4,
+      "unresolved": [
+        "Crevette",
+        "Ail",
+        "Bacon",
+        "Mayonnaise"
+      ],
+      "empty_ingredients": false,
+      "inferred_lines": 8,
+      "unknown_quantities": [
+        "Crevette",
+        "Ail",
+        "Bacon",
+        "Mayonnaise"
+      ],
+      "conversion_reviews": [
+        {
+          "ingredient": "Crevette",
+          "reason": "Besoin conservé : 0 piece de « Crevette ». Aucune équivalence explicite ne permet de convertir en Gramme. L'association officielle et le rangement automatique restent en attente."
+        },
+        {
+          "ingredient": "Bacon",
+          "reason": "Besoin conservé : 0 piece de « Bacon ». Aucune équivalence explicite ne permet de convertir en Gramme. L'association officielle et le rangement automatique restent en attente."
+        },
+        {
+          "ingredient": "Mayonnaise",
+          "reason": "Besoin conservé : 0 piece de « Mayonnaise ». Aucune équivalence explicite ne permet de convertir en Gramme. L'association officielle et le rangement automatique restent en attente."
+        }
+      ],
+      "scenarios": 8
+    },
+    {
+      "id": "81e08e94-0225-47a2-99aa-58f35040fab3",
+      "title": "Méli-mélo de fruits d'été",
+      "raw_lines": 10,
+      "parsed_lines": 10,
+      "resolved": 5,
+      "unresolved": [
+        "farine",
+        "sel",
+        "œufs battus",
+        "huile neutre",
+        "pêches jaunes ou nectarines"
+      ],
+      "empty_ingredients": false,
+      "inferred_lines": 0,
+      "unknown_quantities": [],
+      "conversion_reviews": [
+        {
+          "ingredient": "Prune",
+          "reason": "Besoin conservé : 8 piece de « Prune ». Aucune équivalence explicite ne permet de convertir en Gramme. L'association officielle et le rangement automatique restent en attente."
+        }
+      ],
+      "scenarios": 8
+    },
+    {
+      "id": "a70ca0a7-b231-47b7-bc04-58b83ba8025c",
+      "title": "Mijoté de cocos de Paimpol au porc et oignons de Roscoff",
+      "raw_lines": 13,
+      "parsed_lines": 13,
+      "resolved": 2,
+      "unresolved": [
+        "oignons rosés de Roscoff AOP",
+        "haricots cocos de Paimpol AOP écossés",
+        "échine de porc",
+        "ventrèche ou lard demi-sel séché",
+        "tomates bien mûres",
+        "Ail",
+        "branche de laurier",
+        "branche de thym",
+        "branche de romarin",
+        "bouquet de basilic petit vert",
+        "poivre du moulin"
+      ],
+      "empty_ingredients": false,
+      "inferred_lines": 0,
+      "unknown_quantities": [
+        "poivre du moulin"
+      ],
+      "conversion_reviews": [
+        {
+          "ingredient": "Poivron rouge",
+          "reason": "Besoin conservé : 2 piece de « Poivron rouge ». Aucune équivalence explicite ne permet de convertir en Gramme. L'association officielle et le rangement automatique restent en attente."
+        },
+        {
+          "ingredient": "Ail",
+          "reason": "Besoin conservé : 1 tete de « Ail ». Aucune équivalence explicite ne permet de convertir en Pièce. L'association officielle et le rangement automatique restent en attente."
+        },
+        {
+          "ingredient": "Carotte",
+          "reason": "Besoin conservé : 4 piece de « Carotte ». Aucune équivalence explicite ne permet de convertir en Gramme. L'association officielle et le rangement automatique restent en attente."
+        }
+      ],
+      "scenarios": 8
+    },
+    {
+      "id": "b9497dc8-897c-4387-8ca8-41ce2e771e92",
+      "title": "Comment préparer et cuire le Coco de Paimpol AOP",
+      "raw_lines": 7,
+      "parsed_lines": 7,
+      "resolved": 2,
+      "unresolved": [
+        "Cocos de Paimpol AOP en gousses",
+        "Oignon",
+        "Bouquet garni (thym, laurier)",
+        "Sel",
+        "Poivre en grains"
+      ],
+      "empty_ingredients": false,
+      "inferred_lines": 0,
+      "unknown_quantities": [],
+      "conversion_reviews": [
+        {
+          "ingredient": "Carotte",
+          "reason": "Besoin conservé : 1 piece de « Carotte ». Aucune équivalence explicite ne permet de convertir en Gramme. L'association officielle et le rangement automatique restent en attente."
+        },
+        {
+          "ingredient": "Ail",
+          "reason": "Besoin conservé : 2 gousse de « Ail ». Aucune équivalence explicite ne permet de convertir en Pièce. L'association officielle et le rangement automatique restent en attente."
+        }
+      ],
+      "scenarios": 8
+    },
+    {
+      "id": "e0275312-464b-4586-bf84-84258a6946f9",
+      "title": "Salade estivale de Coco de Paimpol AOP",
+      "raw_lines": 10,
+      "parsed_lines": 10,
+      "resolved": 3,
+      "unresolved": [
+        "Coco de Paimpol AOP frais à écosser",
+        "Poivron jaune ou rouge",
+        "Bouquet garni",
+        "Vinaigre de cidre ou de Xérès",
+        "Ciboulette et persil frais",
+        "Sel",
+        "Poivre du moulin"
+      ],
+      "empty_ingredients": false,
+      "inferred_lines": 0,
+      "unknown_quantities": [],
+      "conversion_reviews": [
+        {
+          "ingredient": "Oignon rouge",
+          "reason": "Besoin conservé : 1 piece de « Oignon rouge ». Aucune équivalence explicite ne permet de convertir en Gramme. L'association officielle et le rangement automatique restent en attente."
+        }
+      ],
+      "scenarios": 8
+    },
+    {
+      "id": "0829e021-fd21-4ef3-8cca-95b2e5487e85",
+      "title": "Tajine de légumes",
+      "raw_lines": 15,
+      "parsed_lines": 15,
+      "resolved": 8,
+      "unresolved": [
+        "oignon",
+        "tomates pelées",
+        "ras-el-hanout",
+        "cumin en poudre",
+        "Coriandre fraîche",
+        "sel",
+        "poivre"
+      ],
+      "empty_ingredients": false,
+      "inferred_lines": 0,
+      "unknown_quantities": [],
+      "conversion_reviews": [
+        {
+          "ingredient": "Carotte",
+          "reason": "Besoin conservé : 4 piece de « Carotte ». Aucune équivalence explicite ne permet de convertir en Gramme. L'association officielle et le rangement automatique restent en attente."
+        },
+        {
+          "ingredient": "Courgette",
+          "reason": "Besoin conservé : 2 piece de « Courgette ». Aucune équivalence explicite ne permet de convertir en Gramme. L'association officielle et le rangement automatique restent en attente."
+        },
+        {
+          "ingredient": "Pomme de terre",
+          "reason": "Besoin conservé : 3 piece de « Pomme de terre ». Aucune équivalence explicite ne permet de convertir en Gramme. L'association officielle et le rangement automatique restent en attente."
+        },
+        {
+          "ingredient": "Navet",
+          "reason": "Besoin conservé : 2 piece de « Navet ». Aucune équivalence explicite ne permet de convertir en Gramme. L'association officielle et le rangement automatique restent en attente."
+        },
+        {
+          "ingredient": "Ail",
+          "reason": "Besoin conservé : 2 gousse de « Ail ». Aucune équivalence explicite ne permet de convertir en Pièce. L'association officielle et le rangement automatique restent en attente."
+        },
+        {
+          "ingredient": "Coriandre fraîche",
+          "reason": "Besoin conservé : 1 bouquet de « Coriandre fraîche ». Aucune équivalence explicite ne permet de convertir en Gramme. L'association officielle et le rangement automatique restent en attente."
+        }
+      ],
+      "scenarios": 8
+    },
+    {
+      "id": "7a5ced7f-a3ea-4719-b12a-349429c6459c",
+      "title": "Soupe à l’oignon (la meilleure)",
+      "raw_lines": 12,
+      "parsed_lines": 13,
+      "resolved": 5,
+      "unresolved": [
+        "sucre",
+        "farine tout usage",
+        "vin blanc sec",
+        "bouillon de bœuf",
+        "branches de thym frais",
+        "feuille de laurier",
+        "tranches de baguette grillées",
+        "fromage gruyère râpé"
+      ],
+      "empty_ingredients": false,
+      "inferred_lines": 0,
+      "unknown_quantities": [],
+      "conversion_reviews": [],
+      "scenarios": 8
+    },
+    {
+      "id": "4b2a51db-0dc5-40e6-aa37-550a56a450af",
+      "title": "Tarte amandine aux poires pochées",
+      "raw_lines": 11,
+      "parsed_lines": 11,
+      "resolved": 3,
+      "unresolved": [
+        "poires fraîches (Conférence ou Comice)",
+        "sucre en poudre (pour le sirop)",
+        "gousse de vanille ou bâton de cannelle (facultatif)",
+        "beurre pommade",
+        "sucre en poudre (pour la crème)",
+        "œufs",
+        "farine",
+        "amandes effilées"
+      ],
+      "empty_ingredients": false,
+      "inferred_lines": 0,
+      "unknown_quantities": [],
+      "conversion_reviews": [
+        {
+          "ingredient": "Pâte sablée",
+          "reason": "Besoin conservé : 1 rouleau de « Pâte sablée ». Aucune équivalence explicite ne permet de convertir en Gramme. L'association officielle et le rangement automatique restent en attente."
+        }
+      ],
+      "scenarios": 8
+    },
+    {
+      "id": "a9340473-1f59-4d05-8599-5ff607a48a96",
+      "title": "Tarte aux pêches, citron vert et romarin façon Ottolenghi",
+      "raw_lines": 9,
+      "parsed_lines": 9,
+      "resolved": 4,
+      "unresolved": [
+        "pêches ou nectarines",
+        "branche de romarin",
+        "citrons verts (zeste et jus)",
+        "sucre (ou miel)",
+        "crème fraîche"
+      ],
+      "empty_ingredients": false,
+      "inferred_lines": 0,
+      "unknown_quantities": [],
+      "conversion_reviews": [
+        {
+          "ingredient": "Pâte feuilletée",
+          "reason": "Besoin conservé : 1 rouleau de « Pâte feuilletée ». Aucune équivalence explicite ne permet de convertir en Gramme. L'association officielle et le rangement automatique restent en attente."
+        }
+      ],
+      "scenarios": 8
+    },
+    {
+      "id": "83d7443d-30d3-4f51-ad33-a85ef231cd8d",
+      "title": "Pot-au-feu",
+      "raw_lines": 12,
+      "parsed_lines": 12,
+      "resolved": 2,
+      "unresolved": [
+        "macreuse",
+        "plat de côte",
+        "gîte à la noix",
+        "os à moelle",
+        "gros sel",
+        "poivre",
+        "poireaux",
+        "petits morceaux de céleri",
+        "oignons piqués d'un clou de girofle",
+        "bouquet garni"
+      ],
+      "empty_ingredients": false,
+      "inferred_lines": 0,
+      "unknown_quantities": [
+        "gros sel",
+        "poivre"
+      ],
+      "conversion_reviews": [
+        {
+          "ingredient": "Carotte",
+          "reason": "Besoin conservé : 4 piece de « Carotte ». Aucune équivalence explicite ne permet de convertir en Gramme. L'association officielle et le rangement automatique restent en attente."
+        },
+        {
+          "ingredient": "Ail",
+          "reason": "Besoin conservé : 1 gousse de « Ail ». Aucune équivalence explicite ne permet de convertir en Pièce. L'association officielle et le rangement automatique restent en attente."
+        }
+      ],
+      "scenarios": 8
+    },
+    {
+      "id": "1c7d3210-a7d2-4956-804a-2e893f70eeb5",
+      "title": "Hachis parmentier de canard",
+      "raw_lines": 11,
+      "parsed_lines": 11,
+      "resolved": 4,
+      "unresolved": [
+        "pommes de terre épluchées (type Bintje ou Manon)",
+        "Gros oignon",
+        "vin blanc sec ou bouillon de volaille",
+        "crème fraîche entière",
+        "chapelure ou fromage râpé",
+        "sel",
+        "poivre"
+      ],
+      "empty_ingredients": false,
+      "inferred_lines": 0,
+      "unknown_quantities": [],
+      "conversion_reviews": [
+        {
+          "ingredient": "Canard (cuisse confite)",
+          "reason": "Besoin conservé : 4 piece de « Canard (cuisse confite) ». Aucune équivalence explicite ne permet de convertir en Gramme. L'association officielle et le rangement automatique restent en attente."
+        },
+        {
+          "ingredient": "Échalote",
+          "reason": "Besoin conservé : 2 piece de « Échalote ». Aucune équivalence explicite ne permet de convertir en Gramme. L'association officielle et le rangement automatique restent en attente."
+        }
+      ],
+      "scenarios": 8
+    },
+    {
+      "id": "e0a837b2-6012-4f5a-867c-68c17d823c0c",
+      "title": "Cake à la compote de pommes",
+      "raw_lines": 9,
+      "parsed_lines": 9,
+      "resolved": 2,
+      "unresolved": [
+        "compote de pommes (idéalement sans sucres ajoutés)",
+        "farine",
+        "œufs",
+        "sucre",
+        "beurre fondu",
+        "sel",
+        "morceaux de pommes, noix ou noisettes (facultatif)"
+      ],
+      "empty_ingredients": false,
+      "inferred_lines": 0,
+      "unknown_quantities": [
+        "morceaux de pommes, noix ou noisettes (facultatif)"
+      ],
+      "conversion_reviews": [],
+      "scenarios": 8
+    },
+    {
+      "id": "a1cfaf0a-c0b8-40c1-a5a5-45ded138315b",
+      "title": "Poulet à la Gaston Gérard facile",
+      "raw_lines": 9,
+      "parsed_lines": 9,
+      "resolved": 4,
+      "unresolved": [
+        "morceaux de poulet (cuisses ou filets)",
+        "vin blanc sec",
+        "moutarde forte de Dijon",
+        "sel",
+        "poivre"
+      ],
+      "empty_ingredients": false,
+      "inferred_lines": 0,
+      "unknown_quantities": [],
+      "conversion_reviews": [],
+      "scenarios": 8
+    },
+    {
+      "id": "34784d16-6980-4530-96b1-1797fa0e5864",
+      "title": "Gambas aux échalotes et vin blanc",
+      "raw_lines": 9,
+      "parsed_lines": 9,
+      "resolved": 6,
+      "unresolved": [
+        "vin blanc sec",
+        "sel",
+        "poivre du moulin"
+      ],
+      "empty_ingredients": false,
+      "inferred_lines": 0,
+      "unknown_quantities": [],
+      "conversion_reviews": [
+        {
+          "ingredient": "Gambas",
+          "reason": "Besoin conservé : 16 piece de « Gambas ». Aucune équivalence explicite ne permet de convertir en Gramme. L'association officielle et le rangement automatique restent en attente."
+        },
+        {
+          "ingredient": "Échalote",
+          "reason": "Besoin conservé : 3 piece de « Échalote ». Aucune équivalence explicite ne permet de convertir en Gramme. L'association officielle et le rangement automatique restent en attente."
+        },
+        {
+          "ingredient": "Ail",
+          "reason": "Besoin conservé : 2 gousse de « Ail ». Aucune équivalence explicite ne permet de convertir en Pièce. L'association officielle et le rangement automatique restent en attente."
+        }
+      ],
+      "scenarios": 8
+    },
+    {
+      "id": "14faa023-4542-40e4-b2fb-86ce03b3ae20",
+      "title": "Gâteau au citron ultra fondant",
+      "raw_lines": 8,
+      "parsed_lines": 8,
+      "resolved": 3,
+      "unresolved": [
+        "farine",
+        "œufs",
+        "citrons non traités (jus et zestes)",
+        "pincée de sel",
+        "sucre glace (pour le glaçage)"
+      ],
+      "empty_ingredients": false,
+      "inferred_lines": 0,
+      "unknown_quantities": [],
+      "conversion_reviews": [],
+      "scenarios": 8
+    },
+    {
+      "id": "3c2f1578-bdc5-4cba-94d4-e46fe87cb382",
+      "title": "Quatre-quarts traditionnel",
+      "raw_lines": 4,
+      "parsed_lines": 4,
+      "resolved": 2,
+      "unresolved": [
+        "œufs",
+        "beurre (idéalement demi-sel)"
+      ],
+      "empty_ingredients": false,
+      "inferred_lines": 0,
+      "unknown_quantities": [],
+      "conversion_reviews": [],
+      "scenarios": 8
+    },
+    {
+      "id": "70e831d1-cf92-4ca9-b566-ce3e86c65d88",
+      "title": "Cassoulet breton de Coco de Paimpol AOP",
+      "raw_lines": 10,
+      "parsed_lines": 11,
+      "resolved": 6,
+      "unresolved": [
+        "Cocos de Paimpol AOP écossés",
+        "Saucisses bretonnes (ou saucisses fraîches)",
+        "Poitrine de porc fumée",
+        "Oignon",
+        "Bouquet garni (thym, laurier)"
+      ],
+      "empty_ingredients": false,
+      "inferred_lines": 0,
+      "unknown_quantities": [],
+      "conversion_reviews": [
+        {
+          "ingredient": "Carotte",
+          "reason": "Besoin conservé : 2 piece de « Carotte ». Aucune équivalence explicite ne permet de convertir en Gramme. L'association officielle et le rangement automatique restent en attente."
+        },
+        {
+          "ingredient": "Ail",
+          "reason": "Besoin conservé : 2 gousse de « Ail ». Aucune équivalence explicite ne permet de convertir en Pièce. L'association officielle et le rangement automatique restent en attente."
+        }
+      ],
+      "scenarios": 8
+    },
+    {
+      "id": "65ba7320-a9c2-4cf4-ad08-be7059168734",
+      "title": "Velouté de châtaigne de Cyril Lignac",
+      "raw_lines": 7,
+      "parsed_lines": 7,
+      "resolved": 2,
+      "unresolved": [
+        "châtaignes cuites au naturel",
+        "bouillon de volaille",
+        "oignon",
+        "sel",
+        "poivre"
+      ],
+      "empty_ingredients": false,
+      "inferred_lines": 0,
+      "unknown_quantities": [],
+      "conversion_reviews": [],
+      "scenarios": 8
+    }
+  ]
+}

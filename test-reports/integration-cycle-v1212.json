@@ -1,0 +1,45 @@
+{
+  "scope": "Routes réelles, DB en mémoire, Claude simulé ; pas Supabase réel.",
+  "events": [
+    {
+      "step": "Planning",
+      "status": "pass",
+      "detail": "Repas de test créé (row-1)."
+    },
+    {
+      "step": "Génération et régénération",
+      "status": "pass",
+      "detail": "5 articles, besoins et identifiants stables."
+    },
+    {
+      "step": "Achats",
+      "status": "pass",
+      "detail": "Les quantités prévues ont été enregistrées comme achetées."
+    },
+    {
+      "step": "Rangement et historique",
+      "status": "pass",
+      "detail": "Lieux précis, un achat par article, second rangement sans doublon."
+    },
+    {
+      "step": "Clôture",
+      "status": "pass",
+      "detail": "La liste a quitté les courses actives."
+    },
+    {
+      "step": "Consommation",
+      "status": "pass",
+      "detail": "Besoins couverts, présence conservée, confirmation répétée sans double déduction."
+    },
+    {
+      "step": "Presque terminé",
+      "status": "pass",
+      "detail": "Proposition de réapprovisionnement créée puis signal annulé."
+    },
+    {
+      "step": "Apprentissage historique",
+      "status": "skipped",
+      "detail": "Un seul achat ne suffit pas à apprendre une fréquence : utiliser plusieurs achats réellement espacés. Les scénarios temporels restent couverts par les tests automatiques."
+    }
+  ]
+}

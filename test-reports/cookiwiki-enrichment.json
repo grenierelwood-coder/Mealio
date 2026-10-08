@@ -1,0 +1,854 @@
+{
+  "scope": "Simulation du SQL sur le précédent export, modules réels ; IA en abstention, pas de Supabase connecté.",
+  "aliases_proposed": 75,
+  "aliases_inserted_in_snapshot": 66,
+  "before": 181,
+  "after": 246,
+  "recipes": 56,
+  "report": [
+    {
+      "title": "Tian de tomates, courgettes et aubergines",
+      "before": 8,
+      "after": 8,
+      "total": 10,
+      "remaining": [
+        "Sel",
+        "Poivre"
+      ],
+      "conversions": [
+        "Courgette",
+        "Aubergine",
+        "Oignon jaune",
+        "Ail",
+        "Feta"
+      ]
+    },
+    {
+      "title": "Pommes de terre rôties à la suédoise",
+      "before": 3,
+      "after": 3,
+      "total": 6,
+      "remaining": [
+        "pommes de terre à chair ferme",
+        "sel",
+        "poivre"
+      ],
+      "conversions": [
+        "Thym frais"
+      ]
+    },
+    {
+      "title": "Gougères au fromage de Valí ",
+      "before": 3,
+      "after": 4,
+      "total": 6,
+      "remaining": [
+        "farine",
+        "sel"
+      ],
+      "conversions": []
+    },
+    {
+      "title": "Recette œuf Bénédicte",
+      "before": 6,
+      "after": 7,
+      "total": 9,
+      "remaining": [
+        "Muffins anglais",
+        "Bacon ou jambon"
+      ],
+      "conversions": [
+        "Jus de citron"
+      ]
+    },
+    {
+      "title": "Tarte aux épinards et chèvre",
+      "before": 1,
+      "after": 2,
+      "total": 7,
+      "remaining": [
+        "épinards hachés surgelés",
+        "crème fraîche",
+        "bûche de fromage de chèvre",
+        "sel",
+        "poivre"
+      ],
+      "conversions": [
+        "Pâte feuilletée"
+      ]
+    },
+    {
+      "title": "Tarte fine aux courgettes et Boursin",
+      "before": 1,
+      "after": 1,
+      "total": 5,
+      "remaining": [
+        "pâte sablée au parmesan",
+        "Boursin ail et fines herbes",
+        "crème fraîche",
+        "Gruyère"
+      ],
+      "conversions": [
+        "Courgette",
+        "Gruyère"
+      ]
+    },
+    {
+      "title": "Cake d'été",
+      "before": 1,
+      "after": 2,
+      "total": 10,
+      "remaining": [
+        "vin blanc sec",
+        "huile",
+        "farine",
+        "levure",
+        "sel",
+        "jambon haché gros ou lardons",
+        "olives dénoyautées (noires et/ou vertes) et/ou tomates séchées",
+        "Thym"
+      ],
+      "conversions": []
+    },
+    {
+      "title": "Tendrons de veau à la gardiane",
+      "before": 6,
+      "after": 6,
+      "total": 12,
+      "remaining": [
+        "poitrine de veau en morceaux",
+        "vin blanc sec",
+        "bouillon",
+        "olives noires et vertes",
+        "sel",
+        "poivre"
+      ],
+      "conversions": [
+        "Ail"
+      ]
+    },
+    {
+      "title": "Le crumble aux pommes du chat qui tousse",
+      "before": 4,
+      "after": 4,
+      "total": 7,
+      "remaining": [
+        "farine",
+        "sucre",
+        "sucre vanillé"
+      ],
+      "conversions": [
+        "Pomme",
+        "Jus de citron"
+      ]
+    },
+    {
+      "title": "Crème brûlée géante ",
+      "before": 3,
+      "after": 3,
+      "total": 5,
+      "remaining": [
+        "lait",
+        "sucre"
+      ],
+      "conversions": []
+    },
+    {
+      "title": "Gâteau aux pêches de Jeanine Laurent",
+      "before": 1,
+      "after": 2,
+      "total": 9,
+      "remaining": [
+        "sucre en morceaux (pour le caramel)",
+        "Eau",
+        "fleur de sel",
+        "farine",
+        "sucre de canne",
+        "beurre salé",
+        "pêches au sirop"
+      ],
+      "conversions": [
+        "Eau"
+      ]
+    },
+    {
+      "title": "Pommes de terre vigneronnes",
+      "before": 2,
+      "after": 2,
+      "total": 6,
+      "remaining": [
+        "pommes de terre BF15",
+        "poitrine fumée en tranches très minces",
+        "poitrine salée en tranches très minces",
+        "poivre"
+      ],
+      "conversions": []
+    },
+    {
+      "title": "Gratin de courgettes",
+      "before": 3,
+      "after": 4,
+      "total": 10,
+      "remaining": [
+        "pommes de terre (BF15 ou Charlotte)",
+        "bouillon de volaille",
+        "thym émietté",
+        "poivre",
+        "sel",
+        "Beurre"
+      ],
+      "conversions": [
+        "Ail",
+        "Beurre"
+      ]
+    },
+    {
+      "title": "Barbotton",
+      "before": 1,
+      "after": 3,
+      "total": 6,
+      "remaining": [
+        "bouillon",
+        "huile",
+        "Beurre"
+      ],
+      "conversions": [
+        "Beurre"
+      ]
+    },
+    {
+      "title": "Pâte brisée, salée ou sucrée façon Vali",
+      "before": 1,
+      "after": 2,
+      "total": 3,
+      "remaining": [
+        "Farine"
+      ],
+      "conversions": []
+    },
+    {
+      "title": "Rillettes de saumon frais et fumé / recette d'Oma pour nos fiançailles !!",
+      "before": 3,
+      "after": 3,
+      "total": 8,
+      "remaining": [
+        "saumon fumé",
+        "vin blanc sec",
+        "Cognac",
+        "sel",
+        "poivre"
+      ],
+      "conversions": []
+    },
+    {
+      "title": "Œufs en meurette",
+      "before": 4,
+      "after": 7,
+      "total": 17,
+      "remaining": [
+        "oignon",
+        "bouquet garni",
+        "bouillon de volaille ou de viande",
+        "farine",
+        "petits champignons",
+        "lard gras",
+        "croûtons de pain",
+        "persil haché",
+        "sel",
+        "poivre du moulin"
+      ],
+      "conversions": [
+        "Carotte",
+        "Ail",
+        "Vin rouge (cuisine)"
+      ]
+    },
+    {
+      "title": "La Tartiflette au Reblochon ",
+      "before": 0,
+      "after": 1,
+      "total": 7,
+      "remaining": [
+        "reblochon",
+        "pommes de terre (chair jaune BF ou charlotte)",
+        "lardons fumés ou nature",
+        "huile ou beurre",
+        "sel",
+        "poivre"
+      ],
+      "conversions": [
+        "Oignon blanc"
+      ]
+    },
+    {
+      "title": "Risotto aux champignons",
+      "before": 6,
+      "after": 8,
+      "total": 15,
+      "remaining": [
+        "riz arborio spécial risotto",
+        "champignons",
+        "oignon",
+        "crème fraîche",
+        "persil",
+        "sel",
+        "poivre"
+      ],
+      "conversions": [
+        "Ail"
+      ]
+    },
+    {
+      "title": "Le michon breton",
+      "before": 4,
+      "after": 5,
+      "total": 8,
+      "remaining": [
+        "confiture d'abricot",
+        "farine",
+        "lambig (ou calvados)"
+      ],
+      "conversions": []
+    },
+    {
+      "title": "Hachis parmentier",
+      "before": 5,
+      "after": 6,
+      "total": 7,
+      "remaining": [
+        "Lait"
+      ],
+      "conversions": [
+        "Oignon jaune"
+      ]
+    },
+    {
+      "title": "Œufs en meurette faciles",
+      "before": 4,
+      "after": 6,
+      "total": 12,
+      "remaining": [
+        "lardons fumés",
+        "farine",
+        "sucre",
+        "tranches de pain (mie ou campagne)",
+        "sel",
+        "poivre"
+      ],
+      "conversions": [
+        "Échalote"
+      ]
+    },
+    {
+      "title": "Filet mignon séché maison",
+      "before": 4,
+      "after": 4,
+      "total": 5,
+      "remaining": [
+        "gros sel de mer"
+      ],
+      "conversions": [
+        "Filet mignon de porc"
+      ]
+    },
+    {
+      "title": "Mousse au chocolat",
+      "before": 1,
+      "after": 3,
+      "total": 4,
+      "remaining": [
+        "chocolat"
+      ],
+      "conversions": []
+    },
+    {
+      "title": "Courgettes au Air Fryer",
+      "before": 3,
+      "after": 4,
+      "total": 6,
+      "remaining": [
+        "Sel",
+        "Poivre"
+      ],
+      "conversions": [
+        "Courgette",
+        "Ail"
+      ]
+    },
+    {
+      "title": "Poulet à la Gaston Gérard facile",
+      "before": 4,
+      "after": 4,
+      "total": 10,
+      "remaining": [
+        "poulet découpé",
+        "huile",
+        "vin blanc sec (type Aligoté)",
+        "moutarde de Dijon",
+        "sel",
+        "poivre"
+      ],
+      "conversions": []
+    },
+    {
+      "title": "Filet mignon rôti au Airfryer",
+      "before": 2,
+      "after": 2,
+      "total": 6,
+      "remaining": [
+        "moutarde à l'ancienne",
+        "thym séché ou herbes de Provence",
+        "sel",
+        "poivre"
+      ],
+      "conversions": []
+    },
+    {
+      "title": "Tarte Rustique à la crème de noix et prunes",
+      "before": 0,
+      "after": 2,
+      "total": 7,
+      "remaining": [
+        "cerneaux de noix",
+        "sucre",
+        "pâte brisée ou sablée",
+        "semoule fine ou biscuits écrasés",
+        "demi-quetsches et demi-reines-claudes congelées"
+      ],
+      "conversions": []
+    },
+    {
+      "title": "Quiche aux figues, chèvre, miel et romarin",
+      "before": 4,
+      "after": 6,
+      "total": 9,
+      "remaining": [
+        "bûche de chèvre",
+        "sel",
+        "poivre"
+      ],
+      "conversions": [
+        "Pâte brisée",
+        "Figue",
+        "Romarin frais"
+      ]
+    },
+    {
+      "title": "Tarte amandine aux figues",
+      "before": 2,
+      "after": 5,
+      "total": 6,
+      "remaining": [
+        "Crème fraîche"
+      ],
+      "conversions": [
+        "Pâte sablée",
+        "Figue"
+      ]
+    },
+    {
+      "title": "Sablé Breton de Christophe Felder",
+      "before": 2,
+      "after": 4,
+      "total": 6,
+      "remaining": [
+        "farine (ou 150g farine + 50g poudre d'amandes, noisette ou pistache)",
+        "sel"
+      ],
+      "conversions": []
+    },
+    {
+      "title": "Croque-monsieur aux figues, chèvre et jambon",
+      "before": 3,
+      "after": 4,
+      "total": 6,
+      "remaining": [
+        "jambon cru ou blanc",
+        "bûche de fromage de chèvre"
+      ],
+      "conversions": [
+        "Pain de mie",
+        "Figue"
+      ]
+    },
+    {
+      "title": "Tarte fine aux raisins, figues et fromage de chèvre",
+      "before": 6,
+      "after": 7,
+      "total": 9,
+      "remaining": [
+        "Grappe de raisin (blanc ou noir)",
+        "Fromage de chèvre frais (ou bûche)"
+      ],
+      "conversions": [
+        "Pâte feuilletée",
+        "Figue",
+        "Thym frais"
+      ]
+    },
+    {
+      "title": "Figues grillées à la pancetta",
+      "before": 2,
+      "after": 3,
+      "total": 5,
+      "remaining": [
+        "fromage de chèvre ou fromage bleu",
+        "poivre du moulin"
+      ],
+      "conversions": [
+        "Figue",
+        "Pancetta"
+      ]
+    },
+    {
+      "title": "Tarte aux tomates cerises à la moutarde et à l'emmental",
+      "before": 6,
+      "after": 6,
+      "total": 8,
+      "remaining": [
+        "sel",
+        "poivre"
+      ],
+      "conversions": [
+        "Pâte brisée"
+      ]
+    },
+    {
+      "title": "Mijoté de cocos de Paimpol au porc et oignons de Roscoff",
+      "before": 2,
+      "after": 7,
+      "total": 13,
+      "remaining": [
+        "oignons rosés de Roscoff AOP",
+        "haricots cocos de Paimpol AOP écossés",
+        "échine de porc",
+        "ventrèche ou lard demi-sel séché",
+        "bouquet de basilic petit vert",
+        "poivre du moulin"
+      ],
+      "conversions": [
+        "Poivron rouge",
+        "Ail",
+        "Carotte",
+        "Laurier frais",
+        "Thym frais",
+        "Romarin frais"
+      ]
+    },
+    {
+      "title": "Sauce hollandaise",
+      "before": 3,
+      "after": 5,
+      "total": 6,
+      "remaining": [
+        "Sel"
+      ],
+      "conversions": []
+    },
+    {
+      "title": "Popcorn de poulet au sesame",
+      "before": 0,
+      "after": 0,
+      "total": 0,
+      "remaining": [],
+      "conversions": []
+    },
+    {
+      "title": "Crevettes au bacon ",
+      "before": 4,
+      "after": 4,
+      "total": 8,
+      "remaining": [
+        "Crevette",
+        "Ail",
+        "Bacon",
+        "Mayonnaise"
+      ],
+      "conversions": [
+        "Crevette",
+        "Bacon",
+        "Mayonnaise"
+      ]
+    },
+    {
+      "title": "Méli-mélo de fruits d'été",
+      "before": 5,
+      "after": 6,
+      "total": 10,
+      "remaining": [
+        "farine",
+        "sel",
+        "huile neutre",
+        "pêches jaunes ou nectarines"
+      ],
+      "conversions": [
+        "Prune"
+      ]
+    },
+    {
+      "title": "Mijoté de cocos de Paimpol au porc et oignons de Roscoff",
+      "before": 2,
+      "after": 7,
+      "total": 13,
+      "remaining": [
+        "oignons rosés de Roscoff AOP",
+        "haricots cocos de Paimpol AOP écossés",
+        "échine de porc",
+        "ventrèche ou lard demi-sel séché",
+        "bouquet de basilic petit vert",
+        "poivre du moulin"
+      ],
+      "conversions": [
+        "Poivron rouge",
+        "Ail",
+        "Carotte",
+        "Laurier frais",
+        "Thym frais",
+        "Romarin frais"
+      ]
+    },
+    {
+      "title": "Comment préparer et cuire le Coco de Paimpol AOP",
+      "before": 2,
+      "after": 2,
+      "total": 7,
+      "remaining": [
+        "Cocos de Paimpol AOP en gousses",
+        "Oignon",
+        "Bouquet garni (thym, laurier)",
+        "Sel",
+        "Poivre en grains"
+      ],
+      "conversions": [
+        "Carotte",
+        "Ail"
+      ]
+    },
+    {
+      "title": "Salade estivale de Coco de Paimpol AOP",
+      "before": 3,
+      "after": 3,
+      "total": 10,
+      "remaining": [
+        "Coco de Paimpol AOP frais à écosser",
+        "Poivron jaune ou rouge",
+        "Bouquet garni",
+        "Vinaigre de cidre ou de Xérès",
+        "Ciboulette et persil frais",
+        "Sel",
+        "Poivre du moulin"
+      ],
+      "conversions": [
+        "Oignon rouge"
+      ]
+    },
+    {
+      "title": "Tajine de légumes",
+      "before": 8,
+      "after": 10,
+      "total": 15,
+      "remaining": [
+        "oignon",
+        "tomates pelées",
+        "ras-el-hanout",
+        "sel",
+        "poivre"
+      ],
+      "conversions": [
+        "Carotte",
+        "Courgette",
+        "Pomme de terre",
+        "Navet",
+        "Ail",
+        "Coriandre fraîche"
+      ]
+    },
+    {
+      "title": "Soupe à l’oignon (la meilleure)",
+      "before": 5,
+      "after": 8,
+      "total": 13,
+      "remaining": [
+        "sucre",
+        "farine tout usage",
+        "vin blanc sec",
+        "bouillon de bœuf",
+        "tranches de baguette grillées"
+      ],
+      "conversions": [
+        "Thym frais",
+        "Laurier frais"
+      ]
+    },
+    {
+      "title": "Tarte amandine aux poires pochées",
+      "before": 3,
+      "after": 7,
+      "total": 11,
+      "remaining": [
+        "poires fraîches (Conférence ou Comice)",
+        "gousse de vanille ou bâton de cannelle (facultatif)",
+        "farine",
+        "amandes effilées"
+      ],
+      "conversions": [
+        "Pâte sablée"
+      ]
+    },
+    {
+      "title": "Tarte aux pêches, citron vert et romarin façon Ottolenghi",
+      "before": 4,
+      "after": 6,
+      "total": 9,
+      "remaining": [
+        "pêches ou nectarines",
+        "sucre (ou miel)",
+        "crème fraîche"
+      ],
+      "conversions": [
+        "Pâte feuilletée",
+        "Romarin frais",
+        "Citron vert"
+      ]
+    },
+    {
+      "title": "Pot-au-feu",
+      "before": 2,
+      "after": 3,
+      "total": 12,
+      "remaining": [
+        "macreuse",
+        "plat de côte",
+        "gîte à la noix",
+        "os à moelle",
+        "gros sel",
+        "poivre",
+        "petits morceaux de céleri",
+        "oignons piqués d'un clou de girofle",
+        "bouquet garni"
+      ],
+      "conversions": [
+        "Carotte",
+        "Poireau",
+        "Ail"
+      ]
+    },
+    {
+      "title": "Hachis parmentier de canard",
+      "before": 4,
+      "after": 4,
+      "total": 11,
+      "remaining": [
+        "pommes de terre épluchées (type Bintje ou Manon)",
+        "Gros oignon",
+        "vin blanc sec ou bouillon de volaille",
+        "crème fraîche entière",
+        "chapelure ou fromage râpé",
+        "sel",
+        "poivre"
+      ],
+      "conversions": [
+        "Canard (cuisse confite)",
+        "Échalote"
+      ]
+    },
+    {
+      "title": "Cake à la compote de pommes",
+      "before": 2,
+      "after": 4,
+      "total": 9,
+      "remaining": [
+        "compote de pommes (idéalement sans sucres ajoutés)",
+        "farine",
+        "sucre",
+        "sel",
+        "morceaux de pommes, noix ou noisettes (facultatif)"
+      ],
+      "conversions": []
+    },
+    {
+      "title": "Poulet à la Gaston Gérard facile",
+      "before": 4,
+      "after": 4,
+      "total": 9,
+      "remaining": [
+        "morceaux de poulet (cuisses ou filets)",
+        "vin blanc sec",
+        "moutarde forte de Dijon",
+        "sel",
+        "poivre"
+      ],
+      "conversions": []
+    },
+    {
+      "title": "Gambas aux échalotes et vin blanc",
+      "before": 6,
+      "after": 6,
+      "total": 9,
+      "remaining": [
+        "vin blanc sec",
+        "sel",
+        "poivre du moulin"
+      ],
+      "conversions": [
+        "Gambas",
+        "Échalote",
+        "Ail"
+      ]
+    },
+    {
+      "title": "Gâteau au citron ultra fondant",
+      "before": 3,
+      "after": 6,
+      "total": 8,
+      "remaining": [
+        "farine",
+        "pincée de sel"
+      ],
+      "conversions": [
+        "Citron"
+      ]
+    },
+    {
+      "title": "Quatre-quarts traditionnel",
+      "before": 2,
+      "after": 3,
+      "total": 4,
+      "remaining": [
+        "beurre (idéalement demi-sel)"
+      ],
+      "conversions": []
+    },
+    {
+      "title": "Cassoulet breton de Coco de Paimpol AOP",
+      "before": 6,
+      "after": 6,
+      "total": 11,
+      "remaining": [
+        "Cocos de Paimpol AOP écossés",
+        "Saucisses bretonnes (ou saucisses fraîches)",
+        "Poitrine de porc fumée",
+        "Oignon",
+        "Bouquet garni (thym, laurier)"
+      ],
+      "conversions": [
+        "Carotte",
+        "Ail"
+      ]
+    },
+    {
+      "title": "Velouté de châtaigne de Cyril Lignac",
+      "before": 2,
+      "after": 2,
+      "total": 7,
+      "remaining": [
+        "châtaignes cuites au naturel",
+        "bouillon de volaille",
+        "oignon",
+        "sel",
+        "poivre"
+      ],
+      "conversions": []
+    }
+  ]
+}

@@ -1,3 +1,7 @@
+import { cleanText } from '../../utils/matcher'
+import { loadPantryProducts } from '../../utils/pantry-server'
+import { loadPantrySignals, loadHouseholdPurchases } from '../../utils/pantry-signals-server'
+import { activeAlmostFinished, latestPurchase } from '../../utils/pantry-history-policy'
 import { getAuthSession } from '../../utils/auth-server'
 import { NextResponse } from 'next/server'
 import { getHouseholdStockServer, resolveHousehold } from '../../utils/household-server'
@@ -11,9 +15,10 @@ export async function GET() {
   }
 
   try {
-    const [items, household] = await Promise.all([
+    const [items, household, pantry, signals, purchases] = await Promise.all([
       getHouseholdStockServer(username),
       resolveHousehold(username),
+      loadPantryProducts(username), loadPantrySignals(username), loadHouseholdPurchases(username),
     ])
 
     const [frostiLocations, cellioLocations, officialIngredients, ingredientSynonyms] = await Promise.all([
@@ -45,12 +50,7 @@ export async function GET() {
     const frostiMap = new Map((frostiLocations.data ?? []).map((location: any) => [location.id, location]))
     const cellioMap = new Map((cellioLocations.data ?? []).map((location: any) => [location.id, location]))
 
-    const normalizeName = (value: string) => value
-      .normalize('NFD')
-      .replace(/[\u0300-\u036f]/g, '')
-      .toLowerCase()
-      .trim()
-      .replace(/[^a-z0-9]+/g, '')
+    const normalizeName = (value: string) => cleanText(value)
 
     const rayonByName = new Map<string, string>()
     for (const ingredient of officialIngredients.data ?? []) {
@@ -71,11 +71,28 @@ export async function GET() {
       return rayonByName.get(key) ?? rayonById.get(ingredientIdBySynonym.get(key) ?? '') ?? null
     }
 
+    const ingredientByName=new Map<string,string>((officialIngredients.data ?? []).map((i:any)=>[normalizeName(i.nom),i.id] as [string,string]))
+    const ingredientById = new Map((officialIngredients.data ?? []).map((i:any) => [i.id, i]))
+    const aliasesById = new Map<string, string[]>()
+    for (const synonym of ingredientSynonyms.data ?? []) aliasesById.set(synonym.ingredient_id, [...(aliasesById.get(synonym.ingredient_id) ?? []), synonym.mot_recette])
+    const identityInfo = (name: string) => {
+      const id = ingredientByName.get(normalizeName(name)) ?? ingredientIdBySynonym.get(normalizeName(name))
+      const ingredient = id ? ingredientById.get(id) as { nom: string } | undefined : undefined
+      return { ingredient_id: id ?? null, ingredient_name: ingredient?.nom ?? null, ingredient_aliases: id ? aliasesById.get(id) ?? [] : [] }
+    }
+    const pantryInfo=(name:string)=>{
+      const key=normalizeName(name)
+      const id=ingredientByName.get(key) ?? ingredientIdBySynonym.get(key)
+      if(!id || !pantry.get(id)?.enabled) return {pantry_ingredient_id:null,almost_finished:false}
+      return {pantry_ingredient_id:id,almost_finished:activeAlmostFinished(signals.find(s=>s.ingredient_id===id && s.kind==='almost_finished'),latestPurchase(purchases,id))}
+    }
     const enrichedItems = items.map(item => {
       if (item.source === 'frosti') {
         const location = item.congelo_id ? frostiMap.get(item.congelo_id) : null
         return {
           ...item,
+          ...pantryInfo(item.produit),
+          ...identityInfo(item.produit),
           rayon: resolveRayon(item.produit),
           location_id: item.congelo_id ?? null,
           location_name: location?.name ?? null,
@@ -86,6 +103,9 @@ export async function GET() {
       const location = item.cellar_id ? cellioMap.get(item.cellar_id) : null
       return {
         ...item,
+        ...pantryInfo(item.produit),
+        ...identityInfo(item.produit),
+        rayon: resolveRayon(item.produit),
         location_id: item.cellar_id ?? null,
         location_name: location?.name ?? null,
         location_is_secondary: location?.is_secondary ?? null,

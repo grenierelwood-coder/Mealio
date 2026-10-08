@@ -1,3 +1,4 @@
+import { loadPantryProducts } from './pantry-server'
 import { mealioServerDb } from '../lib/supabase-server'
 
 function normalizeUnit(value: string | null | undefined): string {
@@ -61,13 +62,23 @@ export async function getOfficialIngredientReferenceUnit(ingredientId: string): 
 export async function assertOfficialIngredientUnit(
   ingredientId: string,
   requestedUnit: string | null | undefined,
+  username?: string,
 ): Promise<string> {
   const [reference, requested] = await Promise.all([
     getOfficialIngredientReferenceUnit(ingredientId),
     canonicalUnit(requestedUnit),
   ])
 
+  if (normalizeUnit(requested) === 'piece') {
+    const { data, error } = await mealioServerDb.from('official_ingredients').select('nom').eq('id', ingredientId).maybeSingle()
+    if (error) throw new Error(error.message)
+    if (data?.nom === 'Ail') throw new Error('Ail : Pièce est interdite. Utiliser Gousse.')
+  }
+
   if (normalizeUnit(reference) !== normalizeUnit(requested)) {
+    // Le format d'achat épicerie est explicite et indépendant de l'unité recette.
+    const pantry = (await loadPantryProducts(username)).get(ingredientId)
+    if (pantry?.enabled && normalizeUnit(pantry.default_unit) === normalizeUnit(requested)) return requested
     const { data } = await mealioServerDb
       .from('official_ingredients')
       .select('nom')
@@ -75,7 +86,7 @@ export async function assertOfficialIngredientUnit(
       .maybeSingle()
 
     throw new Error(
-      `Unité refusée pour « ${data?.nom ?? 'cet ingrédient'} » : « ${requested} » ne correspond pas à son unité de référence « ${reference} ». Modifiez d’abord l’unité de référence de l’ingrédient.`
+      `Unité refusée pour « ${data?.nom ?? 'cet ingrédient'} » : « ${requested} » ne correspond pas à son unité de référence « ${reference} ». Utilisez l’unité de référence et convertissez la quantité avec une équivalence adaptée.`
     )
   }
 

@@ -110,35 +110,24 @@ export async function requireHousehold(
   return household
 }
 
+/** Read every owned row: Supabase's default result cap must not hide dated products. */
+async function pagedStockRows(source:'frosti'|'cellio',userId:string){
+ const db=source==='frosti'?frostiServerDb:cellioServerDb;const location=source==='frosti'?'congelo_id':'cellar_id';const rows:any[]=[]
+ for(let offset=0;offset<100000;offset+=500){
+  const {data,error}=await db.from('items').select(`id,produit,qte,unite,categorie,date_entree,date_peremption,notes,${location}`).eq('user_id',userId).order('id').range(offset,offset+499)
+  if(error)throw new Error(`Erreur lecture stock ${source==='frosti'?'Frosti':'Cellio'} : ${error.message}`)
+  rows.push(...(data||[]));if((data||[]).length<500)return rows
+ }
+ throw new Error('Stock supérieur à 100 000 lignes : lecture complète impossible.')
+}
+
 /**
  * Récupère le stock Frosti du foyer.
  */
 export async function getFrostiStock(
   userId: string
 ): Promise<HouseholdStockItem[]> {
-  const { data, error } = await frostiServerDb
-    .from('items')
-    .select(
-      `
-        id,
-        produit,
-        qte,
-        unite,
-        categorie,
-        date_entree,
-        date_peremption,
-        notes,
-        congelo_id
-      `
-    )
-    .eq('user_id', userId)
-    .order('produit', { ascending: true })
-
-  if (error) {
-    throw new Error(
-      `Erreur lecture stock Frosti : ${error.message}`
-    )
-  }
+  const data=await pagedStockRows('frosti',userId)
 
   return (data ?? []).map((item: any) => ({
     id: item.id,
@@ -160,29 +149,7 @@ export async function getFrostiStock(
 export async function getCellioStock(
   userId: string
 ): Promise<HouseholdStockItem[]> {
-  const { data, error } = await cellioServerDb
-    .from('items')
-    .select(
-      `
-        id,
-        produit,
-        qte,
-        unite,
-        categorie,
-        date_entree,
-        date_peremption,
-        notes,
-        cellar_id
-      `
-    )
-    .eq('user_id', userId)
-    .order('produit', { ascending: true })
-
-  if (error) {
-    throw new Error(
-      `Erreur lecture stock Cellio : ${error.message}`
-    )
-  }
+  const data=await pagedStockRows('cellio',userId)
 
   return (data ?? []).map((item: any) => ({
     id: item.id,
@@ -202,9 +169,12 @@ export async function getCellioStock(
  * Récupère le stock complet du foyer.
  */
 export async function getHouseholdStockServer(
-  username: string
+  username: string,
+  context?: HouseholdContext,
 ): Promise<HouseholdStockItem[]> {
-  const household = await requireHousehold(username)
+  const household = context ?? await requireHousehold(username)
+  if (household.username !== username.trim()) throw new Error('Le contexte ne correspond pas au foyer.')
+  if (!household.frostiUserId && !household.cellioUserId) throw new Error('Foyer introuvable dans Frosti et Cellio.')
 
   const [frostiStock, cellioStock] = await Promise.all([
     household.frostiUserId

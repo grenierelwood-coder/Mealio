@@ -12,6 +12,7 @@ export interface ClaudeMatchResponse {
   matched: string | null
   confidence: number
   reason: string
+  unavailable?: boolean
 }
 
 function extractJson(text: string): any | null {
@@ -32,6 +33,7 @@ async function callClaude(prompt: string): Promise<string | null> {
   }
 
   const response = await fetch('https://api.anthropic.com/v1/messages', {
+    signal: AbortSignal.timeout(15000),
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -92,10 +94,13 @@ Réponds UNIQUEMENT avec :
 
   try {
     const answer = await callClaude(prompt)
-    if (!answer) return { matched: null, confidence: 0, reason: 'IA indisponible' }
+    if (!answer) return { matched: null, confidence: 0, reason: 'IA indisponible', unavailable: true }
 
     const parsed = extractJson(answer)
-    if (!parsed || !parsed.match || String(parsed.match).toUpperCase() === 'AUCUN') {
+    if (!parsed || typeof parsed.match !== 'string') {
+      return { matched: null, confidence: 0, reason: 'Réponse IA invalide', unavailable: true }
+    }
+    if (String(parsed.match).toUpperCase() === 'AUCUN') {
       return {
         matched: null,
         confidence: 0,
@@ -105,7 +110,7 @@ Réponds UNIQUEMENT avec :
 
     const selected = candidates.find(c => c.id === String(parsed.match))
     if (!selected) {
-      return { matched: null, confidence: 0, reason: 'Claude a renvoyé un candidat inexistant' }
+      return { matched: null, confidence: 0, reason: 'Claude a renvoyé un candidat inexistant', unavailable: true }
     }
 
     return {
@@ -115,7 +120,7 @@ Réponds UNIQUEMENT avec :
     }
   } catch (error) {
     console.error('❌ Erreur Claude résolution ingrédient :', error)
-    return { matched: null, confidence: 0, reason: 'Exception IA' }
+    return { matched: null, confidence: 0, reason: 'Exception IA', unavailable: true }
   }
 }
 
@@ -155,10 +160,13 @@ Réponds UNIQUEMENT avec :
 
   try {
     const answer = await callClaude(prompt)
-    if (!answer) return { matched: null, confidence: 0, reason: 'IA indisponible' }
+    if (!answer) return { matched: null, confidence: 0, reason: 'IA indisponible', unavailable: true }
 
     const parsed = extractJson(answer)
-    if (!parsed || !parsed.match || String(parsed.match).toUpperCase() === 'AUCUN') {
+    if (!parsed || typeof parsed.match !== 'string') {
+      return { matched: null, confidence: 0, reason: 'Réponse IA invalide', unavailable: true }
+    }
+    if (String(parsed.match).toUpperCase() === 'AUCUN') {
       return {
         matched: null,
         confidence: 0,
@@ -168,7 +176,7 @@ Réponds UNIQUEMENT avec :
 
     const selected = candidates.find(c => c.id === String(parsed.match))
     if (!selected) {
-      return { matched: null, confidence: 0, reason: 'Claude a renvoyé un candidat inexistant' }
+      return { matched: null, confidence: 0, reason: 'Claude a renvoyé un candidat inexistant', unavailable: true }
     }
 
     return {
@@ -178,6 +186,6 @@ Réponds UNIQUEMENT avec :
     }
   } catch (error) {
     console.error('❌ Erreur Claude matching stock :', error)
-    return { matched: null, confidence: 0, reason: 'Exception IA' }
+    return { matched: null, confidence: 0, reason: 'Exception IA', unavailable: true }
   }
 }

@@ -1,10 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { cookies } from 'next/headers'
+import { getAuthSession } from '../../../utils/auth-server'
+import { getHouseholdStock } from '../../../utils/stock-fetcher'
+import { loadReferenceData, resolveStockIngredientId } from '../../../utils/matcher'
 import {
   validateMatcherDecision,
   rejectMatcherDecision,
   forgetMatcherDecision,
-  StockItem,
+  type StockItem,
 } from '../../../utils/matcher'
 
 interface FeedbackBody {
@@ -15,9 +17,8 @@ interface FeedbackBody {
 }
 
 export async function POST(request: NextRequest) {
-  const cookieStore = await cookies()
-  const userId = cookieStore.get('congelo_user_id')?.value
-  if (!userId) return NextResponse.json({ error: 'Non authentifié.' }, { status: 401 })
+  const session = await getAuthSession()
+  if (!session) return NextResponse.json({ error: 'Non authentifié.' }, { status: 401 })
 
   let body: FeedbackBody
   try {
@@ -26,17 +27,32 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'Corps JSON invalide.' }, { status: 400 })
   }
 
-  if (!body.action || !body.ingredientName || !body.stockItem?.id || !body.stockItem?.produit) {
+  if (!body || typeof body.ingredientName !== 'string' || !body.ingredientName.trim() ||
+      !body.stockItem || typeof body.stockItem.id !== 'string' || typeof body.stockItem.produit !== 'string' ||
+      !body.stockItem.id || !body.stockItem.produit ||
+      !['validate', 'reject', 'forget'].includes(String(body.action))) {
     return NextResponse.json({ error: 'action, ingredientName et stockItem.id/produit sont requis.' }, { status: 400 })
   }
 
   try {
+    const householdStock = await getHouseholdStock(session.username)
+    const ownedStock = householdStock.items.find(item => item.id === body.stockItem!.id)
+    if (!ownedStock) return NextResponse.json({ error: 'Article de stock introuvable dans ce foyer.' }, { status: 404 })
+    const refData = await loadReferenceData()
+    const ingredientId = resolveStockIngredientId(refData, body.ingredientName)
+    const stockId = resolveStockIngredientId(refData, ownedStock.produit)
+    if (body.action === 'validate' && ingredientId && stockId && ingredientId !== stockId) {
+      return NextResponse.json({ error: 'Deux ingrédients officiels différents ne peuvent pas être validés comme équivalents.' }, { status: 409 })
+    }
+    if (body.reason != null && typeof body.reason !== 'string') {
+      return NextResponse.json({ error: 'La raison doit être un texte.' }, { status: 400 })
+    }
     if (body.action === 'validate') {
-      await validateMatcherDecision(body.ingredientName, body.stockItem, body.reason)
+      await validateMatcherDecision(body.ingredientName, ownedStock, body.reason)
     } else if (body.action === 'reject') {
-      await rejectMatcherDecision(body.ingredientName, body.stockItem, body.reason)
+      await rejectMatcherDecision(body.ingredientName, ownedStock, body.reason)
     } else if (body.action === 'forget') {
-      await forgetMatcherDecision(body.ingredientName, body.stockItem)
+      await forgetMatcherDecision(body.ingredientName, ownedStock)
     } else {
       return NextResponse.json({ error: 'Action inconnue.' }, { status: 400 })
     }

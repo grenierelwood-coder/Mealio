@@ -128,7 +128,7 @@ test('presence-only : jamais de calcul quantitatif ni de densité', async () => 
 
   assert.equal(resolved[0].quantity_mode, 'presence')
   assert.equal(resolved[0].qte, 1)
-  assert.equal(resolved[0].unite, 'Pièce')
+  assert.equal(resolved[0].unite, 'Présence')
 })
 
 test('plusieurs lignes de stock exactes sont toutes additionnées', async () => {

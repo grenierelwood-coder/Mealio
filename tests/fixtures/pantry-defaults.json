@@ -1,0 +1,674 @@
+[
+  {
+    "ingredient_id": "9930b353-fa58-4c61-b0e9-c74a7b38f777",
+    "default_quantity": 250.0,
+    "default_unit": "Gramme",
+    "enabled": true
+  },
+  {
+    "ingredient_id": "b173456e-a766-4e91-a518-163bf1920102",
+    "default_quantity": 250.0,
+    "default_unit": "Gramme",
+    "enabled": true
+  },
+  {
+    "ingredient_id": "a5a8e399-d00f-4ca1-892d-bbd029704227",
+    "default_quantity": 500.0,
+    "default_unit": "Gramme",
+    "enabled": true
+  },
+  {
+    "ingredient_id": "16294229-e32a-4a19-8305-664f2fd004c6",
+    "default_quantity": 500.0,
+    "default_unit": "Gramme",
+    "enabled": true
+  },
+  {
+    "ingredient_id": "e6c8d7c9-976c-4c3a-8b9a-8a4d0296f656",
+    "default_quantity": 500.0,
+    "default_unit": "Gramme",
+    "enabled": true
+  },
+  {
+    "ingredient_id": "04637480-6fec-4210-b34a-0fa284116054",
+    "default_quantity": 500.0,
+    "default_unit": "Gramme",
+    "enabled": true
+  },
+  {
+    "ingredient_id": "ebc99b32-24db-4075-b1f0-67b5246739af",
+    "default_quantity": 500.0,
+    "default_unit": "Gramme",
+    "enabled": true
+  },
+  {
+    "ingredient_id": "ba45f79a-5d97-4371-ab2c-ea7c3fdc25e2",
+    "default_quantity": 500.0,
+    "default_unit": "Gramme",
+    "enabled": true
+  },
+  {
+    "ingredient_id": "988905da-104f-4c15-875f-1dacc479cac3",
+    "default_quantity": 1000.0,
+    "default_unit": "Gramme",
+    "enabled": true
+  },
+  {
+    "ingredient_id": "0c3ac111-4503-45da-8963-e8d60dd5ec13",
+    "default_quantity": 1000.0,
+    "default_unit": "Gramme",
+    "enabled": true
+  },
+  {
+    "ingredient_id": "fcbadd29-f293-4b5b-8696-e6c9a4ce0091",
+    "default_quantity": 500.0,
+    "default_unit": "Gramme",
+    "enabled": true
+  },
+  {
+    "ingredient_id": "a64d4dad-783e-4f17-95a9-f560f3b52b02",
+    "default_quantity": 250.0,
+    "default_unit": "Gramme",
+    "enabled": true
+  },
+  {
+    "ingredient_id": "bdb1fabb-116d-44fb-be00-3d4112acbfb1",
+    "default_quantity": 500.0,
+    "default_unit": "Gramme",
+    "enabled": true
+  },
+  {
+    "ingredient_id": "81faabe4-6124-4ee4-b11e-d059b093d8be",
+    "default_quantity": 500.0,
+    "default_unit": "Gramme",
+    "enabled": true
+  },
+  {
+    "ingredient_id": "21d303fe-b285-4159-911f-d7ad95670533",
+    "default_quantity": 500.0,
+    "default_unit": "Gramme",
+    "enabled": true
+  },
+  {
+    "ingredient_id": "b9f01650-8a34-4950-be48-440563900a69",
+    "default_quantity": 500.0,
+    "default_unit": "Gramme",
+    "enabled": true
+  },
+  {
+    "ingredient_id": "e104db1b-dab5-4c47-8950-e77e9c617b75",
+    "default_quantity": 500.0,
+    "default_unit": "Gramme",
+    "enabled": true
+  },
+  {
+    "ingredient_id": "2a6a3502-61a0-4d9d-bb21-e9f612b3ddf0",
+    "default_quantity": 500.0,
+    "default_unit": "Gramme",
+    "enabled": true
+  },
+  {
+    "ingredient_id": "a07d93e2-17a5-49bc-9e95-271515ac746c",
+    "default_quantity": 500.0,
+    "default_unit": "Gramme",
+    "enabled": true
+  },
+  {
+    "ingredient_id": "ca4bc05e-b03c-4c8c-9417-6fbb8b87e409",
+    "default_quantity": 500.0,
+    "default_unit": "Gramme",
+    "enabled": true
+  },
+  {
+    "ingredient_id": "00565f51-c2ff-4bc2-a341-cf57b9a9d271",
+    "default_quantity": 500.0,
+    "default_unit": "Gramme",
+    "enabled": true
+  },
+  {
+    "ingredient_id": "c778ac07-80b3-4344-9293-2e8c5256a917",
+    "default_quantity": 500.0,
+    "default_unit": "Gramme",
+    "enabled": true
+  },
+  {
+    "ingredient_id": "6aa4c4e4-29be-407d-8f15-05a2b63204e0",
+    "default_quantity": 500.0,
+    "default_unit": "Gramme",
+    "enabled": true
+  },
+  {
+    "ingredient_id": "9220f57e-c66c-4bd7-af89-f9bc24a44a3e",
+    "default_quantity": 500.0,
+    "default_unit": "Gramme",
+    "enabled": true
+  },
+  {
+    "ingredient_id": "e8ae3bef-1731-49d5-bc0f-0341d4da9594",
+    "default_quantity": 500.0,
+    "default_unit": "Gramme",
+    "enabled": true
+  },
+  {
+    "ingredient_id": "51081a27-4be0-49a7-a147-4af4d4c16df3",
+    "default_quantity": 250.0,
+    "default_unit": "Gramme",
+    "enabled": true
+  },
+  {
+    "ingredient_id": "998d6c48-440f-4688-aa64-98e179c7edad",
+    "default_quantity": 1000.0,
+    "default_unit": "Gramme",
+    "enabled": true
+  },
+  {
+    "ingredient_id": "b877c024-a45e-4c27-a710-fe0df7524ffe",
+    "default_quantity": 200.0,
+    "default_unit": "Gramme",
+    "enabled": true
+  },
+  {
+    "ingredient_id": "50121d92-8b9a-4bfc-8d98-c4d901f424b4",
+    "default_quantity": 200.0,
+    "default_unit": "Gramme",
+    "enabled": true
+  },
+  {
+    "ingredient_id": "414d03d7-60e8-4e50-bcfc-e81632b52b02",
+    "default_quantity": 200.0,
+    "default_unit": "Gramme",
+    "enabled": true
+  },
+  {
+    "ingredient_id": "e2c2b554-5a08-4b33-9f6a-b9e0ca9510f1",
+    "default_quantity": 250.0,
+    "default_unit": "Gramme",
+    "enabled": true
+  },
+  {
+    "ingredient_id": "2d9c2490-61eb-46cb-9ceb-0c30cc03bd32",
+    "default_quantity": 6.0,
+    "default_unit": "Gramme",
+    "enabled": true
+  },
+  {
+    "ingredient_id": "d1f651ac-2af8-4dba-9799-9fe9e884148e",
+    "default_quantity": 11.0,
+    "default_unit": "Gramme",
+    "enabled": true
+  },
+  {
+    "ingredient_id": "7f1fb626-ee2e-46f7-bd16-89e7061bc434",
+    "default_quantity": 7.0,
+    "default_unit": "Gramme",
+    "enabled": true
+  },
+  {
+    "ingredient_id": "65139df8-6580-422f-8c52-06f5b6eb79f0",
+    "default_quantity": 200.0,
+    "default_unit": "Gramme",
+    "enabled": true
+  },
+  {
+    "ingredient_id": "e956b112-0b15-4268-b204-0641445f9176",
+    "default_quantity": 250.0,
+    "default_unit": "Gramme",
+    "enabled": true
+  },
+  {
+    "ingredient_id": "13cdb406-387a-4f34-943a-5cde5a1294c8",
+    "default_quantity": 250.0,
+    "default_unit": "Gramme",
+    "enabled": true
+  },
+  {
+    "ingredient_id": "061a0f7d-9026-4b28-b8b9-c70483026d98",
+    "default_quantity": 1000.0,
+    "default_unit": "Gramme",
+    "enabled": true
+  },
+  {
+    "ingredient_id": "2512e595-efc5-49f3-9c57-66d88ec7a872",
+    "default_quantity": 1000.0,
+    "default_unit": "Gramme",
+    "enabled": true
+  },
+  {
+    "ingredient_id": "5b925699-63b9-498f-b110-d4c2bd51e77c",
+    "default_quantity": 1000.0,
+    "default_unit": "Gramme",
+    "enabled": true
+  },
+  {
+    "ingredient_id": "67291c17-cfb5-4408-ad37-3459c0a5e295",
+    "default_quantity": 2.0,
+    "default_unit": "Gousse",
+    "enabled": true
+  },
+  {
+    "ingredient_id": "273facce-800f-42d1-8702-ff623f2ff211",
+    "default_quantity": 20.0,
+    "default_unit": "Gramme",
+    "enabled": true
+  },
+  {
+    "ingredient_id": "c8e284fa-c762-439f-80bd-bebfdd7aa36a",
+    "default_quantity": 10.0,
+    "default_unit": "Pièce",
+    "enabled": true
+  },
+  {
+    "ingredient_id": "c4790a43-5945-4af7-a2f3-1d6815b0de61",
+    "default_quantity": 10.0,
+    "default_unit": "Pièce",
+    "enabled": true
+  },
+  {
+    "ingredient_id": "4f1f124a-9d2b-4462-a670-9bbc09f2d5ce",
+    "default_quantity": 10.0,
+    "default_unit": "Pièce",
+    "enabled": true
+  },
+  {
+    "ingredient_id": "fc099c01-24ee-454d-9748-690e36cff5aa",
+    "default_quantity": 250.0,
+    "default_unit": "Gramme",
+    "enabled": true
+  },
+  {
+    "ingredient_id": "68084975-f4e5-4569-8bbc-8bbde72b244b",
+    "default_quantity": 500.0,
+    "default_unit": "Millilitre",
+    "enabled": true
+  },
+  {
+    "ingredient_id": "61873ae1-7ad3-4218-a4e3-a23e6338ba78",
+    "default_quantity": 70.0,
+    "default_unit": "Gramme",
+    "enabled": true
+  },
+  {
+    "ingredient_id": "c24a3154-cd36-4b6a-bbc6-78aae3968426",
+    "default_quantity": 250.0,
+    "default_unit": "Gramme",
+    "enabled": true
+  },
+  {
+    "ingredient_id": "693d5961-c3bc-49cc-90d4-ebe7c9b16b91",
+    "default_quantity": 250.0,
+    "default_unit": "Gramme",
+    "enabled": true
+  },
+  {
+    "ingredient_id": "a1d41d79-fdb2-44c3-bc2c-863228f71756",
+    "default_quantity": 250.0,
+    "default_unit": "Gramme",
+    "enabled": true
+  },
+  {
+    "ingredient_id": "b37594b5-97e4-435e-bcc5-5de01183a768",
+    "default_quantity": 250.0,
+    "default_unit": "Gramme",
+    "enabled": true
+  },
+  {
+    "ingredient_id": "e13a5081-aec9-459a-baa6-cee23490dcc1",
+    "default_quantity": 250.0,
+    "default_unit": "Gramme",
+    "enabled": true
+  },
+  {
+    "ingredient_id": "85d1bffc-7795-46f7-8716-0a4686d51651",
+    "default_quantity": 250.0,
+    "default_unit": "Millilitre",
+    "enabled": true
+  },
+  {
+    "ingredient_id": "5ea3dfb8-a512-4053-af24-99588798d983",
+    "default_quantity": 250.0,
+    "default_unit": "Millilitre",
+    "enabled": true
+  },
+  {
+    "ingredient_id": "e61b06ba-147c-4be3-b9aa-de69cef88490",
+    "default_quantity": 150.0,
+    "default_unit": "Millilitre",
+    "enabled": true
+  },
+  {
+    "ingredient_id": "e378c45d-d950-4bc7-965c-7ca7eb8d6530",
+    "default_quantity": 60.0,
+    "default_unit": "Gramme",
+    "enabled": true
+  },
+  {
+    "ingredient_id": "a76f8bbc-ff41-4e5e-90c5-22636841b9da",
+    "default_quantity": 400.0,
+    "default_unit": "Gramme",
+    "enabled": true
+  },
+  {
+    "ingredient_id": "67d8d633-9923-44fe-bc3e-ace9610ab94a",
+    "default_quantity": 500.0,
+    "default_unit": "Millilitre",
+    "enabled": true
+  },
+  {
+    "ingredient_id": "8f5d5fe1-10cc-4e90-91ea-ca34047ad37e",
+    "default_quantity": 500.0,
+    "default_unit": "Millilitre",
+    "enabled": true
+  },
+  {
+    "ingredient_id": "d5c332c0-1ef4-4723-b6f0-cd95380d279a",
+    "default_quantity": 500.0,
+    "default_unit": "Millilitre",
+    "enabled": true
+  },
+  {
+    "ingredient_id": "b13ba446-716d-4eb6-8770-17e3156fc625",
+    "default_quantity": 25.0,
+    "default_unit": "Gramme",
+    "enabled": true
+  },
+  {
+    "ingredient_id": "94357ffe-87c5-4144-b416-77e0b5de5d51",
+    "default_quantity": 25.0,
+    "default_unit": "Gramme",
+    "enabled": true
+  },
+  {
+    "ingredient_id": "814d7a10-1008-48e9-b255-c5630feee22f",
+    "default_quantity": 25.0,
+    "default_unit": "Gramme",
+    "enabled": true
+  },
+  {
+    "ingredient_id": "579e6440-bd72-47da-82a6-b12877475ff6",
+    "default_quantity": 25.0,
+    "default_unit": "Gramme",
+    "enabled": true
+  },
+  {
+    "ingredient_id": "234c8cbc-3a4f-4103-a955-30d5fc60a41a",
+    "default_quantity": 25.0,
+    "default_unit": "Gramme",
+    "enabled": true
+  },
+  {
+    "ingredient_id": "46f6707a-506b-4687-9b0f-ddafa3c14395",
+    "default_quantity": 25.0,
+    "default_unit": "Gramme",
+    "enabled": true
+  },
+  {
+    "ingredient_id": "8c0bdfed-d774-415c-8bb3-31204e535323",
+    "default_quantity": 25.0,
+    "default_unit": "Gramme",
+    "enabled": true
+  },
+  {
+    "ingredient_id": "daa63d22-f1b2-4359-a8cb-af73f2ee468d",
+    "default_quantity": 25.0,
+    "default_unit": "Gramme",
+    "enabled": true
+  },
+  {
+    "ingredient_id": "68fca284-863a-4a99-ae2e-7b5f098ac01c",
+    "default_quantity": 25.0,
+    "default_unit": "Gramme",
+    "enabled": true
+  },
+  {
+    "ingredient_id": "6c45d349-decf-47f1-a713-2da002911581",
+    "default_quantity": 25.0,
+    "default_unit": "Gramme",
+    "enabled": true
+  },
+  {
+    "ingredient_id": "ee041cff-eccf-4231-a471-392b1c053e5a",
+    "default_quantity": 25.0,
+    "default_unit": "Gramme",
+    "enabled": true
+  },
+  {
+    "ingredient_id": "4dc051af-0baa-4043-b2e8-54969576df03",
+    "default_quantity": 25.0,
+    "default_unit": "Gramme",
+    "enabled": true
+  },
+  {
+    "ingredient_id": "5337a304-abd5-4061-a9b4-ebcecd2c4661",
+    "default_quantity": 25.0,
+    "default_unit": "Gramme",
+    "enabled": true
+  },
+  {
+    "ingredient_id": "9208662e-ca49-46c4-a1ff-3a1ebe0377b9",
+    "default_quantity": 25.0,
+    "default_unit": "Gramme",
+    "enabled": true
+  },
+  {
+    "ingredient_id": "bc99b450-028f-420b-b9f7-aaabade92050",
+    "default_quantity": 250.0,
+    "default_unit": "Gramme",
+    "enabled": true
+  },
+  {
+    "ingredient_id": "a5ff8192-e39e-4a62-ad46-de73e4f1f0b5",
+    "default_quantity": 250.0,
+    "default_unit": "Gramme",
+    "enabled": true
+  },
+  {
+    "ingredient_id": "30f26710-8fc8-47f7-97de-c8e2a0e8f066",
+    "default_quantity": 250.0,
+    "default_unit": "Gramme",
+    "enabled": true
+  },
+  {
+    "ingredient_id": "81c9bc32-f487-4ab2-aaff-2cd3acfbacaf",
+    "default_quantity": 250.0,
+    "default_unit": "Gramme",
+    "enabled": true
+  },
+  {
+    "ingredient_id": "11550cce-de0f-4e38-b1f2-1004bde912a4",
+    "default_quantity": 1.0,
+    "default_unit": "Gramme",
+    "enabled": true
+  },
+  {
+    "ingredient_id": "b34663f6-0748-4fcc-a150-b8fd4dc661ce",
+    "default_quantity": 25.0,
+    "default_unit": "Gramme",
+    "enabled": true
+  },
+  {
+    "ingredient_id": "7d552deb-639f-4791-99bb-994f4675b865",
+    "default_quantity": 750.0,
+    "default_unit": "Millilitre",
+    "enabled": true
+  },
+  {
+    "ingredient_id": "d49db00c-574e-4b97-b9c4-831d92601520",
+    "default_quantity": 250.0,
+    "default_unit": "Millilitre",
+    "enabled": true
+  },
+  {
+    "ingredient_id": "93aec379-4eba-4afc-a011-a031ce0755d0",
+    "default_quantity": 250.0,
+    "default_unit": "Gramme",
+    "enabled": true
+  },
+  {
+    "ingredient_id": "f0a109d2-03bc-4676-98f8-b83f285fde19",
+    "default_quantity": 250.0,
+    "default_unit": "Gramme",
+    "enabled": true
+  },
+  {
+    "ingredient_id": "32f1e428-62eb-4d52-82e3-2ac348d58bbb",
+    "default_quantity": 250.0,
+    "default_unit": "Gramme",
+    "enabled": true
+  },
+  {
+    "ingredient_id": "0ffd7f3d-28c9-4bd3-89aa-cfe37d0ef8ce",
+    "default_quantity": 250.0,
+    "default_unit": "Gramme",
+    "enabled": true
+  },
+  {
+    "ingredient_id": "7ff2c86a-1956-4fee-b89a-68b44c73cbe9",
+    "default_quantity": 250.0,
+    "default_unit": "Gramme",
+    "enabled": true
+  },
+  {
+    "ingredient_id": "32e3673c-1e88-4f8e-ab65-94a9babfb4b2",
+    "default_quantity": 250.0,
+    "default_unit": "Gramme",
+    "enabled": true
+  },
+  {
+    "ingredient_id": "d4f58fb2-1286-4b63-8051-af14033e9f4e",
+    "default_quantity": 250.0,
+    "default_unit": "Gramme",
+    "enabled": true
+  },
+  {
+    "ingredient_id": "636cf3c9-b4ad-44b3-a566-0b16df3e000a",
+    "default_quantity": 250.0,
+    "default_unit": "Gramme",
+    "enabled": true
+  },
+  {
+    "ingredient_id": "a29c3aad-7ab9-4231-a3ab-4071cb44cc14",
+    "default_quantity": 250.0,
+    "default_unit": "Gramme",
+    "enabled": true
+  },
+  {
+    "ingredient_id": "9014af2a-0c39-40d9-9f66-999d38f040f7",
+    "default_quantity": 250.0,
+    "default_unit": "Gramme",
+    "enabled": true
+  },
+  {
+    "ingredient_id": "603c2e71-9700-4c48-9ada-b9be7e78b1bf",
+    "default_quantity": 250.0,
+    "default_unit": "Gramme",
+    "enabled": true
+  },
+  {
+    "ingredient_id": "17857353-55d8-4710-b079-2ea4a2aea238",
+    "default_quantity": 250.0,
+    "default_unit": "Gramme",
+    "enabled": true
+  },
+  {
+    "ingredient_id": "c5876c40-8ce9-4864-8908-f021732bbd81",
+    "default_quantity": 250.0,
+    "default_unit": "Gramme",
+    "enabled": true
+  },
+  {
+    "ingredient_id": "a10c0168-571e-486c-bb7e-c971cfc7cf3d",
+    "default_quantity": 250.0,
+    "default_unit": "Gramme",
+    "enabled": true
+  },
+  {
+    "ingredient_id": "5a702942-f35b-4da3-9844-97773dc23995",
+    "default_quantity": 250.0,
+    "default_unit": "Gramme",
+    "enabled": true
+  },
+  {
+    "ingredient_id": "0c803453-b04b-4f4d-8c74-63f2ec6c1cce",
+    "default_quantity": 250.0,
+    "default_unit": "Gramme",
+    "enabled": true
+  },
+  {
+    "ingredient_id": "74b495e5-b3e6-419b-832d-5777cada25d1",
+    "default_quantity": 250.0,
+    "default_unit": "Gramme",
+    "enabled": true
+  },
+  {
+    "ingredient_id": "ae7e58f5-6c77-431a-900f-cc7ebe215fdf",
+    "default_quantity": 400.0,
+    "default_unit": "Millilitre",
+    "enabled": true
+  },
+  {
+    "ingredient_id": "c6dc8f70-1a3e-440d-8bd7-31ce96e34acf",
+    "default_quantity": 25.0,
+    "default_unit": "Gramme",
+    "enabled": true
+  },
+  {
+    "ingredient_id": "4be3c9fc-041f-4c69-94c6-69449d51ab79",
+    "default_quantity": 30.0,
+    "default_unit": "Gramme",
+    "enabled": true
+  },
+  {
+    "ingredient_id": "e03c6c47-6bed-4bc5-a045-7ecfcaff697c",
+    "default_quantity": 250.0,
+    "default_unit": "Gramme",
+    "enabled": true
+  },
+  {
+    "ingredient_id": "3061158d-6d99-4e19-b288-40f226030570",
+    "default_quantity": 250.0,
+    "default_unit": "Gramme",
+    "enabled": true
+  },
+  {
+    "ingredient_id": "5d488262-081e-4651-b037-922fb964e698",
+    "default_quantity": 250.0,
+    "default_unit": "Gramme",
+    "enabled": true
+  },
+  {
+    "ingredient_id": "99c5a899-f73f-4332-bf32-5b8837f9ef5a",
+    "default_quantity": 250.0,
+    "default_unit": "Millilitre",
+    "enabled": true
+  },
+  {
+    "ingredient_id": "9c94afec-5990-4a24-9451-4c2cdc1da596",
+    "default_quantity": 750.0,
+    "default_unit": "Millilitre",
+    "enabled": true
+  },
+  {
+    "ingredient_id": "913542ae-abed-45d6-b8ae-51b8f2118571",
+    "default_quantity": 750.0,
+    "default_unit": "Millilitre",
+    "enabled": true
+  },
+  {
+    "ingredient_id": "ddf27af8-6a7a-453c-be37-05d3b014033c",
+    "default_quantity": 25.0,
+    "default_unit": "Gramme",
+    "enabled": true
+  },
+  {
+    "ingredient_id": "0c64f463-fbce-4da3-ab71-8cd09dbf08c7",
+    "default_quantity": 250.0,
+    "default_unit": "Gramme",
+    "enabled": true
+  },
+  {
+    "ingredient_id": "8690b64f-e065-47eb-b081-364a67710dbe",
+    "default_quantity": 250.0,
+    "default_unit": "Millilitre",
+    "enabled": true
+  }
+]

@@ -88,7 +88,9 @@ const PRESENCE_ONLY_KEYWORDS = [
 export function isPresenceOnlyIngredient(input: {
   nom?: string | null
   categorie?: string | null
+  quantity_mode?: QuantityMode
 }): boolean {
+  if (input.quantity_mode) return input.quantity_mode === 'presence'
   const name = normalize(input.nom)
   const category = normalize(input.categorie)
 
@@ -103,6 +105,7 @@ export function isPresenceOnlyIngredient(input: {
 export function getQuantityMode(input: {
   nom?: string | null
   categorie?: string | null
+  quantity_mode?: QuantityMode
 }): QuantityMode {
   return isPresenceOnlyIngredient(input) ? 'presence' : 'quantity'
 }
@@ -117,12 +120,12 @@ export function quantityDisplayLabel(mode: QuantityMode): string {
  * Cette règle est générique : aucun ingrédient `presence-only` ne peut
  * utiliser ou recréer une densité, quelle que soit sa catégorie ou son nom.
  */
-export function assertDensityAllowed(input: { nom?: string | null; categorie?: string | null }): void {
+export function assertDensityAllowed(input: Parameters<typeof getQuantityMode>[0]): void {
   if (getQuantityMode(input) === 'presence') {
     throw new Error(`Les ingrédients en mode « Présence » ne peuvent pas avoir de densité.`)
   }
 }
 
-export function isDensityAllowed(input: { nom?: string | null; categorie?: string | null }): boolean {
+export function isDensityAllowed(input: Parameters<typeof getQuantityMode>[0]): boolean {
   return getQuantityMode(input) === 'quantity'
 }

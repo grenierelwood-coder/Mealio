@@ -1,378 +1,142 @@
+import { parisDate,expiryDays } from './expiry-policy'
 import { cookiwikiServerDb } from '../lib/supabase-server'
-import { getHouseholdStockServer, HouseholdStockItem } from './household-server'
-import { loadReferenceData, resolveStockIngredientId, getIngredientSemanticLabels, ReferenceData } from './matcher'
+import { getHouseholdStockServer, type HouseholdStockItem } from './household-server'
+import { cleanText, loadReferenceData, resolveStockIngredientId, type ReferenceData } from './matcher'
+import { parseIngredients } from './cookiwiki-fetcher'
+import { activeRecipeStructure, loadRecipeStructures } from './recipe-structure-server'
 
+export type IngredientMatchMode = 'any' | 'all'
 export interface AntiGaspiRecipeSuggestion {
-  id: string
-  nom: string
-  description: string | null
-  image_url: string | null
-  prep_time: number
-  cook_time: number
-  urgentProducts: string[]
-  matchedProducts: string[]
-  score: number
+  id: string; nom: string; description: string | null; image_url: string | null
+  prep_time: number; cook_time: number; urgentProducts: string[]; matchedProducts: string[]; score: number
 }
-
 export interface AntiGaspiResponse {
-  today: string
-  urgentStock: HouseholdStockItem[]
-  suggestions: AntiGaspiRecipeSuggestion[]
-  availableStock: HouseholdStockItem[]
+  expiryDiagnostic?:{available:number;eligible:number;dated:number;missing:number;invalid:number;expired:number;today:string;horizonDays:number}; today: string; urgentStock: HouseholdStockItem[]; suggestions: AntiGaspiRecipeSuggestion[]; availableStock: HouseholdStockItem[]
 }
-
-function todayParis(): string {
-  return new Intl.DateTimeFormat('en-CA', { timeZone: 'Europe/Paris' }).format(new Date())
-}
-
-function daysUntil(date: string, today: string): number {
-  const a = new Date(`${today}T12:00:00`)
-  const b = new Date(`${date}T12:00:00`)
-  return Math.round((b.getTime() - a.getTime()) / 86400000)
-}
-
-function ingredientIdForRecipeName(refData: ReferenceData, name: string): string | null {
-  const normalized = name.trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '')
-  const exact = refData.officialList.find(i =>
-    i.nom.trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '') === normalized
-  )
-  if (exact) return exact.id
-
-  for (const [synonym, id] of refData.synonymMap.entries()) {
-    const key = synonym.trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '')
-    if (key === normalized) return id
-  }
-  return null
-}
-
-export async function getAntiGaspiTonight(username: string): Promise<AntiGaspiResponse> {
-  const today = todayParis()
-  const [stock, refData] = await Promise.all([
-    getHouseholdStockServer(username),
-    loadReferenceData(),
-  ])
-
-  const urgentStock = stock
-    .filter(item => Number(item.qte || 0) > 0 && item.date_peremption && daysUntil(item.date_peremption, today) <= 3)
-    .sort((a, b) => String(a.date_peremption).localeCompare(String(b.date_peremption)))
-
-  if (!urgentStock.length) {
-    return { today, urgentStock: [], suggestions: [], availableStock: stock.filter(item => Number(item.qte || 0) > 0) }
-  }
-
-  const urgentIds = new Set(
-    urgentStock
-      .map(item => resolveStockIngredientId(refData, item.produit))
-      .filter(Boolean) as string[]
-  )
-
-  const urgentNames = new Map<string, string>()
-  urgentStock.forEach(item => {
-    const id = resolveStockIngredientId(refData, item.produit)
-    if (id) urgentNames.set(id, item.produit)
-  })
-
-  const { data, error } = await cookiwikiServerDb
-    .from('recipes')
-    .select('id,title,description,image_url,prep_time,cook_time,ingredients')
-    .order('title', { ascending: true })
-    .limit(1000)
-
-  if (error) throw new Error(`Impossible de rechercher les recettes Anti-Gaspi : ${error.message}`)
-
-  const suggestions = ((data ?? []) as any[])
-    .map(recipe => {
-      const ingredientNames = Array.isArray(recipe.ingredients)
-        ? recipe.ingredients.map((i: any) => String(i?.name ?? i?.nom ?? i?.ingredient ?? '').trim()).filter(Boolean)
-        : []
-
-      const matchedIds = new Set<string>()
-      const matchedProducts: string[] = []
-
-      for (const name of ingredientNames) {
-        const id = ingredientIdForRecipeName(refData, name)
-        if (id && urgentIds.has(id) && !matchedIds.has(id)) {
-          matchedIds.add(id)
-          matchedProducts.push(urgentNames.get(id) ?? name)
-        }
-      }
-
-      if (!matchedProducts.length) return null
-
-      const urgency = matchedProducts.reduce((sum, product) => {
-        const item = urgentStock.find(s => s.produit === product)
-        return sum + (item?.date_peremption ? Math.max(0, 4 - daysUntil(item.date_peremption, today)) : 0)
-      }, 0)
-
-      return {
-        id: String(recipe.id),
-        nom: recipe.title ?? 'Recette sans nom',
-        description: recipe.description ?? null,
-        image_url: recipe.image_url ?? null,
-        prep_time: Number(recipe.prep_time ?? 0),
-        cook_time: Number(recipe.cook_time ?? 0),
-        urgentProducts: matchedProducts,
-        matchedProducts,
-        score: matchedProducts.length * 100 + urgency,
-      }
-    })
-    .filter(Boolean)
-    .sort((a: any, b: any) => b.score - a.score || a.nom.localeCompare(b.nom))
-    .slice(0, 3) as AntiGaspiRecipeSuggestion[]
-
-  return { today, urgentStock, suggestions, availableStock: stock.filter(item => Number(item.qte || 0) > 0) }
-}
-
-function normalizeLabel(value: string): string {
-  return String(value ?? '')
-    .trim()
-    .toLowerCase()
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
-    .replace(/[’']/g, ' ')
-    .replace(/[^a-z0-9]+/g, ' ')
-    .replace(/\s+/g, ' ')
-    .trim()
-}
-
-function singularToken(value: string): string {
-  if (value.length > 4 && value.endsWith('s')) return value.slice(0, -1)
-  if (value.length > 5 && value.endsWith('x')) return value.slice(0, -1)
-  return value
-}
-
-function tokenSet(value: string): Set<string> {
-  return new Set(normalizeLabel(value).split(' ').filter(Boolean).map(singularToken))
-}
-
-function labelMatchesQuery(label: string, query: string): boolean {
-  const q = normalizeLabel(query)
-  if (!q) return true
-  const nq = q.split(' ').filter(Boolean).map(singularToken)
-  const text = normalizeLabel(label)
-  const tokens = tokenSet(label)
-  return nq.every(part => text.includes(part) || Array.from(tokens).some(t => t.startsWith(part) || part.startsWith(t)))
-}
-
-function ingredientLabelMatchesRecipeIngredient(label: string, recipeIngredient: string): boolean {
-  const labelTokens = tokenSet(label)
-  const recipeTokens = tokenSet(recipeIngredient)
-  if (!labelTokens.size || !recipeTokens.size) return false
-
-  // Recherche précise : tous les termes significatifs du libellé officiel/synonyme
-  // doivent être présents dans l'ingrédient Cookiwiki, après normalisation singulier/pluriel.
-  return Array.from(labelTokens).every(token => recipeTokens.has(token))
-}
-
-function recipeIngredientMatchesSelected(
-  refData: ReferenceData,
-  recipeName: string,
-  selectedIds: Set<string>
-): string | null {
-  for (const selectedId of selectedIds) {
-    const labels = getIngredientSemanticLabels(selectedId, refData)
-    for (const label of labels) {
-      if (ingredientLabelMatchesRecipeIngredient(label, recipeName)) {
-        return selectedId
-      }
-    }
-  }
-  return null
-}
-
 export interface IngredientSearchResult {
-  id: string
-  nom: string
-  categorie: string
-  inStock: boolean
-  stockLabels: string[]
+  id: string; nom: string; categorie: string; inStock: boolean; stockLabels: string[]
 }
-
-export async function searchIngredientsForTonight(
-  username: string,
-  query: string
-): Promise<IngredientSearchResult[]> {
-  const [stock, refData] = await Promise.all([
-    getHouseholdStockServer(username),
-    loadReferenceData(),
+export type RecipeSelection = { selectedIngredientIds?: string[]; selectedLabels?: string[]; selectedKeys?: string[]; matchMode?: IngredientMatchMode }
+type Target = { key: string; name: string; id: string | null }
+const normalize = (value: string) => cleanText(String(value ?? ''))
+function labelMatchesQuery(label: string, query: string) {
+  const terms = normalize(query).split(' ').filter(Boolean), words = normalize(label).split(' ')
+  return terms.every(term => words.some(word => word.startsWith(term)))
+}
+function identity(ref: ReferenceData, name: string) { return resolveStockIngredientId(ref, name) }
+async function loadRecipes() {
+  const [result, structures] = await Promise.all([
+    cookiwikiServerDb.from('recipes').select('id,title,description,image_url,prep_time,cook_time,ingredients').order('title', { ascending: true }).limit(2000),
+    loadRecipeStructures(),
   ])
-
-  const stockByIngredient = new Map<string, string[]>()
-  for (const item of stock.filter(item => Number(item.qte || 0) > 0)) {
-    const id = resolveStockIngredientId(refData, item.produit)
-    if (!id) continue
-    const labels = stockByIngredient.get(id) ?? []
-    if (!labels.includes(item.produit)) labels.push(item.produit)
-    stockByIngredient.set(id, labels)
-  }
-
-  const synonymLabelsById = new Map<string, string[]>()
-  for (const [label, id] of refData.synonymMap.entries()) {
-    const labels = synonymLabelsById.get(id) ?? []
-    labels.push(label)
-    synonymLabelsById.set(id, labels)
-  }
-
-  const results = refData.officialList
-    .filter(item => labelMatchesQuery(item.nom, query) || (synonymLabelsById.get(item.id) ?? []).some(label => labelMatchesQuery(label, query)))
-    .map(item => ({
-      id: item.id,
-      nom: item.nom,
-      categorie: '',
-      inStock: stockByIngredient.has(item.id),
-      stockLabels: stockByIngredient.get(item.id) ?? [],
-    }))
-    .sort((a, b) => {
-      if (a.inStock !== b.inStock) return a.inStock ? -1 : 1
-      const exactA = normalizeLabel(a.nom) === normalizeLabel(query) ? 1 : 0
-      const exactB = normalizeLabel(b.nom) === normalizeLabel(query) ? 1 : 0
-      return exactB - exactA || a.nom.localeCompare(b.nom, 'fr')
-    })
-    .slice(0, 30)
-
-  return results
-}
-
-async function loadCookiwikiRecipesForSearch() {
-  const { data, error } = await cookiwikiServerDb
-    .from('recipes')
-    .select('id,title,description,image_url,prep_time,cook_time,ingredients')
-    .order('title', { ascending: true })
-    .limit(2000)
-  if (error) throw new Error(`Impossible de rechercher les recettes : ${error.message}`)
-  return (data ?? []) as any[]
-}
-
-export async function searchCookiwikiIngredientLabels(
-  query: string
-): Promise<Array<{ label: string; officialId: string | null; recipeCount: number }>> {
-  const [refData, recipes] = await Promise.all([loadReferenceData(), loadCookiwikiRecipesForSearch()])
-  const counts = new Map<string, number>()
-  for (const recipe of recipes) {
-    const names: string[] = Array.isArray(recipe.ingredients)
-      ? recipe.ingredients
-          .map((i: any) => String(i?.name ?? i?.nom ?? i?.ingredient ?? '').trim())
-          .filter((name: string) => Boolean(name))
-      : []
-    for (const name of new Set(names)) {
-      if (labelMatchesQuery(name, query)) counts.set(name, (counts.get(name) ?? 0) + 1)
-    }
-  }
-  const officialByLabel = new Map<string, string>()
-  for (const item of refData.officialList) officialByLabel.set(normalizeLabel(item.nom), item.id)
-  for (const [synonym, id] of refData.synonymMap.entries()) officialByLabel.set(normalizeLabel(synonym), id)
-  return Array.from(counts.entries())
-    .map(([label, recipeCount]) => ({ label, officialId: officialByLabel.get(normalizeLabel(label)) ?? null, recipeCount }))
-    .sort((a, b) => b.recipeCount - a.recipeCount || a.label.localeCompare(b.label, 'fr'))
-    .slice(0, 30)
-}
-
-export async function searchRecipesForSelectedLabels(
-  labels: string[]
-): Promise<{ recipes: AntiGaspiRecipeSuggestion[]; selectedStock: HouseholdStockItem[] }> {
-  const refData = await loadReferenceData()
-  const selectedIds = new Set<string>()
-  for (const rawLabel of labels) {
-    const label = String(rawLabel ?? '').trim()
-    const direct = ingredientIdForRecipeName(refData, label)
-    if (direct) selectedIds.add(direct)
-  }
-
-  if (!selectedIds.size) return { recipes: [], selectedStock: [] }
-  return searchRecipesForSelectedIngredientsByReference(refData, selectedIds)
-}
-
-async function searchRecipesForSelectedIngredientsByReference(
-  refData: ReferenceData,
-  selectedIds: Set<string>
-): Promise<{ recipes: AntiGaspiRecipeSuggestion[]; selectedStock: HouseholdStockItem[] }> {
-  const { data, error } = await cookiwikiServerDb
-    .from('recipes')
-    .select('id,title,description,image_url,prep_time,cook_time,ingredients')
-    .order('title', { ascending: true })
-    .limit(2000)
-
-  if (error) throw new Error(`Impossible de rechercher les recettes : ${error.message}`)
-
-  const recipes = ((data ?? []) as any[])
-    .map(recipe => {
-      const ingredientNames = Array.isArray(recipe.ingredients)
-        ? recipe.ingredients
-            .map((i: any) => String(i?.name ?? i?.nom ?? i?.ingredient ?? '').trim())
-            .filter(Boolean)
-        : []
-
-      const matchedIds = new Set<string>()
-      for (const name of ingredientNames) {
-        const matchedId = recipeIngredientMatchesSelected(refData, name, selectedIds)
-        if (matchedId) matchedIds.add(matchedId)
-      }
-      if (!matchedIds.size) return null
-
-      const matchedProducts = Array.from(matchedIds)
-        .map(id => refData.officialById.get(id)?.nom)
-        .filter(Boolean) as string[]
-
-      const coverage = Math.round((matchedIds.size / Math.max(selectedIds.size, 1)) * 100)
-      const score = matchedIds.size * 1000 + coverage * 10 - Math.max(0, ingredientNames.length - matchedIds.size)
-
-      return {
-        id: String(recipe.id),
-        nom: recipe.title ?? 'Recette sans nom',
-        description: recipe.description ?? null,
-        image_url: recipe.image_url ?? null,
-        prep_time: Number(recipe.prep_time ?? 0),
-        cook_time: Number(recipe.cook_time ?? 0),
-        urgentProducts: [],
-        matchedProducts,
-        score,
-      }
-    })
-    .filter(Boolean)
-    .sort((a: any, b: any) => b.score - a.score || a.nom.localeCompare(b.nom, 'fr'))
-    .slice(0, 12) as AntiGaspiRecipeSuggestion[]
-
-  return { recipes, selectedStock: [] }
-}
-
-export async function searchRecipesForSelectedIngredients(
-  username: string,
-  selectedIngredientIds: string[]
-): Promise<{ recipes: AntiGaspiRecipeSuggestion[]; selectedStock: HouseholdStockItem[] }> {
-  const [stock, refData] = await Promise.all([getHouseholdStockServer(username), loadReferenceData()])
-  const selectedIds = new Set(selectedIngredientIds.map(String).filter(id => refData.officialById.has(id)))
-  if (!selectedIds.size) return { recipes: [], selectedStock: [] }
-
-  const selectedStock = stock.filter(item => {
-    const id = resolveStockIngredientId(refData, item.produit)
-    return Number(item.qte || 0) > 0 && !!id && selectedIds.has(id)
-  })
-
-  const result = await searchRecipesForSelectedIngredientsByReference(refData, selectedIds)
-  const selectedById = new Map<string, string>()
-  selectedStock.forEach(item => {
-    const id = resolveStockIngredientId(refData, item.produit)
-    if (id && !selectedById.has(id)) selectedById.set(id, item.produit)
-  })
-
-  result.recipes = result.recipes.map(recipe => ({
-    ...recipe,
-    matchedProducts: recipe.matchedProducts.map(name => {
-      const id = refData.officialList.find(item => item.nom === name)?.id
-      return (id && selectedById.get(id)) || name
-    }),
+  if (result.error) throw new Error(`Impossible de rechercher les recettes : ${result.error.message}`)
+  const byId = new Map(structures.map(row => [row.recipe_id, row]))
+  return (result.data ?? []).map((recipe: any) => ({ ...recipe,
+    names: parseIngredients(activeRecipeStructure(recipe, byId.get(recipe.id))).filter(i => !i.preparationIssue).map(i => i.name),
   }))
-
-  return { ...result, selectedStock }
 }
-
-export async function searchRecipesForSelectedStock(
-  username: string,
-  selectedKeys: string[]
-): Promise<{ recipes: AntiGaspiRecipeSuggestion[]; selectedStock: HouseholdStockItem[] }> {
-  const [stock, refData] = await Promise.all([getHouseholdStockServer(username), loadReferenceData()])
-  const keySet = new Set(selectedKeys.map(value => String(value).trim()).filter(Boolean))
-  const selectedStock = stock.filter(item => keySet.has(`${item.source}:${item.id}`) && Number(item.qte || 0) > 0)
-  const selectedIds = selectedStock.map(item => resolveStockIngredientId(refData, item.produit)).filter(Boolean) as string[]
-  return searchRecipesForSelectedIngredients(username, selectedIds)
+function targetsFor(ref: ReferenceData, selection: RecipeSelection, stock: HouseholdStockItem[]) {
+  const targets = new Map<string, Target>()
+  function addName(name: string) {
+    const id = identity(ref, name), normalized = normalize(name)
+    if (!normalized) return
+    const key = id ? `id:${id}` : `label:${normalized}`
+    if (!targets.has(key)) targets.set(key, { key, id, name: id ? ref.officialById.get(id)!.nom : name })
+  }
+  for (const id of selection.selectedIngredientIds ?? []) {
+    const official = ref.officialById.get(id)
+    if (official) addName(official.nom)
+    else if (id.startsWith('label:')) addName(id.slice(6))
+  }
+  for (const label of selection.selectedLabels ?? []) addName(label)
+  const keys = new Set(selection.selectedKeys ?? [])
+  const selectedStock = stock.filter(item => keys.has(`${item.source}:${item.id}`) && item.qte > 0)
+  for (const item of selectedStock) addName(item.produit)
+  return { targets: [...targets.values()], selectedStock }
+}
+function matches(ref: ReferenceData, target: Target, name: string) {
+  const recipeId = identity(ref, name)
+  if (target.id && recipeId) return target.id === recipeId
+  if (!target.id) return normalize(target.name) === normalize(name)
+  // Search only: an unresolved recipe label may contain a validated label.
+  // A known contradictory identity above always wins (e.g. wheat vs rice flour).
+  const labels = [ref.officialById.get(target.id)!.nom,
+    ...[...ref.synonymMap].filter(([, id]) => id === target.id).map(([label]) => label)]
+  const words = new Set(normalize(name).split(' '))
+  return labels.some(label => {
+    const parts = normalize(label).split(' ').filter(Boolean)
+    return parts.length > 0 && parts.every(part => words.has(part))
+  })
+}
+function rankRecipes(ref: ReferenceData, recipes: any[], targets: Target[], mode: IngredientMatchMode) {
+  if (!targets.length) return []
+  return recipes.flatMap((recipe): AntiGaspiRecipeSuggestion[] => {
+    const matched = targets.filter(target => recipe.names.some((name: string) => matches(ref, target, name)))
+    if (!matched.length || (mode === 'all' && matched.length !== targets.length)) return []
+    return [{ id: String(recipe.id), nom: recipe.title || 'Recette sans nom', description: recipe.description ?? null,
+      image_url: recipe.image_url ?? null, prep_time: Number(recipe.prep_time ?? 0), cook_time: Number(recipe.cook_time ?? 0),
+      urgentProducts: [], matchedProducts: matched.map(t => t.name),
+      score: matched.length * 1000 - Math.max(0, recipe.names.length - matched.length),
+    }]
+  }).sort((a, b) => b.score - a.score || a.nom.localeCompare(b.nom, 'fr')).slice(0, 12)
+}
+export async function searchRecipesForSelection(username: string, selection: RecipeSelection) {
+  const [stock, ref, recipes] = await Promise.all([getHouseholdStockServer(username), loadReferenceData(username), loadRecipes()])
+  const { targets, selectedStock } = targetsFor(ref, selection, stock)
+  return { recipes: rankRecipes(ref, recipes, targets, selection.matchMode ?? 'any'), selectedStock,
+    matchMode: selection.matchMode ?? 'any', selectionCount: targets.length }
+}
+export async function searchRecipesForSelectedIngredients(username: string, ids: string[], matchMode: IngredientMatchMode = 'any') {
+  return searchRecipesForSelection(username, { selectedIngredientIds: ids, matchMode })
+}
+export async function searchRecipesForSelectedStock(username: string, keys: string[], matchMode: IngredientMatchMode = 'any') {
+  return searchRecipesForSelection(username, { selectedKeys: keys, matchMode })
+}
+export async function searchRecipesForSelectedLabels(labels: string[], matchMode: IngredientMatchMode = 'any') {
+  const [ref, recipes] = await Promise.all([loadReferenceData(), loadRecipes()])
+  const { targets } = targetsFor(ref, { selectedLabels: labels }, [])
+  return { recipes: rankRecipes(ref, recipes, targets, matchMode), selectedStock: [] }
+}
+export async function searchIngredientsForTonight(username: string, query: string): Promise<IngredientSearchResult[]> {
+  const [stock, ref] = await Promise.all([getHouseholdStockServer(username), loadReferenceData(username)])
+  const labelsById = new Map<string, string[]>()
+  for (const item of stock.filter(i => i.qte > 0)) {
+    const id = identity(ref, item.produit)
+    if (id) labelsById.set(id, [...new Set([...(labelsById.get(id) ?? []), item.produit])])
+  }
+  return ref.officialList.filter(item => labelMatchesQuery(item.nom, query) || [...ref.synonymMap].some(([label, id]) => id === item.id && labelMatchesQuery(label, query)))
+    .map(item => ({ id: item.id, nom: item.nom, categorie: '', inStock: labelsById.has(item.id), stockLabels: labelsById.get(item.id) ?? [] }))
+    .sort((a, b) => Number(b.inStock) - Number(a.inStock) || a.nom.localeCompare(b.nom, 'fr')).slice(0, 30)
+}
+export async function searchCookiwikiIngredientLabels(query: string) {
+  const [ref, recipes] = await Promise.all([loadReferenceData(), loadRecipes()])
+  const counts = new Map<string, number>()
+  for (const recipe of recipes) for (const name of new Set<string>(recipe.names)) {
+    if (labelMatchesQuery(name, query)) counts.set(name, (counts.get(name) ?? 0) + 1)
+  }
+  return [...counts].map(([label, recipeCount]) => ({ label, officialId: identity(ref, label), recipeCount }))
+    .sort((a, b) => b.recipeCount - a.recipeCount || a.label.localeCompare(b.label, 'fr')).slice(0, 30)
+}
+function isWine(item: HouseholdStockItem) {
+  const value = ` ${normalize(`${item.produit} ${item.categorie}`)} `
+  return ['vin', 'vins', 'champagne', 'cidre', 'biere', 'wine', 'bordeaux', 'bourgogne', 'cremant'].some(term => value.includes(` ${term} `))
+}
+export async function getAntiGaspiTonight(username: string): Promise<AntiGaspiResponse> {
+  const today = parisDate()
+  const [stock, ref] = await Promise.all([getHouseholdStockServer(username), loadReferenceData(username)])
+  const availableStock = stock.filter(i => i.qte > 0).map(i=>({...i,quantity_mode:ref.pantryProducts?.get(identity(ref,i.produit)||'')?.enabled?'presence' as const:'quantity' as const}))
+  const eligible=availableStock.filter(i=>!isWine(i))
+  const deltas=eligible.map(i=>expiryDays(i.date_peremption,today))
+  const expiryDiagnostic={available:availableStock.length,eligible:eligible.length,dated:deltas.filter(d=>d!==null).length,missing:eligible.filter(i=>!i.date_peremption?.trim()).length,invalid:eligible.filter(i=>i.date_peremption?.trim()&&expiryDays(i.date_peremption,today)===null).length,expired:deltas.filter(d=>d!==null&&d<0).length,today,horizonDays:3}
+  const urgentStock = eligible.filter(i=>{const d=expiryDays(i.date_peremption,today);return d!==null&&d<=3})
+    .sort((a,b)=>expiryDays(a.date_peremption,today)!-expiryDays(b.date_peremption,today)!)
+  if (!urgentStock.length) return { today, urgentStock, suggestions: [], availableStock,expiryDiagnostic }
+  const { targets } = targetsFor(ref, { selectedLabels: urgentStock.map(i => i.produit) }, [])
+  const suggestions = rankRecipes(ref, await loadRecipes(), targets, 'any').map(recipe => ({ ...recipe, urgentProducts: recipe.matchedProducts,
+    score: recipe.score + recipe.matchedProducts.reduce((sum, name) => {
+      const item = urgentStock.find(i => normalize(i.produit) === normalize(name) || (identity(ref, i.produit) && identity(ref, i.produit) === identity(ref, name)))
+      return sum + (item?.date_peremption ? Math.max(0, 4 - (expiryDays(item.date_peremption, today)??4)) : 0)
+    }, 0),
+  })).sort((a, b) => b.score - a.score).slice(0, 3)
+  return { today, urgentStock, suggestions, availableStock,expiryDiagnostic }
 }

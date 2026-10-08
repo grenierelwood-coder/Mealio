@@ -27,9 +27,9 @@ const mainActions = [
   {
     href: '/replenishment',
     icon: '🔄',
-    title: 'Ravitaillement',
+    title: 'Réapprovisionnements',
     text: 'Gérer les seuils, favoris et achats récurrents du foyer.',
-    label: 'Gérer le ravitaillement',
+    label: 'Gérer le réapprovisionnement',
   },
 ]
 
@@ -41,10 +41,10 @@ const secondaryActions = [
     text: 'Consulter le stock réel de Frosti et Cellio.',
   },
   {
-    href: '/point-frigo',
-    icon: '🧊',
-    title: 'Point Frigo',
-    text: 'Recaler rapidement le stock du foyer.',
+    href: '/inventaire',
+    icon: '📋',
+    title: 'Inventaire',
+    text: 'Vérifier et corriger les stocks par lieu.',
   },
 ]
 

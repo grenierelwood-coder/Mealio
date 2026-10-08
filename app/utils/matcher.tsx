@@ -1,3 +1,8 @@
+import { stockAnalysisKey,readStockAnalysis,writeStockAnalysis } from './stock-analysis-cache'
+import { loadIngredientPreparations, type IngredientPreparation } from './ingredient-preparations-server'
+import { loadPantryProducts } from './pantry-server'
+import { pantryMode, type PantryProduct } from './pantry-policy'
+import { createHash } from 'node:crypto'
 import { mealioServerDb } from '../lib/supabase-server'
 import {
   matchStockWithClaude,
@@ -9,6 +14,8 @@ export interface RecipeIngredient {
   name: string
   qty: number
   unit: string
+  preparationIssue?: string
+  inferredFromInstructions?: boolean
 }
 
 export interface StockItem {
@@ -36,9 +43,12 @@ type AiResolution = {
   ingredient_id_propose: string | null
   statut: 'en_attente' | 'valide' | 'rejete'
   created_at: string | null
+  reference_signature?: string | null
 }
 
 export interface ReferenceData {
+  ingredientPreparations?: Map<string,IngredientPreparation>
+  pantryProducts?: Map<string, PantryProduct>
   ignoredSet: Set<string>
   synonymMap: Map<string, string>
   officialList: OfficialIngredient[]
@@ -177,6 +187,7 @@ const DISCRIMINANT_GROUPS = [
   ['rouge', 'vert', 'jaune', 'orange'],
   ['cerise', 'grappe', 'concasse', 'conserve', 'seche'],
   ['coco', 'amande', 'noisette', 'noix', 'soja', 'avoine'],
+  ['ble', 'riz', 'mais', 'sarrasin', 'seigle'],
   ['chevre', 'brebis', 'vache', 'bufflonne'],
   ['doux', 'sale', 'fume', 'epice', 'fort'],
   ['liquide', 'solide', 'poudre'],
@@ -321,6 +332,8 @@ function contradictionPenalty(
   aTokens: string[],
   bTokens: string[]
 ): number {
+  const wholeVsPieces=(a:string[],b:string[])=>a.includes('poulet')&&b.includes('poulet')&&a.includes('entier')&&b.some(t=>['cuisse','blanc','aile','haut','filet'].includes(t))
+  if(wholeVsPieces(aTokens,bTokens)||wholeVsPieces(bTokens,aTokens))return 1
   const groups = new Set<number>()
 
   for (const t of aTokens) {
@@ -529,52 +542,38 @@ function hasSemanticStockEvidence(
     return { matched: true }
   }
 
-  const labels = getIngredientSemanticLabels(
-    ingredientId,
-    refData
-  )
+  // Une identité officielle contradictoire est éliminatoire, même en mémoire.
+  const knownId = resolveStockIngredientId(refData, candidateName)
+  if (knownId) return { matched: knownId === ingredientId }
 
-  const candidateTokens = new Set(
-    tokens(candidateName, stopWords)
-  )
+  // Les équivalences générales ne sont pas des synonymes validés.
+  const official = refData.officialById.get(ingredientId)
+  const labels = [official?.nom ?? '', ...Array.from(refData.synonymMap)
+    .filter(([, id]) => id === ingredientId).map(([label]) => label)]
 
   for (const label of labels) {
-    const coverage = tokenCoverage(
-      label,
-      candidateName,
-      stopWords
-    )
-
-    const meaningfulCommon = coverage.common.filter(
-      token => !STOCK_NON_DISCRIMINANT_TOKENS.has(token)
-    )
-
-    if (meaningfulCommon.length > 0) {
-      return {
-        matched: true,
-        label,
-        common: meaningfulCommon,
-      }
-    }
-
-    const labelNormalized = cleanText(
-      label,
-      stopWords
-    )
-
-    if (
-      labelNormalized &&
-      candidateTokens.has(labelNormalized)
-    ) {
-      return {
-        matched: true,
-        label,
-        common: [labelNormalized],
-      }
+    // Ne jamais effacer un qualificatif métier via ignored_words.
+    const labelTokens = tokens(label, BASE_STOP_WORDS)
+      .filter(token => !STOCK_NON_DISCRIMINANT_TOKENS.has(token))
+    const candidateTokens = tokens(candidateName, BASE_STOP_WORDS)
+      .filter(token => !STOCK_NON_DISCRIMINANT_TOKENS.has(token))
+    if (!labelTokens.length || contradictionPenalty(labelTokens, candidateTokens) > 0) continue
+    if (labelTokens.every(token => candidateTokens.includes(token))) {
+      return { matched: true, label, common: labelTokens }
     }
   }
 
   return { matched: false }
+}
+
+/** Les mots discriminants ne peuvent pas disparaître via ignored_words. */
+function automaticIngredientEvidence(rawName: string, officialName: string): boolean {
+  const harmless = new Set([...STOCK_NON_DISCRIMINANT_TOKENS, 'beau', 'bel', 'belle', 'bio'])
+  const rawTokens = tokens(rawName, BASE_STOP_WORDS).filter(token => !harmless.has(token))
+  const officialTokens = tokens(officialName, BASE_STOP_WORDS).filter(token => !harmless.has(token))
+  return rawTokens.length > 0 && officialTokens.length > 0 &&
+    rawTokens.every(token => officialTokens.includes(token)) &&
+    officialTokens.every(token => rawTokens.includes(token))
 }
 
 function bestIsSafe<T extends { score: number }>(
@@ -598,7 +597,7 @@ function bestIsSafe<T extends { score: number }>(
   return margin >= minMargin
 }
 
-export async function loadReferenceData(): Promise<ReferenceData> {
+export async function loadReferenceData(username?: string): Promise<ReferenceData> {
   const [
     ignored,
     synonyms,
@@ -606,7 +605,10 @@ export async function loadReferenceData(): Promise<ReferenceData> {
     units,
     densities,
     aiLogs,
+    pantryProducts,
+    ingredientPreparations,
   ] = await Promise.all([
+    // Chargement en parallèle, mais toute erreur interrompt le calcul.
     mealioServerDb
       .from('ignored_words')
       .select('mot'),
@@ -638,53 +640,21 @@ export async function loadReferenceData(): Promise<ReferenceData> {
     mealioServerDb
       .from('ai_resolution_log')
       .select(
-        'mot_recette, proposition_ia, ingredient_id_propose, statut, created_at'
+        'mot_recette, proposition_ia, ingredient_id_propose, statut, created_at, reference_signature'
       )
       .order('created_at', {
         ascending: false,
       }),
+    loadPantryProducts(username),
+    loadIngredientPreparations(username),
   ])
 
-  if (ignored.error) {
-    console.error(
-      'ignored_words:',
-      ignored.error.message
-    )
-  }
-
-  if (synonyms.error) {
-    console.error(
-      'ingredient_synonyms:',
-      synonyms.error.message
-    )
-  }
-
-  if (official.error) {
-    console.error(
-      'official_ingredients:',
-      official.error.message
-    )
-  }
-
-  if (units.error) {
-    console.error(
-      'unit_mappings:',
-      units.error.message
-    )
-  }
-
-  if (densities.error) {
-    console.error(
-      'ingredient_densities:',
-      densities.error.message
-    )
-  }
-
-  if (aiLogs.error) {
-    console.error(
-      'ai_resolution_log:',
-      aiLogs.error.message
-    )
+  for (const [table, result] of [
+    ['ignored_words', ignored], ['ingredient_synonyms', synonyms],
+    ['official_ingredients', official], ['unit_mappings', units],
+    ['ingredient_densities', densities], ['ai_resolution_log', aiLogs],
+  ] as const) {
+    if (result.error) throw new Error(`Référentiel ${table} indisponible : ${result.error.message}`)
   }
 
   const officialList =
@@ -764,6 +734,8 @@ export async function loadReferenceData(): Promise<ReferenceData> {
       densities.data ?? [],
 
     aiResolutionMap,
+    pantryProducts,
+    ingredientPreparations,
 
     aiCache:
       new Map(),
@@ -782,6 +754,7 @@ function normalizeUnitKey(
     .toLowerCase()
     .replace(/\(s\)/g, '')
     .replace(/\s+/g, ' ')
+    .replace(/\.+$/, '')
 
   const aliases: Record<
     string,
@@ -793,6 +766,8 @@ function normalizeUnitKey(
     cas: 'cs',
     'c à s': 'cs',
     'c a s': 'cs',
+    'c a soupe': 'cs',
+    'c. à soupe': 'cs',
     'c.s': 'cs',
     cs: 'cs',
     'cuillere a soupe': 'cs',
@@ -804,6 +779,8 @@ function normalizeUnitKey(
     cac: 'cc',
     'c à c': 'cc',
     'c a c': 'cc',
+    'c a cafe': 'cc',
+    'c. à café': 'cc',
     'c.c': 'cc',
     cc: 'cc',
     'cuillere a cafe': 'cc',
@@ -850,6 +827,12 @@ function normalizeUnitKey(
     unités: 'piece',
     'unite s': 'piece',
     'unité s': 'piece',
+
+    noix: 'noix beurre',
+    branche: 'brin',
+    branches: 'brin',
+    morceau: 'morceau',
+    morceaux: 'morceau',
 
     tranche: 'tranche',
     tranches: 'tranche',
@@ -948,7 +931,8 @@ function findDensity(
 
   // Verrou central : un ingrédient en mode « Présence » ne peut jamais
   // exploiter une densité, même si une vieille ligne existe encore en DB.
-  if (ingredient && getQuantityMode(ingredient) === 'presence') {
+  if (ingredient && getQuantityMode({ ...ingredient, quantity_mode: pantryMode(refData.pantryProducts?.get(ingredientId)) ??
+    (refData.pantryProducts ? 'quantity' : undefined) }) === 'presence') {
     return undefined
   }
 
@@ -970,7 +954,8 @@ function findDensityForType(
   type: 'poids' | 'volume'
 ) {
   const ingredient = refData.officialById.get(ingredientId)
-  if (ingredient && getQuantityMode(ingredient) === 'presence') {
+  if (ingredient && getQuantityMode({ ...ingredient, quantity_mode: pantryMode(refData.pantryProducts?.get(ingredientId)) ??
+    (refData.pantryProducts ? 'quantity' : undefined) }) === 'presence') {
     return undefined
   }
 
@@ -997,10 +982,17 @@ function findDensityForType(
   )
 }
 
+export function ingredientReferenceSignature(refData: ReferenceData): string {
+  const ingredients = refData.officialList.map(i => [i.id, i.nom, i.unite_reference, i.categorie]).sort((a,b) => String(a[0]).localeCompare(String(b[0])))
+  const synonyms = [...refData.synonymMap.entries()].sort((a,b) => a[0].localeCompare(b[0]))
+  return createHash('sha256').update(JSON.stringify([ingredients, synonyms, [...refData.ignoredSet].sort()])).digest('hex')
+}
+
 async function saveAiResolution(
   rawName: string,
   proposition: string | null,
-  ingredientId: string | null
+  ingredientId: string | null,
+  refData: ReferenceData
 ): Promise<void> {
   const { error } =
     await mealioServerDb
@@ -1012,6 +1004,7 @@ async function saveAiResolution(
         ingredient_id_propose:
           ingredientId,
         statut: 'en_attente',
+        reference_signature: ingredientReferenceSignature(refData),
       })
 
   if (error) {
@@ -1110,7 +1103,7 @@ async function resolveOfficialIngredient(
     refData.officialPrepared.find(
       o =>
         o.normalized ===
-        normalizedRaw
+        normalizedRaw && automaticIngredientEvidence(rawName, o.item.nom)
     )
 
   if (exact) {
@@ -1195,7 +1188,7 @@ async function resolveOfficialIngredient(
         lexicalWinner.score - candidates[1].score >= 0.05)
     )
 
-  if (lexicalIsDeterministic) {
+  if (lexicalIsDeterministic && lexicalWinner && automaticIngredientEvidence(rawName, lexicalWinner.item.nom)) {
     if (trace) {
       setIngredientDecision(
         trace,
@@ -1229,6 +1222,19 @@ async function resolveOfficialIngredient(
 
   const previous =
     refData.aiResolutionMap.get(key)
+
+  if (previous?.statut === 'en_attente' && previous.proposition_ia === 'AUCUN' &&
+      previous.reference_signature === ingredientReferenceSignature(refData)) {
+    const age = Date.now() - Date.parse(previous.created_at ?? '')
+    if (Number.isFinite(age) && age >= 0 && age < 24 * 60 * 60 * 1000) {
+      setIngredientDecision(trace, 'memory', null, 'Aucune correspondance récente ; référentiel inchangé (cache 24 h)')
+      if (trace) {
+        trace.ingredientAiCacheHit = true
+        trace.events.push('Claude non appelé : réponse négative récente et référentiel inchangé')
+      }
+      return { id: null, name: null, aiProposed: false }
+    }
+  }
 
   if (previous) {
     if (trace) {
@@ -1274,7 +1280,7 @@ async function resolveOfficialIngredient(
       }
     } else if (
       previous.proposition_ia ===
-      'AUCUN'
+      'AUCUN' && previous.statut === 'valide'
     ) {
       refData.aiCache.set(
         key,
@@ -1365,7 +1371,8 @@ async function resolveOfficialIngredient(
     await saveAiResolution(
       rawName,
       null,
-      null
+      null,
+      refData
     )
 
     refData.aiResolutionMap.set(
@@ -1376,6 +1383,7 @@ async function resolveOfficialIngredient(
         ingredient_id_propose:
           null,
         statut: 'en_attente',
+        reference_signature: ingredientReferenceSignature(refData),
         created_at:
           new Date().toISOString(),
       }
@@ -1441,6 +1449,12 @@ async function resolveOfficialIngredient(
     )
   }
 
+  if (ai.unavailable) {
+    setIngredientDecision(trace, 'unresolved', null, ai.reason)
+    // Aucun journal ni cache négatif durable pour une panne du fournisseur.
+    return { id: null, name: null, aiProposed: false }
+  }
+
   const selected =
     ai.matched
       ? refData.officialById.get(
@@ -1451,7 +1465,8 @@ async function resolveOfficialIngredient(
   await saveAiResolution(
     rawName,
     selected?.nom ?? null,
-    selected?.id ?? null
+    selected?.id ?? null,
+    refData
   )
 
   refData.aiResolutionMap.set(
@@ -1463,6 +1478,7 @@ async function resolveOfficialIngredient(
       ingredient_id_propose:
         selected?.id ?? null,
       statut: 'en_attente',
+      reference_signature: ingredientReferenceSignature(refData),
       created_at:
         new Date().toISOString(),
     }
@@ -1510,7 +1526,7 @@ export function resolveIngredientDeterministic(
   }
 
   const normalizedRaw = cleanText(rawName, refData.ignoredSet)
-  const exact = refData.officialPrepared.find(o => o.normalized === normalizedRaw)
+  const exact = refData.officialPrepared.find(o => o.normalized === normalizedRaw && automaticIngredientEvidence(rawName, o.item.nom))
   if (exact) {
     return { id: exact.item.id, name: exact.item.nom, source: 'exact', score: 1 }
   }
@@ -1538,7 +1554,7 @@ export function resolveIngredientDeterministic(
       (candidates.length === 1 || winner.score - candidates[1].score >= 0.05)
     )
 
-    if (deterministic) {
+    if (deterministic && automaticIngredientEvidence(rawName, winner.item.nom)) {
       return {
         id: winner.item.id,
         name: winner.item.nom,
@@ -1584,8 +1600,11 @@ export interface ResolvedIngredient {
   unite: string
   quantity_mode: QuantityMode
   needs_review: boolean
+  quantity_unknown?: boolean
+  review_reason?: string
   source_recipe_id?: string
   source_recipe_nom?: string
+  source_ingredient_name?: string
 }
 
 export async function resolveRecipeIngredients(
@@ -1599,6 +1618,7 @@ export async function resolveRecipeIngredients(
   const resolved: ResolvedIngredient[] = []
 
   for (const ing of recipeIngredients) {
+    const pushResolved=(item:ResolvedIngredient)=>resolved.push({...item,source_ingredient_name:ing.name})
     const rawName =
       cleanText(ing.name)
 
@@ -1611,6 +1631,12 @@ export async function resolveRecipeIngredients(
       continue
     }
 
+    if (ing.preparationIssue) {
+      pushResolved({produit:ing.name,ingredient_id:null,qte:0,unite:ing.unit||'Pièce',quantity_mode:'quantity',
+        needs_review:true,quantity_unknown:true,review_reason:ing.preparationIssue,source_recipe_id:recipeId,source_recipe_nom:recipeNom})
+      continue
+    }
+
     const official =
       await resolveOfficialIngredient(
         ing.name,
@@ -1619,39 +1645,65 @@ export async function resolveRecipeIngredients(
       )
 
     const ingredientId =
-      official.id
+      official.aiProposed ? null : official.id
 
     const standardProduct =
-      official.name ?? ing.name
+      official.aiProposed ? ing.name : official.name ?? ing.name
 
     const officialIngredient = ingredientId
       ? refData.officialById.get(ingredientId) ?? null
       : null
 
+    const preparation=ingredientId?refData.ingredientPreparations?.get(ingredientId):undefined
+    if(preparation?.enabled){
+      if(preparation.components.some(c=>refData.synonymMap.get(cleanText(c.name))===ingredientId||cleanText(c.name)===cleanText(officialIngredient?.nom||'')))throw new Error('Une préparation ne peut pas contenir son propre ingrédient.')
+      const components=await resolveRecipeIngredients(preparation.components,{...refData,ingredientPreparations:new Map()},recipeId,recipeNom,servingsRatio,trace)
+      resolved.push(...components)
+      if(trace)trace.events.push(`Préparation maison du foyer : ${standardProduct} remplacée par ${preparation.components.map(c=>c.name).join(', ')}`)
+      continue
+    }
+
     const quantityMode = getQuantityMode({
       nom: officialIngredient?.nom ?? standardProduct,
       categorie: officialIngredient?.categorie ?? null,
+      quantity_mode: pantryMode(ingredientId ? refData.pantryProducts?.get(ingredientId) : undefined) ??
+        (refData.pantryProducts ? 'quantity' : undefined),
     })
 
     // Les épices/assaisonnements sont des besoins de présence :
     // on ne conserve ni quantité ni unité de recette pour le moteur de calcul.
     if (quantityMode === 'presence') {
-      resolved.push({
+      pushResolved({
         produit: standardProduct,
         ingredient_id: ingredientId,
         qte: 1,
-        unite: officialIngredient?.unite_reference ?? 'Pièce',
+        unite: 'Présence',
         quantity_mode: 'presence',
         needs_review: official.aiProposed || !ingredientId,
+        review_reason: official.aiProposed
+          ? `Proposition « ${official.name} » pour « ${ing.name} » à valider. Aucun stock n'a été déduit.`
+          : !ingredientId
+          ? `« ${standardProduct} » n'est pas encore associé à un ingrédient officiel. Aucun stock n'a été déduit.`
+          : undefined,
         source_recipe_id: recipeId,
         source_recipe_nom: recipeNom,
       })
       continue
     }
 
-    let requiredQty =
-      Number(ing.qty) *
-      servingsRatio
+    if (officialIngredient && cleanText(officialIngredient.nom) === 'ail' &&
+        ['piece', 'pieces', 'unite', 'unites'].includes(normalizeUnitKey(ing.unit))) {
+      pushResolved({ produit: standardProduct, ingredient_id: null, qte: ing.inferredFromInstructions ? 0 : Number(ing.qty) * servingsRatio || 0,
+        unite: ing.unit, quantity_mode: 'quantity', needs_review: true, quantity_unknown: Boolean(ing.inferredFromInstructions),
+        review_reason: 'Ail : Pièce est interdite. Préciser Gousse, ou une masse en grammes, dans la recette.',
+        source_recipe_id: recipeId, source_recipe_nom: recipeNom })
+      continue
+    }
+
+    let quantityUnknown = Boolean(ing.inferredFromInstructions) ||
+      !Number.isFinite(Number(ing.qty)) || Number(ing.qty) <= 0 ||
+      !Number.isFinite(servingsRatio) || servingsRatio <= 0
+    let requiredQty = quantityUnknown ? 0 : Number(ing.qty) * servingsRatio
 
     let requiredUnit =
       normalizeUnitKey(
@@ -1660,7 +1712,19 @@ export async function resolveRecipeIngredients(
 
     let unitResolved = false
 
-    if (ingredientId) {
+    // Un ingrédient référencé en volume reste en volume. Une densité de
+    // cuillère ne doit pas provoquer un détour cs -> g -> mL impossible.
+    const referenceUnit = officialIngredient?.unite_reference
+      ? canonicalUnit(refData, officialIngredient.unite_reference)
+      : null
+    const inputUnit = canonicalUnit(refData, ing.unit)
+    if (referenceUnit?.type === 'volume' && inputUnit?.type === 'volume') {
+      requiredQty *= inputUnit.factor
+      requiredUnit = inputUnit.unit
+      unitResolved = true
+    }
+
+    if (ingredientId && !unitResolved) {
       const density =
         findDensity(
           refData,
@@ -1732,7 +1796,12 @@ export async function resolveRecipeIngredients(
       }
     }
 
-    resolved.push({
+    if (!Number.isFinite(requiredQty) || requiredQty < 0) {
+      quantityUnknown = true
+      requiredQty = 0
+    }
+
+    pushResolved({
       produit:
         standardProduct,
 
@@ -1747,7 +1816,18 @@ export async function resolveRecipeIngredients(
 
       quantity_mode: 'quantity',
 
+      quantity_unknown: quantityUnknown,
+      review_reason: quantityUnknown
+        ? `La quantité de « ${standardProduct} » est inconnue.`
+        : official.aiProposed
+          ? `Proposition « ${official.name} » pour « ${ing.name} » à valider. Aucun stock n'a été déduit.`
+        : !ingredientId
+          ? `« ${standardProduct} » n'est pas encore associé à un ingrédient officiel. Aucun stock n'a été déduit.`
+          : !unitResolved
+              ? `L'unité « ${ing.unit} » n'est pas reconnue pour ce besoin. Aucun stock n'a été déduit.`
+              : undefined,
       needs_review:
+        quantityUnknown ||
         official.aiProposed ||
         !unitResolved ||
         !ingredientId,
@@ -1770,6 +1850,8 @@ export interface AggregatedRequirement {
   unite: string
   quantity_mode: QuantityMode
   needs_review: boolean
+  quantity_unknown?: boolean
+  review_reason?: string
   contributions: {
     recipe_id: string
     recipe_nom: string
@@ -1790,7 +1872,7 @@ export function aggregateRequirements(
     for (const item of list) {
 
       const key =
-        `${item.ingredient_id ?? cleanText(item.produit)}::${item.quantity_mode}`
+        `${item.ingredient_id ?? cleanText(item.produit)}::${item.quantity_mode}::${normalizeUnitKey(item.unite)}::${item.quantity_unknown ? 'unknown' : 'known'}`
 
       const existing =
         map.get(key)
@@ -1807,11 +1889,11 @@ export function aggregateRequirements(
       }
 
       if (existing) {
-        existing.qte +=
-          item.qte
+        existing.qte = item.quantity_mode === 'presence' ? 1 : existing.qte + item.qte
 
         existing.needs_review ||=
           item.needs_review
+        existing.review_reason ??= item.review_reason
 
         existing.contributions.push(
           contribution
@@ -1838,6 +1920,8 @@ export function aggregateRequirements(
             needs_review:
               item.needs_review,
 
+            quantity_unknown: item.quantity_unknown,
+            review_reason: item.review_reason,
             contributions: [
               contribution,
             ],
@@ -1918,19 +2002,8 @@ async function loadStockMemory(
       ),
   ])
 
-  if (memoryResult.error) {
-    console.error(
-      'matcher_memory:',
-      memoryResult.error.message
-    )
-  }
-
-  if (exclusionResult.error) {
-    console.error(
-      'matcher_exclusions:',
-      exclusionResult.error.message
-    )
-  }
+  if (memoryResult.error) throw new Error(`Mémoire matcher indisponible : ${memoryResult.error.message}`)
+  if (exclusionResult.error) throw new Error(`Exclusions matcher indisponibles : ${exclusionResult.error.message}`)
 
   const memory =
     new Map<
@@ -1994,7 +2067,8 @@ async function saveStockMemory(
     | 'exact',
   confidence: number,
   reason: string,
-  validated: boolean
+  validated: boolean,
+  strict = false
 ) {
   const stockItemId =
     String(stockItem.id)
@@ -2031,6 +2105,7 @@ async function saveStockMemory(
       existing.error.message
     )
 
+    if (strict) throw new Error(existing.error.message)
     return
   }
 
@@ -2061,6 +2136,7 @@ async function saveStockMemory(
         'matcher_memory update:',
         error.message
       )
+      if (strict) throw new Error(error.message)
     }
 
     return
@@ -2094,6 +2170,7 @@ async function saveStockMemory(
       'matcher_memory insert:',
       error.message
     )
+    if (strict) throw new Error(error.message)
   }
 }
 
@@ -2120,10 +2197,11 @@ export async function validateMatcherDecision(
     'human',
     1,
     reason,
+    true,
     true
   )
 
-  await mealioServerDb
+  const deletion = await mealioServerDb
     .from('matcher_exclusions')
     .delete()
     .eq(
@@ -2134,6 +2212,7 @@ export async function validateMatcherDecision(
       'stock_item_id',
       String(stockItem.id)
     )
+  if (deletion.error) throw new Error(deletion.error.message)
 }
 
 export async function rejectMatcherDecision(
@@ -2179,7 +2258,7 @@ export async function rejectMatcherDecision(
       existing.error.message
     )
 
-    return
+    throw new Error(existing.error.message)
   }
 
   if (existing.data?.id) {
@@ -2199,6 +2278,7 @@ export async function rejectMatcherDecision(
         'matcher_exclusions update:',
         error.message
       )
+      throw new Error(error.message)
     }
 
     return
@@ -2222,6 +2302,7 @@ export async function rejectMatcherDecision(
       'matcher_exclusions insert:',
       error.message
     )
+    throw new Error(error.message)
   }
 }
 
@@ -2241,7 +2322,7 @@ export async function forgetMatcherDecision(
     return
   }
 
-  await Promise.all([
+  const results = await Promise.all([
     mealioServerDb
       .from('matcher_memory')
       .delete()
@@ -2270,6 +2351,7 @@ export async function forgetMatcherDecision(
         )
       ),
   ])
+  for (const result of results) if (result.error) throw new Error(result.error.message)
 }
 
 /**
@@ -2326,6 +2408,23 @@ async function matchOneRequirement(
     }
   }
 
+  if (!item.ingredient_id || item.needs_review) {
+    return {
+      matchedItems: [], needsReview: true,
+      reviewReason: item.review_reason ?? (!item.ingredient_id
+        ? `« ${item.produit} » n'est pas encore associé à un ingrédient officiel. Aucun stock n'a été déduit.`
+        : `L'association ou l'unité de « ${item.produit} » reste à valider. Aucun stock n'a été déduit.`),
+    }
+  }
+
+  preparedStock = preparedStock.filter(({ item: stock }) => {
+    if (!Number.isFinite(Number(stock.qte)) || Number(stock.qte) <= 0) return false
+    if (stock.ingredient_id && stock.ingredient_id !== item.ingredient_id) return false
+    const knownId = resolveStockIngredientId(refData, stock.produit)
+    if (knownId && knownId !== item.ingredient_id) return false
+    return hasSemanticStockEvidence(item.ingredient_id, stock.produit, refData, stopWords).matched
+  })
+
   // Ingrédient officiel déjà résolu à l'étape précédente.
   // Cette valeur est utilisée uniquement pour la garde sémantique
   // du rapprochement stock.
@@ -2333,6 +2432,25 @@ async function matchOneRequirement(
     item.ingredient_id
       ? refData.officialById.get(item.ingredient_id) ?? null
       : null
+
+  // A validated reference identity takes precedence over an older AI proposal.
+  // Keep explicit exclusions and reject conflicting stock identities above.
+  const associated = preparedStock.filter(p =>
+    (p.item.ingredient_id === item.ingredient_id ||
+      resolveStockIngredientId(refData, p.item.produit) === item.ingredient_id) &&
+    !exclusions.has(`${key}::${p.item.id}`)
+  )
+  if (associated.length) {
+    if (trace) {
+      trace.stock.source = 'exact'
+      trace.stockDecision = {
+        kind: 'stock', source: 'exact', confidence: 1,
+        reason: 'Identité officielle ou synonyme enregistré dans le référentiel',
+      }
+      trace.events.push(`Association stock validée : ${associated.length} ligne(s)`)
+    }
+    return { matchedItems: associated.map(p => p.item), needsReview: false }
+  }
 
   // ============================================================
   // 1. MÉMOIRE PERSISTANTE
@@ -2379,7 +2497,7 @@ async function matchOneRequirement(
           row.stock_item_id
       )
 
-    if (!found) {
+    if (!found || !row.validated) {
       continue
     }
 
@@ -2835,7 +2953,8 @@ async function matchOneRequirement(
   // Une seule équivalence sémantique validée est donc déterministe.
   const semanticDeterministic =
     officialIngredient &&
-    semanticStockCandidates.length === 1
+    semanticStockCandidates.length === 1 &&
+    resolveStockIngredientId(refData, semanticStockCandidates[0].item.produit) === item.ingredient_id
       ? semanticStockCandidates[0]
       : null
 
@@ -2843,11 +2962,11 @@ async function matchOneRequirement(
     const selected = semanticDeterministic
 
     if (trace) {
-      trace.stock.source = 'memory'
+      trace.stock.source = 'exact'
       trace.stockDecision = {
         kind: 'stock',
-        source: 'memory',
-        confidence: Math.max(selected.score, 0.9),
+        source: 'exact',
+        confidence: 1,
         reason: `Équivalence sémantique déterministe via le référentiel : ${selected.item.produit}`,
       }
       trace.events.push(
@@ -2865,6 +2984,7 @@ async function matchOneRequirement(
         .map(p => p.item)
 
     for (const stockItem of matchingItems) {
+      if (!persistMemory) continue
       await saveStockMemory(
         key,
         stockItem,
@@ -2969,6 +3089,14 @@ async function matchOneRequirement(
   // 6. CLAUDE — MATCH AMBIGU
   // ============================================================
 
+  const analysisKey=stockAnalysisKey(item.ingredient_id!,ingredientReferenceSignature(refData),semanticStockCandidates)
+  const rememberedAnalysis=persistMemory?await readStockAnalysis(analysisKey):null
+  if(rememberedAnalysis){
+    if(trace){trace.stock.source='memory';trace.stock.memoryHit=true;trace.stockDecision={kind:'stock',source:'memory',confidence:Number(rememberedAnalysis.confidence),reason:rememberedAnalysis.reason};trace.events.push('Claude non appelé : analyse du même contexte mémorisée')}
+    return {matchedItems:[],needsReview:rememberedAnalysis.matched_label!==null,...(rememberedAnalysis.matched_label?{reviewReason:`Proposition IA à valider : « ${rememberedAnalysis.matched_label} ». Le stock n'a pas été déduit.`}:{})}
+  }
+
+
   if (trace) {
     trace.stock.aiCalled =
       true
@@ -3020,15 +3148,15 @@ async function matchOneRequirement(
     )
   }
 
+  const cacheSelected=semanticStockCandidates.find(c=>c.item.id===ai.matched)
+  if(persistMemory&&!ai.unavailable&&(!ai.matched||cacheSelected))await writeStockAnalysis({case_key:analysisKey,matched_label:cacheSelected?.item.produit??null,matched_source:cacheSelected?.item.source??null,confidence:ai.confidence,reason:ai.reason})
+
   if (!ai.matched) {
-    return {
-      matchedItems: [],
-      needsReview: true,
-    }
+    return {matchedItems: [], needsReview: Boolean(ai.unavailable), ...(ai.unavailable?{reviewReason:'Analyse du stock indisponible. Aucun stock déduit ; réessayer le test.'}:{})}
   }
 
   const selected =
-    aiCandidates.find(
+    semanticStockCandidates.find(
       c =>
         c.item.id ===
         ai.matched
@@ -3060,57 +3188,12 @@ async function matchOneRequirement(
     )
   }
 
-  // ============================================================
-  // 8. V3.5 — TOUTES LES LIGNES DU PRODUIT
-  // ============================================================
-
-  /*
-   * Claude sélectionne potentiellement UNE ligne.
-   *
-   * Exemple :
-   *
-   *   ID 101 : tomates fraîches — 500 g
-   *   ID 102 : tomates fraîches — 1 kg
-   *   ID 103 : tomates fraîches — 250 g
-   *
-   * Claude → ID 101
-   *
-   * V3.4 aurait pu ne retourner que ID 101.
-   *
-   * V3.5 récupère les trois lignes.
-   */
-
-  const matchingItems =
-    preparedStock
-      .filter(
-        p =>
-          p.normalized ===
-            selected.normalized &&
-          !exclusions.has(
-            `${key}::${p.item.id}`
-          )
-      )
-      .map(
-        p => p.item
-      )
-
-  if (
-    trace &&
-    matchingItems.length > 1
-  ) {
-    trace.events.push(
-      `Plusieurs lignes stock retenues après match IA : ${matchingItems.length}`
-    )
-  }
-
   return {
-    matchedItems:
-      matchingItems,
-
-    needsReview:
-      item.needs_review ||
-      ai.confidence < 0.85,
+    matchedItems: [],
+    needsReview: true,
+    reviewReason: `Proposition IA à valider : « ${selected.item.produit} ». Le stock n'a pas été déduit.`,
   }
+
 }
 
 type ConvertedStock = {
@@ -3222,12 +3305,10 @@ function canonicalUnit(
 
   if (!mapping) return null
 
-  const type =
-    mapping.type_unite as
-      | 'poids'
-      | 'volume'
-      | 'unité'
-      | null
+  const family = String(mapping.type_unite ?? '').trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+  const type: 'poids' | 'volume' | 'unité' | null =
+    ['divers', 'unite', 'unites'].includes(family) ? 'unité' :
+    family === 'poids' || family === 'volume' ? family : null
 
   if (!type) return null
 
@@ -3328,9 +3409,13 @@ export function convertStockQuantity(
   targetUnit: string
 ): ConvertedStock | null {
 
-  if (!Number.isFinite(qty)) {
+  if (!Number.isFinite(qty) || qty < 0) {
     return null
   }
+
+  // Ail : une Pièce historique est ambiguë (tête ou gousse), donc jamais convertie.
+  if (ingredientId && cleanText(refData.officialById.get(ingredientId)?.nom ?? '') === 'ail' &&
+      (['piece', 'pieces', 'unite', 'unites'].includes(normalizeUnitKey(fromUnit)) || ['piece', 'pieces', 'unite', 'unites'].includes(normalizeUnitKey(targetUnit)))) return null
 
   const from =
     canonicalUnit(
@@ -3383,8 +3468,7 @@ export function convertStockQuantity(
     return {
       qty:
         qty *
-        from.factor /
-        target.factor,
+        from.factor,
 
       unit:
         target.unit,
@@ -3439,7 +3523,7 @@ export function convertStockQuantity(
         qty * from.factor
 
       return {
-        qty: quantityInUnits * gramsPerUnit / target.factor,
+        qty: quantityInUnits * gramsPerUnit,
         unit: target.unit,
         converted: true,
         reason: `${fromUnit} → ${targetUnit} via équivalence poids/unité`,
@@ -3492,6 +3576,18 @@ export function convertStockQuantity(
     }
   }
 
+  // Discrete units/volume can bridge through their two explicit masses.
+  if (ingredientId && ((from.type === 'unité' && target.type !== 'poids') ||
+      (target.type === 'unité' && from.type === 'volume'))) {
+    const fd = findDensity(refData, ingredientId, fromUnit) ?? findDensity(refData, ingredientId, from.unit)
+    const td = findDensity(refData, ingredientId, targetUnit) ?? findDensity(refData, ingredientId, target.unit)
+    if (fd && td && Number(fd.poids_g_approx) > 0 && Number(td.poids_g_approx) > 0) {
+      const fu = canonicalUnit(refData, fd.unite), tu = canonicalUnit(refData, td.unite)
+      if (fu && tu) return { qty: qty * from.factor / fu.factor * Number(fd.poids_g_approx) / Number(td.poids_g_approx) * tu.factor,
+        unit: target.unit, converted: true, reason: `${fromUnit} → ${targetUnit} via deux masses explicites` }
+    }
+  }
+
   // ============================================================
   // VOLUME -> VOLUME VIA DEUX DENSITÉS EXPLICITES
   // ============================================================
@@ -3526,7 +3622,7 @@ export function convertStockQuantity(
         if (targetDensityUnit) {
           const targetDensityUnits = grams / targetWeight
           return {
-            qty: targetDensityUnits * targetDensityUnit.factor / target.factor,
+            qty: targetDensityUnits * targetDensityUnit.factor,
             unit: target.unit,
             converted: true,
             reason: `${fromUnit} → ${targetUnit} via densités explicites`,
@@ -3673,8 +3769,7 @@ export function convertStockQuantity(
 
     return {
       qty:
-        targetVolumeMl /
-        target.factor,
+        targetVolumeMl,
 
       unit:
         target.unit,
@@ -3687,6 +3782,21 @@ export function convertStockQuantity(
   }
 
   return null
+}
+
+/** Conversion vers un libellé de référence exact pour l'enregistrement en base.
+ * convertStockQuantity conserve son contrat canonique (g/mL/unité discrète).
+ */
+export function convertQuantityToUnit(
+  refData: ReferenceData, ingredientId: string | null,
+  qty: number, fromUnit: string, targetUnit: string,
+): { qty: number; unit: string } | null {
+  const target = canonicalUnit(refData, targetUnit)
+  const result = convertStockQuantity(refData, ingredientId, qty, fromUnit, targetUnit)
+  if (!target || !result || result.unit !== target.unit || target.factor <= 0) return null
+  const value = result.qty / target.factor
+  if (!Number.isFinite(value)) return null
+  return { qty: value, unit: targetUnit }
 }
 
 export interface StockComparisonDetail {
@@ -3787,6 +3897,14 @@ export async function compareToStock(
   for (const item of
     aggregated
   ) {
+    if (item.quantity_unknown) {
+      results.push({
+        ...item, qte_stock: 0, qte_a_acheter: 0, ai_status: 'orange',
+        needs_review: true, stock_details: [],
+        stock_match_review: 'Quantité inconnue : préciser le besoin dans Cookiwiki avant de calculer les courses.',
+      })
+      continue
+    }
 
     const match =
       await matchOneRequirement(

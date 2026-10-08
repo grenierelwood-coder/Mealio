@@ -1,0 +1,122 @@
+[
+  {
+    "ingredient_name": "Quetsche",
+    "unite": "Pièce",
+    "grams": 30
+  },
+  {
+    "ingredient_name": "Reine-Claude",
+    "unite": "Pièce",
+    "grams": 35
+  },
+  {
+    "ingredient_name": "Cannelle (bâton)",
+    "unite": "Pièce",
+    "grams": 3
+  },
+  {
+    "ingredient_name": "Biscuit sec",
+    "unite": "Pièce",
+    "grams": 8
+  },
+  {
+    "ingredient_name": "Pain de campagne",
+    "unite": "Tranche",
+    "grams": 35
+  },
+  {
+    "ingredient_name": "Vinaigre de Xérès",
+    "unite": "Cuillère à soupe",
+    "grams": 15
+  },
+  {
+    "ingredient_name": "Semoule fine",
+    "unite": "Cuillère à soupe",
+    "grams": 12
+  },
+  {
+    "ingredient_name": "Sel gros / Fleur de sel",
+    "unite": "Pincée",
+    "grams": 0.3
+  },
+  {
+    "ingredient_name": "Sel fin",
+    "unite": "Pincée",
+    "grams": 0.3
+  },
+  {
+    "ingredient_name": "Poivre noir",
+    "unite": "Pincée",
+    "grams": 0.1
+  },
+  {
+    "ingredient_name": "Muscade",
+    "unite": "Pincée",
+    "grams": 0.1
+  },
+  {
+    "ingredient_name": "Olive noire",
+    "unite": "Cuillère à soupe",
+    "grams": 20
+  },
+  {
+    "ingredient_name": "Olive verte",
+    "unite": "Cuillère à soupe",
+    "grams": 20
+  },
+  {
+    "ingredient_name": "Thym séché",
+    "unite": "Cuillère à café",
+    "grams": 0.7
+  },
+  {
+    "ingredient_name": "Herbes de Provence",
+    "unite": "Cuillère à café",
+    "grams": 1
+  },
+  {
+    "ingredient_name": "Paprika",
+    "unite": "Cuillère à café",
+    "grams": 2.5
+  },
+  {
+    "ingredient_name": "Cannelle",
+    "unite": "Cuillère à café",
+    "grams": 2.5
+  },
+  {
+    "ingredient_name": "Extrait de vanille",
+    "unite": "Millilitre",
+    "grams": 1
+  },
+  {
+    "ingredient_name": "Vinaigre de cidre",
+    "unite": "Millilitre",
+    "grams": 1
+  },
+  {
+    "ingredient_name": "Sauce sriracha",
+    "unite": "Millilitre",
+    "grams": 1.1
+  },
+  {
+    "ingredient_name": "Maïzena",
+    "unite": "Cuillère à café",
+    "grams": 3
+  },
+  {
+    "ingredient_name": "Vanille (gousse)",
+    "unite": "Pièce",
+    "grams": 3
+  },
+  {
+    "ingredient_name": "Blanc de poulet",
+    "unite": "Pièce",
+    "grams": 180
+  },
+  {
+    "ingredient_name": "Maïzena",
+    "unite": "Pointe de couteau",
+    "grams": 0.5
+  }
+]

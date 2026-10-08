@@ -49,14 +49,14 @@ export async function POST(request: NextRequest) {
 
     const { data: oldItems, error: itemsError } = await mealioServerDb
       .from('shopping_items')
-      .select('id,produit,ingredient_id,qte,qte_achat,qte_achetee,unite,is_checked,is_manual,ai_status')
+      .select('id,produit,ingredient_id,qte,qte_achat,qte_achetee,pantry_pack_quantity,unite,is_checked,is_manual,ai_status')
       .eq('list_id', listId)
 
     if (itemsError) throw itemsError
 
     const items = (oldItems ?? []).map(item => ({
       ...item,
-      remaining: Math.max(numberOrZero(item.qte) - effectiveBought(item), 0),
+      remaining: Math.max(numberOrZero(item.qte_achat ?? item.qte) - effectiveBought(item), 0),
     })).filter(item => item.remaining > 0)
 
     // Une nouvelle liste ne doit jamais recopier une unité historique différente
@@ -111,6 +111,7 @@ export async function POST(request: NextRequest) {
       ingredient_id: item.ingredient_id,
       qte: item.remaining,
       qte_achat: item.remaining,
+      pantry_pack_quantity: item.pantry_pack_quantity ?? null,
       qte_achetee: 0,
       unite: item.unite ?? 'pièce(s)',
       is_checked: false,

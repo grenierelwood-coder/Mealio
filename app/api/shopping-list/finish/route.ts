@@ -72,7 +72,7 @@ export async function POST(request: Request) {
     )
 
     const incompleteItems = (items ?? []).map((item: any) => {
-      const required = numberOrZero(item.qte)
+      const required = numberOrZero(item.qte_achat ?? item.qte)
       const bought = effectiveBought(item)
       const stored = numberOrZero(item.stock_stored_quantity)
       return {

@@ -1,21 +1,22 @@
 'use client'
 
 import Link from 'next/link'
+import InventoryReminderNotice from './InventoryReminderNotice'
+import RecipeWatchNotice from './RecipeWatchNotice'
+import { APP_VERSION } from '../utils/app-version'
 import { usePathname, useRouter } from 'next/navigation'
 import { useEffect, useMemo, useState } from 'react'
 
 const links = [
   { href: '/planning', label: 'Planning', icon: '📅' },
   { href: '/courses', label: 'Courses', icon: '🛒' },
-  { href: '/purchases', label: 'Achats', icon: '🧾' },
   { href: '/stock', label: 'Stock', icon: '📦' },
-  { href: '/anti-gaspi', label: 'Anti-Gaspi', icon: '🥕' },
-  { href: '/replenishment', label: 'Ravitaillement', icon: '🔄' },
-  { href: '/point-frigo', label: 'Point Frigo', icon: '🧊' },
-  { href: '/admin', label: 'Administration', icon: '⚙️' },
-  { href: '/admin/storage', label: 'Rangement', icon: '🗄️' },
-  { href: '/matcher', label: 'Matcher', icon: '🧠' },
+  { href: '/replenishment', label: 'Réapprovisionnements', icon: '🔄' },
+  { href: '/anti-gaspi', label: 'Anti-gaspi', icon: '🥕' },
+  { href: '/inventaire', label: 'Inventaire', icon: '📋' },
+  { href: '/admin', label: 'Admin', icon: '⚙️' },
 ]
+const secondaryLinks = [{ href: '/purchases', label: 'Achats', icon: '🧾' }]
 
 const bottomLinks = [
   { href: '/', label: 'Accueil', icon: '⌂' },
@@ -46,9 +47,9 @@ export default function MealioNav() {
   }, [pathname])
 
   const activeHref = useMemo(() => {
-    const exact = links.find(link => pathname === link.href)
+    const exact = [...links, ...secondaryLinks].find(link => pathname === link.href)
     if (exact) return exact.href
-    const nested = links.find(link => pathname.startsWith(`${link.href}/`))
+    const nested = [...links, ...secondaryLinks].find(link => pathname.startsWith(`${link.href}/`))
     return nested?.href ?? (pathname === '/' ? '/' : '')
   }, [pathname])
 
@@ -85,8 +86,10 @@ export default function MealioNav() {
             />
           </button>
 
+          <span aria-label={`Version Mealio ${APP_VERSION}`} className="shrink-0 rounded-lg border border-slate-200 bg-slate-50 px-2 py-1 text-xs font-bold text-slate-600">v{APP_VERSION}</span>
+
           <nav className="hidden min-w-0 flex-1 items-center gap-1 overflow-hidden lg:flex">
-            {links.slice(0, 9).map(link => {
+            {links.map(link => {
               const active = activeHref === link.href
               return (
                 <Link
@@ -121,6 +124,7 @@ export default function MealioNav() {
           </button>
         </div>
       </header>
+      <RecipeWatchNotice username={username} pathname={pathname}/><InventoryReminderNotice key={username} username={username} pathname={pathname}/>
 
       <nav className="fixed inset-x-0 bottom-0 z-[90] border-t border-slate-200 bg-white/96 px-1 pb-[max(6px,env(safe-area-inset-bottom))] pt-1 shadow-[0_-4px_18px_rgba(15,23,42,0.06)] backdrop-blur lg:hidden">
         <div className="mx-auto grid max-w-xl grid-cols-5 gap-1">
@@ -177,7 +181,7 @@ export default function MealioNav() {
               >
                 <span className="w-6 text-center">⌂</span> Accueil
               </button>
-              {links.map(link => (
+              {[...links, ...secondaryLinks].map(link => (
                 <button
                   key={link.href}
                   type="button"

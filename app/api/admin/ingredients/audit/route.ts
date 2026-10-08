@@ -1,3 +1,4 @@
+import { loadPantryProducts } from '../../../../utils/pantry-server'
 import { NextResponse } from 'next/server'
 import { getAuthSession } from '../../../../utils/auth-server'
 import { mealioServerDb } from '../../../../lib/supabase-server'
@@ -44,6 +45,8 @@ export async function GET() {
     ],
   }
 
+  try { dataset.pantryProducts = [...(await loadPantryProducts()).values()] }
+  catch (error) { return NextResponse.json({ error: error instanceof Error ? error.message : 'Épicerie indisponible' }, { status: 500 }) }
   const report = runDataQualityAudit(dataset)
   return NextResponse.json({ generatedAt: new Date().toISOString(), ...report })
 }

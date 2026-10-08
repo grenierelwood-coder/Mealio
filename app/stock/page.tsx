@@ -2,14 +2,21 @@
 
 import Link from 'next/link'
 import { useEffect, useMemo, useState } from 'react'
+import { matchesStockLocation, stockLocationKey, stockLocationLabel, stockLocationOptions, type StockLocation } from '../utils/stock-location-policy'
 
 type StockItem = {
   id: string
+  pantry_ingredient_id?: string | null
+  almost_finished?: boolean
   produit: string
   qte: number
   unite: string
   categorie: string
   rayon?: string | null
+  location_id?: string | null
+  location_name?: string | null
+  location_is_fridge?: boolean | null
+  location_is_secondary?: boolean | null
   source: 'frosti' | 'cellio'
   date_entree?: string | null
   date_peremption?: string | null
@@ -22,6 +29,7 @@ type StockResponse = {
   frosti: StockItem[]
   cellio: StockItem[]
   total: number
+  locations?: StockLocation[]
   error?: string
 }
 
@@ -48,7 +56,11 @@ function daysUntil(value?: string | null) {
 }
 
 export default function StockPage() {
+  const [savingSignal, setSavingSignal] = useState<string | null>(null)
   const [items, setItems] = useState<StockItem[]>([])
+  const [locations, setLocations] = useState<StockLocation[]>([])
+  const [selectedLocations, setSelectedLocations] = useState<string[]>([])
+  const [locationsOpen, setLocationsOpen] = useState(false)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const [search, setSearch] = useState('')
@@ -70,11 +82,27 @@ export default function StockPage() {
       const data: StockResponse = await response.json()
       if (!response.ok) throw new Error(data.error || 'Erreur lors du chargement du stock.')
       setItems(data.items || [])
+      const options = stockLocationOptions(data.locations || [], data.items || [])
+      setLocations(options)
+      setSelectedLocations(selected => selected.filter(key => options.some(location => stockLocationKey(location.source, location.id) === key)))
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Erreur lors du chargement du stock.')
     } finally {
       setLoading(false)
     }
+  }
+
+  async function signalPantry(item: StockItem) {
+    if(!item.pantry_ingredient_id || savingSignal) return
+    setSavingSignal(item.pantry_ingredient_id); setError('')
+    try {
+      const response=await fetch('/api/pantry/signals',{method:'PATCH',headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({ingredient_id:item.pantry_ingredient_id,action:item.almost_finished?'cancel':'almost_finished'})})
+      const result=await response.json()
+      if(!response.ok) throw new Error(result.error || 'Signalement impossible.')
+      await loadStock()
+    } catch(err){setError(err instanceof Error?err.message:'Signalement impossible.')}
+    finally{setSavingSignal(null)}
   }
 
   const rayons = useMemo(() => {
@@ -93,7 +121,7 @@ export default function StockPage() {
       const matchesSearch = !q || normalize(`${item.produit} ${item.categorie} ${item.notes ?? ''}`).includes(q)
       const matchesCategory = category === 'all' || item.categorie === category
       const matchesRayon = rayon === 'all' || item.rayon === rayon
-      const matchesSource = source === 'all' || item.source === source
+      const matchesSource = matchesStockLocation(item, source, selectedLocations)
       const expiration = item.date_peremption?.slice(0, 10) ?? ''
       const matchesFrom = !dateFrom || (expiration && expiration >= dateFrom)
       const matchesTo = !dateTo || (expiration && expiration <= dateTo)
@@ -104,10 +132,10 @@ export default function StockPage() {
         || (dateMode === '7' && days !== null && days >= 0 && days <= 7)
       return matchesSearch && matchesCategory && matchesRayon && matchesSource && matchesFrom && matchesTo && matchesMode
     })
-  }, [items, search, category, rayon, source, dateFrom, dateTo, dateMode])
+  }, [items, search, category, rayon, source, selectedLocations, dateFrom, dateTo, dateMode])
 
   const activeFilters = [
-    category !== 'all', rayon !== 'all', source !== 'all', dateFrom !== '', dateTo !== '', dateMode !== 'all', search.trim() !== '',
+    category !== 'all', rayon !== 'all', source !== 'all', selectedLocations.length > 0, dateFrom !== '', dateTo !== '', dateMode !== 'all', search.trim() !== '',
   ].filter(Boolean).length
 
   function resetFilters() {
@@ -115,6 +143,7 @@ export default function StockPage() {
     setCategory('all')
     setRayon('all')
     setSource('all')
+    setSelectedLocations([])
     setDateFrom('')
     setDateTo('')
     setDateMode('all')
@@ -129,7 +158,7 @@ export default function StockPage() {
             <h1 className="truncate text-2xl font-black sm:text-3xl">Stocks Frosti + Cellio</h1>
           </div>
           <div className="flex shrink-0 gap-2">
-            <Link href="/point-frigo" className="hidden min-h-11 items-center rounded-xl border border-emerald-200 bg-emerald-50 px-3 text-sm font-bold text-emerald-800 sm:flex">Point Frigo</Link>
+            <Link href="/inventaire" className="flex min-h-11 items-center rounded-xl border border-emerald-200 bg-emerald-50 px-3 text-sm font-bold text-emerald-800">Inventaire</Link>
             <button type="button" onClick={() => void loadStock()} disabled={loading} className="min-h-11 rounded-xl border border-slate-200 bg-white px-3 text-sm font-bold text-slate-600 shadow-sm disabled:opacity-50" aria-label="Actualiser le stock">↻</button>
           </div>
         </div>
@@ -148,9 +177,31 @@ export default function StockPage() {
 
           <div className="mt-2 flex gap-1.5 overflow-x-auto pb-1">
             {([['all', 'Tous'], ['frosti', 'Frosti'], ['cellio', 'Cellio']] as const).map(([value, label]) => (
-              <button key={value} type="button" onClick={() => setSource(value)} className={`min-h-10 shrink-0 rounded-full px-4 text-xs font-black ${source === value ? 'bg-emerald-700 text-white' : 'bg-slate-100 text-slate-600'}`}>{label}</button>
+              <button key={value} type="button" aria-pressed={source === value} onClick={() => { setSource(value); setSelectedLocations([]) }} className={`min-h-10 shrink-0 rounded-full px-4 text-xs font-black ${source === value ? 'bg-emerald-700 text-white' : 'bg-slate-100 text-slate-600'}`}>{label}</button>
             ))}
           </div>
+
+          <button type="button" aria-expanded={locationsOpen} aria-controls="stock-locations" onClick={() => setLocationsOpen(value => !value)} className="mt-2 min-h-11 w-full rounded-xl border border-slate-200 px-3 text-left text-sm font-bold text-slate-700">
+            📍 {selectedLocations.length ? `${selectedLocations.length} lieu(x) sélectionné(s)` : 'Tous les lieux de stockage'} · {locationsOpen ? 'Masquer' : 'Choisir'}
+          </button>
+          {selectedLocations.length > 0 && !locationsOpen && <p className="mt-1 break-words px-1 text-xs text-slate-600">{locations.filter(location => selectedLocations.includes(stockLocationKey(location.source, location.id))).map(stockLocationLabel).join(' · ')}</p>}
+          {locationsOpen && <fieldset id="stock-locations" className="mt-2 rounded-xl border border-slate-200 p-3">
+            <legend className="px-1 text-xs font-bold text-slate-500">Un ou plusieurs lieux</legend>
+            <button type="button" onClick={() => setSelectedLocations([])} className="mb-2 min-h-11 rounded-xl bg-slate-100 px-3 text-sm font-bold text-slate-700">Tous les lieux</button>
+            <div className="grid gap-2 sm:grid-cols-2">
+              {locations.filter(location => source === 'all' || location.source === source).map(location => {
+                const key = stockLocationKey(location.source, location.id)
+                return <label key={key} className="flex min-h-12 cursor-pointer items-center gap-3 rounded-xl border border-slate-200 px-3 py-2 text-sm font-semibold text-slate-700">
+                  <input type="checkbox" checked={selectedLocations.includes(key)} onChange={event => {
+                    const checked = event.target.checked
+                    setSelectedLocations(selected => checked ? [...selected, key] : selected.filter(value => value !== key))
+                  }} className="h-5 w-5 shrink-0 accent-emerald-700" />
+                  <span className="break-words">{stockLocationLabel(location)}</span>
+                </label>
+              })}
+            </div>
+            <p className="mt-2 text-xs text-slate-500">Sans lieu coché, tous les lieux sont affichés. Changer Frosti/Cellio réinitialise ce choix.</p>
+          </fieldset>}
 
           {filtersOpen && (
             <div className="mt-3 grid gap-3 border-t border-slate-100 pt-3 sm:grid-cols-2">
@@ -230,9 +281,13 @@ export default function StockPage() {
                             <div className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl text-xl ${item.source === 'frosti' ? 'bg-blue-50' : 'bg-amber-50'}`}>{item.source === 'frosti' ? '❄️' : '📦'}</div>
                             <div className="min-w-0 flex-1">
                               <div className="truncate font-black text-slate-900">{item.produit}</div>
-                              <div className="mt-0.5 truncate text-xs font-semibold text-slate-500">{item.qte} {item.unite} · {item.categorie || 'Sans catégorie'}</div>
+                              <div className="mt-0.5 truncate text-xs font-semibold text-slate-500">{item.pantry_ingredient_id ? (Number(item.qte)>0?'Présent':'Absent') : `${item.qte} ${item.unite}`} · {item.categorie || 'Sans catégorie'}</div>
+                              <div className="mt-1 break-words text-xs font-semibold text-slate-600">📍 {item.source==='frosti' ? item.location_is_fridge===true?'Frigo · ':item.location_is_fridge===false?'Congélateur · ':'Stock froid · ' : ''}{item.location_name?.trim() || 'Lieu non renseigné'}</div>
                               {item.date_peremption ? <div className={`mt-1 text-xs font-black ${expired ? 'text-red-600' : urgent ? 'text-orange-600' : 'text-emerald-700'}`}>{expired ? 'Péremption dépassée' : `Péremption ${formatDate(item.date_peremption)}`}</div> : <div className="mt-1 text-xs text-slate-400">Aucune date</div>}
                             </div>
+                            {item.pantry_ingredient_id && Number(item.qte)>0 && <button type="button" disabled={savingSignal!==null} onClick={()=>void signalPantry(item)}
+                              className={`min-h-11 max-w-32 rounded-xl px-3 text-xs font-bold disabled:opacity-50 ${item.almost_finished?'bg-orange-100 text-orange-900':'border border-slate-300 text-slate-700'}`}>
+                              {savingSignal===item.pantry_ingredient_id?'…':item.almost_finished?'Presque terminé · Annuler':'Presque terminé'}</button>}
                             <span className="shrink-0 text-lg text-slate-300">›</span>
                           </div>
                         </div>

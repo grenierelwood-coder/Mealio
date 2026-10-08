@@ -1,12 +1,17 @@
 {
   "name": "mealio",
-  "version": "0.1.0",
+  "version": "1.2.27",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "test": "node scripts/test-offline.mjs",
+    "test:ui": "node scripts/test-admin-render.cjs && node scripts/test-inventory-integration-render.cjs",
+    "test:offline": "node scripts/test-offline.mjs",
+    "typecheck": "tsc --noEmit",
+    "verify:production": "node scripts/verify-production.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.112.4",

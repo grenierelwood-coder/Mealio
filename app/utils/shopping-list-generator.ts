@@ -1,18 +1,19 @@
 import { mealioServerDb as mealioDb } from '../lib/supabase-server'
 import {
   getRecipeDetailsFromCookiwiki,
-  RecipeDetails,
+  type RecipeDetails,
 } from './cookiwiki-fetcher'
 import { getHouseholdStock } from './stock-fetcher'
 import {
+  cleanText,
   loadReferenceData,
   resolveRecipeIngredients,
   aggregateRequirements,
   compareToStock,
-  ResolvedIngredient,
-  ComparedRequirement,
+  type ResolvedIngredient,
 } from './matcher'
 import { assertOfficialIngredientUnit } from './official-unit-policy'
+import { prepareShoppingRequirement, canReuseUnpurchasedShoppingItem, type PreparedShoppingRequirement } from './shopping-requirement-policy'
 
 export interface GenerateShoppingListResult {
   listId: string
@@ -712,7 +713,7 @@ export async function generateShoppingListForPeriod(
    */
 
   const refData =
-    await loadReferenceData()
+    await loadReferenceData(username)
 
   /*
    * -----------------------------------------------------------
@@ -727,6 +728,27 @@ export async function generateShoppingListForPeriod(
     try {
       const recipe = await getCachedRecipe(plan.recipe_id)
 
+      if (!recipe.ingredients.length) {
+        generationIssues.push(await logGenerationIssue({
+          list_id:listId,recipe_id:plan.recipe_id,recipe_nom:recipe.nom,produit:recipe.nom,unit:null,
+          issue_type:'RECIPE_PROCESSING_ERROR',phase:'generation',
+          message:`La recette « ${recipe.nom} » ne contient aucun ingrédient exploitable. Ses courses n’ont pas pu être calculées.`,
+          resolution_hint:'Compléter la liste structurée des ingrédients avec leurs quantités dans Cookiwiki, puis régénérer. Les courses des autres recettes sont conservées.',
+        }))
+        continue
+      }
+      for (const ingredient of recipe.ingredients) {
+        const identity=refData.officialList.find(i=>cleanText(i.nom)===cleanText(ingredient.name))?.id || refData.synonymMap.get(cleanText(ingredient.name))
+        const presence=identity&&refData.pantryProducts?.get(identity)?.enabled
+        if ((ingredient.quantityEstimated&&!presence) || ingredient.preparationIssue) {
+          generationIssues.push(await logGenerationIssue({
+            list_id:listId,recipe_id:plan.recipe_id,recipe_nom:recipe.nom,produit:ingredient.name,unit:ingredient.unit,
+            issue_type:ingredient.preparationIssue?'RECIPE_STRUCTURE_REVIEW':'RECIPE_QUANTITY_ESTIMATED',phase:'generation',
+            message:ingredient.preparationIssue || `Quantité estimée pour « ${ingredient.name} » : ${ingredient.qty} ${ingredient.unit} pour ${recipe.baseServings} portions. ${ingredient.qualityNote||''}`,
+            resolution_hint:'Ouvrir la correction de recette, ajuster la quantité ou le choix et désactiver « Estimation » après vérification. Puis régénérer.',
+          }))
+        }
+      }
       const baseServings = recipe.baseServings || 4
       const requestedServings = plan.servings || baseServings
       const servingsRatio = requestedServings / baseServings
@@ -808,12 +830,26 @@ export async function generateShoppingListForPeriod(
    * vider la liste existante.
    */
 
-  const comparedForInsert: Array<ComparedRequirement & { unite_db: string }> = []
+  const comparedForInsert: Array<PreparedShoppingRequirement & { unite_db: string }> = []
 
   for (const item of compared.filter(item => item.ai_status !== 'green')) {
+    if (item.quantity_unknown) {
+      const issue = await logGenerationIssue({
+        list_id: listId,
+        recipe_id: item.contributions?.[0]?.recipe_id ?? null,
+        recipe_nom: item.contributions?.[0]?.recipe_nom ?? null,
+        produit: item.produit, unit: item.unite,
+        issue_type: 'RECIPE_QUANTITY_UNKNOWN', phase: 'generation',
+        message: `La quantité nécessaire de « ${item.produit} » est inconnue. Aucun achat chiffré n'a été inventé.`,
+        resolution_hint: 'Préciser la quantité et l’unité dans Cookiwiki, puis régénérer la liste. Un ajout manuel reste possible dans Courses.',
+      })
+      generationIssues.push(issue)
+      continue
+    }
     try {
-      const unite_db = getDatabaseUnit(item.unite, refData.unitMappings as UnitMapping[])
-      comparedForInsert.push({ ...item, unite_db })
+      const prepared = prepareShoppingRequirement(item, refData)
+      const unite_db = getDatabaseUnit(prepared.unite, refData.unitMappings as UnitMapping[])
+      comparedForInsert.push({ ...prepared, unite_db })
     } catch (error) {
       const message = error instanceof Error ? error.message : `Unité \"${item.unite}\" inconnue.`
       const issue = await logGenerationIssue({
@@ -848,7 +884,7 @@ export async function generateShoppingListForPeriod(
 
   const { data: existingItems, error: existingItemsError } = await mealioDb
     .from('shopping_items')
-    .select('id,produit,ingredient_id,qte,qte_achat,qte_achetee,stock_stored_quantity,unite,is_checked,is_manual,ai_status,updated_at')
+    .select('id,produit,ingredient_id,qte,qte_achat,qte_achetee,stock_stored_quantity,pantry_pack_quantity,unite,is_checked,is_manual,ai_status,updated_at')
     .eq('list_id', listId)
 
   if (existingItemsError) {
@@ -875,6 +911,7 @@ export async function generateShoppingListForPeriod(
     ingredient_id: string | null
     qte: number | null
     qte_achat: number | null
+    pantry_pack_quantity?: number | null
     qte_achetee: number | null
     stock_stored_quantity: number | null
     unite: string | null
@@ -892,12 +929,15 @@ export async function generateShoppingListForPeriod(
   }
 
   const usedExistingIds = new Set<string>()
+  const currentItemKeys = new Set(comparedForInsert.map(item => itemKey({
+    ingredient_id: item.ingredient_id, produit: item.produit, unite: item.unite_db,
+  })))
   let itemCount = 0
 
   for (const item of comparedForInsert) {
     try {
     if (item.ingredient_id) {
-      await assertOfficialIngredientUnit(item.ingredient_id, item.unite_db)
+      await assertOfficialIngredientUnit(item.ingredient_id, item.unite_db, username)
     }
 
     const key = itemKey({
@@ -907,7 +947,16 @@ export async function generateShoppingListForPeriod(
     })
 
     const candidates = byKey.get(key) ?? []
-    const candidate = candidates.find(row => !usedExistingIds.has(row.id))
+    const candidate = candidates.find(row => !usedExistingIds.has(row.id)) ??
+      existing.find(row => !usedExistingIds.has(row.id) &&
+        !currentItemKeys.has(itemKey(row)) && canReuseUnpurchasedShoppingItem(row, item))
+
+    // Un format déjà choisi reste stable lors de la régénération de cette liste.
+    if (candidate && item.pantry_pack_quantity && Number(candidate.pantry_pack_quantity) > 0 &&
+        normalizeUnit(candidate.unite) === normalizeUnit(item.unite_db)) {
+      item.pantry_pack_quantity = Number(candidate.pantry_pack_quantity)
+      item.qte_a_acheter = Number(candidate.pantry_pack_quantity)
+    }
 
     let shoppingItemId: string
 
@@ -922,7 +971,12 @@ export async function generateShoppingListForPeriod(
             produit: item.produit,
             ingredient_id: item.ingredient_id,
             qte: item.qte_a_acheter,
-            qte_achat: Math.max(Number(candidate.qte_achat ?? 0), item.qte_a_acheter),
+            unite: item.unite_db,
+            pantry_pack_quantity: item.pantry_pack_quantity ?? null,
+            qte_achat: normalizeUnit(candidate.unite) === normalizeUnit(item.unite_db) &&
+              (!item.pantry_pack_quantity || Number(candidate.pantry_pack_quantity) === item.pantry_pack_quantity || Number(candidate.qte_achetee ?? 0) > 0 || Number(candidate.stock_stored_quantity ?? 0) > 0)
+              ? Math.max(Number(candidate.qte_achat ?? 0), item.qte_a_acheter)
+              : item.qte_a_acheter,
             ai_status: item.ai_status,
             is_checked: candidate.is_checked ?? false,
           })
@@ -952,6 +1006,7 @@ export async function generateShoppingListForPeriod(
           ingredient_id: item.ingredient_id,
           qte: item.qte_a_acheter,
           qte_achat: item.qte_a_acheter,
+          pantry_pack_quantity: item.pantry_pack_quantity ?? null,
           qte_achetee: 0,
           stock_stored_quantity: 0,
           unite: item.unite_db,
@@ -981,6 +1036,20 @@ export async function generateShoppingListForPeriod(
      * quantité à acheter. Un stock non convertible mais déjà suffisant ne
      * doit pas polluer la liste de courses.
      */
+    if (item.reference_unit_issue) {
+      const issue = await logGenerationIssue({
+        list_id: listId,
+        recipe_id: item.contributions?.[0]?.recipe_id ?? null,
+        recipe_nom: item.contributions?.[0]?.recipe_nom ?? null,
+        shopping_item_id: shoppingItemId,
+        produit: item.produit, unit: item.unite_db,
+        issue_type: 'REFERENCE_UNIT_CONVERSION_REQUIRED', phase: 'generation',
+        message: item.reference_unit_issue,
+        resolution_hint: 'Préciser dans Cookiwiki une quantité dans l’unité de référence, ou renseigner une équivalence poids/unité explicite et vérifiée pour cet ingrédient. Puis régénérer. Ne pas modifier l’unité de référence uniquement pour faire disparaître ce message.',
+      })
+      generationIssues.push(issue)
+    }
+
     const unconvertibleStock = (item.stock_details ?? []).filter(
       detail => detail.qte_convertie === null
     )
@@ -988,7 +1057,7 @@ export async function generateShoppingListForPeriod(
     // Une impossibilité de conversion possède déjà un message dédié plus
     // précis ci-dessous. On n'enregistre donc pas le message générique
     // stock_match_review dans ce cas, afin d'éviter deux alertes identiques.
-    if (item.stock_match_review && unconvertibleStock.length === 0) {
+    if (item.stock_match_review && unconvertibleStock.length === 0 && !item.reference_unit_issue) {
       const issue = await logGenerationIssue({
         list_id: listId,
         recipe_id: item.contributions?.[0]?.recipe_id ?? null,
@@ -999,7 +1068,7 @@ export async function generateShoppingListForPeriod(
         issue_type: 'STOCK_MATCH_REVIEW',
         phase: 'generation',
         message: item.stock_match_review,
-        resolution_hint: 'Si cette correspondance est correcte, aucune action n’est nécessaire. Sinon, corriger le rapprochement dans le Matcher afin que Mealio l’apprenne pour les prochaines courses.',
+        resolution_hint: 'Dans Admin → Ingrédients, ouvrir l’ingrédient officiel choisi et ajouter le libellé exact de la recette (ou du stock) dans Synonymes. Cette association sera réutilisée. Si le libellé contient un choix « ou », préciser d’abord l’ingrédient retenu dans Cookiwiki. Corriger séparément toute unité incompatible, puis régénérer les courses.',
       })
       generationIssues.push(issue)
     }
@@ -1028,7 +1097,7 @@ export async function generateShoppingListForPeriod(
         issue_type: 'STOCK_CONVERSION_MISSING',
         phase: 'generation',
         message: `Mealio a trouvé du stock (${detailText}), mais ne peut pas convertir cette quantité en ${item.unite}. Seule la partie convertible est prise en compte dans le calcul des courses.`,
-        resolution_hint: `Vérifier l'équivalence de cette unité pour "${item.produit}" dans les données de référence Mealio. Tant qu'elle n'est pas connue, la quantité non convertible n'est pas déduite des courses.`,
+        resolution_hint: `Vérifier l'équivalence de cette unité pour "${item.produit}" dans Admin → Ingrédients → Poids moyens et conversions (grammes pour 1 unité), ou corriger l’unité du stock dans Frosti/Cellio si elle est erronée. Tant qu'elle n'est pas connue, la quantité non convertible n'est pas déduite des courses.`,
       })
       generationIssues.push(issue)
     }

@@ -1,3 +1,5 @@
+import { loadPantryProducts } from '../../utils/pantry-server'
+import { pantryMode } from '../../utils/pantry-policy'
 import { getAuthSession } from '../../utils/auth-server'
 import { NextResponse } from 'next/server'
 import { mealioServerDb } from '../../lib/supabase-server'
@@ -10,6 +12,7 @@ type ShoppingItemRow = {
   produit: string
   ingredient_id: string | null
   qte: number | null
+  pantry_pack_quantity: number | null
   qte_achat: number | null
   qte_achetee: number | null
   stock_stored_quantity: number | null
@@ -123,7 +126,7 @@ export async function GET() {
 
     const { data: issueRows, error: issuesError } = await mealioServerDb
       .from('shopping_issues')
-      .select('id,list_id,shopping_item_id,phase,issue_type,produit,unit,message,resolution_hint,status,created_at,resolved_at')
+      .select('id,list_id,recipe_id,shopping_item_id,phase,issue_type,produit,unit,message,resolution_hint,status,created_at,resolved_at')
       .eq('list_id', list.id)
       .eq('status', 'open')
       .order('created_at', { ascending: false })
@@ -161,6 +164,7 @@ export async function GET() {
           ingredient_id,
           qte,
           qte_achat,
+          pantry_pack_quantity,
           qte_achetee,
           stock_stored_quantity,
           unite,
@@ -218,7 +222,7 @@ export async function GET() {
 
     if (itemsRows.length > 0) {
       const isCompleted = (item: ShoppingItemRow): boolean => {
-        const required = Math.max(0, Number(item.qte ?? 0))
+        const required = Math.max(0, Number(item.qte_achat ?? item.qte ?? 0))
         const bought = Math.max(0, Number(item.qte_achetee ?? 0))
         const stored = Math.max(0, Number(item.stock_stored_quantity ?? 0))
 
@@ -320,6 +324,7 @@ export async function GET() {
      * ----------------------------------------------------------------------
      */
 
+    const pantryProducts = await loadPantryProducts(username)
     const items = itemsRows.map(
       item => {
         /*
@@ -330,9 +335,11 @@ export async function GET() {
 const relation = item.official_ingredients
         const official = Array.isArray(relation) ? relation[0] : relation
         const rayon = official?.rayon?.trim() || null
+        const pantry = item.ingredient_id ? pantryProducts.get(item.ingredient_id) : undefined
         const quantity_mode = getQuantityMode({
           nom: official?.nom ?? item.produit,
           categorie: official?.categorie ?? null,
+          quantity_mode: Number(item.pantry_pack_quantity) > 0 ? 'presence' : pantryMode(pantry) ?? 'quantity',
         })
 
         const recipes =
@@ -414,6 +421,8 @@ const relation = item.official_ingredients
             item.unite,
 
           quantity_mode,
+          pantry_pack_quantity: Number(item.pantry_pack_quantity) > 0 ? Number(item.pantry_pack_quantity) :
+            pantry?.enabled && pantry.default_unit === item.unite ? Number(pantry.default_quantity) : null,
 
           /*
            * Rayon de l'ingrédient officiel.
@@ -449,7 +458,7 @@ const relation = item.official_ingredients
 
     const checked =
       items.filter(item => {
-        const required = Math.max(0, Number(item.qte ?? 0))
+        const required = Math.max(0, Number(item.qte_achat ?? item.qte ?? 0))
         const bought = Math.max(0, Number(item.qte_achetee ?? 0))
         return required > 0 && bought >= required
       }).length

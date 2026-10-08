@@ -1,0 +1,106 @@
+[
+  {
+    "nom": "Biscuit sec",
+    "unite_reference": "Pièce",
+    "categorie": "Épicerie",
+    "default_storage": "cellio",
+    "default_is_fridge": false,
+    "rayon": "Épicerie"
+  },
+  {
+    "nom": "Cannelle (bâton)",
+    "unite_reference": "Pièce",
+    "categorie": "Épicerie",
+    "default_storage": "cellio",
+    "default_is_fridge": false,
+    "rayon": "Épicerie"
+  },
+  {
+    "nom": "Fromage bleu",
+    "unite_reference": "Gramme",
+    "categorie": "Produits laitiers",
+    "default_storage": "frosti",
+    "default_is_fridge": true,
+    "rayon": "Produits laitiers"
+  },
+  {
+    "nom": "Fromage frais",
+    "unite_reference": "Gramme",
+    "categorie": "Produits laitiers",
+    "default_storage": "frosti",
+    "default_is_fridge": true,
+    "rayon": "Produits laitiers"
+  },
+  {
+    "nom": "Lard demi-sel",
+    "unite_reference": "Gramme",
+    "categorie": "Viandes",
+    "default_storage": "frosti",
+    "default_is_fridge": true,
+    "rayon": "Viandes"
+  },
+  {
+    "nom": "Pain de campagne",
+    "unite_reference": "Tranche",
+    "categorie": "Épicerie",
+    "default_storage": "cellio",
+    "default_is_fridge": false,
+    "rayon": "Épicerie"
+  },
+  {
+    "nom": "Poudre de noisette",
+    "unite_reference": "Gramme",
+    "categorie": "Épicerie",
+    "default_storage": "cellio",
+    "default_is_fridge": false,
+    "rayon": "Épicerie"
+  },
+  {
+    "nom": "Poudre de pistache",
+    "unite_reference": "Gramme",
+    "categorie": "Épicerie",
+    "default_storage": "cellio",
+    "default_is_fridge": false,
+    "rayon": "Épicerie"
+  },
+  {
+    "nom": "Quetsche",
+    "unite_reference": "Pièce",
+    "categorie": "Fruits frais",
+    "default_storage": "frosti",
+    "default_is_fridge": true,
+    "rayon": "Fruits frais"
+  },
+  {
+    "nom": "Reine-Claude",
+    "unite_reference": "Pièce",
+    "categorie": "Fruits frais",
+    "default_storage": "frosti",
+    "default_is_fridge": true,
+    "rayon": "Fruits frais"
+  },
+  {
+    "nom": "Tomate séchée",
+    "unite_reference": "Gramme",
+    "categorie": "Épicerie",
+    "default_storage": "cellio",
+    "default_is_fridge": false,
+    "rayon": "Épicerie"
+  },
+  {
+    "nom": "Ventrèche",
+    "unite_reference": "Gramme",
+    "categorie": "Viandes",
+    "default_storage": "frosti",
+    "default_is_fridge": true,
+    "rayon": "Viandes"
+  },
+  {
+    "nom": "Vinaigre de Xérès",
+    "unite_reference": "Millilitre",
+    "categorie": "Épicerie",
+    "default_storage": "cellio",
+    "default_is_fridge": false,
+    "rayon": "Épicerie"
+  }
+]
