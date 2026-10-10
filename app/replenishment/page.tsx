@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from 'react'
 import Link from 'next/link'
+import HistoryRecommendationNotice from '../components/HistoryRecommendationNotice'
 import AdminHelp from '../components/AdminHelp'
 
 type Ingredient = { id: string; nom: string; categorie: string | null; unite_reference: string | null }
@@ -295,6 +296,7 @@ export default function ReplenishmentPage() {
           </div>
         </header>
 
+        <HistoryRecommendationNotice />
         <AdminHelp
           title="Comprendre le réapprovisionnement"
           intro="Le réapprovisionnement prépare des propositions à partir du stock et de l’historique. Il ne crée pas une deuxième liste de courses : les ajouts rejoignent la liste active Mealio."

@@ -5,6 +5,13 @@ export interface StockItem {
   produit: string
   qte: number
   unite: string
+  recipe_id?:string|null
+  preparation_id?:string|null
+  preparation_origin?:'bought'|'homemade'|null
+  portions_per_unit?:number|null
+  ingredient_id?: string|null
+  content_quantity?: number|null
+  content_unit?: string|null
   source?: 'frosti' | 'cellio'
 }
 
@@ -24,6 +31,7 @@ export async function getHouseholdStock(username: string): Promise<HouseholdStoc
   const household = await resolveHousehold(username)
   const stock = await getHouseholdStockServer(username, household)
   const items = stock.map(item => ({
+    ...item,
     id: `${item.source}:${item.id}`,
     produit: item.produit, qte: item.qte, unite: item.unite, source: item.source,
   }))

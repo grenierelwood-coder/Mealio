@@ -3,7 +3,7 @@ import { requireHousehold } from './household-server'
 import { inventoryDeadline,type InventoryReminder } from './inventory-reminder-policy'
 export async function householdInventoryPlaces(username:string){
  const h=await requireHousehold(username)
- const [f,c]=await Promise.all([h.frostiUserId?frostiServerDb.from('freezers').select('id,name').eq('user_id',h.frostiUserId):Promise.resolve({data:[],error:null}),h.cellioUserId?cellioServerDb.from('cellars').select('id,name').eq('user_id',h.cellioUserId):Promise.resolve({data:[],error:null})])
+ const [f,c]=await Promise.all([h.frostiUserId?frostiServerDb.from('freezers').select('id,name').is('archived_at',null).eq('user_id',h.frostiUserId):Promise.resolve({data:[],error:null}),h.cellioUserId?cellioServerDb.from('cellars').select('id,name').is('archived_at',null).eq('user_id',h.cellioUserId):Promise.resolve({data:[],error:null})])
  if(f.error||c.error)throw new Error('Lecture des lieux Frosti/Cellio impossible.')
  return [...(f.data||[]).map(r=>({source:'frosti' as const,location_id:r.id,name:r.name})),...(c.data||[]).map(r=>({source:'cellio' as const,location_id:r.id,name:r.name}))]
 }

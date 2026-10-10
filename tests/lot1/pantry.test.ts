@@ -16,7 +16,7 @@ import { calls, setDbResolver } from '../../test-support/db.mjs'
 // @ts-expect-error local I/O doubles
 import { setCookies } from '../../test-support/headers.mjs'
 
-process.env.MEALIO_SESSION_SECRET='pantry-tests-secret'
+process.env.MEALIO_SESSION_SECRET='pantry-tests-secret---------------------'
 globalThis.fetch=async()=>{throw new Error('Claude/network forbidden')}
 const context=()=>({stopWords:new Set<string>(),memory:new Map(),exclusions:new Set<string>(),persistMemory:false})
 const policy={ingredient_id:IDS.farine,default_quantity:1000,default_unit:'Gramme',enabled:true}
@@ -229,7 +229,9 @@ test('Gousse classée divers : identité convertible, aucune équivalence implic
 import { confirmMealConsumption } from '../../app/utils/meal-consumption-server'
 test('repas confirmé : présence ne consomme aucune quantité virtuelle du stock',async()=>{
   const ref=makeReferenceData()
+  let job:any=null;
   setDbResolver((call:any)=>{
+    if(call.table==='ecosystem_jobs'){if(call.action==='upsert')job={...call.payload};if(call.action==='update')Object.assign(job,call.payload);return {data:call.single?job:[],error:null}}
     if(call.action!=='select')return {data:call.single?{meal_plan_id:'plan'}:[],error:null}
     if(call.table==='meal_plans')return {data:[{id:'plan',recipe_id:'recipe',servings:4}],error:null}
     if(call.table==='recipes')return {data:{id:'recipe',title:'Pain',servings:4,ingredients:[{name:'Farine de blé',qty:500,unit:'g'}]},error:null}

@@ -33,7 +33,7 @@ for(const m of delta.masses){const i=data.official_ingredients.find((i:any)=>i.n
 for(const m of read('recipe-measures-v1212.json')){const i=data.official_ingredients.find((i:any)=>i.nom===m.ingredient_name);if(i&&!data.ingredient_densities.some((d:any)=>d.ingredient_id===i.id&&d.unite===m.unite))data.ingredient_densities.push({ingredient_id:i.id,unite:m.unite,poids_g_approx:m.grams})}
 data.pantry_products=read('pantry-defaults.json')
 const corrected=recipes.map((recipe:any)=>({...recipe,ingredients:corrections.find((c:any)=>c.id===recipe.id)?.ingredients??recipe.ingredients}))
-process.env.ANTHROPIC_API_KEY='local-test';process.env.MEALIO_SESSION_SECRET='recipes-secret'
+process.env.ANTHROPIC_API_KEY='local-test';process.env.MEALIO_SESSION_SECRET='recipes-secret--------------------------'
 globalThis.fetch=async()=>Response.json({content:[{type:'text',text:'{"match":"AUCUN","confidence":0}'}]})
 function db(){setCookies({});setDbResolver((c:any)=>({data:c.table==='recipes'?(c.single?corrected.find((r:any)=>r.id===c.filters.find((f:any)=>f[1]==='id')?.[2]):corrected):c.single?null:data[c.table]??[],error:null}))}
 const context=()=>({memory:new Map(),exclusions:new Set<string>(),persistMemory:false})
@@ -133,14 +133,29 @@ test('intégration : vrais handlers planning → courses → achats → rangemen
  const pantry=new Set(data.pantry_products.filter((p:any)=>p.enabled).map((p:any)=>p.ingredient_id))
  tables.mealio.official_ingredients=tables.mealio.official_ingredients.map((i:any)=>({...i,default_storage:pantry.has(i.id)?'cellio':'frosti',default_is_fridge:!pantry.has(i.id)}))
  setDbResolver((call:any)=>{
-  const source=tables[call.source];source[call.table]??=[];const rows=source[call.table]
+  const source=tables[call.source];
+  if(call.table==='mealio_reserve_purchase_stock'){
+   const p=call.payload,item=source.shopping_items.find((i:any)=>i.id===p.p_item);source.shopping_item_stock_transfers??=[];const rows=source.shopping_item_stock_transfers;
+   const pending=rows.find((r:any)=>r.shopping_item_id===item.id&&r.status!=='completed');if(pending)return{data:structuredClone(pending),error:null};
+   const done=rows.filter((r:any)=>r.shopping_item_id===item.id&&r.status==='completed').reduce((a:number,r:any)=>a+r.quantity,0);const amount=Math.max(item.qte_achetee-done,0);
+   if(!amount)return {data:{status:'nothing',stored_quantity:done},error:null};
+   const row={id:`reserve-${++serial}`,shopping_item_id:item.id,operation_key:`mealio:${item.id}:from:${done}:to:${done+amount}`,storage:p.p_source,location_id:p.p_location,location_name:p.p_location_name,rule_label:p.p_rule,quantity:amount,status:'pending',attempted_at:new Date().toISOString(),request_payload:{...structuredClone(p.p_request),qte:amount,[p.p_source==='frosti'?'congelo_id':'cellar_id']:p.p_location}};rows.push(row);return{data:structuredClone(row),error:null};
+  }
+  if(call.action==='rpc'&&call.table.endsWith('_stock_action')){
+   const p=call.payload;source.operations??={};if(source.operations[p.p_operation])return {data:source.operations[p.p_operation],error:null};
+   let result:any;
+   if(p.p_action==='add'){result={id:`stock-${++serial}`,version:1,user_id:p.p_user,...structuredClone(p.p_payload)};source.items.push(result)}
+   else {result=source.items.find((r:any)=>r.id===p.p_item&&r.user_id===p.p_user);if(!result)return {data:null,error:{message:'owned item not found'}};if(p.p_action==='use'){if(result.qte<p.p_payload.amount)return {data:null,error:{message:'insufficient'}};result.qte-=p.p_payload.amount;result.version++}else Object.assign(result,p.p_payload);}
+   source.operations[p.p_operation]=structuredClone(result);return {data:structuredClone(result),error:null};
+  }
+  source[call.table]??=[];const rows=source[call.table]
   function field(row:any,key:string){if(key==='shopping_lists.user_id')return source.shopping_lists?.find((l:any)=>l.id===row.list_id)?.user_id;return row[key]}
   const matches=(row:any)=>call.filters.every(([op,key,val]:any[])=>op==='in'?val.includes(field(row,key)):op==='neq'?field(row,key)!==val:field(row,key)===val)
   let result:any[]
   if(call.action==='insert'||call.action==='upsert'){
    const incoming=Array.isArray(call.payload)?call.payload:[call.payload];result=[]
    for(const value of incoming){
-    let existing=call.action==='upsert'?rows.find((r:any)=>Object.keys(value).filter(k=>['user_id','ingredient_id','kind','shopping_item_id','recipe_id'].includes(k)).every(k=>r[k]===value[k])):null
+    let existing=call.action==='upsert'?rows.find((r:any)=>Object.keys(value).filter(k=>['id','user_id','ingredient_id','kind','shopping_item_id','recipe_id'].includes(k)).every(k=>r[k]===value[k])):null
     if(existing){Object.assign(existing,value);result.push(existing)}else{const row={id:`row-${++serial}`,created_at:new Date().toISOString(),updated_at:new Date().toISOString(),...structuredClone(value)};rows.push(row);result.push(row)}
    }
   }else if(call.action==='update'){result=rows.filter(matches);result.forEach((r:any)=>Object.assign(r,structuredClone(call.payload),{updated_at:new Date().toISOString()}))}

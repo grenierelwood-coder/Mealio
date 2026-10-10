@@ -106,7 +106,7 @@ export async function listStorageLocations(source: StorageSource, userId: string
   if (source === 'frosti') {
     const { data, error } = await frostiServerDb
       .from('freezers')
-      .select('id,name,is_fridge')
+      .select('id,name,is_fridge').is('archived_at',null)
       .eq('user_id', userId)
       .order('name', { ascending: true })
     if (error) throw new Error(`Erreur lecture emplacements Frosti : ${error.message}`)
@@ -115,7 +115,7 @@ export async function listStorageLocations(source: StorageSource, userId: string
 
   const { data, error } = await cellioServerDb
     .from('cellars')
-    .select('id,name,is_secondary')
+    .select('id,name,is_secondary').is('archived_at',null)
     .eq('user_id', userId)
     .order('name', { ascending: true })
   if (error) throw new Error(`Erreur lecture emplacements Cellio : ${error.message}`)

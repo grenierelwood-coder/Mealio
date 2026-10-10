@@ -1,3 +1,5 @@
+import {preparedPortionAllocator} from './prepared-portions-policy'
+import type {HouseholdStockItem} from './household-server'
 import { mealioServerDb as mealioDb } from '../lib/supabase-server'
 import {
   getRecipeDetailsFromCookiwiki,
@@ -724,8 +726,19 @@ export async function generateShoppingListForPeriod(
   const resolvedLists:
     ResolvedIngredient[][] = []
 
+  const householdStock=await getHouseholdStock(username)
+  const portions=preparedPortionAllocator(householdStock.items as HouseholdStockItem[])
+  const {data:links,error:linksError}=await mealioDb.from('meal_preparation_links').select('meal_plan_id,preparation_id').eq('user_id',mealioUserId)
+  if(linksError)throw new Error(linksError.message)
   for (const plan of mealPlans) {
     try {
+      const link=(links??[]).find(l=>l.meal_plan_id===plan.id)
+      const allocation=portions.allocate(plan.recipe_id,Number(plan.servings)||4,link?.preparation_id)
+      if(link){
+       if(allocation.missing>1e-9)generationIssues.push(await logGenerationIssue({list_id:listId,recipe_id:plan.recipe_id,recipe_nom:null,produit:'Préparation maison',unit:'portion(s)',issue_type:'PREPARATION_STOCK_SHORTAGE',phase:'generation',message:`${allocation.missing} portion(s) manquent pour une préparation déjà liée au repas. Aucun ingrédient ne sera acheté une deuxième fois.`,resolution_hint:'Reprendre la préparation dans Écosystème ou vérifier les lots produits et leur inventaire.'}))
+       continue
+      }
+      if(allocation.missing<=1e-9)continue
       const recipe = await getCachedRecipe(plan.recipe_id)
 
       if (!recipe.ingredients.length) {
@@ -750,7 +763,7 @@ export async function generateShoppingListForPeriod(
         }
       }
       const baseServings = recipe.baseServings || 4
-      const requestedServings = plan.servings || baseServings
+      const requestedServings = allocation.missing
       const servingsRatio = requestedServings / baseServings
 
       const resolved = await resolveRecipeIngredients(
@@ -800,10 +813,7 @@ export async function generateShoppingListForPeriod(
    * du username du foyer.
    */
 
-  const householdStock =
-    await getHouseholdStock(
-      username
-    )
+
 
   /*
    * -----------------------------------------------------------
@@ -814,7 +824,7 @@ export async function generateShoppingListForPeriod(
   const compared =
     await compareToStock(
       aggregated,
-      householdStock.items,
+      householdStock.items.map(l=>({...l,qte:portions.remaining.get(`${l.source}:${l.id}`)??l.qte})),
       refData
     )
 

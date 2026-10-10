@@ -1,3 +1,5 @@
+import {storePurchaseLot,storedQuantityFor} from '../../../utils/purchase-storage-server'
+import {assertSameOrigin} from '../../../utils/ecosystem-policy'
 import { getAuthSession } from '../../../utils/auth-server'
 import { NextResponse } from 'next/server'
 import { assertOfficialIngredientUnit } from '../../../utils/official-unit-policy'
@@ -8,7 +10,7 @@ import {
   cellioServerDb,
 } from '../../../lib/supabase-server'
 import {
-  createHouseholdStockItem,
+  createHouseholdStockItem, operationUuid,
   resolveHousehold,
 } from '../../../utils/household-server'
 import {
@@ -142,74 +144,9 @@ async function persistPurchaseState(
 }
 
 
-function buildStorageOperationKey(itemId: string, storedQuantity: number, delta: number): string {
-  return `mealio:${itemId}:from:${storedQuantity}:to:${storedQuantity + delta}`
-}
-
-async function findExistingStockByOperationKey(
-  storage: StorageSource,
-  userId: string,
-  operationKey: string,
-): Promise<string | null> {
-  const db = storage === 'frosti' ? frostiServerDb : cellioServerDb
-  const { data, error } = await db
-    .from('items')
-    .select('id')
-    .eq('user_id', userId)
-    .eq('notes', operationKey)
-    .limit(1)
-    .maybeSingle()
-
-  if (error) {
-    throw new Error(`Impossible de vérifier un rangement existant dans ${storage} : ${error.message}`)
-  }
-  return data?.id ?? null
-}
-
-async function claimStorageOperation(args: {
-  itemId: string
-  operationKey: string
-  storage: StorageSource
-  locationId: string
-  locationName: string
-  ruleLabel: string
-  quantity: number
-}): Promise<{ acquired: boolean; transfer: TransferRow | null }> {
-  const { data, error } = await mealioServerDb
-    .from('shopping_item_stock_transfers')
-    .insert({
-      shopping_item_id: args.itemId,
-      operation_key: args.operationKey,
-      storage: args.storage,
-      location_id: args.locationId,
-      location_name: args.locationName,
-      rule_label: args.ruleLabel,
-      quantity: args.quantity,
-      status: 'pending',
-      attempted_at: new Date().toISOString(),
-    })
-    .select('shopping_item_id,stock_item_id,storage,location_id,location_name,rule_label,quantity,operation_key,status,attempted_at')
-    .single()
-
-  if (!error && data) return { acquired: true, transfer: data as TransferRow }
-
-  // Une autre requête traite déjà exactement le même mouvement.
-  if (error?.code === '23505') {
-    const { data: existing, error: readError } = await mealioServerDb
-      .from('shopping_item_stock_transfers')
-      .select('shopping_item_id,stock_item_id,storage,location_id,location_name,rule_label,quantity,operation_key,status,attempted_at')
-      .eq('operation_key', args.operationKey)
-      .maybeSingle()
-
-    if (readError) throw new Error(`Impossible de relire le verrou de rangement : ${readError.message}`)
-    return { acquired: false, transfer: (existing as TransferRow | null) ?? null }
-  }
-
-  throw new Error(`Impossible de réserver l'opération de rangement : ${error?.message ?? 'erreur inconnue'}`)
-}
-
-export async function POST() {
+export async function POST(request?:Request) {
   try {
+    if(request)assertSameOrigin(request)
     const username = (await getAuthSession())?.username?.trim()
 
     if (!username) {
@@ -310,7 +247,7 @@ export async function POST() {
       // de retrouver l'état rapidement ; on prend le maximum pour réparer
       // une éventuelle écriture interrompue sans diminuer une quantité déjà
       // rangée.
-      storedByItem.set(item.id, Math.max(fromJournal, fromItem))
+      storedByItem.set(item.id, storedQuantityFor(item,transfers))
     }
 
     const ingredientIds = Array.from(
@@ -494,81 +431,10 @@ export async function POST() {
           continue
         }
 
-        // Une opération est identifiée par son point de départ et son point d'arrivée.
-        // Deux navigateurs qui tentent exactement le même rangement obtiennent
-        // donc le même operation_key et un seul peut créer le stock.
-        const operationKey = buildStorageOperationKey(item.id, storedQuantity, delta)
-        const claim = await claimStorageOperation({
-          itemId: item.id,
-          operationKey,
-          storage,
-          locationId: location.location_id,
-          locationName: location.location_name,
-          ruleLabel: location.rule_label,
-          quantity: delta,
-        })
-
-        if (!claim.acquired) {
-          const existing = claim.transfer
-          if (existing?.status === 'completed' && existing.stock_item_id) {
-            const newStoredQuantity = storedQuantity + delta
-            await persistPurchaseState(item, boughtQuantity, newStoredQuantity)
-            storedByItem.set(item.id, newStoredQuantity)
-            continue
-          }
-
-          // Une autre requête possède le verrou. On ne crée surtout pas un
-          // deuxième article de stock. Le prochain clic/réessai reprendra si
-          // l'opération n'est pas encore terminée.
-          skippedItems.push({
-            shopping_item_id: item.id,
-            produit: item.produit,
-            reason: 'Le rangement de cet achat est déjà en cours par un autre utilisateur. Réessayez dans quelques secondes.',
-          })
-          continue
-        }
-
-        let stockItemId = claim.transfer?.stock_item_id ?? null
-
-        // Reprise après panne : le stock peut avoir été créé avant que le journal
-        // Mealio ait pu être finalisé. Le marqueur déterministe dans notes permet
-        // de retrouver cet article sans en créer un second.
-        if (!stockItemId) {
-          const targetUserId = storage === 'frosti' ? household.frostiUserId! : household.cellioUserId!
-          stockItemId = await findExistingStockByOperationKey(storage, targetUserId, operationKey)
-        }
-
-        if (!stockItemId) {
-          const stockItem = await createHouseholdStockItem(username, {
-            source: storage,
-            produit: item.produit,
-            qte: delta,
-            unite: item.unite?.trim() || 'pièce(s)',
-            categorie: ingredient.categorie?.trim() || 'Autre',
-            date_entree: new Date().toISOString().slice(0, 10),
-            date_peremption: undefined,
-            notes: operationKey,
-            congelo_id: storage === 'frosti' ? location.location_id : undefined,
-            cellar_id: storage === 'cellio' ? location.location_id : undefined,
-          })
-          stockItemId = stockItem.id
-        }
-
-        const { error: transferUpdateError } = await mealioServerDb
-          .from('shopping_item_stock_transfers')
-          .update({
-            stock_item_id: stockItemId,
-            status: 'completed',
-            attempted_at: new Date().toISOString(),
-          })
-          .eq('operation_key', operationKey)
-
-        if (transferUpdateError) {
-          throw new Error(`Stock créé mais journal de transfert impossible à finaliser : ${transferUpdateError.message}`)
-        }
-
-        const newStoredQuantity = storedQuantity + delta
-        await persistPurchaseState(item, boughtQuantity, newStoredQuantity)
+        const receipt=await storePurchaseLot(username,item,ingredient,storage,location)
+        const stockItemId=receipt.stock_item_id
+        const newStoredQuantity=receipt.stored_quantity
+        await persistPurchaseState(item,boughtQuantity,newStoredQuantity)
         storedByItem.set(item.id, newStoredQuantity)
 
         if (pendingPurchaseEventId) {
@@ -576,8 +442,8 @@ export async function POST() {
             .from('shopping_purchase_events')
             .update({
               status: 'range',
-              storage,
-              location_name: location.location_name,
+              storage:receipt.source,
+              location_name:receipt.location_name,
             })
             .eq('id', pendingPurchaseEventId)
 
@@ -589,13 +455,13 @@ export async function POST() {
         storedItems.push({
           shopping_item_id: item.id,
           produit: item.produit,
-          qte: delta,
+          qte: receipt.quantity,
           unite: item.unite?.trim() || 'pièce(s)',
-          storage,
-          stock_item_id: stockItemId,
-          location_id: location.location_id,
-          location_name: location.location_name,
-          rule_label: location.rule_label,
+          storage:receipt.source,
+          stock_item_id: stockItemId ?? '',
+          location_id: receipt.location_id,
+          location_name: receipt.location_name,
+          rule_label: receipt.rule_label,
         })
       } catch (error) {
         skippedItems.push({

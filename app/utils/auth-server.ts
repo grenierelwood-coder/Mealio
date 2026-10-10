@@ -1,4 +1,5 @@
 import { createHmac, timingSafeEqual } from 'node:crypto'
+import { frostiServerDb } from '../lib/supabase-server'
 import { cookies } from 'next/headers'
 
 const SESSION_COOKIE = 'mealio_session'
@@ -7,16 +8,17 @@ const SESSION_MAX_AGE = 60 * 60 * 24 * 7
 type SessionPayload = {
   username: string
   frostiUserId: string
+  fingerprint: string
   exp: number
 }
 
 function getSessionSecret(): string {
-  const secret = process.env.MEALIO_SESSION_SECRET || process.env.FROSTI_SERVICE_ROLE_KEY
-  if (!secret) {
-    throw new Error('MEALIO_SESSION_SECRET ou FROSTI_SERVICE_ROLE_KEY manquant.')
-  }
+  const secret = process.env.MEALIO_SESSION_SECRET
+  if (!secret || secret.length < 32) throw new Error('MEALIO_SESSION_SECRET doit contenir au moins 32 caractères.')
   return secret
 }
+
+export function passwordFingerprint(password: string) { return createHmac('sha256',getSessionSecret()).update('mealio-password:'+password).digest('base64url') }
 
 function encode(value: string): string {
   return Buffer.from(value, 'utf8').toString('base64url')
@@ -30,10 +32,11 @@ function sign(data: string): string {
   return createHmac('sha256', getSessionSecret()).update(data).digest('base64url')
 }
 
-export function createSessionValue(username: string, frostiUserId: string): string {
+export function createSessionValue(username: string, frostiUserId: string, password = ''): string {
   const payload: SessionPayload = {
     username: username.trim(),
     frostiUserId: frostiUserId.trim(),
+    fingerprint: passwordFingerprint(password),
     exp: Math.floor(Date.now() / 1000) + SESSION_MAX_AGE,
   }
 
@@ -66,6 +69,7 @@ export function verifySessionValue(value: string | undefined): SessionPayload | 
       !payload.username.trim() ||
       typeof payload.frostiUserId !== 'string' ||
       !payload.frostiUserId.trim() ||
+      typeof payload.fingerprint !== 'string' ||
       typeof payload.exp !== 'number' ||
       payload.exp <= Math.floor(Date.now() / 1000)
     ) {
@@ -76,6 +80,7 @@ export function verifySessionValue(value: string | undefined): SessionPayload | 
       username: payload.username.trim(),
       frostiUserId: payload.frostiUserId.trim(),
       exp: payload.exp,
+      fingerprint: payload.fingerprint,
     }
   } catch {
     return null
@@ -84,7 +89,13 @@ export function verifySessionValue(value: string | undefined): SessionPayload | 
 
 export async function getAuthSession(): Promise<SessionPayload | null> {
   const store = await cookies()
-  return verifySessionValue(store.get(SESSION_COOKIE)?.value)
+  const session = verifySessionValue(store.get(SESSION_COOKIE)?.value)
+  if (!session) return null
+  const {data,error} = await frostiServerDb.from('app_users').select('id,username,password')
+    .eq('id',session.frostiUserId).eq('username',session.username).maybeSingle()
+  if (error) throw new Error('Vérification du foyer indisponible. Réessayez ou reconnectez-vous.')
+  if (!data || typeof data.password !== 'string' || passwordFingerprint(data.password) !== session.fingerprint) return null
+  return session
 }
 
 export async function requireAuth(): Promise<SessionPayload> {

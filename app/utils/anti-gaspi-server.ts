@@ -1,3 +1,4 @@
+import {consumptionDate} from './ecosystem-policy'
 import { parisDate,expiryDays } from './expiry-policy'
 import { cookiwikiServerDb } from '../lib/supabase-server'
 import { getHouseholdStockServer, type HouseholdStockItem } from './household-server'
@@ -51,7 +52,7 @@ function targetsFor(ref: ReferenceData, selection: RecipeSelection, stock: House
   for (const label of selection.selectedLabels ?? []) addName(label)
   const keys = new Set(selection.selectedKeys ?? [])
   const selectedStock = stock.filter(item => keys.has(`${item.source}:${item.id}`) && item.qte > 0)
-  for (const item of selectedStock) addName(item.produit)
+  for (const item of selectedStock) addName(item.ingredient_id?ref.officialById.get(item.ingredient_id)?.nom??item.produit:item.produit)
   return { targets: [...targets.values()], selectedStock }
 }
 function matches(ref: ReferenceData, target: Target, name: string) {
@@ -101,7 +102,7 @@ export async function searchIngredientsForTonight(username: string, query: strin
   const [stock, ref] = await Promise.all([getHouseholdStockServer(username), loadReferenceData(username)])
   const labelsById = new Map<string, string[]>()
   for (const item of stock.filter(i => i.qte > 0)) {
-    const id = identity(ref, item.produit)
+    const id = item.ingredient_id??identity(ref, item.produit)
     if (id) labelsById.set(id, [...new Set([...(labelsById.get(id) ?? []), item.produit])])
   }
   return ref.officialList.filter(item => labelMatchesQuery(item.nom, query) || [...ref.synonymMap].some(([label, id]) => id === item.id && labelMatchesQuery(label, query)))
@@ -118,20 +119,21 @@ export async function searchCookiwikiIngredientLabels(query: string) {
     .sort((a, b) => b.recipeCount - a.recipeCount || a.label.localeCompare(b.label, 'fr')).slice(0, 30)
 }
 function isWine(item: HouseholdStockItem) {
+  if(item.product_type)return item.product_type==='wine';
   const value = ` ${normalize(`${item.produit} ${item.categorie}`)} `
   return ['vin', 'vins', 'champagne', 'cidre', 'biere', 'wine', 'bordeaux', 'bourgogne', 'cremant'].some(term => value.includes(` ${term} `))
 }
 export async function getAntiGaspiTonight(username: string): Promise<AntiGaspiResponse> {
   const today = parisDate()
   const [stock, ref] = await Promise.all([getHouseholdStockServer(username), loadReferenceData(username)])
-  const availableStock = stock.filter(i => i.qte > 0).map(i=>({...i,quantity_mode:ref.pantryProducts?.get(identity(ref,i.produit)||'')?.enabled?'presence' as const:'quantity' as const}))
-  const eligible=availableStock.filter(i=>!isWine(i))
-  const deltas=eligible.map(i=>expiryDays(i.date_peremption,today))
-  const expiryDiagnostic={available:availableStock.length,eligible:eligible.length,dated:deltas.filter(d=>d!==null).length,missing:eligible.filter(i=>!i.date_peremption?.trim()).length,invalid:eligible.filter(i=>i.date_peremption?.trim()&&expiryDays(i.date_peremption,today)===null).length,expired:deltas.filter(d=>d!==null&&d<0).length,today,horizonDays:3}
-  const urgentStock = eligible.filter(i=>{const d=expiryDays(i.date_peremption,today);return d!==null&&d<=3})
-    .sort((a,b)=>expiryDays(a.date_peremption,today)!-expiryDays(b.date_peremption,today)!)
+  const availableStock = stock.filter(i => i.qte > 0).map(i=>({...i,quantity_mode:ref.pantryProducts?.get(i.ingredient_id??identity(ref,i.produit)??'')?.enabled?'presence' as const:'quantity' as const}))
+  const eligible=availableStock.filter(i=>!isWine(i)&&i.date_role!=='apogee')
+  const deltas=eligible.map(i=>expiryDays(consumptionDate(i),today))
+  const expiryDiagnostic={available:availableStock.length,eligible:eligible.length,dated:deltas.filter(d=>d!==null).length,missing:eligible.filter(i=>!i.date_peremption?.trim()).length,invalid:eligible.filter(i=>i.date_peremption?.trim()&&expiryDays(consumptionDate(i),today)===null).length,expired:deltas.filter(d=>d!==null&&d<0).length,today,horizonDays:3}
+  const urgentStock = eligible.filter(i=>{const d=expiryDays(consumptionDate(i),today);return d!==null&&d<=3})
+    .sort((a,b)=>expiryDays(consumptionDate(a),today)!-expiryDays(consumptionDate(b),today)!)
   if (!urgentStock.length) return { today, urgentStock, suggestions: [], availableStock,expiryDiagnostic }
-  const { targets } = targetsFor(ref, { selectedLabels: urgentStock.map(i => i.produit) }, [])
+  const { targets } = targetsFor(ref, { selectedLabels: urgentStock.map(i => i.ingredient_id?ref.officialById.get(i.ingredient_id)?.nom??i.produit:i.produit) }, [])
   const suggestions = rankRecipes(ref, await loadRecipes(), targets, 'any').map(recipe => ({ ...recipe, urgentProducts: recipe.matchedProducts,
     score: recipe.score + recipe.matchedProducts.reduce((sum, name) => {
       const item = urgentStock.find(i => normalize(i.produit) === normalize(name) || (identity(ref, i.produit) && identity(ref, i.produit) === identity(ref, name)))

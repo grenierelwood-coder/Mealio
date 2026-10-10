@@ -475,6 +475,11 @@ export default function PlanningPage() {
   }
 
   useEffect(() => {
+    const date = new URLSearchParams(window.location.search).get('date')
+    if (date && /^\d{4}-\d{2}-\d{2}$/.test(date)) {
+      const day = new Date(`${date}T12:00:00`)
+      if (Number.isFinite(day.getTime()) && formatDate(day) === date) { setWeekStartDate(date); setSelectedDay(date) }
+    }
     void loadRecipes()
     void loadPlans()
   }, [])

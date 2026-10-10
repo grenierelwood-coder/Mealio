@@ -20,7 +20,7 @@ export async function POST(request: Request) {
 
   const { data, error } = await frostiServerDb
     .from('app_users')
-    .select('id, username')
+    .select('id, username, password')
     .eq('username', username)
     .eq('password', password)
     .maybeSingle()
@@ -41,7 +41,7 @@ export async function POST(request: Request) {
 
   response.cookies.set({
     name: AUTH_COOKIE_NAME,
-    value: createSessionValue(data.username, data.id),
+    value: createSessionValue(data.username, data.id, data.password),
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
     sameSite: 'lax',

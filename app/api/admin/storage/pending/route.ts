@@ -1,3 +1,5 @@
+import {storePurchaseLot,storedQuantityFor} from '../../../../utils/purchase-storage-server'
+import {assertSameOrigin} from '../../../../utils/ecosystem-policy'
 import { getAuthSession } from '../../../../utils/auth-server'
 import { NextResponse } from 'next/server'
 
@@ -74,76 +76,7 @@ function normalizeStorage(value: string | null | undefined): StorageSource | nul
   return null
 }
 
-function buildStorageOperationKey(itemId: string, storedQuantity: number, delta: number): string {
-  return `mealio:${itemId}:from:${storedQuantity}:to:${storedQuantity + delta}`
-}
-
-function sumTransferred(itemId: string, transfers: TransferRow[]): number {
-  return transfers
-    .filter(row => row.shopping_item_id === itemId)
-    .reduce((sum, row) => sum + numberOrZero(row.quantity), 0)
-}
-
-async function findExistingStockByOperationKey(
-  storage: StorageSource,
-  userId: string,
-  operationKey: string,
-): Promise<string | null> {
-  const db = storage === 'frosti' ? frostiServerDb : cellioServerDb
-  const { data, error } = await db
-    .from('items')
-    .select('id')
-    .eq('user_id', userId)
-    .eq('notes', operationKey)
-    .limit(1)
-    .maybeSingle()
-
-  if (error) {
-    throw new Error(`Impossible de vérifier un rangement existant dans ${storage} : ${error.message}`)
-  }
-  return data?.id ?? null
-}
-
-async function claimStorageOperation(args: {
-  itemId: string
-  operationKey: string
-  storage: StorageSource
-  locationId: string
-  locationName: string
-  ruleLabel: string
-  quantity: number
-}): Promise<{ acquired: boolean; transfer: TransferRow | null }> {
-  const { data, error } = await mealioServerDb
-    .from('shopping_item_stock_transfers')
-    .insert({
-      shopping_item_id: args.itemId,
-      operation_key: args.operationKey,
-      storage: args.storage,
-      location_id: args.locationId,
-      location_name: args.locationName,
-      rule_label: args.ruleLabel,
-      quantity: args.quantity,
-      status: 'pending',
-      attempted_at: new Date().toISOString(),
-    })
-    .select('shopping_item_id,stock_item_id,storage,location_id,location_name,rule_label,quantity,operation_key,status,attempted_at')
-    .single()
-
-  if (!error && data) return { acquired: true, transfer: data as TransferRow }
-
-  if (error?.code === '23505') {
-    const { data: existing, error: readError } = await mealioServerDb
-      .from('shopping_item_stock_transfers')
-      .select('shopping_item_id,stock_item_id,storage,location_id,location_name,rule_label,quantity,operation_key,status,attempted_at')
-      .eq('operation_key', args.operationKey)
-      .maybeSingle()
-
-    if (readError) throw new Error(`Impossible de relire le verrou de rangement : ${readError.message}`)
-    return { acquired: false, transfer: (existing as TransferRow | null) ?? null }
-  }
-
-  throw new Error(`Impossible de réserver l'opération de rangement : ${error?.message ?? 'erreur inconnue'}`)
-}
+function sumTransferred(itemId:string,transfers:TransferRow[]){return transfers.filter(r=>r.shopping_item_id===itemId&&r.status==='completed').reduce((sum,r)=>sum+numberOrZero(r.quantity),0)}
 
 async function updateIssue(issueId: string, values: Record<string, unknown>) {
   const { error } = await mealioServerDb
@@ -163,10 +96,7 @@ async function processIssue(
   household: Awaited<ReturnType<typeof resolveHousehold>>,
 ): Promise<{ ok: boolean; produit: string; message: string; destination?: { storage: StorageSource; location_name: string; rule_label: string } }> {
   const boughtQuantity = numberOrZero(item.qte_achetee)
-  const storedQuantity = Math.max(
-    numberOrZero(item.stock_stored_quantity),
-    sumTransferred(item.id, transfers),
-  )
+  const storedQuantity = storedQuantityFor(item,transfers)
   const delta = Math.max(boughtQuantity - storedQuantity, 0)
 
   if (delta <= 0) {
@@ -230,79 +160,8 @@ async function processIssue(
       return { ok: false, produit: item.produit, message }
     }
 
-    const operationKey = buildStorageOperationKey(item.id, storedQuantity, delta)
-    const claim = await claimStorageOperation({
-      itemId: item.id,
-      operationKey,
-      storage,
-      locationId: location.location_id,
-      locationName: location.location_name,
-      ruleLabel: location.rule_label,
-      quantity: delta,
-    })
-
-    if (!claim.acquired) {
-      if (claim.transfer?.status === 'completed' && claim.transfer.stock_item_id) {
-        const newStoredQuantity = storedQuantity + delta
-        await mealioServerDb
-          .from('shopping_items')
-          .update({
-            stock_stored_quantity: newStoredQuantity,
-            is_checked: numberOrZero(item.qte) > 0 && boughtQuantity >= numberOrZero(item.qte),
-          })
-          .eq('id', item.id)
-        await mealioServerDb
-          .from('shopping_purchase_events')
-          .update({ status: 'range', storage, location_name: location.location_name })
-          .eq('shopping_item_id', item.id)
-          .eq('status', 'a_ranger')
-        await updateIssue(issue.id, { status: 'resolved', resolved_at: new Date().toISOString() })
-        return {
-          ok: true,
-          produit: item.produit,
-          message: 'Article rangé (opération déjà finalisée).',
-          destination: { storage, location_name: location.location_name, rule_label: location.rule_label },
-        }
-      }
-
-      return { ok: false, produit: item.produit, message: 'Le rangement est déjà en cours. Réessayez dans quelques secondes.' }
-    }
-
-    let stockItemId = claim.transfer?.stock_item_id ?? null
-    if (!stockItemId) {
-      stockItemId = await findExistingStockByOperationKey(storage, storageUserId, operationKey)
-    }
-
-    if (!stockItemId) {
-      const stockItem = await createHouseholdStockItem(username, {
-        source: storage,
-        produit: item.produit,
-        qte: delta,
-        unite: item.unite?.trim() || 'pièce(s)',
-        categorie: ingredient.categorie?.trim() || 'Autre',
-        date_entree: new Date().toISOString().slice(0, 10),
-        date_peremption: undefined,
-        notes: operationKey,
-        congelo_id: storage === 'frosti' ? location.location_id : undefined,
-        cellar_id: storage === 'cellio' ? location.location_id : undefined,
-      })
-      stockItemId = stockItem.id
-    }
-
-    const { error: transferUpdateError } = await mealioServerDb
-      .from('shopping_item_stock_transfers')
-      .update({
-        stock_item_id: stockItemId,
-        status: 'completed',
-        attempted_at: new Date().toISOString(),
-      })
-      .eq('operation_key', operationKey)
-
-    if (transferUpdateError) {
-      throw new Error(`Stock créé mais journal de transfert impossible à finaliser : ${transferUpdateError.message}`)
-    }
-
-    const newStoredQuantity = storedQuantity + delta
+    const receipt=await storePurchaseLot(username,item,ingredient,storage,location)
+    const newStoredQuantity=receipt.stored_quantity
     const { error: itemUpdateError } = await mealioServerDb
       .from('shopping_items')
       .update({
@@ -396,7 +255,7 @@ async function loadPending(username: string) {
       item: item ?? null,
       ingredient: ingredient ?? null,
       list: listMap.get(issue.list_id) ?? null,
-      stored_quantity: item ? Math.max(numberOrZero(item.stock_stored_quantity), sumTransferred(item.id, itemTransfers)) : 0,
+      stored_quantity: item ? storedQuantityFor(item,itemTransfers) : 0,
       bought_quantity: item ? numberOrZero(item.qte_achetee) : 0,
     }
   }).filter(row => row.item !== null)
@@ -415,6 +274,7 @@ export async function GET() {
 
 export async function POST(request: Request) {
   try {
+    assertSameOrigin(request)
     const username = (await getAuthSession())?.username?.trim()
     if (!username) return NextResponse.json({ error: 'Utilisateur non authentifié.' }, { status: 401 })
 

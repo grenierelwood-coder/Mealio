@@ -1,0 +1,13 @@
+CREATE ROLE anon;
+CREATE ROLE authenticated;
+CREATE ROLE service_role BYPASSRLS;
+CREATE TABLE app_users(id uuid PRIMARY KEY DEFAULT gen_random_uuid(),created_at timestamptz DEFAULT now(),username text UNIQUE NOT NULL,password text NOT NULL);
+CREATE TABLE freezers(id uuid PRIMARY KEY DEFAULT gen_random_uuid(),created_at timestamptz DEFAULT now(),user_id uuid REFERENCES app_users(id) ON DELETE CASCADE,name text NOT NULL,is_fridge bool DEFAULT false,UNIQUE(id,user_id));
+CREATE TABLE categories(id uuid PRIMARY KEY DEFAULT gen_random_uuid(),name text UNIQUE NOT NULL);
+CREATE TABLE product_templates(id uuid PRIMARY KEY DEFAULT gen_random_uuid(),category_id uuid REFERENCES categories(id) ON DELETE CASCADE,name text NOT NULL);
+CREATE TABLE items(id uuid PRIMARY KEY DEFAULT gen_random_uuid(),created_at timestamptz DEFAULT now(),user_id uuid REFERENCES app_users(id) ON DELETE CASCADE,congelo_id uuid REFERENCES freezers(id) ON DELETE CASCADE,categorie text NOT NULL,produit text NOT NULL,qte numeric NOT NULL DEFAULT 1,unite text DEFAULT 'pièce(s)',date_entree date DEFAULT CURRENT_DATE,date_peremption date,notes text);
+CREATE TABLE user_settings(user_id text PRIMARY KEY,ntfy_topic text);
+CREATE TABLE alert_rules(id uuid PRIMARY KEY DEFAULT gen_random_uuid(),user_id text NOT NULL,categorie text NOT NULL,fridge_days integer DEFAULT 7,freezer_days integer DEFAULT 90,UNIQUE(user_id,categorie));
+CREATE TABLE storage_defaults(id uuid PRIMARY KEY DEFAULT gen_random_uuid(),created_at timestamptz DEFAULT now(),user_id uuid NOT NULL REFERENCES app_users(id) ON DELETE CASCADE,ingredient_id uuid NOT NULL,freezer_id uuid NOT NULL,UNIQUE(user_id,ingredient_id),FOREIGN KEY(freezer_id,user_id) REFERENCES freezers(id,user_id) ON DELETE CASCADE);
+CREATE TABLE storage_routing_rules(id uuid PRIMARY KEY DEFAULT gen_random_uuid(),created_at timestamptz DEFAULT now(),user_id uuid NOT NULL REFERENCES app_users(id),rule_type text NOT NULL CHECK(rule_type IN('default_fridge','default_freezer','category','ingredient')),category text,ingredient_id uuid,freezer_id uuid,priority integer NOT NULL DEFAULT 100,is_active boolean NOT NULL DEFAULT true);
+GRANT ALL ON ALL TABLES IN SCHEMA public TO anon,authenticated,service_role;

@@ -1,3 +1,5 @@
+import {catalogRows} from './catalog-server'
+import { stockContent } from './ecosystem-policy'
 import { stockAnalysisKey,readStockAnalysis,writeStockAnalysis } from './stock-analysis-cache'
 import { loadIngredientPreparations, type IngredientPreparation } from './ingredient-preparations-server'
 import { loadPantryProducts } from './pantry-server'
@@ -26,6 +28,8 @@ export interface StockItem {
   source?: string
   /** Ingredient officiel associé à la ligne de stock lorsqu'il est connu. */
   ingredient_id?: string | null
+  content_quantity?: number|null
+  content_unit?: string|null
 }
 
 type OfficialIngredient = {
@@ -613,17 +617,9 @@ export async function loadReferenceData(username?: string): Promise<ReferenceDat
       .from('ignored_words')
       .select('mot'),
 
-    mealioServerDb
-      .from('ingredient_synonyms')
-      .select(
-        'mot_recette, ingredient_id'
-      ),
+    catalogRows('ingredient_synonyms','mot_recette, ingredient_id').then(data=>({data,error:null})),
 
-    mealioServerDb
-      .from('official_ingredients')
-      .select(
-        'id, nom, rayon, default_storage, categorie, unite_reference'
-      ),
+    catalogRows('official_ingredients','id, nom, rayon, default_storage, categorie, unite_reference').then(data=>({data,error:null})),
 
     mealioServerDb
       .from('unit_mappings')
@@ -2420,6 +2416,7 @@ async function matchOneRequirement(
   preparedStock = preparedStock.filter(({ item: stock }) => {
     if (!Number.isFinite(Number(stock.qte)) || Number(stock.qte) <= 0) return false
     if (stock.ingredient_id && stock.ingredient_id !== item.ingredient_id) return false
+    if (stock.ingredient_id === item.ingredient_id) return true
     const knownId = resolveStockIngredientId(refData, stock.produit)
     if (knownId && knownId !== item.ingredient_id) return false
     return hasSemanticStockEvidence(item.ingredient_id, stock.produit, refData, stopWords).matched
@@ -4004,10 +4001,8 @@ export async function compareToStock(
           convertStockQuantity(
             refData,
             ingredientId,
-            Number(
-              stock.qte || 0
-            ),
-            stock.unite,
+            stockContent(stock).qte,
+            stockContent(stock).unite,
             item.unite
           )
 
@@ -4023,10 +4018,8 @@ export async function compareToStock(
           convertStockQuantity(
             refData,
             item.ingredient_id,
-            Number(
-              stock.qte || 0
-            ),
-            stock.unite,
+            stockContent(stock).qte,
+            stockContent(stock).unite,
             item.unite
           )
       }

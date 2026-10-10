@@ -14,7 +14,7 @@ import { setCookies } from '../../test-support/headers.mjs'
 // @ts-expect-error local I/O doubles are supplied by scripts/test-offline.mjs
 import { calls, setDbResolver } from '../../test-support/db.mjs'
 
-process.env.MEALIO_SESSION_SECRET='lot1-offline-secret'
+process.env.MEALIO_SESSION_SECRET='lot1-offline-secret---------------------'
 globalThis.fetch=async()=>{throw new Error('Network forbidden in offline API tests')}
 const routes={lab,matcherTest,resolve,feedback}
 const request=(body:unknown)=>new NextRequest('http://mealio.test/api/matcher',{method:'POST',body:JSON.stringify(body),headers:{'content-type':'application/json'}})

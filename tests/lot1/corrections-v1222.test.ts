@@ -14,7 +14,7 @@ import { setDbResolver,calls } from '../../test-support/db.mjs'
 // @ts-expect-error local session double
 import { setCookies } from '../../test-support/headers.mjs'
 const place='12345678-1234-1234-1234-123456789abc'
-function session(){process.env.MEALIO_SESSION_SECRET='inventory-secret';setCookies({mealio_session:createSessionValue('KH','kh-id')})}
+function session(){process.env.MEALIO_SESSION_SECRET='inventory-secret------------------------';setCookies({mealio_session:createSessionValue('KH','kh-id')})}
 const reference=()=>{const ref=structuredClone(makeReferenceData());for(const nom of ['Persil plat','Ciboulette']){const i={id:nom,nom,unite_reference:'Gramme',rayon:null,categorie:'Herbes',default_storage:'cellio'};ref.officialList.push(i);ref.officialById.set(nom,i);ref.officialPrepared.push({item:i,normalized:cleanText(nom),tokens:cleanText(nom).split(' ')})}return ref}
 function setup(stock:any[]=[],options:{override?:boolean;missing?:boolean;reminders?:any[]}={}){const ref=reference();setDbResolver((c:any)=>{
  if(c.table==='app_users')return {data:{id:`${c.source}-user`,username:'KH'},error:null}

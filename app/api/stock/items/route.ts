@@ -1,3 +1,4 @@
+import {assertSameOrigin} from '../../../utils/ecosystem-policy'
 import { getAuthSession } from '../../../utils/auth-server'
 import { NextResponse } from 'next/server'
 import {
@@ -22,12 +23,14 @@ export async function POST(request: Request) {
   }
 
   try {
+    assertSameOrigin(request);
     const body = await request.json()
 
     const item = await createHouseholdStockItem(
       username,
       {
         source: body.source,
+        operation_id: body.operation_id,
         produit: body.produit,
         qte: body.qte,
         unite: body.unite,
@@ -70,6 +73,7 @@ export async function PATCH(request: Request) {
   }
 
   try {
+    assertSameOrigin(request);
     const body = await request.json()
 
     if (!body.id) {
@@ -86,11 +90,14 @@ export async function PATCH(request: Request) {
       )
     }
 
+    if(!Number.isSafeInteger(body.expected_version)||body.expected_version<1)throw new Error('Version du lot obligatoire. Actualisez le stock.')
     const item = await updateHouseholdStockItem(
       username,
       body.id,
       {
         source: body.source,
+        expected_version: body.expected_version,
+        operation_id: body.operation_id,
         produit: body.produit,
         qte: body.qte,
         unite: body.unite,
@@ -112,10 +119,7 @@ export async function PATCH(request: Request) {
         ? error.message
         : 'Erreur interne.'
 
-    const status =
-      message.includes('introuvable')
-        ? 404
-        : 500
+    const status = message.includes('introuvable')?404:/changé|version|Actualisez/i.test(message)?409:400
 
     return NextResponse.json(
       { error: message },
@@ -135,6 +139,7 @@ export async function DELETE(request: Request) {
   }
 
   try {
+    assertSameOrigin(request);
     const body = await request.json()
 
     if (!body.id) {
@@ -168,10 +173,7 @@ export async function DELETE(request: Request) {
         ? error.message
         : 'Erreur interne.'
 
-    const status =
-      message.includes('introuvable')
-        ? 404
-        : 500
+    const status = message.includes('introuvable')?404:/changé|version|Actualisez/i.test(message)?409:400
 
     return NextResponse.json(
       { error: message },

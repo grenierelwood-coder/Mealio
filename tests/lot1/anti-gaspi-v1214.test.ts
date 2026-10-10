@@ -13,7 +13,7 @@ import { createSessionValue } from '../../app/utils/auth-server'
 import { setDbResolver, calls } from '../../test-support/db.mjs'
 // @ts-expect-error offline doubles
 import { setCookies } from '../../test-support/headers.mjs'
-process.env.MEALIO_SESSION_SECRET='anti-gaspi-secret'
+process.env.MEALIO_SESSION_SECRET='anti-gaspi-secret-----------------------'
 globalThis.fetch=async()=>{throw new Error('Claude/network forbidden in deterministic search')}
 const recipe=(id:string,names:string[])=>({id,title:id,ingredients:names.map(name=>({name,qty:1,unit:'g'}))})
 function setup(recipes:any[],stock:any[]=[],structures:any[]=[]) {

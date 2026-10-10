@@ -18,7 +18,10 @@ if (typeof nodeModule.stripTypeScriptTypes === 'function') {
   }).outputText
 }
 
-const modules = [
+const modules = ['app/utils/prepared-portions-policy.ts','tests/lot1/ecosystem-v131.test.ts','app/api/stock/items/route.ts','app/api/admin/storage/pending/route.ts','app/utils/catalog-server.ts','app/utils/purchase-storage-server.ts',
+ 'app/api/ecosystem/route.ts','tests/lot1/ecosystem-v13.test.ts',
+ 'app/utils/ecosystem-policy.ts','app/utils/ecosystem-jobs-server.ts',
+ 'app/utils/household-history-policy.ts','app/utils/household-history-server.ts','app/api/history/route.ts','app/api/history/recommendations/route.ts','tests/lot1/history-v1228.test.ts',
  'tests/lot1/corrections-v1223.test.ts','app/utils/contextual-help.ts','app/utils/production-readiness-server.ts','app/utils/production-readiness-policy.ts','app/api/admin/readiness/route.ts',
  'tests/lot1/corrections-v1222.test.ts',
  'app/utils/expiry-policy.ts','app/utils/recipe-presence-policy.ts','app/utils/inventory-reminder-policy.ts','app/utils/inventory-reminder-server.ts','app/api/inventory/reminders/route.ts',
@@ -75,14 +78,14 @@ try {
   }
   fs.cpSync(path.join(project, 'tests/lot1/support'), path.join(temporary, 'test-support'), { recursive: true })
   fs.cpSync(path.join(project,'tests/fixtures'),path.join(temporary,'tests/fixtures'),{recursive:true})
-  const tests = ['tests/lot1/corrections-v1223.test.mjs','tests/lot1/corrections-v1222.test.mjs','tests/lot1/corrections-v1221.test.mjs','tests/lot1/corrections-v1220.test.mjs','tests/lot1/shopping-corrections.test.mjs','tests/lot1/anti-gaspi-v1214.test.mjs','tests/lot1/recipes-v1212.test.mjs','tests/lot1/defaults-v1210.test.mjs','tests/lot1/stock-location.test.mjs','tests/lot1/enrichment.test.mjs','tests/lot1/recipe-campaign.test.mjs','tests/lot1/pantry-history.test.mjs','scripts/matcher-contract.test.mjs', 'scripts/data-quality.test.mjs',
+  const tests = ['tests/lot1/ecosystem-v131.test.mjs','tests/lot1/ecosystem-v13.test.mjs','tests/lot1/history-v1228.test.mjs','tests/lot1/corrections-v1223.test.mjs','tests/lot1/corrections-v1222.test.mjs','tests/lot1/corrections-v1221.test.mjs','tests/lot1/corrections-v1220.test.mjs','tests/lot1/shopping-corrections.test.mjs','tests/lot1/anti-gaspi-v1214.test.mjs','tests/lot1/recipes-v1212.test.mjs','tests/lot1/defaults-v1210.test.mjs','tests/lot1/stock-location.test.mjs','tests/lot1/enrichment.test.mjs','tests/lot1/recipe-campaign.test.mjs','tests/lot1/pantry-history.test.mjs','scripts/matcher-contract.test.mjs', 'scripts/data-quality.test.mjs',
     'tests/lot1/matcher-safety.test.mjs', 'tests/lot1/api-session.test.mjs', 'tests/lot1/shopping-requirements.test.mjs', 'tests/lot1/pantry.test.mjs']
-  const result = spawnSync(process.execPath, ['--test', ...tests], { cwd: temporary, encoding: 'utf8', env:{...process.env,MEALIO_TEST_REPORT_DIR:path.join(project,'test-reports')} })
+  const result = spawnSync(process.execPath, ['--test','--test-concurrency=2', ...tests], { cwd: temporary, encoding: 'utf8', env:{...process.env,MEALIO_TEST_PROJECT:project,MEALIO_TEST_REPORT_DIR:path.join(project,'test-reports')} })
   process.stdout.write(result.stdout ?? '')
   process.stderr.write(result.stderr ?? '')
   if (result.status !== 0) process.exitCode = result.status || 1
   if (!process.exitCode) {
-    const lab = spawnSync(process.execPath, ['scripts/run-matcher-lab.mjs'], { cwd: temporary, encoding: 'utf8', env:{...process.env,MEALIO_TEST_REPORT_DIR:path.join(project,'test-reports')} })
+    const lab = spawnSync(process.execPath, ['scripts/run-matcher-lab.mjs'], { cwd: temporary, encoding: 'utf8', env:{...process.env,MEALIO_TEST_PROJECT:project,MEALIO_TEST_REPORT_DIR:path.join(project,'test-reports')} })
     process.stdout.write(lab.stdout ?? '')
     process.stderr.write(lab.stderr ?? '')
     process.exitCode = lab.status || 0

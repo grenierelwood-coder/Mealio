@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import {stockContent} from '../utils/ecosystem-policy'
 import { useEffect, useMemo, useState } from 'react'
 import { matchesStockLocation, stockLocationKey, stockLocationLabel, stockLocationOptions, type StockLocation } from '../utils/stock-location-policy'
 
@@ -20,6 +21,10 @@ type StockItem = {
   source: 'frosti' | 'cellio'
   date_entree?: string | null
   date_peremption?: string | null
+  ingredient_name?: string|null
+  content_quantity?: number|null
+  content_unit?: string|null
+  date_role?: string
   notes?: string | null
 }
 
@@ -283,7 +288,7 @@ export default function StockPage() {
                               <div className="truncate font-black text-slate-900">{item.produit}</div>
                               <div className="mt-0.5 truncate text-xs font-semibold text-slate-500">{item.pantry_ingredient_id ? (Number(item.qte)>0?'Présent':'Absent') : `${item.qte} ${item.unite}`} · {item.categorie || 'Sans catégorie'}</div>
                               <div className="mt-1 break-words text-xs font-semibold text-slate-600">📍 {item.source==='frosti' ? item.location_is_fridge===true?'Frigo · ':item.location_is_fridge===false?'Congélateur · ':'Stock froid · ' : ''}{item.location_name?.trim() || 'Lieu non renseigné'}</div>
-                              {item.date_peremption ? <div className={`mt-1 text-xs font-black ${expired ? 'text-red-600' : urgent ? 'text-orange-600' : 'text-emerald-700'}`}>{expired ? 'Péremption dépassée' : `Péremption ${formatDate(item.date_peremption)}`}</div> : <div className="mt-1 text-xs text-slate-400">Aucune date</div>}
+                              {item.ingredient_name && <p className="text-xs text-slate-500">Ingrédient : {item.ingredient_name}</p>}{item.content_quantity && <p className="text-xs text-slate-500">{item.content_quantity} {item.content_unit} par unité · {stockContent(item).qte} {stockContent(item).unite} au total</p>}{item.date_peremption ? <div className={`mt-1 text-xs font-black ${expired ? 'text-red-600' : urgent ? 'text-orange-600' : 'text-emerald-700'}`}>{`${({dlc:'DLC',ddm:'DDM',apogee:'Apogée',indicative:'Date indicative'} as Record<string,string>)[item.date_role??'']??'Date de suivi'} ${formatDate(item.date_peremption)}`}</div> : <div className="mt-1 text-xs text-slate-400">Aucune date</div>}
                             </div>
                             {item.pantry_ingredient_id && Number(item.qte)>0 && <button type="button" disabled={savingSignal!==null} onClick={()=>void signalPantry(item)}
                               className={`min-h-11 max-w-32 rounded-xl px-3 text-xs font-bold disabled:opacity-50 ${item.almost_finished?'bg-orange-100 text-orange-900':'border border-slate-300 text-slate-700'}`}>

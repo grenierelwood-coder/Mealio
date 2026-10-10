@@ -15,7 +15,7 @@ const policy={ingredient_id:id,enabled:true,default_quantity:1000,default_unit:'
 const now=new Date('2026-10-07T12:00:00Z')
 const events:PantryPurchase[]=['2026-09-07','2026-09-14','2026-09-21','2026-09-28'].map(d=>({ingredient_id:id,quantity:1000,unite:'Gramme',purchased_at:d+'T10:00:00Z',status:'range'}))
 const flag={ingredient_id:id,kind:'almost_finished' as const,signaled_at:'2026-10-06T10:00:00Z',until_date:null}
-function session(){process.env.MEALIO_SESSION_SECRET='history-test';setCookies({mealio_session:createSessionValue('Famille','frosti-user')})}
+function session(){process.env.MEALIO_SESSION_SECRET='history-test----------------------------';setCookies({mealio_session:createSessionValue('Famille','frosti-user')})}
 function db(options:{signals?:any[],events?:any[],enabled?:boolean,candidates?:any[],stock?:boolean}={}){
   setDbResolver((call:any)=>{
     if(call.action==='rpc')return {data:{item:options.candidates?.[0] ?? {id:'new',qte_achat:call.payload.p_quantity},merged:Boolean(options.candidates?.length)},error:null}

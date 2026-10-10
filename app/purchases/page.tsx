@@ -1,5 +1,6 @@
 'use client'
 
+import Link from 'next/link'
 import { useEffect, useMemo, useState } from 'react'
 
 interface PurchaseEvent {
@@ -102,7 +103,7 @@ export default function PurchasesPage() {
           <div>
             <div className="text-[10px] font-black uppercase tracking-[0.2em] text-emerald-600">Mealio</div>
             <h1 className="mt-1 text-3xl font-black tracking-tight">🧾 Historique des achats</h1>
-            <p className="mt-1 text-sm text-slate-500">Recherche par produit, catégorie et période.</p>
+            <p className="mt-1 text-sm text-slate-500">Recherche par produit, catégorie et période.</p><Link href="/history" className="mt-2 inline-flex min-h-11 items-center font-bold text-emerald-800 underline">Tout l’historique : repas, consommations et analyses →</Link>
           </div>
           <button type="button" onClick={loadPurchases} disabled={loading} className="rounded-xl border bg-white px-4 py-2 text-sm font-semibold disabled:opacity-50">↻ Actualiser</button>
         </header>

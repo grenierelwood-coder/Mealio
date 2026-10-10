@@ -3,14 +3,15 @@ import InventoryReminderSettings from '../components/InventoryReminderSettings'
 import Link from 'next/link'
 import { APP_VERSION } from '../utils/app-version'
 import { stockSourceLink } from '../utils/stock-source-link'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState, useRef } from 'react'
 import { stockLocationKey, stockLocationLabel, stockLocationOptions, type StockLocation } from '../utils/stock-location-policy'
 
-type Item = { id: string; produit: string; qte: number; unite: string; categorie: string; pantry_ingredient_id?:string|null; ingredient_name?: string | null; ingredient_aliases?: string[]; source: 'frosti' | 'cellio'; location_id?: string | null; location_name?: string | null; location_is_fridge?: boolean | null }
+type Item = { content_quantity?:number|null;content_unit?:string|null; version?: number; id: string; produit: string; qte: number; unite: string; categorie: string; pantry_ingredient_id?:string|null; ingredient_name?: string | null; ingredient_aliases?: string[]; source: 'frosti' | 'cellio'; location_id?: string | null; location_name?: string | null; location_is_fridge?: boolean | null }
 type Draft = { qte: number; unite: string }
 const key = (item: Item) => JSON.stringify([item.source, item.id])
 
 export default function InventoryPage() {
+  const receipts=useRef(new Map<string,string>())
   const [items, setItems] = useState<Item[]>([]), [locations, setLocations] = useState<StockLocation[]>([])
   const [search, setSearch] = useState('')
   const [selected, setSelected] = useState('all'), [draft, setDraft] = useState<Record<string, Draft>>({})
@@ -53,9 +54,12 @@ export default function InventoryPage() {
       }
       for (const rows of groups.values()) {
         const first = rows[0]
+        const edits=rows.map(item => ({id:item.id,source:item.source,...draft[key(item)],expected_qte:item.qte,expected_unite:item.unite,expected_version:item.version}));
+        const fingerprint=JSON.stringify([first.source,first.location_id,edits]);
+        let op=receipts.current.get(fingerprint);if(!op){op=crypto.randomUUID();receipts.current.set(fingerprint,op)}
         const response = await fetch('/api/point-frigo', { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({
-          source: first.source, location_id: first.location_id ?? null,
-          items: rows.map(item => ({ id: item.id, source: item.source, ...draft[key(item)], expected_qte: item.qte, expected_unite: item.unite })),
+          operation_id:op, source: first.source, location_id: first.location_id ?? null,
+          items: edits,
         }) })
         const result = await response.json()
         if (!response.ok) {
@@ -90,10 +94,10 @@ export default function InventoryPage() {
         const originLink = stockSourceLink(item)
         const garlic = item.produit.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim() === 'ail'
         return <article key={key(item)} className="rounded-xl border bg-white p-3">
-          <h2 className="font-bold">{item.produit}</h2>{item.ingredient_name&&item.ingredient_name!==item.produit&&<p className="text-xs text-slate-500">Ingrédient : {item.ingredient_name}</p>}<p className="mt-1 text-sm font-semibold text-emerald-800">{stockLocationLabel(locations.find(l => stockLocationKey(l.source, l.id) === stockLocationKey(item.source, item.location_id)) || { source: item.source, id: item.location_id ?? null, name: item.location_name || 'Lieu non renseigné' })}</p><p className="text-xs text-slate-500">Enregistré : {item.pantry_ingredient_id?(item.qte>0?'Présent':'Absent'):`${item.qte} ${item.unite}`} · {item.categorie}</p>
+          <h2 className="font-bold">{item.produit}</h2>{item.content_quantity!=null&&<p className="text-xs text-slate-600">Contenu : {item.content_quantity} {item.content_unit} par {item.unite}. Pour changer ce format, ouvrir {item.source}.</p>}{item.ingredient_name&&item.ingredient_name!==item.produit&&<p className="text-xs text-slate-500">Ingrédient : {item.ingredient_name}</p>}<p className="mt-1 text-sm font-semibold text-emerald-800">{stockLocationLabel(locations.find(l => stockLocationKey(l.source, l.id) === stockLocationKey(item.source, item.location_id)) || { source: item.source, id: item.location_id ?? null, name: item.location_name || 'Lieu non renseigné' })}</p><p className="text-xs text-slate-500">Enregistré : {item.pantry_ingredient_id?(item.qte>0?'Présent':'Absent'):`${item.qte} ${item.unite}`} · {item.categorie}</p>
           <div className="mt-3 flex flex-wrap gap-3">{item.pantry_ingredient_id?<label className="min-h-12 flex items-center gap-3 font-bold"><input aria-label={`Présence ${item.produit}`} type="checkbox" disabled={saving} checked={current.qte>0} onChange={e=>edit(item,{qte:e.target.checked?(item.qte>0?item.qte:1):0})}/>Il en reste</label>:<>
             <label className="min-w-0 flex-1 text-sm font-bold">Quantité réelle<input type="number" min="0" step="any" disabled={saving} value={current.qte} onChange={e => { const qte = Number(e.target.value); if (Number.isFinite(qte) && qte >= 0) edit(item, { qte }) }} className="mt-1 min-h-12 w-full rounded-xl border p-3" /></label>
-            <label className="min-w-0 flex-1 text-sm font-bold">Unité<select disabled={saving} value={current.unite} onChange={e => edit(item, { unite: e.target.value })} className="mt-1 min-h-12 w-full rounded-xl border bg-white p-3">
+            <label className="min-w-0 flex-1 text-sm font-bold">Unité<select disabled={saving || item.content_quantity!=null} value={current.unite} onChange={e => edit(item, { unite: e.target.value })} className="mt-1 min-h-12 w-full rounded-xl border bg-white p-3">
               {[...new Set([item.unite, ...(garlic ? ['Gousse'] : ['Pièce', 'Gramme', 'Millilitre', 'Gousse'])])].map(u => <option disabled={garlic && u !== 'Gousse'} key={u}>{u}</option>)}
             </select></label></>}
           </div>

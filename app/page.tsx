@@ -34,6 +34,7 @@ const mainActions = [
 ]
 
 const secondaryActions = [
+  {href:'/history',icon:'🕘',title:'Historique',text:'Retrouver achats et repas, comprendre les besoins et améliorer les réapprovisionnements.'},
   {
     href: '/stock',
     icon: '❄️',

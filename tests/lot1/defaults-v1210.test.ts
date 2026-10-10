@@ -31,7 +31,7 @@ const ail=data.official_ingredients.find((i:any)=>i.nom==='Ail')
 data.ingredient_densities=data.ingredient_densities.filter((d:any)=>d.ingredient_id!==ail.id||cleanText(d.unite)!=='piece')
 data.ingredient_densities.find((d:any)=>d.ingredient_id===ail.id&&d.unite==='Gousse').poids_g_approx=5
 data.pantry_products=read('pantry-defaults.json')
-process.env.MEALIO_SESSION_SECRET='defaults-secret';process.env.ANTHROPIC_API_KEY='local-test'
+process.env.MEALIO_SESSION_SECRET='defaults-secret-------------------------';process.env.ANTHROPIC_API_KEY='local-test'
 globalThis.fetch=async()=>Response.json({content:[{type:'text',text:'{"match":"AUCUN","confidence":0}'}]})
 function session(){setCookies({mealio_session:createSessionValue('Famille','frosti-user')})}
 function db(errorTable?:string){setDbResolver((c:any)=>{
@@ -109,10 +109,10 @@ test('liens : proposition stock ouvre son libellé, conversion ouvre Admin',()=>
  assert.ok(matcherCorrectionLink({produit:'Saucisses',issue_type:'STOCK_MATCH_REVIEW',message:'Proposition « Saucisse fraîche » pour « Saucisses bretonnes (ou saucisses fraîches) » à valider.'}).includes(encodeURIComponent('Saucisses bretonnes (ou saucisses fraîches)')))
 })
 const correction={id:'a',source:'frosti',qte:10,unite:'Gousse',expected_qte:1,expected_unite:'Pièce'}
-test('inventaire : corrige ail en Gousse dans le lieu choisi',async()=>{db();session();assert.equal((await inventory(req({source:'frosti',location_id:'cold',items:[correction]}))).status,200);const write=calls.find((c:any)=>c.table==='items'&&c.action==='update');assert.ok(write.filters.some((f:any)=>f[1]==='user_id'&&f[2]==='frosti-user'));assert.equal(write.payload.unite,'Gousse')})
+test('inventaire : corrige ail en Gousse dans le lieu choisi',async()=>{db();session();assert.equal((await inventory(req({source:'frosti',location_id:'cold',items:[correction]}))).status,200);const write=calls.find((c:any)=>c.table==='frosti_inventory_batch'&&c.action==='rpc');assert.equal(write.payload.p_user,'frosti-user');assert.equal(write.payload.p_rows[0].unite,'Gousse')})
 test('inventaire : lot multi-lieux refusé avant toute écriture',async()=>{db();session();const response=await inventory(req({source:'frosti',location_id:'cold',items:[correction,{id:'b',source:'frosti',qte:3,unite:'Pièce',expected_qte:2,expected_unite:'Pièce'}]}));assert.equal(response.status,409);assert.ok(!calls.some((c:any)=>c.action==='update'))})
 test('inventaire : source extérieure, stock modifié et ail Pièce refusés',async()=>{
  for(const body of [{source:'cellio',location_id:'dry',items:[correction]},{source:'frosti',location_id:'cold',items:[{...correction,expected_qte:8}]},{source:'frosti',location_id:'cold',items:[{...correction,unite:'Pièce'}]}]){db();session();assert.ok((await inventory(req(body))).status>=400);assert.ok(!calls.some((c:any)=>c.action==='update'))}
 })
-test('inventaire Cellio : UUID propre à Cellio pour son placard',async()=>{db();session();assert.equal((await inventory(req({source:'cellio',location_id:'dry',items:[{id:'c',source:'cellio',qte:2,unite:'Pièce',expected_qte:1,expected_unite:'Pièce'}]}))).status,200);assert.ok(calls.find((c:any)=>c.table==='items'&&c.action==='update').filters.some((f:any)=>f[1]==='user_id'&&f[2]==='cellio-user'))})
+test('inventaire Cellio : UUID propre à Cellio pour son placard',async()=>{db();session();assert.equal((await inventory(req({source:'cellio',location_id:'dry',items:[{id:'c',source:'cellio',qte:2,unite:'Pièce',expected_qte:1,expected_unite:'Pièce'}]}))).status,200);assert.equal(calls.find((c:any)=>c.table==='cellio_inventory_batch'&&c.action==='rpc').payload.p_user,'cellio-user')})
 after(()=>{const output=process.env.MEALIO_TEST_REPORT_DIR;if(output){fs.mkdirSync(output,{recursive:true});fs.writeFileSync(path.join(output,'defaults-v1210-campaign.json'),JSON.stringify({recipes:report.length,resolved:report.reduce((n,r)=>n+r.resolved,0),report},null,2))}})

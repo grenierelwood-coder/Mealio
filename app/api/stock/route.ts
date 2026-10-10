@@ -1,3 +1,4 @@
+import {catalogRows} from '../../utils/catalog-server'
 import { cleanText } from '../../utils/matcher'
 import { loadPantryProducts } from '../../utils/pantry-server'
 import { loadPantrySignals, loadHouseholdPurchases } from '../../utils/pantry-signals-server'
@@ -25,27 +26,21 @@ export async function GET() {
       household.frostiUserId
         ? frostiServerDb
             .from('freezers')
-            .select('id,name,is_fridge')
+            .select('id,name,is_fridge').is('archived_at',null)
             .eq('user_id', household.frostiUserId)
         : Promise.resolve({ data: [], error: null }),
       household.cellioUserId
         ? cellioServerDb
             .from('cellars')
-            .select('id,name,is_secondary')
+            .select('id,name,is_secondary').is('archived_at',null)
             .eq('user_id', household.cellioUserId)
         : Promise.resolve({ data: [], error: null }),
-      mealioServerDb
-        .from('official_ingredients')
-        .select('id,nom,rayon'),
-      mealioServerDb
-        .from('ingredient_synonyms')
-        .select('mot_recette,ingredient_id'),
+      catalogRows('official_ingredients','id,nom,rayon').then(data=>({data,error:null})),
+      catalogRows('ingredient_synonyms','mot_recette,ingredient_id').then(data=>({data,error:null})),
     ])
 
     if (frostiLocations.error) throw new Error(`Erreur lecture emplacements Frosti : ${frostiLocations.error.message}`)
     if (cellioLocations.error) throw new Error(`Erreur lecture emplacements Cellio : ${cellioLocations.error.message}`)
-    if (officialIngredients.error) throw new Error(`Erreur lecture référentiel ingrédients : ${officialIngredients.error.message}`)
-    if (ingredientSynonyms.error) throw new Error(`Erreur lecture synonymes ingrédients : ${ingredientSynonyms.error.message}`)
 
     const frostiMap = new Map((frostiLocations.data ?? []).map((location: any) => [location.id, location]))
     const cellioMap = new Map((cellioLocations.data ?? []).map((location: any) => [location.id, location]))
@@ -80,9 +75,9 @@ export async function GET() {
       const ingredient = id ? ingredientById.get(id) as { nom: string } | undefined : undefined
       return { ingredient_id: id ?? null, ingredient_name: ingredient?.nom ?? null, ingredient_aliases: id ? aliasesById.get(id) ?? [] : [] }
     }
-    const pantryInfo=(name:string)=>{
+    const pantryInfo=(name:string,explicitId?:string|null)=>{
       const key=normalizeName(name)
-      const id=ingredientByName.get(key) ?? ingredientIdBySynonym.get(key)
+      const id=explicitId ?? ingredientByName.get(key) ?? ingredientIdBySynonym.get(key)
       if(!id || !pantry.get(id)?.enabled) return {pantry_ingredient_id:null,almost_finished:false}
       return {pantry_ingredient_id:id,almost_finished:activeAlmostFinished(signals.find(s=>s.ingredient_id===id && s.kind==='almost_finished'),latestPurchase(purchases,id))}
     }
@@ -91,9 +86,10 @@ export async function GET() {
         const location = item.congelo_id ? frostiMap.get(item.congelo_id) : null
         return {
           ...item,
-          ...pantryInfo(item.produit),
+          ...pantryInfo(item.produit,item.ingredient_id),
           ...identityInfo(item.produit),
-          rayon: resolveRayon(item.produit),
+          ...(item.ingredient_id ? {ingredient_id:item.ingredient_id,ingredient_name:(ingredientById.get(item.ingredient_id) as any)?.nom??item.ingredient_name} : {}),
+          rayon: (item.ingredient_id ? rayonById.get(item.ingredient_id) : null) ?? resolveRayon(item.produit),
           location_id: item.congelo_id ?? null,
           location_name: location?.name ?? null,
           location_is_fridge: location?.is_fridge ?? null,
@@ -103,9 +99,10 @@ export async function GET() {
       const location = item.cellar_id ? cellioMap.get(item.cellar_id) : null
       return {
         ...item,
-        ...pantryInfo(item.produit),
+        ...pantryInfo(item.produit,item.ingredient_id),
         ...identityInfo(item.produit),
-        rayon: resolveRayon(item.produit),
+          ...(item.ingredient_id ? {ingredient_id:item.ingredient_id,ingredient_name:(ingredientById.get(item.ingredient_id) as any)?.nom??item.ingredient_name} : {}),
+        rayon: (item.ingredient_id ? rayonById.get(item.ingredient_id) : null) ?? resolveRayon(item.produit),
         location_id: item.cellar_id ?? null,
         location_name: location?.name ?? null,
         location_is_secondary: location?.is_secondary ?? null,

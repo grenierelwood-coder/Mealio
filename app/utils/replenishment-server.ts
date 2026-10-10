@@ -1,3 +1,4 @@
+import {stockContent} from './ecosystem-policy'
 import { loadPantrySignals, loadHouseholdPurchases } from './pantry-signals-server'
 import { activeAlmostFinished, forecastPurchases, latestPurchase } from './pantry-history-policy'
 import { loadPantryProducts } from './pantry-server'
@@ -5,7 +6,7 @@ import { pantryMode, pantryPack } from './pantry-policy'
 import { mealioServerDb } from '../lib/supabase-server'
 import { isPresenceOnlyIngredient } from './quantity-policy'
 import { getHouseholdStockServer } from './household-server'
-import { convertQuantityToUnit, loadReferenceData } from './matcher'
+import { convertQuantityToUnit, convertStockQuantity, loadReferenceData } from './matcher'
 import { assertOfficialIngredientUnit, getOfficialIngredientReferenceUnit } from './official-unit-policy'
 
 export type ReplenishmentMode = 'suggestion' | 'systematic'
@@ -174,7 +175,7 @@ export async function listFavorites(username: string): Promise<FavoriteIngredien
 
   const { data: ingredients, error: ingredientError } = await mealioServerDb
     .from('official_ingredients')
-    .select('id,nom,categorie,default_storage')
+    .select('id,nom,categorie,default_storage,unite_reference')
     .in('id', ids)
 
   if (ingredientError) throw new Error(`Impossible de charger les ingrédients favoris : ${ingredientError.message}`)
@@ -254,7 +255,7 @@ export async function listRecurringRules(username: string): Promise<RecurringRul
 
 async function ingredientMap(username: string) {
   const [{ data: ingredients, error: ingredientsError }, { data: synonyms, error: synonymsError }] = await Promise.all([
-    mealioServerDb.from('official_ingredients').select('id,nom,categorie,default_storage'),
+    mealioServerDb.from('official_ingredients').select('id,nom,categorie,default_storage,unite_reference'),
     mealioServerDb.from('ingredient_synonyms').select('mot_recette,ingredient_id'),
   ])
   if (ingredientsError) throw new Error(`Impossible de charger le référentiel : ${ingredientsError.message}`)
@@ -268,16 +269,19 @@ async function ingredientMap(username: string) {
     quantity_mode: pantryMode(pantry.get(row.id)) ?? 'quantity' })), byKey, pantry }
 }
 
-async function stockByIngredient(username: string) {
-  const [stock, maps] = await Promise.all([getHouseholdStockServer(username), ingredientMap(username)])
+async function stockByIngredient(username: string,maps:Awaited<ReturnType<typeof ingredientMap>>,ref:Awaited<ReturnType<typeof loadReferenceData>>) {
+  const stock = await getHouseholdStockServer(username)
   const result = new Map<string, { quantity: number; unit: string; compatible: boolean }>()
   for (const item of stock) {
     if (!Number.isFinite(Number(item.qte)) || Number(item.qte) <= 0) continue
-    const ingredientId = maps.byKey.get(normalize(item.produit))
+    const ingredientId = item.ingredient_id ?? maps.byKey.get(normalize(item.produit))
     if (!ingredientId) continue
     const ingredient = maps.ingredients.find((i: any) => i.id === ingredientId)
     const presenceOnly = ingredient ? isPresenceOnlyIngredient(ingredient) : false
-    const unit = String(item.unite ?? '').trim()
+    const content=stockContent(item)
+    const unit = String(ingredient?.unite_reference || content.unite).trim()
+    const converted=convertStockQuantity(ref,ingredientId,content.qte,content.unite,unit)
+    const quantity=converted?.qty ?? 0
     const current = result.get(ingredientId)
 
     if (presenceOnly) {
@@ -288,11 +292,12 @@ async function stockByIngredient(username: string) {
     }
 
     if (!current) {
-      result.set(ingredientId, { quantity: Number(item.qte ?? 0), unit, compatible: true })
+      result.set(ingredientId, { quantity, unit, compatible: !!converted })
       continue
     }
     if (unitKey(current.unit) === unitKey(unit)) {
-      current.quantity += Number(item.qte ?? 0)
+      current.quantity += quantity
+      if(!converted)current.compatible=false
     } else {
       current.compatible = false
     }
@@ -301,11 +306,11 @@ async function stockByIngredient(username: string) {
 }
 
 export async function getReplenishmentSuggestions(username: string): Promise<ReplenishmentSuggestion[]> {
-  const [thresholds, recurring, stocks, maps, signals, purchases] = await Promise.all([
+  const [maps,ref]=await Promise.all([ingredientMap(username),loadReferenceData(username)])
+  const [thresholds, recurring, stocks, signals, purchases] = await Promise.all([
     listThresholdRules(username),
     listRecurringRules(username),
-    stockByIngredient(username),
-    ingredientMap(username),
+    stockByIngredient(username,maps,ref),
     loadPantrySignals(username),
     loadHouseholdPurchases(username),
   ])
@@ -342,10 +347,11 @@ export async function getReplenishmentSuggestions(username: string): Promise<Rep
       continue
     }
 
-    const stockQty = stock?.quantity ?? 0
+    const converted = stock ? convertStockQuantity(ref,rule.ingredient_id,stock.quantity,stock.unit,rule.unite) : null
+    const stockQty = converted?.qty ?? 0
     const compatible = !stock || stock.compatible
     if (!compatible) continue
-    if (stock && unitKey(stock.unit) !== unitKey(rule.unite)) continue
+    if (stock && !converted) continue
     if (stockQty >= rule.min_quantity) continue
     const quantity = Math.max(rule.target_quantity - stockQty, 0)
     if (quantity <= 0) continue
@@ -360,7 +366,7 @@ export async function getReplenishmentSuggestions(username: string): Promise<Rep
       reason: `Stock ${round(stockQty)} ${rule.unite} sous le seuil de ${round(rule.min_quantity)} ${rule.unite}`,
       mode: rule.mode,
       stock_quantity: round(stockQty),
-      stock_unit: stock?.unit ?? rule.unite,
+      stock_unit: rule.unite,
       min_quantity: rule.min_quantity,
       target_quantity: rule.target_quantity,
       due_date: null,

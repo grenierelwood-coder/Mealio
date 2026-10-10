@@ -10,13 +10,15 @@ import { useEffect, useMemo, useState } from 'react'
 const links = [
   { href: '/planning', label: 'Planning', icon: '📅' },
   { href: '/courses', label: 'Courses', icon: '🛒' },
+  { href: '/ecosystem', label: 'Écosystème', icon: '🍲' },
   { href: '/stock', label: 'Stock', icon: '📦' },
   { href: '/replenishment', label: 'Réapprovisionnements', icon: '🔄' },
   { href: '/anti-gaspi', label: 'Anti-gaspi', icon: '🥕' },
   { href: '/inventaire', label: 'Inventaire', icon: '📋' },
+  { href: '/history', label: 'Historique', icon: '🕘' },
   { href: '/admin', label: 'Admin', icon: '⚙️' },
 ]
-const secondaryLinks = [{ href: '/purchases', label: 'Achats', icon: '🧾' }]
+const secondaryLinks: typeof links = []
 
 const bottomLinks = [
   { href: '/', label: 'Accueil', icon: '⌂' },
@@ -47,6 +49,7 @@ export default function MealioNav() {
   }, [pathname])
 
   const activeHref = useMemo(() => {
+    if(pathname === '/purchases') return '/history'
     const exact = [...links, ...secondaryLinks].find(link => pathname === link.href)
     if (exact) return exact.href
     const nested = [...links, ...secondaryLinks].find(link => pathname.startsWith(`${link.href}/`))
@@ -88,7 +91,7 @@ export default function MealioNav() {
 
           <span aria-label={`Version Mealio ${APP_VERSION}`} className="shrink-0 rounded-lg border border-slate-200 bg-slate-50 px-2 py-1 text-xs font-bold text-slate-600">v{APP_VERSION}</span>
 
-          <nav className="hidden min-w-0 flex-1 items-center gap-1 overflow-hidden lg:flex">
+          <nav className="hidden min-w-0 flex-1 items-center gap-1 overflow-x-auto lg:flex">
             {links.map(link => {
               const active = activeHref === link.href
               return (
@@ -103,7 +106,7 @@ export default function MealioNav() {
             })}
           </nav>
 
-          <div className="ml-auto hidden shrink-0 items-center gap-3 sm:flex">
+          <div className="ml-auto hidden shrink-0 items-center gap-3 sm:flex"><button className="min-h-11 text-xs font-bold text-emerald-800" onClick={()=>window.dispatchEvent(new Event('mealio:review-meals'))}>Repas passés</button>
             {username && <span className="text-xs text-slate-500">{username}</span>}
             <button
               type="button"
@@ -194,7 +197,7 @@ export default function MealioNav() {
               ))}
             </div>
 
-            <div className="border-t border-slate-200 p-3">
+            <div className="border-t border-slate-200 p-3"><button className="min-h-11 mb-2 w-full rounded-xl border p-3 font-bold text-emerald-800" onClick={()=>{setDrawerOpen(false);window.dispatchEvent(new Event('mealio:review-meals'))}}>Repas passés</button>
               <button type="button" onClick={logout} className="min-h-12 w-full rounded-xl border border-slate-200 bg-white px-3 text-left text-sm font-bold text-slate-600">
                 ⇥ Déconnexion
               </button>
