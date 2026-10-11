@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useMemo, useState } from 'react'
+import { filterPlanningRecipes } from '../utils/planning-recipe-search'
 
 type Recipe = {
   id: string
@@ -143,19 +144,6 @@ function getRecipeType(recipe: Recipe): string {
   }
 
   return 'Plat'
-}
-
-function roleToRecipeType(
-  role: MealRole
-): string | null {
-  if (role === 'entree') return 'Entrée'
-  if (role === 'dessert') return 'Dessert'
-  if (role === 'accompagnement') {
-    return 'Accompagnement'
-  }
-  if (role === 'plat') return 'Plat'
-
-  return null
 }
 
 function MealSlot({
@@ -337,6 +325,7 @@ export default function PlanningPage() {
     useState<string | null>(null)
 
   const [search, setSearch] = useState('')
+  const [limitToRole, setLimitToRole] = useState(false)
 
   const [difficultyFilter, setDifficultyFilter] =
     useState('Toutes')
@@ -372,37 +361,10 @@ export default function PlanningPage() {
     [recipes, selectedRecipeId]
   )
 
-  const filteredRecipes = useMemo(() => {
-    const q = search.trim().toLowerCase()
-    const wantedType =
-      roleToRecipeType(role)
-
-    return recipes.filter(recipe => {
-      const text = `
-        ${recipe.nom}
-        ${recipe.description ?? ''}
-        ${(recipe.tags ?? []).join(' ')}
-      `.toLowerCase()
-
-      return (
-        (!q || text.includes(q)) &&
-        (!wantedType ||
-          getRecipeType(recipe) ===
-            wantedType) &&
-        (
-          difficultyFilter ===
-            'Toutes' ||
-          recipe.difficulty ===
-            difficultyFilter
-        )
-      )
-    })
-  }, [
-    recipes,
-    search,
-    difficultyFilter,
-    role,
-  ])
+  const filteredRecipes = useMemo(
+    () => filterPlanningRecipes(recipes, search, difficultyFilter, role, limitToRole),
+    [recipes, search, difficultyFilter, role, limitToRole]
+  )
 
   async function loadRecipes() {
     try {
@@ -516,6 +478,7 @@ export default function PlanningPage() {
     setSelectedRecipeId(null)
 
     setSearch('')
+    setLimitToRole(false)
     setDifficultyFilter('Toutes')
     setRole('plat')
     setServings(4)
@@ -544,6 +507,7 @@ export default function PlanningPage() {
     setServings(plan.servings)
 
     setSearch('')
+    setLimitToRole(false)
     setDifficultyFilter('Toutes')
 
     setError(null)
@@ -932,7 +896,7 @@ export default function PlanningPage() {
 
           <section className="mb-3 rounded-3xl border border-slate-200 bg-white p-3 shadow-sm">
             <div className="mb-2 text-xs font-black uppercase tracking-wider text-slate-400">
-              Type de repas
+              Place dans le repas
             </div>
 
             <div className="grid grid-cols-4 gap-1.5">
@@ -1006,14 +970,21 @@ export default function PlanningPage() {
                       event.target.value
                     )
                   }
-                  placeholder="Rechercher une recette…"
+                  placeholder="Titre ou ingrédient…"
+                  aria-label="Rechercher par titre ou ingrédient"
                   autoFocus
                   className="min-h-13 w-full rounded-2xl border border-slate-200 bg-stone-50 px-4 text-base font-semibold outline-none focus:border-emerald-400 focus:bg-white focus:ring-2 focus:ring-emerald-100"
                 />
               </div>
             </div>
 
+            <label className="mt-2 flex min-h-11 items-center gap-3 text-sm font-semibold text-slate-600">
+              <input type="checkbox" checked={limitToRole} onChange={event => setLimitToRole(event.target.checked)} className="h-5 w-5 accent-emerald-600" />
+              Limiter à ce type de repas
+            </label>
+
             <select
+              aria-label="Filtrer par difficulté"
               value={
                 difficultyFilter
               }
@@ -1044,7 +1015,7 @@ export default function PlanningPage() {
             <div className="mt-2 text-xs font-bold text-slate-400">
               {loadingRecipes
                 ? 'Chargement…'
-                : `${filteredRecipes.length} recette${
+                : `${filteredRecipes.length} / ${recipes.length} recette${
                     filteredRecipes.length >
                     1
                       ? 's'
@@ -1064,8 +1035,12 @@ export default function PlanningPage() {
                 Aucune recette ne
                 correspond.
                 <br />
-                Essaie une autre
-                recherche.
+                Essaie une autre recherche.
+                {(limitToRole || difficultyFilter !== 'Toutes') && (
+                  <button type="button" onClick={() => { setLimitToRole(false); setDifficultyFilter('Toutes') }} className="mt-3 min-h-11 rounded-xl bg-emerald-600 px-4 font-bold text-white">
+                    Retirer les filtres
+                  </button>
+                )}
               </div>
             ) : (
               <div className="space-y-2">

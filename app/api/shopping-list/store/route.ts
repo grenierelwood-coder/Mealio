@@ -144,7 +144,7 @@ async function persistPurchaseState(
 }
 
 
-export async function POST(request?:Request) {
+export async function POST(request:Request) {
   try {
     if(request)assertSameOrigin(request)
     const username = (await getAuthSession())?.username?.trim()

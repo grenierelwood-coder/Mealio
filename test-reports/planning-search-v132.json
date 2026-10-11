@@ -1,0 +1,21 @@
+{
+  "version": "1.3.2",
+  "offlineTests": {
+    "passed": 649,
+    "failed": 0,
+    "newPlanningCases": 11
+  },
+  "matcherLab": {
+    "passed": 14,
+    "failed": 0
+  },
+  "uiCallbacks": "passed",
+  "typecheck": "passed",
+  "productionCompilation": {
+    "passed": true,
+    "bundler": "webpack",
+    "supabaseEnvironment": "fictitious",
+    "googleFonts": "mocked"
+  },
+  "realDatabaseValidation": false
+}

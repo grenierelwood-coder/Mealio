@@ -21,39 +21,37 @@ type CookiwikiRecipe = {
   ingredients: CookiwikiIngredient[] | null
 }
 
+export const dynamic = 'force-dynamic'
+const PAGE_SIZE = 500
+
 export async function GET() {
   try {
-    const { data, error } = await cookiwikiServerDb
-      .from('recipes')
-      .select(
-        `
-          id,
-          title,
-          servings,
-          image_url,
-          description,
-          prep_time,
-          cook_time,
-          difficulty,
-          tags,
-          ingredients
-        `
-      )
-      .order('title', { ascending: true })
+    const data: CookiwikiRecipe[] = []
+    for (let from = 0; ; from += PAGE_SIZE) {
+      const { data: page, error } = await cookiwikiServerDb
+        .from('recipes')
+        .select(
+          `
+            id,
+            title,
+            servings,
+            image_url,
+            description,
+            prep_time,
+            cook_time,
+            difficulty,
+            tags,
+            ingredients
+          `
+        )
+        .order('title', { ascending: true })
+        .order('id', { ascending: true })
+        .range(from, from + PAGE_SIZE - 1)
 
-    if (error) {
-      console.error(
-        '❌ Erreur GET /api/recipes :',
-        error
-      )
-
-      return NextResponse.json(
-        {
-          error:
-            `Impossible de récupérer les recettes Cookiwiki : ${error.message}`,
-        },
-        { status: 500 }
-      )
+      if (error) throw new Error(`Impossible de récupérer les recettes Cookiwiki : ${error.message}`)
+      const rows = (page ?? []) as CookiwikiRecipe[]
+      data.push(...rows)
+      if (rows.length < PAGE_SIZE) break
     }
 
     const recipes = ((data ?? []) as CookiwikiRecipe[]).map(
@@ -72,10 +70,7 @@ export async function GET() {
       })
     )
 
-    return NextResponse.json({
-      recipes,
-      total: recipes.length,
-    })
+    return NextResponse.json({ recipes, total: recipes.length }, { headers: { 'Cache-Control': 'no-store' } })
   } catch (error) {
     console.error(
       '❌ Erreur inattendue GET /api/recipes :',

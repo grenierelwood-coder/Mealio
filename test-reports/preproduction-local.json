@@ -1,27 +1,27 @@
 {
-  "date": "2026-10-08T15:34:01.336Z",
+  "date": "2026-10-11T07:21:08.254Z",
   "scope": "installation locale : tests, typage et build ; pas de cycle Supabase réel",
   "passed": true,
   "checks": [
     {
       "command": "npm run test",
       "status": "pass",
-      "durationMs": 5918
+      "durationMs": 18724
     },
     {
       "command": "npm run test:ui",
       "status": "pass",
-      "durationMs": 1754
+      "durationMs": 2560
     },
     {
       "command": "npm run typecheck",
       "status": "pass",
-      "durationMs": 3298
+      "durationMs": 11474
     },
     {
       "command": "npm run build",
       "status": "pass",
-      "durationMs": 12903
+      "durationMs": 27821
     }
   ]
 }

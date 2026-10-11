@@ -13,7 +13,7 @@ async function getUsername() {
   return (await getAuthSession())?.username?.trim() || null
 }
 
-export async function GET(request?:Request) {
+export async function GET(request:Request) {
   const username = await getUsername()
   if (!username) return NextResponse.json({ error: 'Non authentifié.' }, { status: 401 })
 
